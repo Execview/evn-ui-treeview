@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
+import EventBubble from './EventBubble'
 var Rx = require('rxjs/Rx')
-
-var mousepositionstream = Rx.Observable.fromEvent(document,'mousemove')
 
 class Scheduler extends Component {
 	constructor()
@@ -18,107 +17,90 @@ class Scheduler extends Component {
 		this.dimensions = [window.innerWidth*0.75,500]
 		this.barsnaps = [[],[]] //when a bubble is moved, append the x and ys to this list so you can snap to them or line things up to them
 		var numberofsnaps = [2*this.displaycols.length,10]
-		this.barHeight = 50 //TODO: convert bubbles to take starting point, width and height. height can have a default parameter and you define the bubble with others. It will be easier to manage and detect collisions this way.
+		this.bubbleHeight = 50
 		for(var i=0;i<numberofsnaps[0]+1;i++){this.barsnaps[0].push(this.dimensions[0]*i/numberofsnaps[0])}
 		for(var j=0;j<numberofsnaps[1]+1;j++){this.barsnaps[1].push(this.dimensions[1]*j/numberofsnaps[1])}
 
-		this.listofbubbles=[{id:1, startpoint:[50,75], width: 350, height: 50, colour:'rgb(190,230,240)', snaps:this.barsnaps},
-							{id:2, startpoint:[50,175], width: 350, height: 50, colour:'rgb(240,180,190)', snaps:this.barsnaps},
-							{id:3, startpoint:[50,275], width: 350, height: 50, colour:'rgb(180,240,200)', snaps:this.barsnaps},
-							{id:4, startpoint:[50,375], width: 350, height: 50, colour:'rgb(250,250,190)', snaps:this.barsnaps},
-							{id:5, startpoint:[50,475], width: 350, height: 50, colour:'rgb(240,190,250)', snaps:this.barsnaps}]
+		this.bubblemessagestream = new Rx.Subject();
+		this.bubbles=[
+			new EventBubble({key:0, startpoint:[50,75], width: 350, height: this.bubbleHeight, colour:'rgb(190,230,240)', snaps:this.barsnaps, bubblemessagestream: this.bubblemessagestream}),
+			new EventBubble({key:1, startpoint:[50,175], width: 350, height: 50, colour:'rgb(240,180,190)', snaps:this.barsnaps, bubblemessagestream: this.bubblemessagestream}),
+			new EventBubble({key:2, startpoint:[50,275], width: 350, height: 50, colour:'rgb(180,240,200)', snaps:this.barsnaps, bubblemessagestream: this.bubblemessagestream}),
+			new EventBubble({key:3, startpoint:[50,375], width: 350, height: 50, colour:'rgb(250,250,190)', snaps:this.barsnaps, bubblemessagestream: this.bubblemessagestream}),
+			new EventBubble({key:4, startpoint:[50,475], width: 350, height: 50, colour:'rgb(240,190,250)', snaps:this.barsnaps, bubblemessagestream: this.bubblemessagestream})]
 		
-		this.bubbles = this.listofbubbles.map((b)=><EventBubble key={b.id} startpoint={b.startpoint} width={b.width} height={b.height} colour={b.colour} snaps={b.snaps}/>)
+		this.bubblemessagestream.subscribe(	(message)=>{if(message[0]==='state'){
+														this.bubbleRequestState(this.bubbles[message[1]],message[2])}
+														else if(message[0]==='linkup'){this.lastup=[message[1],message[2]]}
+														else if(message[0]==='linklift'){this.performLink(message[1],message[2])}
+														}) //this is quite a dumb id/key system. probably fix later... 
 
-		console.log(this.barsnaps)
+		this.lastup = [0,'left']
+		this.links = []
 	}
-
-  render() {
-	console.log("render scheduler")
 	
-    return 	<svg width={this.dimensions[0]} height={this.dimensions[1]}>
-				{Columns([0,0],this.dimensions,this.displaycols,[5,15],20)}
-				{this.bubbles}
-			</svg>
-  }
+	bubbleRequestState(bubble,changes)
+	{	//deal with snapping here. The bubble will just request a state change to the position of the mouse. You can also do collision here
+		var teststate = Object.assign(bubble.state,changes)
+
+		if(teststate.width<teststate.height){
+			bubble.state = Object.assign(bubble.state,{width:teststate.height}) //fix
+			this.forceUpdate()
+		}
+		else if(this.noCollisions(bubble.key,teststate)){
+			bubble.state = teststate
+			this.forceUpdate()
+		}else{console.log('collision!')}
+	}
+
+	noCollisions(key,teststate)
+	{
+		var bubbleswithoutthis = this.bubbles.slice()
+		bubbleswithoutthis.splice(key,1)
+		var nocollision = true
+		bubbleswithoutthis.forEach((aBubble)=>{
+			if((aBubble.state.startpoint[1]===teststate.startpoint[1]) && 
+			(	(teststate.startpoint[0]>aBubble.state.startpoint[0]
+				&&
+				teststate.startpoint[0]<aBubble.state.startpoint[0]+aBubble.state.width)
+			||
+				(teststate.startpoint[0]+teststate.width>aBubble.state.startpoint[0]
+				&&
+				teststate.startpoint[0]+teststate.width<aBubble.state.startpoint[0]+aBubble.state.width)
+			||
+				(teststate.startpoint[0]<aBubble.state.startpoint[0] 
+				&&
+				teststate.startpoint[0]+teststate.width>aBubble.state.startpoint[0]+aBubble.state.width)
+			)			
+			){nocollision=false}
+		})
+		return nocollision
+	}
+
+	performLink(liftkey,liftside){
+		var upkey=this.lastup[0]
+		var upside=this.lastup[1]
+		
+		if(this.links.indexOf(liftkey+' '+liftside+' '+upkey+' '+upside)===-1 && this.links.indexOf(upkey+' '+upside+' '+liftkey+' '+liftside)===-1){
+		this.links.push(liftkey+' '+liftside+' '+upkey+' '+upside)
+		console.log(liftkey+' '+liftside+' '+upkey+' '+upside)
+		}
+		else{console.log('already linked!')}
+		console.log(this.links)
+		}
+
+  	render() {
+		console.log("render scheduler")
+		
+		return 	<svg width={this.dimensions[0]} height={this.dimensions[1]}>
+					{Columns([0,0],this.dimensions,this.displaycols,[5,15],20)}
+					{this.bubbles.map((b)=>b.render())})	
+				</svg>
+	}
 }
-
-class EventBubble extends Component {
-	constructor(props)
-	{
-		super(props);
-
-		this.state = {startpoint: this.props.startpoint, width: this.props.width, height: this.props.height, colour: this.props.colour}
-
-		this.mousedownpos = [0,0]
-		this.dragDiffs = [[0,0],[0,0]] //the vector from mouse down to the start/end points
-
-		this.isleftmousedown = false
-		this.isrightmousedown = false
-		this.ismiddlemousedown = false
-
-		mousepositionstream.subscribe((event)=>this.mousemove(event))
-
-		this.leftclickdown = this.leftclickdown.bind(this);
-		this.rightclickdown = this.rightclickdown.bind(this);
-		this.middleclickdown = this.middleclickdown.bind(this);
-		this.mousemove = this.mousemove.bind(this);
-		this.getNearestValueInArray = this.getNearestValueInArray.bind(this);
-		this.render = this.render.bind(this);
-
-		this.snaps = this.props.snaps //the list of x's and y's which the bar size and placement should snap to
-	}
-	leftclickdown(event){this.isleftmousedown = true; this.mousedownpos = [event.nativeEvent.offsetX,event.nativeEvent.offsetY]}
-	rightclickdown(event){this.isrightmousedown = true; this.mousedownpos = [event.nativeEvent.offsetX,event.nativeEvent.offsetY]}
-	middleclickdown(event){	this.ismiddlemousedown = true
-							this.mousedownpos = [event.nativeEvent.offsetX,event.nativeEvent.offsetY]
-							this.dragDiffs[0] = [this.mousedownpos[0]-this.state.startpoint[0],this.mousedownpos[1]-this.state.startpoint[1]]
-							this.dragDiffs[1] = [this.mousedownpos[0]-(this.state.startpoint[0]+this.state.width),this.mousedownpos[1]-(this.state.startpoint[1]+this.state.height)]
-							}
-							
-	mousemove(event)
-	{
-		if(event.buttons===0) {this.isleftmousedown=false;this.isrightmousedown=false;this.ismiddlemousedown=false;}
-		if(this.isleftmousedown){	var newX = this.getNearestValueInArray(this.snaps[0],event.offsetX); 
-									this.setState({startpoint: [newX,this.state.startpoint[1]], width: this.state.width-(newX-this.state.startpoint[0])})}
-		if(this.isrightmousedown){	var newX = this.getNearestValueInArray(this.snaps[0],event.offsetX)
-									this.setState({width: newX-(this.state.startpoint[0])})}
-		if(this.ismiddlemousedown){	this.setState({startpoint: [event.offsetX-this.dragDiffs[0][0],this.getNearestValueInArray(this.snaps[1],event.offsetY)-this.state.height/2]})}
-	}
-	getNearestValueInArray(snapsarray,value){ if(snapsarray===[]){return value}
-		var distancefromsnapsarray = snapsarray.slice().map((i)=>Math.abs(i-value))
-		return snapsarray[distancefromsnapsarray.indexOf(Math.min(...distancefromsnapsarray))]
-	}
-
-	render(){return Bubble(this.state.startpoint,[(this.state.startpoint[0]+this.state.width),(this.state.startpoint[1]+this.state.height)],this.state.colour,this.leftclickdown,this.rightclickdown,this.middleclickdown)}
-}
-
-function Bubble(startpoint, endpoint, 
-				colour='rgb(190,230,240)', 
-				leftclickdown=()=>console.log("left end down"),
-				rightclickdown=()=>console.log("right end down"),
-				middleclickdown=()=>console.log("middle part down")) 
-	{
-		// Must be longer than it is tall
-		//Path arcs  rx ry x-axis-rotation large-arc-flag sweep-flag dx dy
-		// 'M 70 200 a 2 2 1 1 0 0 100 h 100 a 2 2 1 1 0 0 -100 z' 
-		// rgb(190,230,240), rgb(240,180,190), rgb(180,240,200)
-		var radius = (endpoint[1]-startpoint[1])/2
-		var width = (endpoint[0]-startpoint[0])
-
-		var leftend = 'M '+(startpoint[0]+radius)+" "+startpoint[1]+" a 2 2 1 1 0 0 "+(2*radius)
-		var middle = 'M '+(startpoint[0]+radius)+" "+startpoint[1]+" h "+(width-2*radius)+" v "+(2*radius)+" h "+-1*(width-2*radius)+" z"
-		var rightend ='M '+(endpoint[0]-radius)+" "+endpoint[1]+" a 2 2 1 1 0 0 "+(-2*radius)
-
-		return <g>
-			<path d={leftend} fill={colour} strokeWidth='0' onMouseDown={leftclickdown}/>
-			<path d={middle} fill={colour} strokeWidth='0' onMouseDown={middleclickdown}/>
-			<path d={rightend} fill={colour} strokeWidth='0' onMouseDown={rightclickdown}/> 
-			</g>
-	}
 
 function Columns(startpoint, endpoint, columnTitles,colLetterShift=[5,10], horizontalBreakLineHeight=15)
-	{
+	{	//TODO change input to accept titles and cell positions
 		var dayElements = []
 		var dayBreakLines = []
 		
