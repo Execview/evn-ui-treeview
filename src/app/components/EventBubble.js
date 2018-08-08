@@ -13,6 +13,7 @@ class EventBubble extends Component {
 		this.key=this.props.key
 		this.mousedownpos = [0,0]
 		this.dragDiffs = [[0,0],[0,0]] //the vector from mouse down to the start/end points
+		this.highlightcolour = 'rgb(100,100,100)'
 
 		this.isleftmousedown = false
 		this.isrightmousedown = false
@@ -40,10 +41,10 @@ class EventBubble extends Component {
 	}
 	leftclickdown(event){	this.isleftmousedown = true; 
 							this.mousedownpos = [event.nativeEvent.offsetX,event.nativeEvent.offsetY]
-							this.requestSetState({leftcolour:'rgb(100,100,100)'})}
+							this.requestSetState({leftcolour:this.highlightcolour})}
 	rightclickdown(event){	this.isrightmousedown = true; 
 							this.mousedownpos = [event.nativeEvent.offsetX,event.nativeEvent.offsetY]
-							this.requestSetState({rightcolour:'rgb(100,100,100)'})}
+							this.requestSetState({rightcolour:this.highlightcolour})}
 	middleclickdown(event){	this.ismiddlemousedown = true
 							this.mousedownpos = [event.nativeEvent.offsetX,event.nativeEvent.offsetY]
 							this.dragDiffs[0] = [this.mousedownpos[0]-this.state.startpoint[0],this.mousedownpos[1]-this.state.startpoint[1]]
@@ -54,10 +55,10 @@ class EventBubble extends Component {
 	leftlift(){this.props.bubblemessagestream.next(['linklift',this.props.key,'left'])} //anywhere
 	rightlift(){this.props.bubblemessagestream.next(['linklift',this.props.key,'right'])}
 
-	leftmousein(event){if(event.buttons!==0){this.requestSetState({leftcolour: 'rgb(100,100,100)'})}}
-	leftmouseout(event){if(!this.isleftmousedown){this.requestSetState({leftcolour: this.initialcolour})}}
-	rightmousein(event){if(event.buttons!==0){this.requestSetState({rightcolour: 'rgb(100,100,100)'})}}
-	rightmouseout(event){if(!this.isrightmousedown){this.requestSetState({rightcolour: this.initialcolour})}}
+	leftmousein(event){if(event.buttons!==0){this.requestSetState({leftcolour: this.highlightcolour})}}
+	leftmouseout(event){if(!this.isleftmousedown && event.buttons!==0){this.getOriginalColour('left')}}
+	rightmousein(event){if(event.buttons!==0){this.requestSetState({rightcolour: this.highlightcolour})}}
+	rightmouseout(event){if(!this.isrightmousedown && event.buttons!==0){this.getOriginalColour('right')}}
 			
 	mousemove(event)
 	{
@@ -66,16 +67,21 @@ class EventBubble extends Component {
 								this.isleftmousedown=false;
 								this.isrightmousedown=false;
 								this.ismiddlemousedown=false;
-								if(this.state.leftcolour!==this.initialcolour || this.state.rightcolour!==this.initialcolour){
-									this.requestSetState({leftcolour: this.initialcolour})
-									this.requestSetState({rightcolour: this.initialcolour})}}
+								if(this.state.leftcolour===this.highlightcolour || this.state.rightcolour===this.highlightcolour){
+									this.getOriginalColour('left')
+									this.getOriginalColour('right')
+									}}
+		//TODO MOVE SNAPPING (getNearestValueInArray stuff) into scheduler. Then you wont need to pass snaps. It also means snaps can change when you move eventbubbles
 		if(this.isleftmousedown){	var newX = this.getNearestValueInArray(this.snaps[0],event.offsetX); 
 									this.requestSetState({startpoint: [newX,this.state.startpoint[1]], width: this.state.width-(newX-this.state.startpoint[0])})}
 		if(this.isrightmousedown){	var newX = this.getNearestValueInArray(this.snaps[0],event.offsetX)
 									this.requestSetState({width: newX-(this.state.startpoint[0])})}
-		if(this.ismiddlemousedown){	this.requestSetState({startpoint: [event.offsetX-this.dragDiffs[0][0],this.getNearestValueInArray(this.snaps[1],event.offsetY)-this.state.height/2]})}
+		if(this.ismiddlemousedown){	
+			this.requestSetState({startpoint: [this.getNearestValueInArray(this.snaps[0],event.offsetX-this.dragDiffs[0][0]),this.getNearestValueInArray(this.snaps[1],event.offsetY)-this.state.height/2]})
+		}
 	}
 	requestSetState(changes){this.props.bubblemessagestream.next(['state',this.props.key,changes])}
+	getOriginalColour(side){this.props.bubblemessagestream.next(['initialcolour',this.props.key,side])}
 	getNearestValueInArray(snapsarray,value){ if(snapsarray===[]){return value}
 		var distancefromsnapsarray = snapsarray.slice().map((i)=>Math.abs(i-value))
 		return snapsarray[distancefromsnapsarray.indexOf(Math.min(...distancefromsnapsarray))]

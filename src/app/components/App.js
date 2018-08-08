@@ -9,10 +9,9 @@ class App extends Component {
     	<div className="App">
     		<header className="App-header">
 				<img src={logo} className="App-logo" alt="logo" />
-        		<h1 className="App-title">Scheduler Test</h1>
-        	</header>
-        	<p className="App-intro">Testing</p>
-			<Scheduler/>
+        		<h1 className="App-title">Execview Scheduler</h1>
+        	</header>		
+			<Scheduler className="App-scheduler"/>			
       </div>
     );
   }
