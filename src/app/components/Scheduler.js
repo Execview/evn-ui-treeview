@@ -1,151 +1,218 @@
 import React, { Component } from 'react';
+import '../css/App.css';
 import EventBubble from './EventBubble'
 var Rx = require('rxjs/Rx')
 
 class Scheduler extends Component {
 	constructor()
 	{
+		//these should be ALL props. inc the date span. Also TODO convert (x,y) into dates when loading/saving/converting
 		super();
+
+		this.colours = [['Blue','rgb(190,230,240)'],['Red','rgb(240,180,190)'],['Green','rgb(180,240,200)'],['Yellow','rgb(250,250,190)'],['Purple','rgb(240,190,250)']]
+		this.newbubblecolour = this.colours[0][1]
+		this.highlightcolour = 'rgb(100,100,100)'
+
 		var week = ['Mo','Tu','We','Th','Fr','Sa','Su']
 		var month = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]
 		var year = ['Ja','Fe','Ma','Ap','Ma','Ju','JL','Au','Se','Oc','No','De']
 		var names = ["James","Andras","Salman","Marisha","Vygantus"]
 
-		this.displaycols = week;
+		this.selectedFile = 'a.json'
+
 		this.rows = names
+		var initialbubbles=[]
 
+		this.state = {bubbles: initialbubbles, links: [], displaycols: week, snaps: [[],[]]} // TODO PUT STATE HERE
+		
 		this.schedulerDimensions = [window.innerWidth*0.85,700]
-			this.barsnaps = [[],[]] //when a bubble is moved, append the x and ys to this list so you can snap to them or line things up to them
-			var numberofXsnaps = 2*this.displaycols.length
-		this.bubbleDimensions = [2*this.schedulerDimensions[0]/numberofXsnaps,50]
+		this.bubbleDimensions = [this.schedulerDimensions[0]/this.state.displaycols.length,50]
 
-		this.render = this.render.bind(this)
-		
-		
-		for(var i=0;i<numberofXsnaps+1;i++){this.barsnaps[0].push(this.bubbleDimensions[0]*i)}
-		for(var j=0;this.bubbleDimensions[1]*j<this.schedulerDimensions[1];j++){this.barsnaps[1].push(this.bubbleDimensions[1]*j)}
-		
+		for(var i=0;i<2*this.state.displaycols.length+1;i++){this.state.snaps[0].push(this.bubbleDimensions[0]*i)}
+		for(var j=0;this.bubbleDimensions[1]*j<this.schedulerDimensions[1];j++){this.state.snaps[1].push(this.bubbleDimensions[1]*j)}
+
 		this.bubblemessagestream = new Rx.Subject();
-		this.bubbles=[
-			/*new EventBubble({key:0, startpoint:[this.barsnaps[0][4],this.barsnaps[1][2]+this.bubbleDimensions[1]/2], width: this.bubbleDimensions[0], height: this.bubbleDimensions[1], colour:'rgb(190,230,240)', snaps:this.barsnaps, bubblemessagestream: this.bubblemessagestream}),
-			new EventBubble({key:1, startpoint:[this.barsnaps[0][4],this.barsnaps[1][3]+this.bubbleDimensions[1]/2], width: this.bubbleDimensions[0], height: this.bubbleDimensions[1], colour:'rgb(240,180,190)', snaps:this.barsnaps, bubblemessagestream: this.bubblemessagestream}),
-			new EventBubble({key:2, startpoint:[this.barsnaps[0][4],this.barsnaps[1][5]+this.bubbleDimensions[1]/2], width: this.bubbleDimensions[0], height: this.bubbleDimensions[1], colour:'rgb(180,240,200)', snaps:this.barsnaps, bubblemessagestream: this.bubblemessagestream}),
-			new EventBubble({key:3, startpoint:[this.barsnaps[0][4],this.barsnaps[1][6]+this.bubbleDimensions[1]/2], width: this.bubbleDimensions[0], height: this.bubbleDimensions[1], colour:'rgb(250,250,190)', snaps:this.barsnaps, bubblemessagestream: this.bubblemessagestream}),
-			new EventBubble({key:4, startpoint:[this.barsnaps[0][4],this.barsnaps[1][8]+this.bubbleDimensions[1]/2], width: this.bubbleDimensions[0], height: this.bubbleDimensions[1], colour:'rgb(240,190,250)', snaps:this.barsnaps, bubblemessagestream: this.bubblemessagestream})
-			*/]
-		
-		this.bubblemessagestream.subscribe(	(message)=>{if(message[0]==='state'){this.bubbleRequestState(this.bubbles[message[1]],message[2])}
+		this.bubblemessagestream.subscribe(	(message)=>{if(message[0]==='transform'){this.bubbleTransform(message[1],message[2])}
 														else if(message[0]==='linkup'){this.lastup=[message[1],message[2]]}
 														else if(message[0]==='linklift'){console.log('lift');this.performLink(message[1],message[2])}
-														else if(message[0]==='initialcolour'){this.setInitialColour(message[1],message[2])}
-														}) //this is quite a dumb id/key system. probably fix later... 
+														else if(message[0]==='originalcolour'){this.setOriginalColour(message[1],message[2])}
+														else if(message[0]==='highlightcolour'){this.setHighlightColour(message[1],message[2])}
+														})
 
-		this.lastup = null
-		this.links = []
-
-		this.newbubblecolour = 'rgb(190,230,240)'
-
+		this.lastup = null		
+		this.bubbleTransform = this.bubbleTransform.bind(this);
+		this.checkIfValidTransformState = this.checkIfValidTransformState.bind(this);
+		this.noCollisions = this.noCollisions.bind(this);
+		this.checkForNoBubbleCollisions = this.checkForNoBubbleCollisions.bind(this);
+		this.getNearestValueInArray = this.getNearestValueInArray.bind(this);
+		this.performLink = this.performLink.bind(this);
+		this.setOriginalColour = this.setOriginalColour.bind(this);
+		this.setHighlightColour = this.setHighlightColour.bind(this);
 		this.makeNewBubble = this.makeNewBubble.bind(this);
-	}
-	
-	bubbleRequestState(bubble,changes) //Stop passing bubble and instead pass the changes, which will contain the bubble key if it requires changing
-	{	//deal with snapping here. The bubble will just request a state change to the position of the mouse. You can also do collision here
-		var teststate = Object.assign(bubble.state,changes)//will later have to be the whole state including all bubble positions to test for nocollisions when moving linked bubbles
-
-
-		if(teststate.width<teststate.height){
-			bubble.state = Object.assign(bubble.state,{startpoint: bubble.state.startpoint}) //fix
-			this.forceUpdate()
-		}
-		else if(this.noCollisions(bubble.key,teststate)){
-			var islinkedto = []
-			this.links.forEach((linkstring)=>{var link=linkstring.split(" ");if(link[0]==bubble.key){
-				var linkedbubble = this.bubbles[link[2]]
-				var endpoint = [teststate.startpoint[0]+teststate.width,teststate.startpoint[1]+teststate.height]
-				var newX = null
-				if(link[1]==='right'){newX = endpoint[0]}else{newX =teststate.startpoint[0]}				
-				if(link[3]==='right'){this.bubbleRequestState(linkedbubble,{startpoint: [newX-linkedbubble.state.width,linkedbubble.state.startpoint[1]]})}
-				else{this.bubbleRequestState(linkedbubble,{startpoint: [newX,linkedbubble.state.startpoint[1]]})}
-			}})
-			bubble.state = teststate
-			this.forceUpdate()
-		}
-		else{console.log('collision!')}
+		this.saveToFile = this.saveToFile.bind(this);
+		this.loadFromFile = this.loadFromFile.bind(this);			
+		this.render = this.render.bind(this);
 	}
 
-	noCollisions(key,teststate)
+	bubbleTransform(key,changes){
+		var originalStates = []; //save a copy of the original states and replace the current state with the original if the current is an illegal state after the transformations
+		this.state.bubbles.forEach(bubble=>{originalStates.push(JSON.parse(JSON.stringify(bubble.state)))})
+		Object.assign(this.state.bubbles[key].state,changes)
+		if(!this.checkIfValidTransformState(this.state)){var i=0;this.state.bubbles.forEach(bubble=>{bubble.state=originalStates[i];i++});}
+		this.forceUpdate()	
+	}
+
+	checkIfValidTransformState(teststate) 
+	{	
+		//Move all bubbles based on links
+		const horribleLinkForcingAlgorithm = () =>{
+			var changes = false
+			this.state.links.forEach(link=>{
+			var parentside = 'right'===link[1] ? "endpoint" : "startpoint"
+			var childside = 'right'===link[3] ? "endpoint" : "startpoint"
+			if(teststate.bubbles[link[0]].state[parentside][0]!==teststate.bubbles[link[2]].state[childside][0]){
+				var childotherside = 'right'===link[3] ? "startpoint" : "endpoint";
+				teststate.bubbles[link[2]].state[childotherside][0]+=teststate.bubbles[link[0]].state[parentside][0]-teststate.bubbles[link[2]].state[childside][0]
+				teststate.bubbles[link[2]].state[childside][0]=teststate.bubbles[link[0]].state[parentside][0];
+				changes=true}})
+			if(changes===true){horribleLinkForcingAlgorithm()}
+		}
+		horribleLinkForcingAlgorithm()
+
+		//Snap all bubbles
+		teststate.bubbles.forEach(bubble=>{
+			bubble.state.startpoint = [	this.getNearestValueInArray(this.state.snaps[0],bubble.state.startpoint[0]),
+										this.getNearestValueInArray(this.state.snaps[1],bubble.state.startpoint[1])]
+			bubble.state.endpoint = [	this.getNearestValueInArray(this.state.snaps[0],bubble.state.endpoint[0]),
+										this.getNearestValueInArray(this.state.snaps[1],bubble.state.endpoint[1])]})		
+		
+		//Dont allow negative length bubbles	
+		var oneHasNegativeWidth = false
+		teststate.bubbles.forEach(bubble => {if(bubble.state.startpoint[0]>=bubble.state.endpoint[0]){oneHasNegativeWidth = true}});
+		if(oneHasNegativeWidth){return false}
+		
+		//Dont allow bubbles to collide
+		if(!this.noCollisions(teststate)){return false}
+
+		return true
+	}
+
+
+	noCollisions(teststate){
+		var noglobalcollision = true
+		teststate.bubbles.forEach(bubble=>{if(!this.checkForNoBubbleCollisions(bubble,teststate)){noglobalcollision=false}})
+		return noglobalcollision
+	}
+
+	checkForNoBubbleCollisions(bubble,teststate)
 	{
-		var bubbleswithoutthis = this.bubbles.slice()
-		bubbleswithoutthis.splice(key,1)
+		var bubbleswithoutthis = teststate.bubbles.slice()
+		bubbleswithoutthis.splice(bubble.props.key,1)
 		var nocollision = true
-		bubbleswithoutthis.forEach((aBubble)=>{
-			if((aBubble.state.startpoint[1]===teststate.startpoint[1]) && 
-			(	(teststate.startpoint[0]>aBubble.state.startpoint[0]
+		bubbleswithoutthis.forEach((otherBubble)=>{
+			if((otherBubble.state.startpoint[1]===bubble.state.startpoint[1]) && 
+			(	(bubble.state.startpoint[0]>otherBubble.state.startpoint[0]
 				&&
-				teststate.startpoint[0]<aBubble.state.startpoint[0]+aBubble.state.width)
+				bubble.state.startpoint[0]<otherBubble.state.endpoint[0])
 			||
-				(teststate.startpoint[0]+teststate.width>aBubble.state.startpoint[0]
+				(bubble.state.endpoint[0]>otherBubble.state.startpoint[0]
 				&&
-				teststate.startpoint[0]+teststate.width<aBubble.state.startpoint[0]+aBubble.state.width)
+				bubble.state.endpoint[0]<otherBubble.state.endpoint[0])
 			||
-				(teststate.startpoint[0]<aBubble.state.startpoint[0] 
+				(bubble.state.startpoint[0]<=otherBubble.state.startpoint[0] 
 				&&
-				teststate.startpoint[0]+teststate.width>aBubble.state.startpoint[0]+aBubble.state.width)
+				bubble.state.endpoint[0]>=otherBubble.state.endpoint[0])
 			)			
-			){nocollision=false}
+			){nocollision=false;console.log('collision')}
 		})
 		return nocollision
 	}
 
+	getNearestValueInArray(snapsarray,value){ if(snapsarray===[]){return value}
+		var distancefromsnapsarray = snapsarray.slice().map((i)=>Math.abs(i-value))
+		return snapsarray[distancefromsnapsarray.indexOf(Math.min(...distancefromsnapsarray))]
+	}
 	performLink(liftkey,liftside){
 		if(this.lastup!==null)
 		{
-			var upkey=this.lastup[0]
-			var upside=this.lastup[1]			
-			if(this.links.indexOf(liftkey+' '+liftside+' '+upkey+' '+upside)===-1 && this.links.indexOf(upkey+' '+upside+' '+liftkey+' '+liftside)===-1 && upkey!==liftkey){
-			this.links.push(liftkey+' '+liftside+' '+upkey+' '+upside)
-			console.log(liftkey+' '+liftside+' '+upkey+' '+upside)
-			console.log(this.links)
+			var upkey=this.lastup[0];
+			var upside=this.lastup[1];		
+			if(this.state.links.every(link=>{return (link[2]!==upkey)&&!(link[0]===upkey&&link[2]===liftkey)}) && upkey!==liftkey){
+				this.state.links.push([liftkey,liftside,upkey,upside])
+				console.log(liftkey+' '+liftside+' '+upkey+' '+upside)
+				console.log(this.state.links)
+				this.setOriginalColour(upkey,upside) //Sometimes it wasnt updating the colour until next mouse event. This forces it here.
 			}
 			else{console.log('already linked!')}
 		}
 		this.lastup = null
 		}
-	setInitialColour(key,side){ console.log('here')
-		var colourtoset=this.bubbles[key].initialcolour
-		this.links.forEach((l)=>{var link = l.split(" ")
-		if(link[2]==key &&link[3]==side){colourtoset = this.bubbles[link[0]].initialcolour}
-		})
-		if(side=='right'){this.bubbles[key].state = Object.assign(this.bubbles[key].state,{rightcolour:colourtoset})}else{this.bubbles[key].state = Object.assign(this.bubbles[key].state,{leftcolour:colourtoset})}
+	setOriginalColour(key,side){
+		var colourtoset=this.state.bubbles[key].props.colour
+		this.state.links.forEach(link=>{
+		if(parseInt(link[2])===key &&link[3]===side){colourtoset = this.state.bubbles[link[0]].props.colour}})
+		if(side==='right'){this.state.bubbles[key].state = Object.assign(this.state.bubbles[key].state,{rightcolour:colourtoset})}else{this.state.bubbles[key].state = Object.assign(this.state.bubbles[key].state,{leftcolour:colourtoset})}
+		this.forceUpdate()
+	}
+	setHighlightColour(key,side){
+		var colourtoset=this.state.bubbles[key].props.highlightcolour
+		if(side==='right'){this.state.bubbles[key].state = Object.assign(this.state.bubbles[key].state,{rightcolour:colourtoset})}else{this.state.bubbles[key].state = Object.assign(this.state.bubbles[key].state,{leftcolour:colourtoset})}
 		this.forceUpdate()
 	}
 	makeNewBubble()
 	{
-		var maxY = this.barsnaps[1][0]+this.bubbleDimensions[1]/2
+		var maxY = this.state.snaps[1][0]
 		var maxX = 0
 		var maxkey = -1
-		this.bubbles.forEach((bubble)=>{if(bubble.state.startpoint[1]>maxY){maxY=bubble.state.startpoint[1]};
-										if(bubble.state.startpoint[0]+bubble.state.width>maxX){maxX=bubble.state.startpoint[0]+bubble.state.width};
-										if(bubble.key>maxkey){maxkey=bubble.key}})
-		var newbubble = new EventBubble({key:maxkey+1, startpoint:[maxX,maxY+this.bubbleDimensions[1]], width: this.bubbleDimensions[0], height: this.bubbleDimensions[1], colour:this.newbubblecolour, snaps:this.barsnaps, bubblemessagestream: this.bubblemessagestream})
-		this.bubbles.push(newbubble)
+		this.state.bubbles.forEach((bubble)=>{if(bubble.state.startpoint[1]>maxY){maxY=bubble.state.startpoint[1]};
+										if(bubble.state.endpoint[0]>maxX){maxX=bubble.state.endpoint[0]};
+										if(bubble.props.key>maxkey){maxkey=bubble.props.key}})
+		var newbubble = new EventBubble({key:maxkey+1, startpoint:[maxX,maxY+this.bubbleDimensions[1]], endpoint:[maxX+this.bubbleDimensions[0],maxY+2*this.bubbleDimensions[1]], colour:this.newbubblecolour,leftcolour:this.newbubblecolour,rightcolour:this.newbubblecolour, bubblemessagestream: this.bubblemessagestream, highlightcolour: this.highlightcolour})
+		this.state.bubbles[newbubble.props.key] = newbubble
 		this.forceUpdate();
 	}
+
+	saveToFile(){
+		console.log("Saving to: "+this.selectedFile)
+		var bubbleData = []
+		this.state.bubbles.forEach(bubble=>{bubbleData.push({key:bubble.props.key,state:bubble.state})})
+		var data = {links: this.state.links, bubbles: bubbleData}
+		console.log(data)
+		var url = "http://192.168.1.115:3001/write?file="+this.selectedFile+'&data='+JSON.stringify(data)
+		fetch(url,{method: 'POST',header: {"Access-Control-Allow-Origin": "*", "Content-Type":"application/json"}})
+			.then(response => {console.log("done")})}
+
+	loadFromFile(){
+		console.log("Loading: "+this.selectedFile)
+		var url = "http://192.168.1.115:3001/read?file="+this.selectedFile
+		fetch(url,{header: {"Access-Control-Allow-Origin": "*", "Content-Type":"application/json"}})
+			.then(response => {return response.json()})
+			.then(data => {	console.log(data)
+							this.state.links = data.links
+							this.state.bubbles = []
+							data.bubbles.forEach(bubble=>{this.state.bubbles.push(new EventBubble({key:bubble.key, startpoint:bubble.state.startpoint, endpoint:bubble.state.endpoint, colour:bubble.state.colour, leftcolour:bubble.state.leftcolour, rightcolour:bubble.state.rightcolour, bubblemessagestream: this.bubblemessagestream, highlightcolour: this.highlightcolour}))});this.forceUpdate()})
+					}
+
   	render() {
 		console.log("render scheduler")
 		return 	<div>
-					<p/>
+					<div className='App-dropdown'>
+						<select onChange={(event)=>{this.selectedFile=event.target.value}}>
+							<option value="a.json">a</option>
+							<option value="b.json">b</option>
+							<option value="c.json">c</option>
+						</select>
+						<button onClick={this.loadFromFile}>Load</button>
+						<button onClick={this.saveToFile}>Save</button>
+					</div>
+					{/*Maybe add colour wheel. Also probably make another js file with these colours, so you can access them from multiple places.*/}
 					<button style={{color:'black',borderColor:'black',backgroundColor:this.newbubblecolour}}>ACTIVE COLOUR </button>
 					<button onClick={this.makeNewBubble}>Add bubble</button>
-					<button onClick={()=>{this.newbubblecolour='rgb(190,230,240)';this.forceUpdate();}} style={{color:'black',borderColor:'white',backgroundColor:'rgb(190,230,240)'}}>Blue</button>
-					<button onClick={()=>{this.newbubblecolour='rgb(240,180,190)';this.forceUpdate()}} style={{color:'black',borderColor:'white',backgroundColor:'rgb(240,180,190)'}}>Red</button>
-					<button onClick={()=>{this.newbubblecolour='rgb(180,240,200)';this.forceUpdate()}} style={{color:'black',borderColor:'white',backgroundColor:'rgb(180,240,200)'}}>Green</button>
-					<button onClick={()=>{this.newbubblecolour='rgb(250,250,190)';this.forceUpdate()}} style={{color:'black',borderColor:'white',backgroundColor:'rgb(250,250,190)'}}>Yellow</button>
-					<button onClick={()=>{this.newbubblecolour='rgb(240,190,250)';this.forceUpdate()}} style={{color:'black',borderColor:'white',backgroundColor:'rgb(240,190,250)'}}>Purple</button>
+					{this.colours.map(colour=><button key={colour} onClick={()=>{this.newbubblecolour=colour[1];this.forceUpdate()}} style={{color:'black',borderColor:'white',backgroundColor: colour[1]}}>{colour[0]}</button>)}
 					<p/>
 					<svg width={this.schedulerDimensions[0]} height={this.schedulerDimensions[1]}>
-						{Columns([0,0],this.schedulerDimensions,this.displaycols,[5,15],20)}
-						{this.bubbles.map((b)=>b.render())})	
+						{Columns([0,0],this.schedulerDimensions,this.state.displaycols,[5,15],20)}
+						{this.state.bubbles.map((b)=>b.render())})	
 					</svg>
 				</div>
 	}

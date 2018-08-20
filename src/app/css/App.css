@@ -17,7 +17,9 @@
 }
 
 .App-scheduler{
-	padding-top: 100px;
+	padding-top: 10px;
 }
-
+.App-dropdown{
+	padding-top:20px;
+}
 

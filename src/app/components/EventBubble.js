@@ -8,12 +8,9 @@ class EventBubble extends Component {
 	{
 		super(props);
 
-		this.state = {startpoint: this.props.startpoint, width: this.props.width, height: this.props.height, colour: this.props.colour, leftcolour: this.props.colour, rightcolour: this.props.colour} //change left and right colour to load to their respective colours
-		this.initialcolour = this.props.colour
-		this.key=this.props.key
+		this.state = {startpoint: this.props.startpoint, endpoint:this.props.endpoint, colour: this.props.colour, leftcolour: this.props.leftcolour, rightcolour: this.props.rightcolour} 
 		this.mousedownpos = [0,0]
 		this.dragDiffs = [[0,0],[0,0]] //the vector from mouse down to the start/end points
-		this.highlightcolour = 'rgb(100,100,100)'
 
 		this.isleftmousedown = false
 		this.isrightmousedown = false
@@ -24,76 +21,61 @@ class EventBubble extends Component {
 		this.leftclickdown = this.leftclickdown.bind(this);
 		this.rightclickdown = this.rightclickdown.bind(this);
 		this.middleclickdown = this.middleclickdown.bind(this);
-		this.leftclickup = this.leftclickup.bind(this);
-		this.rightclickup = this.rightclickup.bind(this);
-		this.mousemove = this.mousemove.bind(this);
-		this.getNearestValueInArray = this.getNearestValueInArray.bind(this);
-		this.leftlift = this.leftlift.bind(this);
-		this.rightlift = this.rightlift.bind(this);
 		this.leftmousein = this.leftmousein.bind(this);
 		this.leftmouseout = this.leftmouseout.bind(this);
 		this.rightmousein = this.rightmousein.bind(this);
 		this.rightmouseout = this.rightmouseout.bind(this);
-		this.requestSetState = this.requestSetState.bind(this);
+		this.mousemove = this.mousemove.bind(this);
+		this.transform = this.transform.bind(this);
+		this.setOriginalColour = this.setOriginalColour.bind(this);
+		this.setHighlightColour = this.setHighlightColour.bind(this);
+		this.leftclickup = this.leftclickup.bind(this);
+		this.rightclickup = this.rightclickup.bind(this);
+		this.leftlift = this.leftlift.bind(this);
+		this.rightlift = this.rightlift.bind(this);
 		this.render = this.render.bind(this);
 
-		this.snaps = this.props.snaps //the list of x's and y's which the bar size and placement should snap to
 	}
-	leftclickdown(event){	this.isleftmousedown = true; 
-							this.mousedownpos = [event.nativeEvent.offsetX,event.nativeEvent.offsetY]
-							this.requestSetState({leftcolour:this.highlightcolour})}
-	rightclickdown(event){	this.isrightmousedown = true; 
-							this.mousedownpos = [event.nativeEvent.offsetX,event.nativeEvent.offsetY]
-							this.requestSetState({rightcolour:this.highlightcolour})}
+	leftclickdown(){this.isleftmousedown = true; this.setHighlightColour('left')}
+	rightclickdown(){this.isrightmousedown = true; this.setHighlightColour('right')}
 	middleclickdown(event){	this.ismiddlemousedown = true
 							this.mousedownpos = [event.nativeEvent.offsetX,event.nativeEvent.offsetY]
 							this.dragDiffs[0] = [this.mousedownpos[0]-this.state.startpoint[0],this.mousedownpos[1]-this.state.startpoint[1]]
-							}
-	leftclickup(event){this.props.bubblemessagestream.next(['linkup',this.props.key,'left'])} //inside bubble
-	rightclickup(event){this.props.bubblemessagestream.next(['linkup',this.props.key,'right'])}
+							this.dragDiffs[1] = [this.mousedownpos[0]-this.state.endpoint[0],this.mousedownpos[1]-this.state.endpoint[1]]}
 
-	leftlift(){this.props.bubblemessagestream.next(['linklift',this.props.key,'left'])} //anywhere
-	rightlift(){this.props.bubblemessagestream.next(['linklift',this.props.key,'right'])}
-
-	leftmousein(event){if(event.buttons!==0){this.requestSetState({leftcolour: this.highlightcolour})}}
-	leftmouseout(event){if(!this.isleftmousedown && event.buttons!==0){this.getOriginalColour('left')}}
-	rightmousein(event){if(event.buttons!==0){this.requestSetState({rightcolour: this.highlightcolour})}}
-	rightmouseout(event){if(!this.isrightmousedown && event.buttons!==0){this.getOriginalColour('right')}}
+	leftmousein(event){if(event.buttons!==0){this.setHighlightColour('left')}}
+	leftmouseout(event){if(!this.isleftmousedown && event.buttons!==0){this.setOriginalColour('left')}}
+	rightmousein(event){if(event.buttons!==0){this.setHighlightColour('right')}}
+	rightmouseout(event){if(!this.isrightmousedown && event.buttons!==0){this.setOriginalColour('right')}}
 			
 	mousemove(event)
 	{
 		if(event.buttons===0) {	if(this.isleftmousedown){this.leftlift()};
 								if(this.isrightmousedown){this.rightlift()};
-								this.isleftmousedown=false;
-								this.isrightmousedown=false;
-								this.ismiddlemousedown=false;
-								if(this.state.leftcolour===this.highlightcolour || this.state.rightcolour===this.highlightcolour){
-									this.getOriginalColour('left')
-									this.getOriginalColour('right')
-									}}
-		//TODO MOVE SNAPPING (getNearestValueInArray stuff) into scheduler. Then you wont need to pass snaps. It also means snaps can change when you move eventbubbles
-		if(this.isleftmousedown){	var newX = this.getNearestValueInArray(this.snaps[0],event.offsetX); 
-									this.requestSetState({startpoint: [newX,this.state.startpoint[1]], width: this.state.width-(newX-this.state.startpoint[0])})}
-		if(this.isrightmousedown){	var newX = this.getNearestValueInArray(this.snaps[0],event.offsetX)
-									this.requestSetState({width: newX-(this.state.startpoint[0])})}
+								this.isleftmousedown=false;	this.isrightmousedown=false; this.ismiddlemousedown=false;
+								if(this.state.leftcolour===this.props.highlightcolour || this.state.rightcolour===this.props.highlightcolour){
+									this.setOriginalColour('left')
+									this.setOriginalColour('right')}}
+		if(this.isleftmousedown){this.transform({startpoint: [event.offsetX,this.state.startpoint[1]]})}
+		if(this.isrightmousedown){this.transform({endpoint:[event.offsetX,this.state.endpoint[1]]})}
 		if(this.ismiddlemousedown){	
-			this.requestSetState({startpoint: [this.getNearestValueInArray(this.snaps[0],event.offsetX-this.dragDiffs[0][0]),this.getNearestValueInArray(this.snaps[1],event.offsetY)-this.state.height/2]})
-		}
+			this.transform({startpoint:[event.offsetX-this.dragDiffs[0][0],
+										event.offsetY-this.dragDiffs[0][1]], 
+							endpoint:[	event.offsetX-this.dragDiffs[1][0],
+										event.offsetY-this.dragDiffs[1][1]]})}
 	}
-	requestSetState(changes){this.props.bubblemessagestream.next(['state',this.props.key,changes])}
-	getOriginalColour(side){this.props.bubblemessagestream.next(['initialcolour',this.props.key,side])}
-	getNearestValueInArray(snapsarray,value){ if(snapsarray===[]){return value}
-		var distancefromsnapsarray = snapsarray.slice().map((i)=>Math.abs(i-value))
-		return snapsarray[distancefromsnapsarray.indexOf(Math.min(...distancefromsnapsarray))]
-	}
+	transform(changes){this.props.bubblemessagestream.next(['transform',this.props.key,changes])}
+	setOriginalColour(side){this.props.bubblemessagestream.next(['originalcolour',this.props.key,side])}
+	setHighlightColour(side){this.props.bubblemessagestream.next(['highlightcolour',this.props.key,side])}
+	leftclickup(){this.props.bubblemessagestream.next(['linkup',this.props.key,'left'])} //inside bubble
+	rightclickup(){this.props.bubblemessagestream.next(['linkup',this.props.key,'right'])}
+	leftlift(){this.props.bubblemessagestream.next(['linklift',this.props.key,'left'])} //anywhere
+	rightlift(){this.props.bubblemessagestream.next(['linklift',this.props.key,'right'])}
 	
-	
-
-	render(){return Bubble(this.state.startpoint,[(this.state.startpoint[0]+this.state.width),(this.state.startpoint[1]+this.state.height)],this.state.colour,this.leftclickdown,this.rightclickdown,this.middleclickdown,this.leftclickup,this.rightclickup,this.leftmousein, this.leftmouseout,this.rightmousein,this.rightmouseout,this.state.leftcolour,this.state.rightcolour,this.props.key)}
+	render(){return Bubble(this.state.startpoint,this.state.endpoint,this.state.colour,this.leftclickdown,this.rightclickdown,this.middleclickdown,this.leftclickup,this.rightclickup,this.leftmousein, this.leftmouseout,this.rightmousein,this.rightmouseout,this.state.leftcolour,this.state.rightcolour,this.props.key)}
 }
 
-function Bubble(startpoint, endpoint, 
-				colour='rgb(190,230,240)', 
+function Bubble(startpoint, endpoint, colour='rgb(190,230,240)', 
 				leftclickdown=()=>console.log("left end down"),
 				rightclickdown=()=>console.log("right end down"),
 				middleclickdown=()=>console.log("middle part down"),
