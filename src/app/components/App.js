@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import logo from '../../favicon.ico';
+//import logo from '../../favicon.ico';
 import '../css/App.css';
 import Scheduler from './Scheduler'
 
