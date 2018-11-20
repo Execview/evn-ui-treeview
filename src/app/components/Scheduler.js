@@ -5,10 +5,7 @@ var moment = require('moment')
 var crypto = require('crypto')
 const hash = crypto.createHash('sha256');
 
-//TODO ADD RIGHTCLICK MENU TO RENAME, DELETE, AND CHANGE BUBBLE COLOUR. Figure out how selective loading is going to work. remember links not on screen still exist! If you make it a property of the bubble, it would work, then climb tree of visible bubbles to find parent, before recursively forcing links down the tree.
-//KNOWN BUG Moving bubbles past the end of the svg canvas. Can probably be fixed by adding more snaps
-//KNOWN BUG Month number is showing 1 less than real month number...
-//TODO NEXT Make links a property of a bubble. 
+//TODO ADD RIGHTCLICK MENU TO RENAME, DELETE, AND CHANGE BUBBLE COLOUR. Figure out how selective loading is going to work. remember links not on screen still exist!
 var mousepositionstream = Rx.Observable.fromEvent(document,'mousemove')
 var mousepoll = Rx.Observable.interval(8)
 var refreshstream = Rx.Observable.interval(16)
@@ -29,30 +26,23 @@ class Scheduler extends Component {
 		this.schedulerPageScale = [0.9,1]
 		this.internalSVGDimensions = [1280,1000]
 
+		this.startdate = new Date("2018-10-15")
+		this.enddate = new Date("2018-10-22")
+		this.extrasnaps = 2 //extra snaps beyond visible range. must be above 2+ to fit an entire bubble right and left side.
+
 		//this.colours = [['Blue','rgb(190,230,240)'],['Red','rgb(240,180,190)'],['Green','rgb(180,240,200)'],['Yellow','rgb(250,250,190)'],['Purple','rgb(240,190,250)']]
-		//this.colours = [['Blue','rgb(100,230,240)'],['Red','rgb(220,100,120)'],['Green','rgb(80,220,130)'],['Yellow','rgb(250,250,150)'],['Purple','rgb(230,140,250)']]
 		this.colours = [['Blue','rgb(130,200,210)'],['Red','rgb(210,115,130)'],['Green','rgb(100,200,135)'],['Yellow','rgb(240,240,160)'],['Purple','rgb(220,160,230)']]
 		this.AndrasToColour = {AMBER:"Yellow", RED:"Red", GREEN:"Green", BLUE:"Blue", GREY:"Purple"}
 		this.newbubblecolour = this.colours[0][1]
 		this.highlightcolour = 'rgb(100,100,100)'		
-		this.bubbleDimensions = [[1,"days"],50]
+		this.bubbleDimensions = [[1,"days"],50] //Stop defining y as svg y units. Use something more constant.
 
-		//this.startdate = new Date("2018-08-27")
-		//this.enddate = new Date("2018-09-06")//"2018-09-02"
-		this.startdate = new Date("2018-10-15")
-		this.enddate = new Date("2018-10-25")//"2018-09-02"
-
-		var daterange = this.getDateRange(this.startdate,this.enddate)
-
+		this.state = {bubbles: {}, snaps: [[],[]], parentbubbles: []}
 		//snaps = [[x_id,x_x],[y_id,y_y]]
-		this.state = {bubbles: {}, displaycols: daterange, snaps: [[],[]], parentbubbles: []}
 
-		for(var i=0;i<daterange.length;i++){this.state.snaps[0].push([daterange[i],(this.internalSVGDimensions[0]/daterange.length)*i])}
-		this.state.snaps[0].push([moment(daterange[-1]).add(this.bubbleDimensions[0]).toDate(),this.internalSVGDimensions[0]/daterange.length*daterange.length]) //Add one more snap at the end
-
-		for(var j=0;this.bubbleDimensions[1]*j<this.internalSVGDimensions[1];j++){this.state.snaps[1].push([j,this.bubbleDimensions[1]*j])}
-
-		this.lastup = null	
+		this.isOnScheduler = false
+		this.DownDateandSchedulerWidth = [0,new Date("1970-01-01")] //temporary variable needed when scrolling scheduler with mouse
+		this.lastup = null //remembers last bubble key which had the mouse lifted on one side. Used for performing links
 
 		// #region Contructor Function Binds
 		this.bubbleTransform = this.bubbleTransform.bind(this);
@@ -60,7 +50,7 @@ class Scheduler extends Component {
 		this.checkForNoBubbleCollisions = this.checkForNoBubbleCollisions.bind(this);
 		this.performLink = this.performLink.bind(this);		
 		this.makeNewBubble = this.makeNewBubble.bind(this);
-		this.dateChangeTest = this.dateChangeTest.bind(this);
+		this.setStartAndEndDate = this.setStartAndEndDate.bind(this);
 		this.saveToFile = this.saveToFile.bind(this);
 		this.loadFromFile = this.loadFromFile.bind(this);
 		this.loadFromDB = this.loadFromDB.bind(this);
@@ -87,8 +77,11 @@ class Scheduler extends Component {
 		this.getNearestDateToX = this.getNearestDateToX.bind(this);
 		this.getInternalMousePosition = this.getInternalMousePosition.bind(this);
 		this.bubbleCopy = this.bubbleCopy.bind(this);
-		this.bubbleDateParser = this.bubbleDateParser.bind(this);
 		// #endregion
+	}
+	componentDidMount(){
+		this.setStartAndEndDate(this.startdate,this.enddate)
+		for(var j=1;this.bubbleDimensions[1]*j<this.internalSVGDimensions[1];j++){this.state.snaps[1].push([j,this.bubbleDimensions[1]*j])}
 	}
 
 // #region Scheduler Rules 
@@ -97,7 +90,7 @@ class Scheduler extends Component {
 		for (var bubblekey in this.state.bubbles){var bubble=this.state.bubbles[bubblekey];originalStates[bubble.key]=this.bubbleCopy(bubble)}
 		Object.assign(this.state.bubbles[key],changes)
 		if(JSON.stringify(this.state.bubbles)!==JSON.stringify(originalStates)){
-			if(!this.checkIfValidTransformState(this.state)){this.state.bubbles={};for (var bubblekey in originalStates){var bubble=originalStates[bubblekey];this.state.bubbles[bubble.key]=this.bubbleCopy(bubble)}}
+			if(!this.checkIfValidTransformState(this.state)){this.state.bubbles=originalStates}
 			this.forceUpdate();
 		}else{/*console.log("EQUAL")*/}
 	}
@@ -207,17 +200,15 @@ class Scheduler extends Component {
 		console.log(newbubble.key)
 	}
 
-	dateChangeTest(){
-		this.startdate =  moment(this.startdate).add(1,'d').toDate()
-		this.enddate = moment(this.enddate).add(1,'d').toDate()
-
-		var daterange = this.getDateRange(this.startdate,this.enddate)
-
-		//snaps = [[x_id,x_x],[y_id,y_y]]
+	setStartAndEndDate(start,end){
+		//this.extrasnaps adds snapping points beyond the visible range. the columns are told not to render
+		this.startdate = start
+		this.enddate = end
+		var daterange = this.getDateRange(moment(this.startdate).subtract(this.extrasnaps,'d').toDate(),moment(this.enddate).add(this.extrasnaps,'d'));
 		this.state.snaps[0]=[]
-
-		for(var i=0;i<daterange.length;i++){this.state.snaps[0].push([daterange[i],(this.internalSVGDimensions[0]/daterange.length)*i])}
-		this.state.snaps[0].push([moment(daterange[-1]).add(this.bubbleDimensions[0]).toDate(),this.internalSVGDimensions[0]/daterange.length*daterange.length]) //Add one more snap at the end
+		for(var i=0;i<daterange.length;i++){
+			this.state.snaps[0].push([daterange[i],(this.internalSVGDimensions[0]/(daterange.length-2*this.extrasnaps))*(i-this.extrasnaps)])
+		}
 		this.forceUpdate()
 	}
 
@@ -251,21 +242,22 @@ class Scheduler extends Component {
 							this.forceUpdate();
 							})
 					}
+
 		loadFromDB(){
-		console.log("Loading: From Database")
-		var url = "https://evnext-api.evlem.net/tasks"
-		fetch(url,{header: {"Access-Control-Allow-Origin": "*", "Content-Type":"application/json"}})
-			.then(response => {return response.json()})
-			.then(data => {	console.log(data)
-							this.state.bubbles = {}
-							this.state.parentbubbles=[]
-							var i=0
-							data.forEach(bubble=>{i++;console.log(bubble)
-								this.state.bubbles[bubble.id]={key:bubble.id, startdate:new Date(bubble.start), enddate:new Date(bubble.end), y: i*this.bubbleDimensions[1], colour:this.getColourFromAndras(bubble.status), ChildBubbles: {}, ParentBubble: '', leftcolour:this.getColourFromAndras(bubble.status), rightcolour:this.getColourFromAndras(bubble.status), highlightcolour: this.highlightcolour, mouseDownOn: [false,false,false], dragDiffs: [[0,0],[0,0]], text: bubble.title || ''}});
-							console.log(this.state)							
-							for (var bubblekey in this.state.bubbles){var bubble=this.state.bubbles[bubblekey];this.setOriginalColour(bubble.key,'left');this.setOriginalColour(bubble.key,'right')}	
-							this.forceUpdate();
-							})
+			console.log("Loading: From Database")
+			var url = "https://evnext-api.evlem.net/tasks"
+			fetch(url,{header: {"Access-Control-Allow-Origin": "*", "Content-Type":"application/json"}})
+				.then(response => {return response.json()})
+				.then(data => {	console.log(data)
+								this.state.bubbles = {}
+								this.state.parentbubbles=[]
+								var i=0
+								data.forEach(bubble=>{i++;console.log(bubble)
+									this.state.bubbles[bubble.id]={key:bubble.id, startdate:new Date(bubble.start), enddate:new Date(bubble.end), y: i*this.bubbleDimensions[1], colour:this.getColourFromAndras(bubble.status), ChildBubbles: {}, ParentBubble: '', leftcolour:this.getColourFromAndras(bubble.status), rightcolour:this.getColourFromAndras(bubble.status), highlightcolour: this.highlightcolour, mouseDownOn: [false,false,false], dragDiffs: [[0,0],[0,0]], text: bubble.title || ''}});
+								console.log(this.state)							
+								for (var bubblekey in this.state.bubbles){var bubble=this.state.bubbles[bubblekey];this.setOriginalColour(bubble.key,'left');this.setOriginalColour(bubble.key,'right')}	
+								this.forceUpdate();
+								})
 					}
 // #endregion
 
@@ -289,27 +281,45 @@ class Scheduler extends Component {
 	leftlift(key){this.performLink(key,'left')}
 	rightlift(key){this.performLink(key,'right')}
 
+	//Manages scheduler movements AND bubble movements
 	mousemove(event)
 	{
+		var isOnBubble = false
 		var mouse = this.getInternalMousePosition(event)
 		for (var bubblekey in this.state.bubbles){var bubble=this.state.bubbles[bubblekey];
-		if(event.buttons===0) {	if(bubble.mouseDownOn[0]){this.leftlift(bubble.key)};
-								if(bubble.mouseDownOn[1]){this.rightlift(bubble.key)};
-								bubble.mouseDownOn[0]=false;	bubble.mouseDownOn[1]=false; bubble.mouseDownOn[2]=false;
-								if(bubble.leftcolour===this.highlightcolour || bubble.rightcolour===this.highlightcolour){
-									this.setOriginalColour(bubble.key,'left')
-									this.setOriginalColour(bubble.key,'right')
-									this.forceUpdate();}}
-		if(bubble.mouseDownOn[0] && !event.shiftKey){this.bubbleTransform(bubble.key,{startdate: this.getNearestDateToX(mouse[0])})}
-		if(bubble.mouseDownOn[1] && !event.shiftKey){this.bubbleTransform(bubble.key,{enddate:this.getNearestDateToX(mouse[0])})}
-		if(bubble.mouseDownOn[2]){ var newstartdate = this.getNearestDateToX(mouse[0]-bubble.dragDiffs[0][0])
-			this.bubbleTransform(bubble.key,{startdate: newstartdate, 
-											enddate:	moment(newstartdate).add(bubble.enddate-moment(bubble.startdate)).toDate(),
-											y: 			this.getNearestValueInArray(this.state.snaps[1].map(i=>i[1]),mouse[1]-this.bubbleDimensions[1]/2)})}
+			if(event.buttons===0) {	if(bubble.mouseDownOn[0]){this.leftlift(bubble.key)};
+									if(bubble.mouseDownOn[1]){this.rightlift(bubble.key)};
+									bubble.mouseDownOn[0]=false;	bubble.mouseDownOn[1]=false; bubble.mouseDownOn[2]=false;
+									if(bubble.leftcolour===this.highlightcolour || bubble.rightcolour===this.highlightcolour){
+										this.setOriginalColour(bubble.key,'left')
+										this.setOriginalColour(bubble.key,'right')
+										this.forceUpdate();}}
+			if(bubble.mouseDownOn[0] && !event.shiftKey){this.bubbleTransform(bubble.key,{startdate: this.getNearestDateToX(mouse[0])})}
+			if(bubble.mouseDownOn[1] && !event.shiftKey){this.bubbleTransform(bubble.key,{enddate:this.getNearestDateToX(mouse[0])})}
+			if(bubble.mouseDownOn[2]){ var newstartdate = this.getNearestDateToX(mouse[0]-bubble.dragDiffs[0][0])
+				this.bubbleTransform(bubble.key,{startdate: newstartdate, 
+												enddate:	moment(newstartdate).add(bubble.enddate-moment(bubble.startdate)).toDate(),
+												y: 			this.getNearestValueInArray(this.state.snaps[1].map(i=>i[1]),mouse[1]-this.bubbleDimensions[1]/2)})}
+			if(bubble.mouseDownOn[0]||bubble.mouseDownOn[1]||bubble.mouseDownOn[2]){isOnBubble=true}
+		}
+		//check column interaction.
+		if(event.buttons===0 && this.isOnScheduler){this.isOnScheduler = false; console.log("RELEASE")}
+		if(event.buttons===1 && !isOnBubble && !this.isOnScheduler){
+			this.isOnScheduler = true;
+			var schedulerWidth = moment(this.enddate).diff(this.startdate,'d')
+			var XDownDate = this.getNearestDateToX(mouse[0])
+			this.DownDateandSchedulerWidth = [XDownDate,schedulerWidth]
+			console.log("PRESS DOWN!")}
+		if(event.buttons===1 && this.isOnScheduler){
+			var mousedate = this.getNearestDateToX(mouse[0])
+			var datediff = (mousedate-this.DownDateandSchedulerWidth[0])
+			if(datediff!=0){
+				newstartdate = moment(this.startdate).subtract(datediff).toDate()			
+				this.setStartAndEndDate(newstartdate,moment(newstartdate).add(this.DownDateandSchedulerWidth[1],'d').toDate())
+			}		
 		}
 	}
 	consumePendingMouseMovements(){
-		//console.log(this.pendingMouseMovements.length)
 		if(this.pendingMouseMovements.length>0){this.mousemove(this.pendingMouseMovements.pop())}
 		this.pendingMouseMovements=[]
 	}
@@ -355,7 +365,10 @@ class Scheduler extends Component {
 						<button onClick={this.loadFromFile}>Load (File)</button>
 						<button onClick={this.loadFromDB}>Load (DB)</button>
 						<button onClick={this.saveToFile}>Save (File)</button>
-						<button onClick={this.dateChangeTest}>DATE CHANGE TEST BUTTON</button>
+						<div/>						
+						<button onClick={()=>{this.setStartAndEndDate(moment(this.startdate).subtract(1,'d').toDate(),moment(this.enddate).add(1,'d').toDate());this.forceUpdate()}}>ZOOM -</button>
+						<button onClick={()=>{this.setStartAndEndDate(moment(this.startdate).add(1,'d').toDate(),moment(this.enddate).subtract(1,'d').toDate());this.forceUpdate()}}>ZOOM +</button>
+						<button onClick={()=>{this.bubbleDimensions[1]=20;this.forceUpdate()}}>SHRINK</button>
 					</div>
 					{/*Maybe add colour wheel. Also probably make another js file with these colours, so you can access them from multiple places.*/}
 					<button style={{color:'black',borderColor:'black',backgroundColor:this.newbubblecolour}}>ACTIVE COLOUR </button>
@@ -363,7 +376,7 @@ class Scheduler extends Component {
 					{this.colours.map(colour=><button key={colour} onClick={()=>{this.newbubblecolour=colour[1];this.forceUpdate();}} style={{color:'black',borderColor:'white',backgroundColor: colour[1]}}>{colour[0]}</button>)}
 					<p/>
 					<svg onContextMenu={(event)=>{event.preventDefault()}} ref={this.svgRef} viewBox={'0 0 '+this.internalSVGDimensions[0]+' '+ this.internalSVGDimensions[1]} transform={'scale('+this.schedulerPageScale[0]+','+this.schedulerPageScale[1]+')'}>
-						{Columns([0,0],this.internalSVGDimensions,this.state.snaps,[5,15],20)}
+						{Columns([0,0],this.internalSVGDimensions,this.state.snaps[0].slice(this.extrasnaps),[5,15],20)}
 						{BubbleElements}
 					</svg>
 				</div>
@@ -401,25 +414,36 @@ class Scheduler extends Component {
 		return nearestXsnap
 	}
 	bubbleCopy(bubble){
-		return JSON.parse(JSON.stringify(bubble),this.bubbleDateParser)
+		return this.recursiveDeepCopy(bubble)
 	}
-	bubbleDateParser(property,value){
-		//2018-08-29T00:00:00.000Z example case of date
-		var dateCheck = new RegExp("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z")
-		if(dateCheck.test(value)){return new Date(value)} //return a date if it is a date else return the original item		
-		return value
-	}
+
+	recursiveDeepCopy(o) {
+		var newO,i;	
+		if (typeof o !== 'object') {return o;}
+		if (!o) {return o;}
+		var str = Object.prototype.toString.apply(o)
+		if ('[object Array]' === str) {
+			newO = [];
+			for (i = 0; i < o.length; i += 1) {newO[i] = this.recursiveDeepCopy(o[i]);}
+			return newO;}		
+		if('[object Date]' === str){return new Date(o)}	
+		newO = {};
+		for (i in o) {
+		if (o.hasOwnProperty(i)) {newO[i] = this.recursiveDeepCopy(o[i]);}}
+		return newO;
+  	}
+
 // #endregion
 }
 
-function Columns(startpoint, endpoint, snaps,colLetterShift=[5,10], horizontalBreakLineHeight=15)
+function Columns(startpoint, endpoint, xsnaps, colLetterShift=[5,10], horizontalBreakLineHeight=15)
 	{	//TODO change input to accept titles and cell positions
-		var columnTitles = snaps[0].map(dateX=>{return dateX[0].getDate()+"/"+dateX[0].getMonth()})
+		var columnTitles = xsnaps.map(dateX=>{return dateX[0].getDate()+"/"+(dateX[0].getMonth()+1)})
 		var dayElements = []
 		var dayBreakLines = []
 
 		for(var i=0; i<columnTitles.length; i++){
-			var xpos = snaps[0][i][1];
+			var xpos = xsnaps[i][1];
 			//Day
 			dayElements.push(<tspan style={{fill:'white'}} key={2*i} x={xpos+colLetterShift[0]} y={startpoint[1]+colLetterShift[1]}>{columnTitles[i]}</tspan>)
 			//Linebreak
@@ -462,5 +486,7 @@ function Bubble(startpoint, endpoint, colour='rgb(190,230,240)',
 			<text style={{MozUserSelect:"none", WebkitUserSelect:"none", msUserSelect:"none"}} x={(startpoint[0]+endpoint[0])/2} y={(startpoint[1]+endpoint[1])/2} textAnchor='middle'>{text}</text>
 			</g>
 	}
+
+
 
 export default Scheduler;
