@@ -1,14 +1,27 @@
 import React, { Component } from 'react';
-import '../css/App.css';
+import {connect} from 'react-redux'
+import '../css/Scheduler.css';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import Bubble from "./Bubble";
+import Columns from "./Columns";
+import BubbleContextMenu from "./BubbleContextMenu"
+import RenameModal from "./RenameModal"
+import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 var Rx = require('rxjs/Rx')
 var moment = require('moment')
 var crypto = require('crypto')
 const hash = crypto.createHash('sha256');
 
-//TODO ADD RIGHTCLICK MENU TO RENAME, DELETE, AND CHANGE BUBBLE COLOUR. Figure out how selective loading is going to work. remember links not on screen still exist!
-var mousepositionstream = Rx.Observable.fromEvent(document,'mousemove')
-var mousepoll = Rx.Observable.interval(8)
-var refreshstream = Rx.Observable.interval(16)
+const SESSIONTOKEN = 'eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjViYzUxNDgzZDE5MWQ4ODRhNDM1YmRkZSIsImVtYWlsIjoiZGVtb0BleGVjdmlldy5jb20ifQ.astgpmbCNcdwlOtEg83Bn6esS_PNnWkcVYN1JVLCdWw'
+
+//TODO ADD DARK THEME CSS. MAYBE STRING APPEND A COLOUR OVERWRITING CLASS? CONSIDER WHERE CSS GOES ON A COMPONENT
+//TODO LOAD ONLY BUBBLES WHICH ARE VISIBLE (+ the parent) FROM DB
+//TODO MULTIPLE PARENTS SELECT LATEST/EARLIEST
+
+//TODO Figure out how selective loading is going to work. remember links not on screen still exist!
+// KNOWN BUG: loading a file with adjacent bubbles seems to require the LHS bubble to be moved back and forth before a RHS bubble is able to re-claim its place. Could just be corrupt data though...
+var mousepositionstream = Rx.Observable.fromEvent(document,'mousemove').merge(Rx.Observable.fromEvent(document,'mousedown'))
 
 class Scheduler extends Component {
 	constructor()
@@ -16,206 +29,119 @@ class Scheduler extends Component {
 		//these should be ALL props.
 		super();
 		this.svgRef = React.createRef();
-		this.pendingMouseMovements = []
-		mousepositionstream.subscribe((event)=>this.mousemove(event))
-		//mousepositionstream.subscribe((event)=>{this.pendingMouseMovements.push(event)})
-		//mousepoll.subscribe(()=>this.consumePendingMouseMovements())
-		//refreshstream.subscribe(()=>this.forceUpdate())
+		mousepositionstream.subscribe((event)=>this.mouseEvent(event))
 
 		this.selectedFile = 'a.json'
 		this.schedulerPageScale = [0.9,1]
 		this.internalSVGDimensions = [1280,1000]
+		this.darkTheme = true
 
-		this.startdate = new Date("2018-10-15")
-		this.enddate = new Date("2018-10-22")
+		this.startdate = new Date("2018-12-15")
+		this.enddate = new Date("2018-12-22")
 		this.extrasnaps = 2 //extra snaps beyond visible range. must be above 2+ to fit an entire bubble right and left side.
 
-		//this.colours = [['Blue','rgb(190,230,240)'],['Red','rgb(240,180,190)'],['Green','rgb(180,240,200)'],['Yellow','rgb(250,250,190)'],['Purple','rgb(240,190,250)']]
-		this.colours = [['Blue','rgb(130,200,210)'],['Red','rgb(210,115,130)'],['Green','rgb(100,200,135)'],['Yellow','rgb(240,240,160)'],['Purple','rgb(220,160,230)']]
-		this.AndrasToColour = {AMBER:"Yellow", RED:"Red", GREEN:"Green", BLUE:"Blue", GREY:"Purple"}
+		this.Lightcolours = [	['Blue','rgb(190,230,240)'],
+								['Red','rgb(240,180,190)'],
+								['Green','rgb(180,240,200)'],
+								['Yellow','rgb(250,250,190)'],
+								['Purple','rgb(240,190,250)']]
+		this.Darkcolours = [	['Blue','rgb(130,200,210)'],
+								['Red','rgb(210,115,130)'],
+								['Green','rgb(100,200,135)'],
+								['Yellow','rgb(240,240,160)'],
+								['Purple','rgb(220,160,230)']]
+
+		this.colours = this.darkTheme?this.Darkcolours:this.Lightcolours
+		this.AndrasToColour = {	AMBER:"Yellow",
+								RED:"Red",
+								GREEN:"Green",
+								BLUE:"Blue",
+								GREY:"Purple"}
 		this.newbubblecolour = this.colours[0][1]
 		this.highlightcolour = 'rgb(100,100,100)'		
-		this.bubbleDimensions = [[1,"days"],50] //Stop defining y as svg y units. Use something more constant.
+		this.bubbleDimensions = [[1,"days"],50]
 
-		this.state = {bubbles: {}, snaps: [[],[]], parentbubbles: []}
+		this.state = {snaps: [[],[]]}
 		//snaps = [[x_id,x_x],[y_id,y_y]]
 
-		this.isOnScheduler = false
+		this.isOnScheduler = false //is mouse down on the scheduler
+		this.activeBubbleContextMenu = ['',[0,0]] //which Bubble the context menu is open on and mouse co-ordinate
+		this.activeRenameModal = '' //bubble key for the bubble which the rename modal will edit
 		this.DownDateandSchedulerWidth = [0,new Date("1970-01-01")] //temporary variable needed when scrolling scheduler with mouse
-		this.lastup = null //remembers last bubble key which had the mouse lifted on one side. Used for performing links
-
-		// #region Contructor Function Binds
-		this.bubbleTransform = this.bubbleTransform.bind(this);
-		this.checkIfValidTransformState = this.checkIfValidTransformState.bind(this);
-		this.checkForNoBubbleCollisions = this.checkForNoBubbleCollisions.bind(this);
-		this.performLink = this.performLink.bind(this);		
-		this.makeNewBubble = this.makeNewBubble.bind(this);
-		this.setStartAndEndDate = this.setStartAndEndDate.bind(this);
-		this.saveToFile = this.saveToFile.bind(this);
-		this.loadFromFile = this.loadFromFile.bind(this);
-		this.loadFromDB = this.loadFromDB.bind(this);
-		this.getColourFromIndex = this.getColourFromIndex.bind(this);
-		this.getColourFromAndras = this.getColourFromAndras.bind(this);
-		this.getIndexFromColour = this.getIndexFromColour.bind(this);
-		this.leftclickdown = this.leftclickdown.bind(this);
-		this.rightclickdown = this.rightclickdown.bind(this);
-		this.middleclickdown = this.middleclickdown.bind(this);
-		this.leftclickup = this.leftclickup.bind(this);
-		this.rightclickup = this.rightclickup.bind(this)
-		this.leftmousein = this.leftmousein.bind(this);
-		this.leftmouseout = this.leftmouseout.bind(this);
-		this.rightmousein = this.rightmousein.bind(this);
-		this.rightmouseout = this.rightmouseout.bind(this);
-		this.leftlift = this.leftlift.bind(this);
-		this.rightlift = this.rightlift.bind(this);
-		this.mousemove = this.mousemove.bind(this);				
-		this.setOriginalColour = this.setOriginalColour.bind(this);
-		this.setHighlightColour = this.setHighlightColour.bind(this);
-		this.render = this.render.bind(this);
-		this.FLOATcloseenough = this.FLOATcloseenough.bind(this);
-		this.getNearestValueInArray = this.getNearestValueInArray.bind(this);
-		this.getNearestDateToX = this.getNearestDateToX.bind(this);
-		this.getInternalMousePosition = this.getInternalMousePosition.bind(this);
-		this.bubbleCopy = this.bubbleCopy.bind(this);
-		// #endregion
 	}
-	componentDidMount(){
+	componentDidMount = ()=>{
 		this.setStartAndEndDate(this.startdate,this.enddate)
-		for(var j=1;this.bubbleDimensions[1]*j<this.internalSVGDimensions[1];j++){this.state.snaps[1].push([j,this.bubbleDimensions[1]*j])}
+		this.setYSnaps()
 	}
-
-// #region Scheduler Rules 
-	bubbleTransform(key,changes){
-		var originalStates = {}; //save a copy of the original states and replace the current state with the original if the current is an illegal state after the transformations
-		for (var bubblekey in this.state.bubbles){var bubble=this.state.bubbles[bubblekey];originalStates[bubble.key]=this.bubbleCopy(bubble)}
-		Object.assign(this.state.bubbles[key],changes)
-		if(JSON.stringify(this.state.bubbles)!==JSON.stringify(originalStates)){
-			if(!this.checkIfValidTransformState(this.state)){this.state.bubbles=originalStates}
-			this.forceUpdate();
-		}else{/*console.log("EQUAL")*/}
-	}
-
-	checkIfValidTransformState(teststate) 
-	{	
-		//Move all bubbles based on links
-		const LinkForcingAlgorithm = (parentbubblekey) =>{
-			for(var childkey in teststate.bubbles[parentbubblekey]["ChildBubbles"]){
-				//move all child bubbles
-				//[upside,liftside,xGapDate]
-				var parentside = 'right'===teststate.bubbles[parentbubblekey]["ChildBubbles"][childkey][1] ? "enddate" : "startdate"
-				var childside = 'right'===teststate.bubbles[parentbubblekey]["ChildBubbles"][childkey][0] ? "enddate" : "startdate"
-				var xGapx =teststate.bubbles[parentbubblekey]["ChildBubbles"][childkey][2]
-				if(!moment(teststate.bubbles[parentbubblekey][parentside]).add(xGapx).isSame(moment(teststate.bubbles[childkey][childside]))){
-					var childotherside = 'right'===teststate.bubbles[parentbubblekey]["ChildBubbles"][childkey][0] ? "startdate" : "enddate";
-					var childwidth = (teststate.bubbles[childkey][childotherside]-teststate.bubbles[childkey][childside]);
-					teststate.bubbles[childkey][childside]=moment(teststate.bubbles[parentbubblekey][parentside]).add(xGapx).toDate();
-					teststate.bubbles[childkey][childotherside]=moment(teststate.bubbles[childkey][childside]).add(childwidth).toDate()}
-
-				LinkForcingAlgorithm(childkey) //get all child bubbles to move their children
-			}
-		}
-		teststate.parentbubbles.forEach((parentbubblekey)=>{
-			LinkForcingAlgorithm(parentbubblekey)
-		})
-		
-		//Dont allow negative length bubbles
-		if(!Object.keys(teststate.bubbles).every(bubblekey => {var bubble = teststate.bubbles[bubblekey];return bubble.startdate<bubble.enddate})){console.log('negative width!');return false}
-		
-		//Dont allow bubbles to collide
-		if(!Object.keys(teststate.bubbles).every(bubblekey => {var bubble = teststate.bubbles[bubblekey];return this.checkForNoBubbleCollisions(bubble,teststate)})){console.log('collision!');return false}
-
-		return true
-	}
-
-	checkForNoBubbleCollisions(bubble,teststate)
-	{
-		var bubblekeyswithoutthis = []
-		for (var bubblekey in teststate.bubbles){bubblekeyswithoutthis.push(bubblekey)}
-		bubblekeyswithoutthis.splice(bubblekeyswithoutthis.indexOf(bubble.key),1)
-		return bubblekeyswithoutthis.every((otherBubbleKey)=>{var otherBubble = teststate.bubbles[otherBubbleKey]
-			return !((this.FLOATcloseenough(otherBubble.y,
-			bubble.y)) && 
-			(	(bubble.startdate>otherBubble.startdate
-				&&
-				bubble.startdate<otherBubble.enddate)
-			||
-				(bubble.enddate>otherBubble.startdate
-				&&
-				bubble.enddate<otherBubble.enddate)
-			||
-				(bubble.startdate<=otherBubble.startdate
-				&&
-				bubble.enddate>=otherBubble.enddate)
-			)			
-			)
-		})
-	}
-
-	performLink(liftkey,liftside){
-		if(this.lastup!==null)
-		{
-			var upkey=this.lastup[0];
-			var upside=this.lastup[1];
-			var liftpoint = 'right'===liftside ? "enddate" : "startdate"
-			var uppoint = 'right'===upside ? "enddate" : "startdate"
-			// if not linking to self AND child doesnt have parent AND parent hasnt already linked child
-			if((upkey!==liftkey)&&(this.state.bubbles[upkey]["ParentBubble"]==='')&&(this.state.bubbles[liftkey]["ChildBubbles"][upkey]==null)){
-				var xGapDate = this.state.bubbles[upkey][uppoint]-this.state.bubbles[liftkey][liftpoint];
-				this.state.bubbles[liftkey]["ChildBubbles"][upkey] = [upside,liftside,xGapDate]
-				this.state.bubbles[upkey]["ParentBubble"] = liftkey
-				this.setOriginalColour(upkey,upside)
-				// if parent bubble has no parent, add to main list of parents
-				if(this.state.bubbles[liftkey]["ParentBubble"]===''){
-					this.state.parentbubbles.push(liftkey)
-				}
-				// if child bubble was in list of parents, remove.
-				if(this.state.bubbles[upkey]["ParentBubble"]!==''){
-					var newChildBubblesparentbubblesIndex = this.state.parentbubbles.indexOf(upkey)
-					if(newChildBubblesparentbubblesIndex!==-1){
-						this.state.parentbubbles.splice(newChildBubblesparentbubblesIndex,1)
-					}
-				}
-				console.log(this.state.parentbubbles)
-				this.forceUpdate();
-			}
-			else{console.log('already linked!')}
-		}
-		this.lastup = null
-		}
-// #endregion
-
-// #region Scheduler Functionality
-	makeNewBubble()
-	{
-		var maxY = this.state.snaps[1][0][1]
-		var maxX = this.startdate
-		for (var bubblekey in this.state.bubbles){var bubble=this.state.bubbles[bubblekey];	
-												if(bubble.y>maxY){maxY=bubble.y};
-											  	if(bubble.enddate>maxX){maxX=bubble.enddate}}
-												  
-		var newbubble = {key:hash.update(Date.now()+Math.random().toString()).digest('hex'), startdate:maxX, enddate:moment(maxX).add(...this.bubbleDimensions[0]).toDate(), y:maxY+this.bubbleDimensions[1], colour:this.newbubblecolour,leftcolour:this.newbubblecolour,rightcolour:this.newbubblecolour, ChildBubbles: {}, ParentBubble: "", highlightcolour: this.highlightcolour, mouseDownOn: [false,false,false], dragDiffs: [[0,0],[0,0]], text: ''}
-		this.state.bubbles[newbubble.key] = newbubble
-		this.forceUpdate();;
-		console.log(this.state.bubbles)
-		console.log(newbubble.key)
-	}
-
-	setStartAndEndDate(start,end){
+	setStartAndEndDate = (start,end)=>{
 		//this.extrasnaps adds snapping points beyond the visible range. the columns are told not to render
+		if(end-start<0){return}
 		this.startdate = start
 		this.enddate = end
-		var daterange = this.getDateRange(moment(this.startdate).subtract(this.extrasnaps,'d').toDate(),moment(this.enddate).add(this.extrasnaps,'d'));
+		function getDateRange(start, end){
+			var daterange = []
+			for(var currentdate=moment(start); currentdate.isSameOrBefore(end); currentdate.add(1,'d')){
+				daterange.push(moment(currentdate).toDate())
+				}
+			return daterange
+		}
+		var daterange = getDateRange(moment(this.startdate).subtract(this.extrasnaps,'d').toDate(),moment(this.enddate).add(this.extrasnaps,'d'));
 		this.state.snaps[0]=[]
 		for(var i=0;i<daterange.length;i++){
 			this.state.snaps[0].push([daterange[i],(this.internalSVGDimensions[0]/(daterange.length-2*this.extrasnaps))*(i-this.extrasnaps)])
-		}
+			}
 		this.forceUpdate()
 	}
+	setYSnaps = ()=>{
+		this.state.snaps[1] = []
+		for(var j=1;this.bubbleDimensions[1]*j<this.internalSVGDimensions[1];j++){
+			this.state.snaps[1].push([j,this.bubbleDimensions[1]*j])
+			}
+	}
 
-	saveToFile(){
+	tryLinking = (childkey,childside)=>{
+		for(var bubblekey in this.props.bubbles){			
+			if(this.props.bubbles[bubblekey].mouseDownOn.left || this.props.bubbles[bubblekey].mouseDownOn.right)
+			{
+				var bubbleside = 'left'
+				if(this.props.bubbles[bubblekey].mouseDownOn.right){bubbleside='right'}
+				console.log([childkey,bubblekey,childside,bubbleside])
+				this.props.performLink(childkey,bubblekey,childside,bubbleside)
+				this.forceUpdate();
+			}
+		}
+	}
+
+	makeNewBubble = ()=>{
+		var maxY = this.state.snaps[1][0][0]-1
+		var maxX = this.startdate
+		for (var bubblekey in this.props.bubbles){var bubble=this.props.bubbles[bubblekey];	
+												if(bubble.y>maxY){maxY=bubble.y};
+											  	if(bubble.enddate>maxX){maxX=bubble.enddate}}
+												  
+		var newbubble = {	key:hash.update(Date.now()+Math.random().toString()).digest('hex'),
+							startdate:maxX,
+							enddate:moment(maxX).add(...this.bubbleDimensions[0]).toDate(),
+							y:maxY+1,
+							colour:this.newbubblecolour,
+							leftcolour:this.newbubblecolour,
+							rightcolour:this.newbubblecolour,
+							ChildBubbles: {},
+							ParentBubble: "",
+							highlightcolour: this.highlightcolour,
+							mouseDownOn: {left: false, right: false, middle:false},
+							dragDiffs: [[0,0],[0,0]],
+							text: ''}
+		this.props.addBubble(newbubble);
+		this.forceUpdate();
+		this.activeRenameModal=newbubble.key
+	}
+
+	saveToFile = ()=>{
 		console.log("Saving to: "+this.selectedFile)
 		var bubbleData = {}
-		for (var bubblekey in this.state.bubbles){var bubble=this.state.bubbles[bubblekey];
+		for (var bubblekey in this.props.bubbles){
+			var bubble={...this.props.bubbles[bubblekey]};
 			bubble.colour = this.getIndexFromColour(bubble.colour)
 			const {highlightcolour, leftcolour, rightcolour, mouseDownOn, dragDiffs, mousedownpos, ...rest} = bubble
 			bubbleData[bubble.key]=rest}
@@ -225,138 +151,236 @@ class Scheduler extends Component {
 		fetch(url,{method: 'POST',header: {"Access-Control-Allow-Origin": "*", "Content-Type":"application/json"}})
 			.then(response => {console.log("done")})}
 
-	loadFromFile(){
+	loadFromFile = ()=>{
 		console.log("Loading: "+this.selectedFile)
 		var url = "http://192.168.1.115:3001/read?file="+this.selectedFile
 		fetch(url,{header: {"Access-Control-Allow-Origin": "*", "Content-Type":"application/json"}})
 			.then(response => {return response.json()})
-			.then(data => {	this.state.bubbles = {}
-							this.state.parentbubbles=[]
-							for (var bubblekey in data.bubbles){ var bubble = data.bubbles[bubblekey] 
-								this.state.bubbles[bubble.key]={key:bubble.key, startdate:new Date(bubble.startdate), enddate:new Date(bubble.enddate), y: bubble.y, colour:this.getColourFromIndex(bubble.colour), ChildBubbles: bubble.ChildBubbles, ParentBubble: bubble.ParentBubble, leftcolour:this.getColourFromIndex(bubble.colour), rightcolour:this.getColourFromIndex(bubble.colour), highlightcolour: this.highlightcolour, mouseDownOn: [false,false,false], dragDiffs: [[0,0],[0,0]], text: bubble.text || ''}};
-							console.log(this.state)
-							
-							for (var bubblekey in this.state.bubbles){var bubble=this.state.bubbles[bubblekey];
-							if(bubble["ParentBubble"]===''){this.state.parentbubbles.push(bubblekey)}
-							this.setOriginalColour(bubble.key,'left');this.setOriginalColour(bubble.key,'right')}	
-							this.forceUpdate();
-							})
-					}
-
-		loadFromDB(){
-			console.log("Loading: From Database")
-			var url = "https://evnext-api.evlem.net/tasks"
-			fetch(url,{header: {"Access-Control-Allow-Origin": "*", "Content-Type":"application/json"}})
-				.then(response => {return response.json()})
-				.then(data => {	console.log(data)
-								this.state.bubbles = {}
-								this.state.parentbubbles=[]
-								var i=0
-								data.forEach(bubble=>{i++;console.log(bubble)
-									this.state.bubbles[bubble.id]={key:bubble.id, startdate:new Date(bubble.start), enddate:new Date(bubble.end), y: i*this.bubbleDimensions[1], colour:this.getColourFromAndras(bubble.status), ChildBubbles: {}, ParentBubble: '', leftcolour:this.getColourFromAndras(bubble.status), rightcolour:this.getColourFromAndras(bubble.status), highlightcolour: this.highlightcolour, mouseDownOn: [false,false,false], dragDiffs: [[0,0],[0,0]], text: bubble.title || ''}});
-								console.log(this.state)							
-								for (var bubblekey in this.state.bubbles){var bubble=this.state.bubbles[bubblekey];this.setOriginalColour(bubble.key,'left');this.setOriginalColour(bubble.key,'right')}	
+			.then(data => {	this.props.clearBubbles()
+							this.props.clearParentBubbles()
+							for (var bubblekey in data.bubbles){
+								var bubble = data.bubbles[bubblekey] 
+								var newbubble={
+									key:bubble.key,
+									startdate:new Date(bubble.startdate),
+									enddate:new Date(bubble.enddate),
+									y: bubble.y,
+									colour:this.getColourFromIndex(bubble.colour),
+									ChildBubbles: bubble.ChildBubbles,
+									ParentBubble: bubble.ParentBubble,
+									leftcolour:this.getColourFromIndex(bubble.colour),
+									rightcolour:this.getColourFromIndex(bubble.colour),
+									highlightcolour: this.highlightcolour,
+									mouseDownOn: {left: false, right: false, middle:false},
+									dragDiffs: [[0,0],[0,0]],
+									text: bubble.text || ''}
+								this.props.addBubble(newbubble)
+								};						
+							for (var bubblekey in this.props.bubbles){
+								var bubble=this.props.bubbles[bubblekey];
+								if(bubble["ParentBubble"]===''){this.props.addParentBubble(bubblekey)}
+								this.props.setOriginalColour(bubble.key,'left');
+								this.props.setOriginalColour(bubble.key,'right')}	
 								this.forceUpdate();
 								})
 					}
-// #endregion
 
-// #region Bubble Rules 
-	leftclickdown(key,event){this.state.bubbles[key].mouseDownOn[0] = true; this.setHighlightColour(key,'left'); this.forceUpdate();}
-	rightclickdown(key,event){this.state.bubbles[key].mouseDownOn[1] = true; this.setHighlightColour(key,'right'); this.forceUpdate();}
-	middleclickdown(key,event){this.state.bubbles[key].mouseDownOn[2] = true;
-							 this.state.bubbles[key].mousedownpos = this.getInternalMousePosition(event)
-							if(event.buttons===2){console.log('right click!')}
-							this.state.bubbles[key].dragDiffs[0] = [this.state.bubbles[key].mousedownpos[0]-this.getNearestSnapXToDate(this.state.bubbles[key].startdate),
-																	this.state.bubbles[key].mousedownpos[1]-this.state.bubbles[key].y]
-							this.state.bubbles[key].dragDiffs[1] = [this.state.bubbles[key].mousedownpos[0]-this.getNearestSnapXToDate(this.state.bubbles[key].enddate),
-																	this.state.bubbles[key].mousedownpos[1]-(this.state.bubbles[key].y+this.bubbleDimensions[1])]}
-	leftclickup(key,event){this.lastup=[key,'left']}
-	rightclickup(key,event){this.lastup=[key,'right']}
-	leftmousein(key,event){if(event.buttons!==0 && !this.state.bubbles[key].mouseDownOn[2]){this.setHighlightColour(key,'left');this.forceUpdate();}}
-	leftmouseout(key,event){if(!this.state.bubbles[key].mouseDownOn[0] && event.buttons!==0){this.setOriginalColour(key,'left');this.forceUpdate();}}
-	rightmousein(key,event){if(event.buttons!==0 && !this.state.bubbles[key].mouseDownOn[2]){this.setHighlightColour(key,'right');this.forceUpdate();}}
-	rightmouseout(key,event){if(!this.state.bubbles[key].mouseDownOn[1] && event.buttons!==0){this.setOriginalColour(key,'right');this.forceUpdate();}}
+		loadFromDB = ()=>{
+			console.log("Loading: From Database")
+			var url = "https://evnext-api.evlem.net/tasks"
+			fetch(url,{headers: {"Access-Control-Allow-Origin": "*",
+								"Content-Type":"application/json",
+								"Authorization": "Bearer " + SESSIONTOKEN}})
+				.then(response => {return response.json()})
+				.then(data => {	console.log(data)
+								if(data.error){console.log("ERROR");return}
+								this.props.clearBubbles()
+								this.props.clearParentBubbles()
+								var i=0
+								data.forEach(bubble=>{i++;console.log(bubble)
+									var newbubble={
+										key:bubble.id,
+										startdate:new Date(bubble.start),
+										enddate:new Date(bubble.end),
+										y: i,
+										colour:this.getColourFromAndras(bubble.status),
+										ChildBubbles: {},
+										ParentBubble: '',
+										leftcolour:this.getColourFromAndras(bubble.status),
+										rightcolour:this.getColourFromAndras(bubble.status),
+										highlightcolour: this.highlightcolour,
+										mouseDownOn: {left: false, right: false, middle:false},
+										dragDiffs: [[0,0],[0,0]],
+										text: bubble.title || ''}
+										this.props.addBubble(newbubble)
+									});						
+								for (var bubblekey in this.props.bubbles){
+									var bubble=this.props.bubbles[bubblekey];
+									this.props.setOriginalColour(bubble.key,'left');
+									this.props.setOriginalColour(bubble.key,'right')}	
+									this.forceUpdate();
+								})
+					}
 
-	leftlift(key){this.performLink(key,'left')}
-	rightlift(key){this.performLink(key,'right')}
+	leftclickdown = (key,event)=>{	this.props.mouseDownOnBubble(key,'left',true); 
+									this.setHighlightColour(key,'left'); 
+									this.forceUpdate();}
+	rightclickdown = (key,event)=>{	this.props.mouseDownOnBubble(key,'right',true);
+									this.setHighlightColour(key,'right');
+									this.forceUpdate();}
+	middleclickdown = (key,event)=>{this.props.mouseDownOnBubble(key,'middle',true);
+									var mousedownpos = this.getInternalMousePosition(event)
+									this.props.setMouseDownPos(key,mousedownpos)
+									if(event.buttons===2){this.activeBubbleContextMenu = [key,mousedownpos]}
+									this.props.setDragDiff(key,[
+											[mousedownpos[0]-this.getNearestSnapXToDate(this.props.bubbles[key].startdate),
+											mousedownpos[1]-this.props.bubbles[key].y],
+											[mousedownpos[0]-this.getNearestSnapXToDate(this.props.bubbles[key].enddate),
+											mousedownpos[1]-(this.props.bubbles[key].y+this.bubbleDimensions[1])]
+										])}
+	leftclickup = (key,event)=>{this.tryLinking(key,'left')}
+	rightclickup = (key,event)=>{this.tryLinking(key,'right')}
+	leftmousein = (key,event)=>{if(event.buttons!==0 && !this.props.bubbles[key].mouseDownOn.middle){
+		this.setHighlightColour(key,'left');
+		this.forceUpdate()}}
+	leftmouseout = (key,event)=>{if(!this.props.bubbles[key].mouseDownOn.left && event.buttons!==0){
+		this.props.setOriginalColour(key,'left');
+		this.forceUpdate()}}
+	rightmousein = (key,event)=>{if(event.buttons!==0 && !this.props.bubbles[key].mouseDownOn.middle){
+		this.setHighlightColour(key,'right');
+		this.forceUpdate()}}
+	rightmouseout = (key,event)=>{if(!this.props.bubbles[key].mouseDownOn.right && event.buttons!==0){
+		this.props.setOriginalColour(key,'right');
+		this.forceUpdate()}}
 
 	//Manages scheduler movements AND bubble movements
-	mousemove(event)
-	{
+	mouseEvent = (event) => {
 		var isOnBubble = false
 		var mouse = this.getInternalMousePosition(event)
-		for (var bubblekey in this.state.bubbles){var bubble=this.state.bubbles[bubblekey];
-			if(event.buttons===0) {	if(bubble.mouseDownOn[0]){this.leftlift(bubble.key)};
-									if(bubble.mouseDownOn[1]){this.rightlift(bubble.key)};
-									bubble.mouseDownOn[0]=false;	bubble.mouseDownOn[1]=false; bubble.mouseDownOn[2]=false;
-									if(bubble.leftcolour===this.highlightcolour || bubble.rightcolour===this.highlightcolour){
-										this.setOriginalColour(bubble.key,'left')
-										this.setOriginalColour(bubble.key,'right')
-										this.forceUpdate();}}
-			if(bubble.mouseDownOn[0] && !event.shiftKey){this.bubbleTransform(bubble.key,{startdate: this.getNearestDateToX(mouse[0])})}
-			if(bubble.mouseDownOn[1] && !event.shiftKey){this.bubbleTransform(bubble.key,{enddate:this.getNearestDateToX(mouse[0])})}
-			if(bubble.mouseDownOn[2]){ var newstartdate = this.getNearestDateToX(mouse[0]-bubble.dragDiffs[0][0])
-				this.bubbleTransform(bubble.key,{startdate: newstartdate, 
-												enddate:	moment(newstartdate).add(bubble.enddate-moment(bubble.startdate)).toDate(),
-												y: 			this.getNearestValueInArray(this.state.snaps[1].map(i=>i[1]),mouse[1]-this.bubbleDimensions[1]/2)})}
-			if(bubble.mouseDownOn[0]||bubble.mouseDownOn[1]||bubble.mouseDownOn[2]){isOnBubble=true}
+		for (var bubblekey in this.props.bubbles){
+			var bubble=this.props.bubbles[bubblekey];
+			if(event.buttons===0) {	
+				if(bubble.mouseDownOn.left||bubble.mouseDownOn.right||bubble.mouseDownOn.middle){
+					this.props.mouseDownOnBubble(bubblekey,'left',false);
+					this.props.mouseDownOnBubble(bubblekey,'right',false);
+					this.props.mouseDownOnBubble(bubblekey,'middle',false);}
+				if(bubble.leftcolour===this.highlightcolour || bubble.rightcolour===this.highlightcolour){
+					this.props.setOriginalColour(bubble.key,'left')
+					this.props.setOriginalColour(bubble.key,'right')
+					this.forceUpdate();}}
+			if(bubble.mouseDownOn.left && !event.shiftKey){
+				this.props.bubbleTransform(	bubble.key,
+											{startdate: this.getNearestDateToX(mouse[0])})}
+			if(bubble.mouseDownOn.right && !event.shiftKey){
+				this.props.bubbleTransform(	bubble.key,
+											{enddate:this.getNearestDateToX(mouse[0])})}
+			if(bubble.mouseDownOn.middle){ 
+				var newstartdate = this.getNearestDateToX(mouse[0]-bubble.dragDiffs[0][0])
+				this.props.bubbleTransform(	bubble.key,
+											{startdate: newstartdate, 
+											enddate: moment(newstartdate).add(bubble.enddate-moment(bubble.startdate)).toDate(),
+											y: this.getNearestIndexToY(mouse[1]-this.bubbleDimensions[1]/2)})}
+			if(bubble.mouseDownOn.left||bubble.mouseDownOn.right||bubble.mouseDownOn.middle){isOnBubble=true}
 		}
+
 		//check column interaction.
-		if(event.buttons===0 && this.isOnScheduler){this.isOnScheduler = false; console.log("RELEASE")}
-		if(event.buttons===1 && !isOnBubble && !this.isOnScheduler){
-			this.isOnScheduler = true;
-			var schedulerWidth = moment(this.enddate).diff(this.startdate,'d')
-			var XDownDate = this.getNearestDateToX(mouse[0])
-			this.DownDateandSchedulerWidth = [XDownDate,schedulerWidth]
-			console.log("PRESS DOWN!")}
-		if(event.buttons===1 && this.isOnScheduler){
+		if(event.shiftKey){console.log(event)}
+		if((event.buttons===0 && this.isOnScheduler) || isOnBubble){this.isOnScheduler = false}
+		if(event.buttons===1 && isOnBubble){this.removeContextMenu()}
+		if(event.buttons===1 && !isOnBubble && this.isOnScheduler){
 			var mousedate = this.getNearestDateToX(mouse[0])
 			var datediff = (mousedate-this.DownDateandSchedulerWidth[0])
-			if(datediff!=0){
+			if(datediff!==0){
 				newstartdate = moment(this.startdate).subtract(datediff).toDate()			
 				this.setStartAndEndDate(newstartdate,moment(newstartdate).add(this.DownDateandSchedulerWidth[1],'d').toDate())
-			}		
-		}
+			}
+		}		
 	}
-	consumePendingMouseMovements(){
-		if(this.pendingMouseMovements.length>0){this.mousemove(this.pendingMouseMovements.pop())}
-		this.pendingMouseMovements=[]
+	removeContextMenu = () => {this.activeBubbleContextMenu=['',[0,0]];this.forceUpdate()}
+	clickedOnScheduler = (event) => {
+		this.isOnScheduler=true
+		var mouse = this.getInternalMousePosition(event)
+		this.removeContextMenu()
+		var schedulerWidth = moment(this.enddate).diff(this.startdate,'d')
+		var XDownDate = this.getNearestDateToX(mouse[0])
+		this.DownDateandSchedulerWidth = [XDownDate,schedulerWidth]
 	}
 
-	setOriginalColour(key,side){
-		var colourtoset=this.state.bubbles[key].colour
-		var parentkey = this.state.bubbles[key]["ParentBubble"]		
-		if(parentkey!==''){
-			var thislink = this.state.bubbles[parentkey]["ChildBubbles"][key]
-			if(thislink!=null){
-				if(thislink[0]===side){
-					colourtoset=this.state.bubbles[parentkey].colour}}}
-		if(side==='right'){this.state.bubbles[key] = Object.assign(this.state.bubbles[key],{rightcolour:colourtoset})}else{this.state.bubbles[key] = Object.assign(this.state.bubbles[key],{leftcolour:colourtoset})}
+	getInternalMousePosition = (event)=>{
+		var mouse = document.querySelector("svg").createSVGPoint();
+		mouse.x =event.clientX
+		mouse.y = event.clientY
+		var mouseSVG = mouse.matrixTransform(this.svgRef.current.getScreenCTM().inverse())
+		return [mouseSVG.x,mouseSVG.y]
+	}	
+	getNearestValueInArray = (snapsarray,value)=>{ if(snapsarray===[]){return value}
+		var distancefromsnapsarray = snapsarray.slice().map((i)=>Math.abs(i-value))
+		return snapsarray[distancefromsnapsarray.indexOf(Math.min(...distancefromsnapsarray))]
 	}
-	setHighlightColour(key,side){
+	getNearestDateToX = (X)=>{
+		var nearestsnap = this.getNearestValueInArray(this.state.snaps[0].map(i=>i[1]),X)
+		var nearestsnapindex = this.state.snaps[0].map(i=>i[1]).indexOf(nearestsnap)
+		return this.state.snaps[0][nearestsnapindex][0]
+	}
+	getNearestSnapXToDate = (date)=>{
+		var daterangems = this.state.snaps[0].map(dateX=>dateX[0].valueOf())
+		var nearestms = this.getNearestValueInArray(daterangems,date.valueOf())
+		var nearestmsindex = daterangems.indexOf(nearestms)
+		var nearestXsnap = this.state.snaps[0].map(i=>i[1])[nearestmsindex]
+		return nearestXsnap
+	}
+	getNearestIndexToY = (Y)=>{ //TODO identical to getNearestDateToX. Make configurable? Accesses outsisde. Pass this.state.snaps[n] as arg?
+		var nearestsnap = this.getNearestValueInArray(this.state.snaps[1].map(i=>i[1]),Y)
+		var nearestsnapindex = this.state.snaps[1].map(i=>i[1]).indexOf(nearestsnap)
+		return this.state.snaps[1][nearestsnapindex][0]
+	}
+	getNearestSnapYToIndex = (index)=>{
+		var arrindex = this.state.snaps[1].map(indexy=>indexy[0])
+		var closestsnapindextoindex = this.getNearestValueInArray(arrindex,index)
+		var indexInSnaps = arrindex.indexOf(closestsnapindextoindex)
+		var nearestYsnap = this.state.snaps[1].map(i=>i[1])[indexInSnaps]
+		return nearestYsnap
+	}
+	setHighlightColour = (key,side)=>{
 		var colourtoset=this.highlightcolour
-		if(side ==='right'){this.state.bubbles[key] = Object.assign(this.state.bubbles[key],{rightcolour:colourtoset})}else{this.state.bubbles[key] = Object.assign(this.state.bubbles[key],{leftcolour:colourtoset})}
+		this.props.setBubbleSideColour(key,colourtoset,side)
 	}
-	getColourFromIndex(index){
+	getColourFromIndex = (index)=>{
 		return this.colours[this.colours.map(i=>i[0]).indexOf(index)][1]
 	}
-	getColourFromAndras(AndrasString){
+	getColourFromAndras = (AndrasString)=>{
 		return this.getColourFromIndex(this.AndrasToColour[AndrasString])
 	}
-	getIndexFromColour(colourstring){
+	getIndexFromColour = (colourstring)=>{
 		return this.colours[this.colours.map(i=>i[1]).indexOf(colourstring)][0]
 	}
 
-// #endregion
-
   	render() {
-		console.log("render scheduler")
+		//console.log("render scheduler")
 		var BubbleElements = []
-		for (var bubblekey in this.state.bubbles){var b = this.state.bubbles[bubblekey];
-		BubbleElements.push(Bubble([this.getNearestSnapXToDate(b.startdate),b.y],[this.getNearestSnapXToDate(b.enddate),b.y+this.bubbleDimensions[1]],b.colour,this.leftclickdown,this.rightclickdown,this.middleclickdown,this.leftclickup,this.rightclickup,this.leftmousein,this.leftmouseout,this.rightmousein,this.rightmouseout,b.leftcolour,b.rightcolour,b.key,b.text))}
+		for (var bubblekey in this.props.bubbles){
+			var b = this.props.bubbles[bubblekey];
+			BubbleElements.push(
+				<Bubble key={b.key}
+						startpoint={[this.getNearestSnapXToDate(b.startdate),this.getNearestSnapYToIndex(b.y)]} 
+						endpoint={[this.getNearestSnapXToDate(b.enddate),this.getNearestSnapYToIndex(b.y)+this.bubbleDimensions[1]]} 
+						colour={b.colour}
+						leftclickdown={this.leftclickdown}
+						rightclickdown={this.rightclickdown}
+						middleclickdown={this.middleclickdown}
+						leftclickup={this.leftclickup}
+						rightclickup={this.rightclickup}
+						leftmousein={this.leftmousein}
+						leftmouseout={this.leftmouseout}
+						rightmousein={this.rightmousein}
+						rightmouseout={this.rightmouseout}
+						leftcolour={b.leftcolour}
+						rightcolour={b.rightcolour}
+						bkey={b.key}
+						text={b.text}/>
+			)}
 		return 	<div>
-					<div className='App-dropdown'>
+					<div className='Scheduler-dropdown'>
 						<select onChange={(event)=>{this.selectedFile=event.target.value}}>
 							<option value="a.json">a</option>
 							<option value="b.json">b</option>
@@ -366,127 +390,114 @@ class Scheduler extends Component {
 						<button onClick={this.loadFromDB}>Load (DB)</button>
 						<button onClick={this.saveToFile}>Save (File)</button>
 						<div/>						
-						<button onClick={()=>{this.setStartAndEndDate(moment(this.startdate).subtract(1,'d').toDate(),moment(this.enddate).add(1,'d').toDate());this.forceUpdate()}}>ZOOM -</button>
-						<button onClick={()=>{this.setStartAndEndDate(moment(this.startdate).add(1,'d').toDate(),moment(this.enddate).subtract(1,'d').toDate());this.forceUpdate()}}>ZOOM +</button>
-						<button onClick={()=>{this.bubbleDimensions[1]=20;this.forceUpdate()}}>SHRINK</button>
+						<button onClick={()=>{
+							this.setStartAndEndDate(moment(this.startdate).subtract(1,'d').toDate(),moment(this.enddate).add(1,'d').toDate());this.forceUpdate()}}>ZOOM -</button>
+						<button onClick={()=>{
+							this.setStartAndEndDate(moment(this.startdate).add(1,'d').toDate(),moment(this.enddate).subtract(1,'d').toDate());this.forceUpdate()}}>ZOOM +</button>
+						<button onClick={()=>{	
+							this.bubbleDimensions[1]=20;
+							this.setYSnaps()
+							this.forceUpdate()}}>SHRINK</button>
+						<button onClick={()=>{this.forceUpdate()}}>RENDER</button>
+						<button onClick={()=>{this.darkTheme=!this.darkTheme}}>Toggle Theme</button>
 					</div>
 					{/*Maybe add colour wheel. Also probably make another js file with these colours, so you can access them from multiple places.*/}
 					<button style={{color:'black',borderColor:'black',backgroundColor:this.newbubblecolour}}>ACTIVE COLOUR </button>
 					<button onClick={this.makeNewBubble}>Add bubble</button>
-					{this.colours.map(colour=><button key={colour} onClick={()=>{this.newbubblecolour=colour[1];this.forceUpdate();}} style={{color:'black',borderColor:'white',backgroundColor: colour[1]}}>{colour[0]}</button>)}
+					{this.colours.map(colour=>
+						<button key={colour} 
+								onClick={()=>{
+									this.newbubblecolour=colour[1]
+									this.forceUpdate()}} 
+								style={{color:'black',borderColor:'white',backgroundColor: colour[1]}}>
+							{colour[0]}
+						</button>)}
 					<p/>
-					<svg onContextMenu={(event)=>{event.preventDefault()}} ref={this.svgRef} viewBox={'0 0 '+this.internalSVGDimensions[0]+' '+ this.internalSVGDimensions[1]} transform={'scale('+this.schedulerPageScale[0]+','+this.schedulerPageScale[1]+')'}>
-						{Columns([0,0],this.internalSVGDimensions,this.state.snaps[0].slice(this.extrasnaps),[5,15],20)}
+					<div className='Scheduler-datepicker'>
+						<div className='Scheduler-startdate'>
+							Start Date:
+							<DatePicker dateFormat='dd/MM/yyy' 
+										selected={this.startdate} 
+										onChange={(newdate)=>{this.setStartAndEndDate(newdate,this.enddate)}}/>
+						</div>
+						<div className='Scheduler-enddate'>
+							End Date:
+							<DatePicker dateFormat='dd/MM/yyy'
+										selected={this.enddate}
+										onChange={(newdate)=>{this.setStartAndEndDate(this.startdate,newdate)}}/>
+						</div>
+					</div>
+					<p/>
+					<svg 	onContextMenu={(event)=>{event.preventDefault()}}
+							ref={this.svgRef}
+							viewBox={'0 0 '+this.internalSVGDimensions[0]+' '+ this.internalSVGDimensions[1]}
+							transform={'scale('+this.schedulerPageScale[0]+','+this.schedulerPageScale[1]+')'}>
+						<Columns 
+							startpoint={[0,0]}
+							endpoint={this.internalSVGDimensions}
+							xsnaps={this.state.snaps[0].slice(this.extrasnaps)}
+							onMouseDown={this.clickedOnScheduler}/>
 						{BubbleElements}
+						{this.activeBubbleContextMenu[0] ? 
+							<BubbleContextMenu 
+								x={this.activeBubbleContextMenu[1][0]}
+								y={this.activeBubbleContextMenu[1][1]}
+								options={[
+									["Change Colour",()=>{
+										this.props.changeOriginalColour(this.activeBubbleContextMenu[0],this.newbubblecolour);
+										this.removeContextMenu()}],
+									["Rename",()=>{
+										this.activeRenameModal=this.activeBubbleContextMenu[0];
+										this.removeContextMenu()}],
+									["Unlink from Parent Bubble",()=>{
+										this.props.unlinkParentBubble(this.activeBubbleContextMenu[0]);
+										this.props.setOriginalColour(this.activeBubbleContextMenu[0],'left');
+										this.props.setOriginalColour(this.activeBubbleContextMenu[0],'right');
+										this.removeContextMenu();
+										this.forceUpdate()}],
+									["Delete",()=>{
+										this.props.deleteBubble(this.activeBubbleContextMenu[0]);
+										this.removeContextMenu()}]
+								]}/>
+						:	null}
+						{this.activeRenameModal ? 
+							<RenameModal
+							startingText={this.props.bubbles[this.activeRenameModal].text}
+							startpoint={[0,0]}
+							endpoint={this.internalSVGDimensions}
+							onMouseDown={(newName)=>{this.props.renameBubble(this.activeRenameModal,newName);this.activeRenameModal='';this.forceUpdate()}}
+							onSubmit={(newName)=>{this.props.renameBubble(this.activeRenameModal,newName);this.activeRenameModal='';this.forceUpdate()}}/>
+						:	null}
 					</svg>
 				</div>
 	}
-// #region Useful Functions
-	FLOATcloseenough(a,b){
-		return Math.round(100*a)===Math.round(100*b) //matches floats to 2 dp
-	}
-	getNearestValueInArray(snapsarray,value){ if(snapsarray===[]){return value}
-		var distancefromsnapsarray = snapsarray.slice().map((i)=>Math.abs(i-value))
-		return snapsarray[distancefromsnapsarray.indexOf(Math.min(...distancefromsnapsarray))]
-	}
-	getInternalMousePosition(event){
-		var mouse = document.querySelector("svg").createSVGPoint();
-		mouse.x =event.clientX
-		mouse.y = event.clientY
-		var mouseSVG = mouse.matrixTransform(this.svgRef.current.getScreenCTM().inverse())
-		return [mouseSVG.x,mouseSVG.y]
-	}
-	getDateRange(start, end){
-		var daterange = []
-		for(var currentdate=moment(start); currentdate.isSameOrBefore(end); currentdate.add(1,'d')){daterange.push(moment(currentdate).toDate())}
-		return daterange
-	}
-	getNearestDateToX(X){
-		var nearestsnap = this.getNearestValueInArray(this.state.snaps[0].map(i=>i[1]),X)
-		var nearestsnapindex = this.state.snaps[0].map(i=>i[1]).indexOf(nearestsnap)
-		return this.state.snaps[0][nearestsnapindex][0]
-	}
-	getNearestSnapXToDate(date){
-		var daterangems = this.state.snaps[0].map(dateX=>dateX[0].valueOf())
-		var nearestms = this.getNearestValueInArray(daterangems,date.valueOf())
-		var nearestmsindex = daterangems.indexOf(nearestms)
-		var nearestXsnap = this.state.snaps[0].map(i=>i[1])[nearestmsindex]
-		return nearestXsnap
-	}
-	bubbleCopy(bubble){
-		return this.recursiveDeepCopy(bubble)
-	}
-
-	recursiveDeepCopy(o) {
-		var newO,i;	
-		if (typeof o !== 'object') {return o;}
-		if (!o) {return o;}
-		var str = Object.prototype.toString.apply(o)
-		if ('[object Array]' === str) {
-			newO = [];
-			for (i = 0; i < o.length; i += 1) {newO[i] = this.recursiveDeepCopy(o[i]);}
-			return newO;}		
-		if('[object Date]' === str){return new Date(o)}	
-		newO = {};
-		for (i in o) {
-		if (o.hasOwnProperty(i)) {newO[i] = this.recursiveDeepCopy(o[i]);}}
-		return newO;
-  	}
-
-// #endregion
 }
 
-function Columns(startpoint, endpoint, xsnaps, colLetterShift=[5,10], horizontalBreakLineHeight=15)
-	{	//TODO change input to accept titles and cell positions
-		var columnTitles = xsnaps.map(dateX=>{return dateX[0].getDate()+"/"+(dateX[0].getMonth()+1)})
-		var dayElements = []
-		var dayBreakLines = []
-
-		for(var i=0; i<columnTitles.length; i++){
-			var xpos = xsnaps[i][1];
-			//Day
-			dayElements.push(<tspan style={{fill:'white'}} key={2*i} x={xpos+colLetterShift[0]} y={startpoint[1]+colLetterShift[1]}>{columnTitles[i]}</tspan>)
-			//Linebreak
-			dayBreakLines.push(<line key={2*i+1} stroke='white' strokeWidth='0.5' x1={xpos} x2={xpos} y1={startpoint[1]} y2={endpoint[1]}/>)
-		}
-		return <g style={{MozUserSelect:"none", WebkitUserSelect:"none", msUserSelect:"none"}}>
-					<line stroke='white' strokeWidth='1' x1={startpoint[0]} x2={endpoint[0]} y1={startpoint[1]+horizontalBreakLineHeight} y2={startpoint[1]+horizontalBreakLineHeight}/>
-					<text>{dayElements}</text>
-					{dayBreakLines}
-				</g>
+const mapStateToProps = state => {
+	return {
+		bubbles: state.bubbles,
+		parentbubbles: state.parentbubbles,
 	}
+}
 
-function Bubble(startpoint, endpoint, colour='rgb(190,230,240)', 
-				leftclickdown=()=>console.log("left end down"),
-				rightclickdown=()=>console.log("right end down"),
-				middleclickdown=()=>console.log("middle part down"),
-				leftclickup=()=>console.log("left end up"),
-				rightclickup=()=>console.log("right end up"),
-				leftmousein=()=>console.log("left mouse in"),
-				leftmouseout=()=>console.log("left mouseout"),
-				rightmousein=()=>console.log("right mouse in"),
-				rightmouseout=()=>console.log("right mouseout"),
-				leftcolour=null, rightcolour=null, key=null, text='') 
-	{
-		// Must be longer than it is tall
-		//Path arcs  rx ry x-axis-rotation large-arc-flag sweep-flag dx dy
-		// 'M 70 200 a 2 2 1 1 0 0 100 h 100 a 2 2 1 1 0 0 -100 z' 
-		// rgb(190,230,240), rgb(240,180,190), rgb(180,240,200)
-		var radius = (endpoint[1]-startpoint[1])/2
-		var width = (endpoint[0]-startpoint[0])
-
-		var leftend = 'M '+(startpoint[0]+radius)+" "+startpoint[1]+" a 2 2 1 1 0 0 "+(2*radius)
-		var middle = 'M '+(startpoint[0]+radius)+" "+startpoint[1]+" h "+(width-2*radius)+" v "+(2*radius)+" h "+-1*(width-2*radius)+" z"
-		var rightend ='M '+(endpoint[0]-radius)+" "+endpoint[1]+" a 2 2 1 1 0 0 "+(-2*radius)
-
-		return <g key={key}>
-			<path d={leftend} fill={leftcolour} strokeWidth='0' onMouseDown={(event)=>leftclickdown(key,event)} onMouseUp={(event)=>leftclickup(key,event)} onMouseEnter={(event)=>leftmousein(key,event)} onMouseOut={(event)=>leftmouseout(key,event)}/>
-			<path d={middle} fill={colour} strokeWidth='0' onMouseDown={(event)=>middleclickdown(key,event)}/>
-			<path d={rightend} fill={rightcolour} strokeWidth='0' onMouseDown={(event)=>rightclickdown(key,event)} onMouseUp={(event)=>rightclickup(key,event)} onMouseEnter={(event)=>rightmousein(key,event)} onMouseOut={(event)=>rightmouseout(key,event)}/> 
-			<text style={{MozUserSelect:"none", WebkitUserSelect:"none", msUserSelect:"none"}} x={(startpoint[0]+endpoint[0])/2} y={(startpoint[1]+endpoint[1])/2} textAnchor='middle'>{text}</text>
-			</g>
+const mapDispatchToProps = dispatch => {
+	return {
+		addBubble: (newbubble) => dispatch({type:'NEW_BUBBLE',bubble:newbubble}),
+		clearBubbles: ()=>dispatch({type:'CLEAR_BUBBLES'}),
+		mouseDownOnBubble: (key,side,bool)=> dispatch({type:'MOUSE_DOWN_ON_BUBBLE',key:key,side:side,bool:bool}),
+		setMouseDownPos: (key,pos) => dispatch({type:'MOUSE_DOWN_POS',key:key,position:pos}),
+		setDragDiff: (key,diffs) => dispatch({type:'SET_DRAG_DIFF',key:key,diffs:diffs}),
+		setBubbleSideColour: (key,colour,side) => dispatch({type:'SET_BUBBLE_SIDE_COLOUR', key:key,colour:colour,side:side}),
+		setOriginalColour: (key,side) => dispatch({type:'SET_ORIGINAL_COLOUR',key:key,side:side}),
+		clearParentBubbles: () => dispatch({type:'CLEAR_PARENT_BUBBLES'}),
+		addParentBubble: (key) => dispatch({type:'ADD_PARENT_BUBBLE',key:key}),
+		bubbleTransform: (key,changes) => dispatch({type: 'BUBBLE_TRANSFORM',key:key,changes:changes}),
+		performLink: (childkey,parentkey,childside,parentside)=> dispatch({type: 'PERFORM_LINK',parentkey:parentkey,childkey:childkey,parentside:parentside,childside:childside}),
+		deleteBubble: (key) => dispatch({type:'DELETE_BUBBLE',key:key}),
+		changeOriginalColour: (key,colour) => dispatch({type:'CHANGE_BUBBLE_COLOUR',key:key,colour:colour}),
+		renameBubble: (key,text) => dispatch({type:'RENAME_BUBBLE',key:key,text:text}),
+		unlinkParentBubble: (key) => dispatch({type:'UNLINK_PARENT_BUBBLE',key:key})
 	}
+}
 
-
-
-export default Scheduler;
+export default connect(mapStateToProps,mapDispatchToProps)(Scheduler);

@@ -1,0 +1,21 @@
+.Scheduler-dropdown{
+	padding-top:20px;
+}
+
+.Scheduler-datepicker{
+	display: flex;
+	color: rgb(255,255,255);
+	justify-content: space-between;
+}
+
+.Scheduler-startdate{
+	font-size: 15px;
+	text-align: left;
+	padding-left: 70pt;
+}
+
+.Scheduler-enddate{
+	font-size: 15px;
+	text-align: right;
+	padding-right: 70pt;
+}
