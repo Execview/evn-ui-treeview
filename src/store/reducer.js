@@ -1,13 +1,12 @@
 // import React from 'react';
 import * as actionTypes from './actionTypes';
-import { countries, priority } from './constants';
+import { priority } from './constants';
 import validateInput from './validators';
 
 const initialState = {
   data: [],
   column: '',
   order: 'desc',
-  countryDropdown: countries,
   dataConfig: [
     { colName: 'company', cellType: 'text', colTitle: 'Company', labelType: 'text', rule: 0 },
     { colName: 'contact', cellType: 'text', colTitle: 'Contact', labelType: 'text' },
@@ -115,7 +114,7 @@ const reducer = (state = initialState, action) => {
         ...state,
         cellText: action.text
       };
-      
+
     case actionTypes.KEY_PRESSED: {
       let finalstate = { ...state };
       if (action.key.key === 'Enter' && !(action.key.shiftKey)) {

@@ -50,7 +50,7 @@ class App extends Component {
                 <tr key={`tr${index + 1}`}>
                   {this.props.dataConfig.map((col) => {
                     if (index === this.props.activeCell[0] && col.colName === this.props.activeCell[1]) {
-                      return (<Cell class={this.state.wrap ? 'toggle-wrap' : ''} cellText={this.props.cellText} warning={this.props.warning} onInputChange={this.props.onInputChange} onSaveCell={this.props.onSaveCell} onKeyPress={this.props.onKeyPress} isActive={true} activeCell={this.props.activeCell} key={col.colName + row.id} type={col.cellType} />);
+                      return (<Cell cellText={this.props.cellText} warning={this.props.warning} onInputChange={this.props.onInputChange} onSaveCell={this.props.onSaveCell} onKeyPress={this.props.onKeyPress} isActive={true} activeCell={this.props.activeCell} key={col.colName + row.id} type={col.cellType} />);
                     }
                     return (<Cell class={this.state.wrap ? 'toggle-wrap' : ''} text={row[col.colName] === undefined ? '' : row[col.colName]} row={index} labelType={col.labelType} col={col.colName} key={col.colName + row.id} setActive={this.props.onSetActive} isActive={false} rule={col.rule} />);
                   })}
