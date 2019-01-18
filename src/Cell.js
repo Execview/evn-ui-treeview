@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import CellEditor from './CellEditor';
-import './App.css';
+import CellDisplay from './CellDisplay';
 
 export default class Cell extends Component {
   hideLabel= () => {
@@ -8,14 +8,9 @@ export default class Cell extends Component {
   }
 
   render() {
-    let cell;
     if (this.props.isActive) {
-      cell = (<td className="table-label" onClick={this.hideLabel}>{this.props.text}</td>);
-    } else {
-      cell = (<td><CellEditor type={this.props.type} /></td>);
-      //
+      return (<td className={this.props.class}><CellEditor type={this.props.type} text={this.props.cellText} onInputChange={this.props.onInputChange} onKeyPress={this.props.onKeyPress} onSaveCell={this.props.onSaveCell} activeCell={this.props.activeCell} warning={this.props.warning} /></td>);
     }
-
-    return (cell);
+    return (<td className={'table-label ' + this.props.class} onClick={this.hideLabel}><CellDisplay text={this.props.text} labelType={this.props.labelType} /></td>);
   }
 }

@@ -1,27 +1,6 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import * as actionTypes from './store/actionTypes';
 
-// class DropdownCellEditor extends Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//     };
-//   }
-//
-//   render() {
-//     return (
-//       <div>
-//         <select value="pickOption" onChange={e => this.props.onSaveCell(this.props.activeCell[0], this.props.activeCell[1], e.target.value)}>
-//           <option value="pickOption">Pick an option</option>
-//           {this.props.countryDropdown.map(option => <option value={option} key={option}>{option}</option>)}
-//         </select>
-//       </div>
-//     );
-//   }
-// }
-
-class DropdownCellEditor extends Component {
+export default class DropdownCellEditor extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -42,23 +21,6 @@ class DropdownCellEditor extends Component {
         <ul className="dropdown-menu">
           {this.state.displayedRows.map(v => <li className="dropdown-item" key={v} onClick={() => this.props.onSaveCell(this.props.activeCell[0], this.props.activeCell[1], v)}>{v}</li>)}
         </ul>
-
       </div>);
   }
 }
-
-const mapStateToProps = (state) => {
-  return {
-    activeCell: state.activeCell,
-    countryDropdown: state.countryDropdown,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    onSaveCell: (row, col, text) => dispatch({ type: actionTypes.SAVE_CELL, row, col, text })
-  };
-};
-
-
-export default connect(mapStateToProps, mapDispatchToProps)(DropdownCellEditor);
