@@ -1,7 +1,7 @@
 
 
 const validateString = (text) => {
-  if (text.length > 5) {
+  if (text.replace(/\n/g, '').length > 5) {
     return true;
   }
   return false;

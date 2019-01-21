@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import Cell from './Cell';
 import './App.css';
 import * as actionTypes from './store/actionTypes';
+import { cellTypes } from './store/configs';
 
 
 class App extends Component {
@@ -50,9 +51,9 @@ class App extends Component {
                 <tr key={`tr${index + 1}`}>
                   {this.props.dataConfig.map((col) => {
                     if (index === this.props.activeCell[0] && col.colName === this.props.activeCell[1]) {
-                      return (<Cell cellText={this.props.cellText} warning={this.props.warning} onInputChange={this.props.onInputChange} onSaveCell={this.props.onSaveCell} onKeyPress={this.props.onKeyPress} isActive={true} activeCell={this.props.activeCell} key={col.colName + row.id} type={col.cellType} />);
+                      return (<Cell cellTypes={cellTypes} cellText={this.props.cellText} warning={this.props.warning} onValidateSave={this.props.onValidateSave} isActive={true} key={col.colName + row.id} type={col.cellType} />);
                     }
-                    return (<Cell class={this.state.wrap ? 'toggle-wrap' : ''} text={row[col.colName] === undefined ? '' : row[col.colName]} row={index} labelType={col.labelType} col={col.colName} key={col.colName + row.id} setActive={this.props.onSetActive} isActive={false} rule={col.rule} />);
+                    return (<Cell cellTypes={cellTypes} class={this.state.wrap ? 'toggle-wrap' : ''} text={row[col.colName] === undefined ? '' : row[col.colName]} row={index} labelType={col.labelType} col={col.colName} key={col.colName + row.id} setActive={this.props.onSetActive} isActive={false} rule={col.rule} />);
                   })}
                 </tr>
               ))}
@@ -85,9 +86,7 @@ const mapDispatchToProps = (dispatch) => {
     onGetData: () => dispatch({ type: actionTypes.GET_DATA }),
     onSort: (col, cellType) => dispatch({ type: actionTypes.SORT_DATA, col, cellType }),
     onSetActive: (row, col, rule, text) => dispatch({ type: actionTypes.SET_ACTIVE, row, col, rule, text }),
-    onInputChange: text => dispatch({ type: actionTypes.CHANGE_CELL_TEXT, text }),
-    onKeyPress: key => dispatch({ type: actionTypes.KEY_PRESSED, key }),
-    onSaveCell: (row, col, text) => dispatch({ type: actionTypes.SAVE_CELL, row, col, text })
+    onValidateSave: cellText => dispatch({ type: actionTypes.VALIDATE, cellText }),
     // onSetWarning: (warning, rule) => dispatch({ type: actionTypes.SET_WARNING, warning, rule })
   };
 };

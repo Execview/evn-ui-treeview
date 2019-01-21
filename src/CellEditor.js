@@ -6,28 +6,29 @@ import ColorCellEditor from './ColorCellEditor';
 import DateCellEditor from './DateCellEditor';
 import { countries } from './store/constants';
 
+
 export default class CellEditor extends Component {
   render() {
     let element;
     switch (this.props.type) {
       case 'text': {
-        element = (<InputCellEditor text={this.props.text} onInputChange={this.props.onInputChange} onKeyPress={this.props.onKeyPress} warning={this.props.warning} />);
+        element = (<InputCellEditor text={this.props.text} onValidateSave={this.props.onValidateSave} warning={this.props.warning} />);
         break;
       }
       case 'number': {
-        element = (<NumberCellEditor text={this.props.text} onInputChange={this.props.onInputChange} onKeyPress={this.props.onKeyPress} warning={this.props.warning} />);
+        element = (<NumberCellEditor text={this.props.text} onValidateSave={this.props.onValidateSave} warning={this.props.warning} />);
         break;
       }
       case 'dropdown': {
-        element = (<DropdownCellEditor countryDropdown={countries} onSaveCell={this.props.onSaveCell} activeCell={this.props.activeCell} />);
+        element = (<DropdownCellEditor countryDropdown={countries} onValidateSave={this.props.onValidateSave} />);
         break;
       }
       case 'color': {
-        element = (<ColorCellEditor onSaveCell={this.props.onSaveCell} activeCell={this.props.activeCell} />);
+        element = (<ColorCellEditor onValidateSave={this.props.onValidateSave} />);
         break;
       }
       case 'date': {
-        element = (<DateCellEditor onSaveCell={this.props.onSaveCell} activeCell={this.props.activeCell} text={this.props.text} />);
+        element = (<DateCellEditor text={this.props.text} onValidateSave={this.props.onValidateSave} />);
         break;
       }
       default:
