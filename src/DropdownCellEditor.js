@@ -5,12 +5,12 @@ export default class DropdownCellEditor extends Component {
     super(props);
     this.state = {
       searchString: '',
-      displayedRows: this.props.countryDropdown
+      displayedRows: this.props.dropdownList
     };
   }
 
   onChange(value) {
-    const newRows = this.props.countryDropdown.filter(v => v.toLowerCase().includes(value));
+    const newRows = this.props.dropdownList.filter(v => v.toLowerCase().includes(value));
     this.setState({ searchString: value, displayedRows: newRows });
   }
 

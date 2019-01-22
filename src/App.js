@@ -20,6 +20,7 @@ class App extends Component {
   }
 
   render() {
+    // console.log(this.props.orderedData);
     return (
       <div className="App">
         <div>
@@ -27,7 +28,7 @@ class App extends Component {
           <button className="get-data" type="button" onClick={() => this.toggleWrap()}>Toggle Cell Wrap</button>
           {/* <button type="button" onClick={() => this.forceUpdate()}>RENDER</button> */}
         </div>
-        {this.props.data.length > 0 ? (
+        {this.props.orderedData.length > 0 ? (
           <table>
             <tbody>
               <tr>
@@ -47,13 +48,35 @@ class App extends Component {
               </tr>
             </tbody>
             <tbody>
-              {this.props.data.map((row, index) => (
-                <tr key={`tr${index + 1}`}>
+              {this.props.orderedData.map(entry => (
+                <tr key={`tr${entry}`}>
                   {this.props.dataConfig.map((col) => {
-                    if (index === this.props.activeCell[0] && col.colName === this.props.activeCell[1]) {
-                      return (<Cell cellTypes={cellTypes} cellText={this.props.cellText} warning={this.props.warning} onValidateSave={this.props.onValidateSave} isActive={true} key={col.colName + row.id} type={col.cellType} />);
+                    let isActive = false;
+                    if (entry === this.props.activeCell[0] && col.colName === this.props.activeCell[1]) {
+                      isActive = true;
                     }
-                    return (<Cell cellTypes={cellTypes} class={this.state.wrap ? 'toggle-wrap' : ''} text={row[col.colName] === undefined ? '' : row[col.colName]} row={index} labelType={col.labelType} col={col.colName} key={col.colName + row.id} setActive={this.props.onSetActive} isActive={false} rule={col.rule} />);
+                    let red = false;
+                    for (let i = 0; i < this.props.invalidCells.length; i++) {
+                      if (entry === this.props.invalidCells[i].id && col.colName === this.props.invalidCells[i].col) {
+                        red = true;
+                      }
+                    }
+                    return (
+                      <Cell
+                        cellTypes={cellTypes}
+                        wrap={this.state.wrap ? 'toggle-wrap' : ''}
+                        text={this.props.data[entry][col.colName] === undefined ? '' : this.props.data[entry][col.colName]}
+                        entry={entry}
+                        isEditable={false}
+                        type={col.cellType}
+                        col={col.colName}
+                        key={col.colName + entry}
+                        setActive={this.props.onSetActive}
+                        isActive={isActive}
+                        rule={col.rule}
+                        onValidateSave={this.props.onValidateSave}
+                        red={red}
+                      />);
                   })}
                 </tr>
               ))}
@@ -78,6 +101,8 @@ const mapStateToProps = (state) => {
     column: state.column,
     order: state.order,
     cellText: state.cellText,
+    invalidCells: state.invalidCells,
+    orderedData: state.orderedData
   };
 };
 
@@ -85,7 +110,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onGetData: () => dispatch({ type: actionTypes.GET_DATA }),
     onSort: (col, cellType) => dispatch({ type: actionTypes.SORT_DATA, col, cellType }),
-    onSetActive: (row, col, rule, text) => dispatch({ type: actionTypes.SET_ACTIVE, row, col, rule, text }),
+    onSetActive: (id, col, rule, text) => dispatch({ type: actionTypes.SET_ACTIVE, id, col, rule, text }),
     onValidateSave: cellText => dispatch({ type: actionTypes.VALIDATE, cellText }),
     // onSetWarning: (warning, rule) => dispatch({ type: actionTypes.SET_WARNING, warning, rule })
   };

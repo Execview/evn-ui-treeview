@@ -19,9 +19,6 @@ export default class NumberCellEditor extends Component {
   }
 
   render() {
-    if (this.props.warning) {
-      return (<input className="text-input red" autoFocus type="text" value={this.state.text} onChange={e => this.onChange(e.target.value)} onKeyPress={e => this.onKeyPress(e)} />);
-    }
     return (
       <input className="text-input" autoFocus type="text" value={this.state.text} onChange={e => this.onChange(e.target.value)} onKeyPress={e => this.onKeyPress(e)} />
     );

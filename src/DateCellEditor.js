@@ -4,9 +4,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 export default class DateCellEditor extends Component {
   render() {
-    if (this.props.text === '') {
-      return (<div><DatePicker autoFocus selected={new Date()} onSelect={date => this.props.onValidateSave(date.toISOString())} /></div>);
-    }
-    return (<div><DatePicker autoFocus selected={new Date(this.props.text)} onSelect={date => this.props.onValidateSave(date.toISOString())} /></div>);
+    const selectedDate = this.props.text ? new Date(this.props.text) : new Date();
+    return (<div><DatePicker autoFocus selected={selectedDate} onSelect={date => this.props.onValidateSave(date.toISOString())} /></div>);
   }
 }

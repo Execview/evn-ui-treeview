@@ -5,15 +5,17 @@ import validateInput from './validators';
 import { dataConfig, newData } from './configs';
 
 const initialState = {
-  data: [],
+  data: {},
   column: '',
   order: 'desc',
+  orderedData: [],
   dataConfig,
   rules,
   activeCell: [null, null],
   warning: false,
   cellText: '',
   activeRule: null,
+  invalidCells: []
 };
 
 const reducer = (state = initialState, action) => {
@@ -21,18 +23,19 @@ const reducer = (state = initialState, action) => {
     case actionTypes.GET_DATA:
       return {
         ...state,
-        data: newData
+        data: newData,
+        orderedData: Object.keys(newData)
       };
 
     case actionTypes.SAVE_CELL:
       return { ...state,
-        data: state.data.map((el, index) => {
-          if (index === state.activeCell[0]) {
-            return { ...state.data[state.activeCell[0]],
-              [state.activeCell[1]]: action.text };
+        data: {
+          ...state.data,
+          [state.activeCell[0]]: {
+            ...state.data[state.activeCell[0]],
+            [state.activeCell[1]]: action.text
           }
-          return el;
-        }),
+        },
         activeCell: [null, null],
         warning: false,
         activeRule: null
@@ -40,28 +43,29 @@ const reducer = (state = initialState, action) => {
 
     case actionTypes.SORT_DATA: {
       let ordering = state.order;
-      let columnOrder = state.column;
-      if (columnOrder === action.col) {
+      let columnToOrder = state.column;
+      if (columnToOrder === action.col) {
         ordering = state.order === 'asc' ? 'desc' : 'asc';
       } else {
-        columnOrder = action.col;
+        columnToOrder = action.col;
         ordering = 'desc';
       }
-      const orderData = JSON.parse(JSON.stringify(state.data));
+      const dataToOrder = [];
+      Object.keys(state.data).map(key => dataToOrder.push({ id: key, [action.col]: state.data[key][action.col] }));
       if (action.cellType === 'text' || action.cellType === 'dropdown' || action.cellType === 'date') {
-        orderData.sort((a, b) => {
+        dataToOrder.sort((a, b) => {
           const x = a[action.col] ? a[action.col].toLowerCase() : '';
           const y = b[action.col] ? b[action.col].toLowerCase() : '';
           return (x > y) ? -1 : ((x < y) ? 1 : 0);
         });
       } else if (action.cellType === 'number') {
-        orderData.sort((a, b) => {
+        dataToOrder.sort((a, b) => {
           const x = a[action.col] ? a[action.col] : 0;
           const y = b[action.col] ? b[action.col] : 0;
           return (parseFloat(x) > parseFloat(y)) ? -1 : ((parseFloat(x) < parseFloat(y)) ? 1 : 0);
         });
       } else if (action.cellType === 'color') {
-        orderData.sort((a, b) => {
+        dataToOrder.sort((a, b) => {
           const x = priority[a[action.col]] ? priority[a[action.col]] : 0;
           const y = priority[b[action.col]] ? priority[b[action.col]] : 0;
           return (x > y) ? -1 : ((x < y) ? 1 : 0);
@@ -69,13 +73,16 @@ const reducer = (state = initialState, action) => {
       }
 
       if (ordering === 'asc') {
-        orderData.reverse();
+        dataToOrder.reverse();
       }
+      const dataToReturn = [];
+      dataToOrder.map(obj => dataToReturn.push(obj.id));
+
       return {
         ...state,
-        data: orderData,
+        orderedData: dataToReturn,
         order: ordering,
-        column: columnOrder,
+        column: columnToOrder,
         activeCell: [null, null],
         warning: false,
         activeRule: null
@@ -85,7 +92,7 @@ const reducer = (state = initialState, action) => {
     case actionTypes.SET_ACTIVE: {
       return {
         ...state,
-        activeCell: [action.row, action.col],
+        activeCell: [action.id, action.col],
         warning: false,
         activeRule: action.rule,
         cellText: action.text
@@ -93,25 +100,56 @@ const reducer = (state = initialState, action) => {
     }
 
     case actionTypes.VALIDATE: {
-      let finalstate = { ...state };
       if (state.activeRule !== undefined) {
         if (validateInput(state.activeRule, action.cellText)) {
-          finalstate = reducer(finalstate, { type: actionTypes.SAVE_CELL, row: state.activeCell[0], col: state.activeCell[1], text: action.cellText });
-          return finalstate;
+          const newErrors = JSON.parse(JSON.stringify(state.invalidCells));
+          const toRet = newErrors.filter(obj => !(obj.id === state.activeCell[0] && obj.col === state.activeCell[1]));
+          return { ...state,
+            data: {
+              ...state.data,
+              [state.activeCell[0]]: {
+                ...state.data[state.activeCell[0]],
+                [state.activeCell[1]]: action.cellText
+              }
+            },
+            activeCell: [null, null],
+            warning: false,
+            activeRule: null,
+            invalidCells: toRet
+          };
         }
-        return {
-          ...state,
-          cellText: action.cellText,
-          warning: true,
+        const newErrors = JSON.parse(JSON.stringify(state.invalidCells));
+        newErrors.push({ id: state.activeCell[0], col: state.activeCell[1] });
+        return { ...state,
+          data: {
+            ...state.data,
+            [state.activeCell[0]]: {
+              ...state.data[state.activeCell[0]],
+              [state.activeCell[1]]: action.cellText
+            }
+          },
+          activeCell: [null, null],
+          warning: false,
+          activeRule: null,
+          invalidCells: newErrors
         };
       }
-      finalstate = reducer(finalstate, { type: actionTypes.SAVE_CELL, row: state.activeCell[0], col: state.activeCell[1], text: action.cellText });
-      return finalstate;
+      return { ...state,
+        data: {
+          ...state.data,
+          [state.activeCell[0]]: {
+            ...state.data[state.activeCell[0]],
+            [state.activeCell[1]]: action.cellText
+          }
+        },
+        activeCell: [null, null],
+        warning: false,
+        activeRule: null
+      };
     }
     default:
       return state;
   }
 };
-
 
 export default reducer;

@@ -19,9 +19,6 @@ export default class InputCellEditor extends Component {
   }
 
   render() {
-    if (this.props.warning) {
-      return (<textarea rows="1" cols="50" autoFocus className="text-input red" type="text" value={this.state.text} onChange={e => this.onChange(e.target.value)} onKeyPress={e => this.onKeyPress(e)} />);
-    }
     return (
       <textarea rows="1" cols="50" autoFocus className="text-input" type="text" value={this.state.text} onChange={e => this.onChange(e.target.value)} onKeyPress={e => this.onKeyPress(e)} />
     );

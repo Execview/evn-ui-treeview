@@ -3,10 +3,8 @@ import { days, months } from './store/constants';
 
 export default class DateCellDisplay extends Component {
   render() {
-    if (this.props.text !== '') {
-      const myDate = new Date(this.props.text);
-      return (<div className="cell-container">{ days[myDate.getDay()] + ' ' + myDate.getDate() + '/' + months[myDate.getMonth()] + '/' + myDate.getFullYear()}</div>);
-    }
-    return (<div className="cell-container">Date Unknown</div>);
+    const myDate = new Date(this.props.text);
+    const toReturn = this.props.text !== '' ? days[myDate.getDay()] + ' ' + myDate.getDate() + '/' + months[myDate.getMonth()] + '/' + myDate.getFullYear() : 'Date Unknown';
+    return (<div className="cell-container">{toReturn}</div>);
   }
 }
