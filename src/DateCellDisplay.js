@@ -5,6 +5,6 @@ export default class DateCellDisplay extends Component {
   render() {
     const myDate = new Date(this.props.text);
     const toReturn = this.props.text !== '' ? days[myDate.getDay()] + ' ' + myDate.getDate() + '/' + months[myDate.getMonth()] + '/' + myDate.getFullYear() : 'Date Unknown';
-    return (<div className="cell-container">{toReturn}</div>);
+    return (<div className="cell-container"><p className="cell-text">{toReturn}</p></div>);
   }
 }

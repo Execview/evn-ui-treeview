@@ -3,18 +3,19 @@ import React, { PureComponent } from 'react';
 
 export default class Cell extends PureComponent {
   render() {
+    console.log('meow meow');
     if (this.props.isActive) {
       return (
-        <td className={this.props.red ? 'red' : ''}>
-          {React.cloneElement(this.props.cellTypes[this.props.type].editor, { text: this.props.text, onValidateSave: this.props.onValidateSave })}
+        <td className={'td-edit ' + (this.props.hasError ? 'red' : '')}>
+          {React.cloneElement(this.props.cellTypes[this.props.type].editor, { text: this.props.text, onValidateSave: this.props.onValidateSave, rule: this.props.rule })}
         </td>);
     }
     return (
       <td
-        className={'table-label ' + (this.props.wrap ? 'toggle-wrap ' : ' ') + (this.props.red ? 'red' : '')}
+        className={'table-label ' + (this.props.hasError ? 'red ' : ' ') + (this.props.isEditable ? '' : 'no-edit')}
         onClick={() => this.props.setActive(this.props.entry, this.props.col, this.props.rule, this.props.text)}
       >
-        {React.cloneElement(this.props.cellTypes[this.props.type].display, { text: this.props.text })}
+        {React.cloneElement(this.props.cellTypes[this.props.type].display, { text: this.props.text, hasError: this.props.hasError, errorText: this.props.errorText, wrap: this.props.wrap })}
       </td>);
   }
 }

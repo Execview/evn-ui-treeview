@@ -14,7 +14,7 @@ export default class NumberCellEditor extends Component {
 
   onKeyPress(e) {
     if (e.key === 'Enter') {
-      this.props.onValidateSave(this.state.text);
+      this.props.onValidateSave(this.state.text, this.props.rule);
     }
   }
 

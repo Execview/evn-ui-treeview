@@ -1,8 +1,7 @@
 // import React from 'react';
 import * as actionTypes from './actionTypes';
-import { priority, rules } from './constants';
-import validateInput from './validators';
-import { dataConfig, newData } from './configs';
+import { priority } from './constants';
+import { dataConfig, newData, editableCells, rules, validators } from './configs';
 
 const initialState = {
   data: {},
@@ -12,10 +11,9 @@ const initialState = {
   dataConfig,
   rules,
   activeCell: [null, null],
-  warning: false,
   cellText: '',
-  activeRule: null,
-  invalidCells: []
+  invalidCells: [],
+  editableCells
 };
 
 const reducer = (state = initialState, action) => {
@@ -36,9 +34,7 @@ const reducer = (state = initialState, action) => {
             [state.activeCell[1]]: action.text
           }
         },
-        activeCell: [null, null],
-        warning: false,
-        activeRule: null
+        activeCell: [null, null]
       };
 
     case actionTypes.SORT_DATA: {
@@ -84,8 +80,6 @@ const reducer = (state = initialState, action) => {
         order: ordering,
         column: columnToOrder,
         activeCell: [null, null],
-        warning: false,
-        activeRule: null
       };
     }
 
@@ -93,15 +87,13 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         activeCell: [action.id, action.col],
-        warning: false,
-        activeRule: action.rule,
         cellText: action.text
       };
     }
 
     case actionTypes.VALIDATE: {
-      if (state.activeRule !== undefined) {
-        if (validateInput(state.activeRule, action.cellText)) {
+      if (action.rule !== undefined) {
+        if (validators[action.rule](action.cellText)) {
           const newErrors = JSON.parse(JSON.stringify(state.invalidCells));
           const toRet = newErrors.filter(obj => !(obj.id === state.activeCell[0] && obj.col === state.activeCell[1]));
           return { ...state,
@@ -113,8 +105,6 @@ const reducer = (state = initialState, action) => {
               }
             },
             activeCell: [null, null],
-            warning: false,
-            activeRule: null,
             invalidCells: toRet
           };
         }
@@ -129,8 +119,6 @@ const reducer = (state = initialState, action) => {
             }
           },
           activeCell: [null, null],
-          warning: false,
-          activeRule: null,
           invalidCells: newErrors
         };
       }
@@ -143,8 +131,6 @@ const reducer = (state = initialState, action) => {
           }
         },
         activeCell: [null, null],
-        warning: false,
-        activeRule: null
       };
     }
     default:

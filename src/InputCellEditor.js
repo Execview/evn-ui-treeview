@@ -14,7 +14,7 @@ export default class InputCellEditor extends Component {
 
   onKeyPress(e) {
     if (e.key === 'Enter' && !(e.shiftKey)) {
-      this.props.onValidateSave(this.state.text);
+      this.props.onValidateSave(this.state.text, this.props.rule);
     }
   }
 
