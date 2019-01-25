@@ -16,7 +16,7 @@ export default class DropdownCellEditor extends Component {
 
   render() {
     return (
-      <div className="dropdown">
+      <div className="dropdown" onBlur={this.props.onRemoveActive}>
         <input className="dropdown-input" autoFocus type="text" value={this.state.searchString} onChange={e => this.onChange(e.target.value)} placeholder="Search.." />
         <ul className="dropdown-menu">
           {this.state.displayedRows.map(v => <li className="dropdown-item" key={v} onClick={() => this.props.onValidateSave(v)}>{v}</li>)}

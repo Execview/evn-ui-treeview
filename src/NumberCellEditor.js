@@ -14,13 +14,13 @@ export default class NumberCellEditor extends Component {
 
   onKeyPress(e) {
     if (e.key === 'Enter') {
-      this.props.onValidateSave(this.state.text, this.props.rule);
+      this.props.onValidateSave(this.state.text);
     }
   }
 
   render() {
     return (
-      <input className="text-input" autoFocus type="text" value={this.state.text} onChange={e => this.onChange(e.target.value)} onKeyPress={e => this.onKeyPress(e)} />
+      <input className="text-input" autoFocus type="text" onBlur={() => this.props.onValidateSave(this.state.text)} value={this.state.text} onChange={e => this.onChange(e.target.value)} onKeyPress={e => this.onKeyPress(e)} />
     );
   }
 }

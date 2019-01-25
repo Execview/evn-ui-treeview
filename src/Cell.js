@@ -3,11 +3,11 @@ import React, { PureComponent } from 'react';
 
 export default class Cell extends PureComponent {
   render() {
-    console.log('meow meow');
+    // console.log('meow meow');
     if (this.props.isActive) {
       return (
         <td className={'td-edit ' + (this.props.hasError ? 'red' : '')}>
-          {React.cloneElement(this.props.cellTypes[this.props.type].editor, { text: this.props.text, onValidateSave: this.props.onValidateSave, rule: this.props.rule })}
+          {React.cloneElement(this.props.cellTypes[this.props.type].editor, { text: this.props.text, onValidateSave: this.props.onValidateSave, onRemoveActive: this.props.onRemoveActive })}
         </td>);
     }
     return (

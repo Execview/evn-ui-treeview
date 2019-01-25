@@ -15,6 +15,7 @@ class InputCellDisplay extends Component {
     }, 3000);
   };
 
+
   render() {
     if (this.props.hasError) {
       return (

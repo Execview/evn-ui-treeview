@@ -4,3 +4,4 @@ export const SORT_DATA = 'SORT_DATA';
 export const SET_ACTIVE = 'SET_ACTIVE';
 export const CHANGE_CELL_TEXT = 'CHANGE_CELL_TEXT';
 export const VALIDATE = 'VALIDATE';
+export const REMOVE_ACTIVE = 'REMOVE_ACTIVE';

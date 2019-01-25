@@ -91,9 +91,17 @@ const reducer = (state = initialState, action) => {
       };
     }
 
+    case actionTypes.REMOVE_ACTIVE: {
+      return {
+        ...state,
+        activeCell: [null, null]
+      };
+    }
+
     case actionTypes.VALIDATE: {
-      if (action.rule !== undefined) {
-        if (validators[action.rule](action.cellText)) {
+      const retObj = dataConfig.filter(obj => obj.colName === state.activeCell[1]);
+      if (retObj[0].rule !== undefined) {
+        if (validators[retObj[0].rule](action.cellText)) {
           const newErrors = JSON.parse(JSON.stringify(state.invalidCells));
           const toRet = newErrors.filter(obj => !(obj.id === state.activeCell[0] && obj.col === state.activeCell[1]));
           return { ...state,
@@ -104,6 +112,7 @@ const reducer = (state = initialState, action) => {
                 [state.activeCell[1]]: action.cellText
               }
             },
+            // activeCell: [state.orderedData[state.orderedData.indexOf(state.activeCell[0]) + 1], state.activeCell[1]],
             activeCell: [null, null],
             invalidCells: toRet
           };
@@ -122,6 +131,7 @@ const reducer = (state = initialState, action) => {
           invalidCells: newErrors
         };
       }
+      console.log(state.activeCell[0]);
       return { ...state,
         data: {
           ...state.data,
