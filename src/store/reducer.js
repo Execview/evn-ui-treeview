@@ -91,14 +91,9 @@ const reducer = (state = initialState, action) => {
       };
     }
 
-    case actionTypes.REMOVE_ACTIVE: {
-      return {
-        ...state,
-        activeCell: [null, null]
-      };
-    }
-
     case actionTypes.VALIDATE: {
+      console.log('trigger mouse down');
+      console.log(action.cellText);
       const retObj = dataConfig.filter(obj => obj.colName === state.activeCell[1]);
       if (retObj[0].rule !== undefined) {
         if (validators[retObj[0].rule](action.cellText)) {
@@ -131,7 +126,6 @@ const reducer = (state = initialState, action) => {
           invalidCells: newErrors
         };
       }
-      console.log(state.activeCell[0]);
       return { ...state,
         data: {
           ...state.data,

@@ -6,17 +6,10 @@ export default class Cell extends PureComponent {
     // console.log('meow meow');
     if (this.props.isActive) {
       return (
-        <td className={'td-edit ' + (this.props.hasError ? 'red' : '')}>
-          {React.cloneElement(this.props.cellTypes[this.props.type].editor, { text: this.props.text, onValidateSave: this.props.onValidateSave, onRemoveActive: this.props.onRemoveActive })}
-        </td>);
+        React.cloneElement(this.props.type.editor, { text: this.props.text, onValidateSave: this.props.onValidateSave }));
     }
     return (
-      <td
-        className={'table-label ' + (this.props.hasError ? 'red ' : ' ') + (this.props.isEditable ? '' : 'no-edit')}
-        onClick={() => this.props.setActive(this.props.entry, this.props.col, this.props.rule, this.props.text)}
-      >
-        {React.cloneElement(this.props.cellTypes[this.props.type].display, { text: this.props.text, hasError: this.props.hasError, errorText: this.props.errorText, wrap: this.props.wrap })}
-      </td>);
+      React.cloneElement(this.props.type.display, { text: this.props.text, errorText: this.props.errorText, style: this.props.style }));
   }
 }
 

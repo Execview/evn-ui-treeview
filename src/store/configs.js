@@ -63,7 +63,7 @@ export const rules = { textSize: 'The size of the field must be of at least 6 ch
 
 export const validators = {
   textSize: function validateString(text) {
-    if (text.replace(/\n/g, '').length > 5) {
+    if (text.replace(/\n/g, '').length > 60) {
       return true;
     }
     return false;

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+// import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
-import ColumnResizer from 'column-resizer';
+// import ColumnResizer from 'column-resizer';
 import Cell from './Cell';
 import './App.css';
 import * as actionTypes from './store/actionTypes';
@@ -12,58 +12,58 @@ import { cats } from './store/constants';
 class App extends Component {
   constructor(props) {
     super(props);
+    const initialWidths = this.props.dataConfig.reduce((total, obj) => { return { ...total, [obj.colName]: 300 }; }, {});
+    const minWidths = this.props.dataConfig.reduce((total, obj) => { return { ...total, [obj.colName]: 100 }; }, {});
     this.state = {
-      wrap: true
+      wrap: true,
+      widths: { ...initialWidths },
+      minWidths,
+      columnClicked: null,
+      positionClicked: null,
+      initialWidth: null,
+      nextInitialWidth: null
     };
-    this.tableSelector = '#somethingUnique';
   }
 
-
-  componentDidMount() {
-    if (this.props.resizable) {
-      this.enableResize();
-    }
+  onMouseDown = (e, colName) => {
+    e.stopPropagation();
+    e.preventDefault();
+    const nextCol = this.props.dataConfig[this.props.dataConfig.indexOf(this.props.dataConfig.filter(obj => obj.colName === colName)[0]) + 1].colName;
+    console.log(nextCol);
+    console.log('first width: ' + this.state.widths[colName] + ' 2nd width: ' + this.state.widths[nextCol]);
+    this.setState({ positionClicked: e.clientX, columnClicked: colName, initialWidth: this.state.widths[colName], nextInitialWidth: this.state.widths[nextCol] });
+    document.addEventListener('mousemove', this.onMouseMove);
+    document.addEventListener('mouseup', this.removeListener);
   }
 
-  componentWillUpdate() {
-    if (this.props.resizable) {
-      this.disableResize();
+  onMouseMove = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    const currentX = e.clientX;
+    const newVal = this.state.initialWidth + currentX - this.state.positionClicked;
+    const nextCol = this.props.dataConfig[this.props.dataConfig.indexOf(this.props.dataConfig.filter(obj => obj.colName === this.state.columnClicked)[0]) + 1].colName;
+    const nextVal = this.state.nextInitialWidth - currentX + this.state.positionClicked;
+    if (newVal < this.state.minWidths[this.state.columnClicked] || nextVal < this.state.minWidths[nextCol]) {
+      return;
     }
+    this.setState({ widths: { ...this.state.widths, [this.state.columnClicked]: newVal, [nextCol]: nextVal } });
   }
 
-  componentDidUpdate() {
-    if (this.props.resizable) {
-      this.enableResize();
-    }
-  }
-
-  componentWillUnmount() {
-    if (this.props.resizable) {
-      this.disableResize();
-    }
-  }
-
-  enableResize() {
-    const options = this.props.resizerOptions;
-    if (!this.resizer) {
-      this.resizer = new ColumnResizer(
-        ReactDOM.findDOMNode(this).querySelector(this.tableSelector),
-        options
-      );
-    } else {
-      this.resizer.reset(options);
-    }
-  }
-
-  disableResize() {
-    if (this.resizer) {
-      this.resizer.reset({ disable: true });
-    }
+  removeListener = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    document.removeEventListener('mousemove', this.onMouseMove);
+    document.removeEventListener('mouseup', this.removeListener);
   }
 
   toggleWrap() {
     const wr = this.state.wrap;
     this.setState({ wrap: !wr });
+  }
+
+  stopPr(e) {
+    e.stopPropagation();
+    e.preventDefault();
   }
 
   render() {
@@ -76,28 +76,40 @@ class App extends Component {
           <button className="get-data" type="button" onClick={() => this.toggleWrap()}>Toggle Cell Wrap</button>
           {/* <button type="button" onClick={() => this.forceUpdate()}>RENDER</button> */}
         </div>
-        <table style={visible} id="somethingUnique" cellSpacing="0">
+        <table style={visible}>
           <thead>
             <tr>
-              {this.props.dataConfig.map((col) => {
+              {this.props.dataConfig.map((col, index) => {
+                const lastOne = index === this.props.dataConfig.length - 1;
+                const width = this.state.widths[col.colName];
+                let spans = null;
                 if (this.props.column === '') {
-                  return (<th key={col.colName} onClick={() => this.props.onSort(col.colName, col.cellType)} title={col.colTitle}><div className="span-container"><span className="arrow-up" /> <span className="arrow-down" /></div><div className="thead-container toggle-wrap">{col.colTitle}</div></th>);
-                }
-                if (col.colName === this.props.column) {
-                  return (
-                    <th key={col.colName} onClick={() => this.props.onSort(col.colName, col.cellType)} title={col.colTitle}>
-                      <div className="span-container"> <span className={col.colName === this.props.column ? (this.props.order === 'desc' ? 'arrow-down' : 'arrow-up') : ''} /> </div><div className="thead-container toggle-wrap">{col.colTitle}</div>
-                    </th>
+                  spans = (
+                    <div className="span-container">
+                      <span className="arrow-up" />
+                      <span className="arrow-down" />
+                    </div>);
+                } else if (this.props.column === col.colName) {
+                  spans = (
+                    <div className="span-container">
+                      <span className={col.colName === this.props.column ? (this.props.order === 'desc' ? 'arrow-down' : 'arrow-up') : ''} />
+                    </div>
                   );
                 }
-                return (<th key={col.colName} onClick={() => this.props.onSort(col.colName, col.cellType)} title={col.colTitle}><div className="thead-container toggle-wrap">{col.colTitle}</div></th>);
+                return (
+                  <th key={col.colName} onMouseDown={() => this.props.onSort(col.colName, col.cellType)} title={col.colTitle} style={{ width: this.state.widths[col.colName], MozUserSelect: 'none', WebkitUserSelect: 'none', msUserSelect: 'none' }}>
+                    {spans}
+                    <div className="thead-container toggle-wrap" style={{ width: this.state.widths[col.colName] - 30 }}>{col.colTitle}</div>
+                    {!lastOne && <div style={{ position: 'absolute', zIndex: 1, transform: 'translateX(5px)', top: 0, right: 0, height: '100%', width: '10px', cursor: 'w-resize' }} onMouseDown={e => this.onMouseDown(e, col.colName)} onClick={this.stopPr} /> }
+                  </th>
+                );
               })}
             </tr>
           </thead>
           <tbody>
             {this.props.orderedData.map(entry => (
               <tr key={`tr${entry}`}>
-                {this.props.dataConfig.map((col) => {
+                {this.props.dataConfig.map((col, index) => {
                   let isActive = false;
                   if (entry === this.props.activeCell[0] && col.colName === this.props.activeCell[1] && this.props.editableCells[entry][col.colName]) {
                     isActive = true;
@@ -108,30 +120,37 @@ class App extends Component {
                       red = true;
                     }
                   }
+                  const onClickAction = isActive ? null : (() => this.props.onSetActive(entry, col.colName, col.rule, this.props.data[entry][col.colName] === undefined ? '' : this.props.data[entry][col.colName]));
+                  const lastOne = index === this.props.dataConfig.length - 1;
+                  let style = { width: this.state.widths[col.colName] - 5 };
+                  if (this.state.wrap) {
+                    style = { ...style, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' };
+                  }
                   return (
-                    <Cell
-                      cellTypes={cellTypes}
-                      wrap={this.state.wrap ? 'toggle-wrap' : ''}
-                      text={this.props.data[entry][col.colName] === undefined ? '' : this.props.data[entry][col.colName]}
-                      entry={entry}
-                      isEditable={this.props.editableCells[entry][col.colName]}
-                      type={col.cellType}
-                      col={col.colName}
-                      key={col.colName + entry}
-                      setActive={this.props.onSetActive}
-                      isActive={isActive}
-                      rule={col.rule}
-                      onValidateSave={this.props.onValidateSave}
-                      onRemoveActive={this.props.onRemoveActive}
-                      hasError={red}
-                      errorText={this.props.rules[col.rule]}
-                    />);
+                    <td
+                      key={col.colName + entry + 1}
+                      title={col.colName}
+                      className={(isActive ? ' ' : 'table-label ') + (this.props.editableCells[entry][col.colName] ? '' : 'no-edit')}
+                      onClick={onClickAction}
+                    >
+                        <Cell
+                          style={style}
+                          text={this.props.data[entry][col.colName] === undefined ? '' : this.props.data[entry][col.colName]}
+                          type={cellTypes[col.cellType]}
+                          key={col.colName + entry}
+                          isActive={isActive}
+                          onValidateSave={this.props.onValidateSave}
+                          errorText={red ? this.props.rules[col.rule] : null}
+                        />
+                        {!lastOne && <div style={{ position: 'absolute', zIndex: 1, transform: 'translateX(5px)', top: 0, right: 0, height: '100%', width: '10px', cursor: 'w-resize' }} onMouseDown={e => this.onMouseDown(e, col.colName)} onClick={this.stopPr} /> }
+                    </td>
+                  );
                 })}
               </tr>
             ))}
           </tbody>
         </table>
-        <img style={{ marginTop: '30px', width: '400px', maxHeight: '400px' }} src={cats[randomNumber]} alt="xd" />
+        {/* <img style={{ marginTop: '30px', width: '400px', maxHeight: '400px' }} src={cats[randomNumber]} alt="xd" /> */}
 
       </div>
 
@@ -162,7 +181,6 @@ const mapDispatchToProps = (dispatch) => {
     onSort: (col, cellType) => dispatch({ type: actionTypes.SORT_DATA, col, cellType }),
     onSetActive: (id, col, rule, text) => dispatch({ type: actionTypes.SET_ACTIVE, id, col, rule, text }),
     onValidateSave: cellText => dispatch({ type: actionTypes.VALIDATE, cellText }),
-    onRemoveActive: () => dispatch({ type: actionTypes.REMOVE_ACTIVE })
   };
 };
 

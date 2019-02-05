@@ -4,6 +4,6 @@ import { colors } from './store/constants';
 export default class ColorCellDisplay extends Component {
   render() {
     const text = this.props.text || 'grey';
-    return (<div className={'progress progress-' + text}>{colors[text]}</div>);
+    return (<div className={'progress-' + text}><div className="progress-text">{colors[text]}</div></div>);
   }
 }

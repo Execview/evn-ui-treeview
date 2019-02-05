@@ -16,10 +16,10 @@ export default class DropdownCellEditor extends Component {
 
   render() {
     return (
-      <div className="dropdown" onBlur={this.props.onRemoveActive}>
+      <div className="dropdown" onBlur={() => this.props.onValidateSave(this.props.text)}>
         <input className="dropdown-input" autoFocus type="text" value={this.state.searchString} onChange={e => this.onChange(e.target.value)} placeholder="Search.." />
         <ul className="dropdown-menu">
-          {this.state.displayedRows.map(v => <li className="dropdown-item" key={v} onClick={() => this.props.onValidateSave(v)}>{v}</li>)}
+          {this.state.displayedRows.map(v => <li className="dropdown-item" autoFocus key={v} onMouseDown={() => this.props.onValidateSave(v)}>{v}</li>)}
         </ul>
       </div>);
   }

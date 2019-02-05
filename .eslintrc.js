@@ -18,14 +18,15 @@ module.exports = {
       "no-nested-ternary":0,
       "no-trailing-spaces":0,
       "no-autofocus":0,
+      "react/no-access-state-in-setstate": 0,
       "jsx-a11y/no-autofocus": 0,
       "jsx-a11y/click-events-have-key-events":0,
       "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
+      "jsx-a11y/no-static-element-interactions": 0,
       'jsx-a11y/no-noninteractive-element-interactions': [
         'error',
         {
           handlers: [
-            'onMouseDown',
             'onMouseUp',
             'onKeyPress',
             'onKeyDown',

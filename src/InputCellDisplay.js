@@ -17,16 +17,16 @@ class InputCellDisplay extends Component {
 
 
   render() {
-    if (this.props.hasError) {
+    if (this.props.errorText !== null) {
       return (
-        <div className="cell-container">
-          <p className={'cell-text ' + (this.props.wrap ? 'toggle-wrap ' : ' ')}>{this.props.text}</p>
+        <div className="cell-container cell-error">
+          <p style={this.props.style} className="cell-text-error">{this.props.text}</p>
           <img className="error-icon" src={xd} alt="info" onClick={e => this.showError(e)} />
           <div className={'error-info ' + (this.state.showText ? 'error-shown' : 'error-hidden')}><p className="error-text">{this.props.errorText}</p></div>
         </div>
       );
     }
-    return <div className="cell-container"><p className={'cell-text ' + (this.props.wrap ? 'toggle-wrap ' : ' ')}>{this.props.text}</p></div>;
+    return <div className="cell-container"><p style={this.props.style} className="cell-text">{this.props.text}</p></div>;
   }
 }
 
