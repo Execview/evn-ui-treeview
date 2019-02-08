@@ -20,7 +20,9 @@ export default class NumberCellEditor extends Component {
 
   render() {
     return (
-      <input className="text-input" autoFocus type="text" onBlur={() => this.props.onValidateSave(this.state.text)} value={this.state.text} onChange={e => this.onChange(e.target.value)} onKeyPress={e => this.onKeyPress(e)} />
+      <div className="text-container">
+        <input className="text-input" autoFocus type="text" onBlur={() => this.props.onValidateSave(this.state.text)} value={this.state.text} onChange={e => this.onChange(e.target.value)} onKeyPress={e => this.onKeyPress(e)} />
+      </div>
     );
   }
 }

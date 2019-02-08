@@ -10,12 +10,12 @@ import InputCellDisplay from '../InputCellDisplay';
 import { countries } from './constants';
 
 export const dataConfig = [
-  { colName: 'company', cellType: 'text', colTitle: 'Company', rule: 'textSize' },
+  { colName: 'company', cellType: 'text', colTitle: 'CompanyCompanyCompanyCompanyCompany', rule: 'textSize' },
   { colName: 'contact', cellType: 'text', colTitle: 'Contact' },
   { colName: 'country', cellType: 'dropdown', colTitle: 'Country' },
+  { colName: 'dueDate', cellType: 'date', colTitle: 'Due Date' },
   { colName: 'value', cellType: 'number', colTitle: 'Value (in $M)', rule: 'numberHigher' },
-  { colName: 'progress', cellType: 'color', colTitle: 'Progress' },
-  { colName: 'dueDate', cellType: 'date', colTitle: 'Due Date' }];
+  { colName: 'progress', cellType: 'color', colTitle: 'Progress' }];
 
 
 export const editableCells = {
