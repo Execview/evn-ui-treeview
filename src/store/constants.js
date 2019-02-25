@@ -1,4 +1,4 @@
-export const colors = { green: 'Done', amber: 'In Progress', red: 'OOPS', grey: 'Unknown Status' };
+export const colors = { green: 'Done', amber: 'In Progress', red: 'Blocked', grey: 'Unknown Status' };
 export const priority = { grey: 0, red: 1, amber: 2, green: 3 };
 export const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 export const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];

@@ -1,49 +1,71 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Table from './Table';
+import TableWrapper from './TableWrapper';
 import './App.css';
 import * as actionTypes from './store/actionTypes';
-import { cellTypes, dataSort, rowValidation, rules, validators, columnsInfo } from './store/configs';
+import { cellTypes, dataSort, rowValidation, rules, columnsInfo2, columnsInfo3 } from './store/configs';
 import { cats } from './store/constants';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      wrap: true,
+      data: this.props.data,
+      display: false
     };
   }
 
-  toggleWrap() {
-    const wr = this.state.wrap;
-    this.setState({ wrap: !wr });
+  componentWillReceiveProps(newProps) {
+    this.setState({ data: newProps.data });
+  }
+
+  onGetData() {
+    this.setState({ display: true });
   }
 
   render() {
-    // console.log(this.props.orderedData);
+    const t1 = {};
+    for (let i = 0; i < 5; i++) {
+      t1[Object.keys(this.state.data)[i]] = this.state.data[Object.keys(this.state.data)[i]];
+    }
+    const t2 = {};
+    for (let i = 4; i < Object.keys(this.state.data).length; i++) {
+      t2[Object.keys(this.state.data)[i]] = this.state.data[Object.keys(this.state.data)[i]];
+    }
+    console.log(this.props.data);
     const randomNumber = Math.floor((Math.random() * 37));
     return (
       <div className="App">
-        <div>
-          <button className="get-data" type="button" onClick={() => this.props.onGetData()}>Get Data!</button>
-          <button className="get-data" type="button" onClick={() => this.toggleWrap()}>Toggle Cell Wrap</button>
-          <button className="get-data" type="button" onClick={this.props.onAddRow}>Add Row</button>
-          {/* <button type="button" onClick={() => this.forceUpdate()}>RENDER</button> */}
+        <button className="get-data" type="button" onClick={() => this.onGetData()}>Get Data!</button>
+        {this.state.display && (
+          <div>
+            <TableWrapper
+              columnsInfo={columnsInfo2}
+              editableCells={this.props.editableCells}
+              data={t1}
+              cellTypes={cellTypes}
+              onSave={this.props.onSave}
+              rules={rules}
+              dataSort={dataSort}
+              rowValidation={rowValidation}
+              tableWidth={1800}
+            />
+            <TableWrapper
+              columnsInfo={columnsInfo3}
+              editableCells={this.props.editableCells}
+              data={t2}
+              cellTypes={cellTypes}
+              onSave={this.props.onSave}
+              rules={rules}
+              dataSort={dataSort}
+              rowValidation={rowValidation}
+              tableWidth={1200}
+            />
+          </div>
+        )}
+        <div style={{ margin: 'auto', marginTop: '30px', maxWidth: '400px' }}>
+          <img style={{ marginTop: '30px', maxWidth: '100%' }} src={cats[randomNumber]} alt="xd" />
         </div>
-        <Table
-          columnsInfo={columnsInfo}
-          orderedData={this.props.orderedData}
-          editableCells={this.props.editableCells}
-          data={this.props.data}
-          wrap={this.state.wrap}
-          cellTypes={cellTypes}
-          onSave={this.props.onSave}
-          rules={rules}
-          dataSort={dataSort}
-          rowValidation={rowValidation}
-          validators={validators}
-        />
-        <img style={{ marginTop: '30px', width: '400px', maxHeight: '400px' }} src={cats[randomNumber]} alt="xd" />
       </div>
     );
   }
@@ -52,16 +74,14 @@ class App extends Component {
 const mapStateToProps = (state) => {
   return {
     data: state.data,
-    columnsInfo: state.columnsInfo,
-    orderedData: state.orderedData,
     editableCells: state.editableCells,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onGetData: () => dispatch({ type: actionTypes.GET_DATA }),
-    onSave: (rowId, rowDetails) => dispatch({ type: actionTypes.SAVE, rowId, rowDetails }),
+    // onGetData: () => dispatch({ type: actionTypes.GET_DATA }),
+    onSave: (rowId, rowValues, editableValues) => dispatch({ type: actionTypes.SAVE, rowId, rowValues, editableValues }),
     onAddRow: () => dispatch({ type: actionTypes.ADD_ROW })
   };
 };

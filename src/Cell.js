@@ -4,12 +4,16 @@ import React, { PureComponent } from 'react';
 export default class Cell extends PureComponent {
   render() {
     // console.log('meow meow');
+    const text = this.props.text || '';
+    const errorText = this.props.errorText || this.props.errorText === '' ? this.props.errorText : null;
+    const style = this.props.style || {};
+    const onValidateSave = this.props.onValidateSave || (() => { console.log('give it a function brah'); });
     if (this.props.isActive) {
       return (
-        React.cloneElement(this.props.type.editor, { text: this.props.text, onValidateSave: this.props.onValidateSave }));
+        React.cloneElement(this.props.type.editor, { text, onValidateSave }));
     }
     return (
-      React.cloneElement(this.props.type.display, { text: this.props.text, errorText: this.props.errorText, style: this.props.style }));
+      React.cloneElement(this.props.type.display, { text, errorText, style }));
   }
 }
 

@@ -13,6 +13,7 @@ module.exports = {
       "react/prop-types": [0],
       "object-curly-newline": 0,
       "prefer-template":0,
+      "prefer-destructuring": 0,
       "react/jsx-boolean-value":0,
       "class-methods-use-this":0,
       "no-nested-ternary":0,
