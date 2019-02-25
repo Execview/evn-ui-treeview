@@ -8,15 +8,15 @@ const RenameModal = (props) => {
 						width={props.endpoint[0]-props.startpoint[0]}
 						height={props.endpoint[1]-props.startpoint[1]}
 						style={{fill:"rgba(0,0,0,0.5)"}} 
-						onMouseDown={(event)=>{event.preventDefault();props.onMouseDown(inputvalue)}}/>
-				<foreignObject x={0} width={props.endpoint[0]-props.startpoint[0]}>
+						/>
+				<foreignObject x={0} width={props.endpoint[0]-props.startpoint[0]} height='100%'>
 					<form onSubmit={(event)=>{event.preventDefault();props.onSubmit(inputvalue)}}>
 						<input 
 							autoFocus 
 							type='text' 
 							defaultValue={inputvalue} 
-							onChange={(event)=>{event.preventDefault();
-							inputvalue=event.target.value}}
+							onBlur={()=>props.onSubmit(inputvalue)}
+							onChange={(event)=>{event.preventDefault();	inputvalue=event.target.value}}
 							style={{
 								width:'80%',
 								fontSize: '60px',

@@ -7,10 +7,13 @@ const Bubble = React.memo((props) => {
 		var middleclickdown = props.middleclickdown || (()=>console.log("middle part down"))
 		var leftclickup = props.leftclickup || (()=>console.log("left end up"))
 		var rightclickup = props.rightclickup || (()=>console.log("right end up"))
+		var middleclickup = props.middleclickup || (()=>console.log("middle part up"))
 		var leftmousein = props.leftmousein || (()=>console.log("left mouse in"))
 		var leftmouseout = props.leftmouseout || (()=>console.log("left mouseout"))
 		var rightmousein = props.rightmousein || (()=>console.log("right mouse in"))
 		var rightmouseout = props.rightmouseout || (()=>console.log("right mouseout"))
+		var middlemousein = props.middlemousein || (()=>console.log("middle mouse in"))
+		var middlemouseout = props.middlemouseout || (()=>console.log("middle mouseout"))
 		var leftcolour = props.leftcolour 
 		var rightcolour = props.rightcolour
 		var key = props.bkey
@@ -34,7 +37,10 @@ const Bubble = React.memo((props) => {
 				onMouseEnter =	{(event)=>leftmousein(key,event)}
 				onMouseOut   =	{(event)=>leftmouseout(key,event)}/>
 			<path d={middle} fill={colour} strokeWidth='0'
-				onMouseDown  =	{(event)=>middleclickdown(key,event)}/>
+				onMouseDown  =	{(event)=>middleclickdown(key,event)}
+				onMouseUp  =	{(event)=>middleclickup(key,event)}
+				onMouseEnter =	{(event)=>middlemousein(key,event)}
+				onMouseOut   =	{(event)=>middlemouseout(key,event)}/>
 			<path d={rightend} fill={rightcolour} strokeWidth='0'
 				onMouseDown  =	{(event)=>rightclickdown(key,event)}
 				onMouseUp    =	{(event)=>rightclickup(key,event)}

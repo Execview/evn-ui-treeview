@@ -5,12 +5,15 @@ const Columns = React.memo((props)=>{
 		var onMouseDownHandler = props.onMouseDown || (()=>{console.log("[Scheduler] Mouse Down")})
 		var colLetterShift = props.colLetterShift || [5,15];
 		var horizontalBreakLineHeight = props.horizontalBreakLineHeight || 20;
-		var columnTitles = props.xsnaps.map(dateX=>{return dateX[0].getDate()+"/"+(dateX[0].getMonth()+1)})
+		var colsToShow = props.xsnaps
+		//console.log(props.xsnaps)
+		//console.log(colsToShow)	 //TODO DO THIS	
+		var columnTitles = colsToShow.map(dateX=>{return dateX[0].getDate()+"/"+(dateX[0].getMonth()+1)})
 		var dayElements = []
 		var dayBreakLines = []
 
 		for(var i=0; i<columnTitles.length; i++){
-			var xpos = props.xsnaps[i][1];
+			var xpos = colsToShow[i][1];
 			//Day
 			dayElements.push(<tspan style={{fill:'white'}} 
 									key={2*i} x={xpos+colLetterShift[0]}

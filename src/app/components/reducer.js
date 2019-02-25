@@ -1,9 +1,12 @@
 import tryReturnValidTransformState from './stateValidator'
+import {bubbleCopy} from '../functions/bubbleCopy'
 
 const initialState = {
-	bubbles:{},
-	parentbubbles:[],
+	bubbles:{}
 }
+
+//TODO: Add validation to prevent associating a bubble with its own child associate, or links etc...
+//KNOWN BUG: Deleting bubbles doesnt redo the association movements + resizings.
 
 const reducer = (state=initialState,action)=>{
 	if (action.type === 'NEW_BUBBLE'){
@@ -13,6 +16,18 @@ const reducer = (state=initialState,action)=>{
 				[action.bubble.key]:action.bubble
 			}
 		}
+	}
+	if (action.type === 'ADD_MANY_BUBBLES'){
+		var newState = {...state}
+		for(var i=0; i<action.bubbles.length; i++){
+			newState = reducer(newState,{type:'NEW_BUBBLE',bubble:action.bubbles[i]})
+		}
+
+		for (var bubblekey in newState.bubbles){
+			newState = reducer(newState,{type:'SET_ORIGINAL_COLOUR',key:bubblekey,side:'left'})
+			newState = reducer(newState,{type:'SET_ORIGINAL_COLOUR',key:bubblekey,side:'right'})
+		}
+		return newState
 	}
 	if (action.type === 'CHANGE_BUBBLE_DATE')
 		return {
@@ -45,51 +60,39 @@ const reducer = (state=initialState,action)=>{
 				}
 		}
 	}
+	if (action.type === 'ADD_CHILD_ASSOCIATION'){
+		return {
+			...state,
+			bubbles: {...state.bubbles,
+					[action.parentkey]:{...state.bubbles[action.parentkey],
+								ChildAssociatedBubbles:[...state.bubbles[action.parentkey]["ChildAssociatedBubbles"], action.childkey],
+										}
+					}
+				}		
+	}
+	if (action.type === 'ADD_PARENT_ASSOCIATION'){
+		return {	
+			...state,
+			bubbles: {...state.bubbles,
+					[action.childkey]:{...state.bubbles[action.childkey],
+								ParentAssociatedBubble: action.parentkey
+								}
+				}
+		}
+	}
 	if (action.type === 'CLEAR_BUBBLES'){
 		return {
 			...state,
 			bubbles: {}
 		}
 	}
-	if (action.type === 'MOUSE_DOWN_ON_BUBBLE') {
-		return {	
-			...state,
-			bubbles: {...state.bubbles,
-					[action.key]:{...state.bubbles[action.key],
-								mouseDownOn: {...state.bubbles[action.key].mouseDownOn,
-									[action.side]: action.bool},
-								} 
-				}
-		}
-	}
-	if (action.type === 'MOUSE_DOWN_POS'){
-		return {
-			...state,
-			bubbles: {...state.bubbles,
-					[action.key]:{...state.bubbles[action.key],
-								mousedownpos: action.position
-								},
-					} 
-
-		}
-	}
-	if (action.type === 'SET_DRAG_DIFF'){
-		return {
-			...state,
-			bubbles: {...state.bubbles,
-					[action.key]:{...state.bubbles[action.key],
-								dragDiffs: action.diffs
-								},
-					} 
-		}
-	}
 	if (action.type === 'SET_BUBBLE_SIDE_COLOUR'){
-		var sides = {'right':'rightcolour','left':'leftcolour'}
 		return {
 			...state,
 			bubbles: {...state.bubbles,
 					[action.key]:{...state.bubbles[action.key],
-					[sides[action.side]]:action.colour}								
+						colours:{...state.bubbles[action.key].colours,
+							[action.side]:action.colour}}								
 					} 
 		}
 	}
@@ -99,77 +102,70 @@ const reducer = (state=initialState,action)=>{
 			bubbles: action.bubbles
 		}
 	}
-	if (action.type === 'CLEAR_PARENT_BUBBLES'){
-		return {
-			...state,
-			parentbubbles:[]
-		}
-	}
-	if (action.type === 'ADD_PARENT_BUBBLE'){
-		return {
-			...state,
-			parentbubbles: [...state.parentbubbles,action.key]
-		}
-	}
-	if (action.type === 'TRY_REMOVE_PARENT_BUBBLE'){
-		var newParentBubbles = [...state.parentbubbles]
-		var newChildBubblesparentbubblesIndex = newParentBubbles.indexOf(action.key)
-		if(newChildBubblesparentbubblesIndex!==-1){						
-			newParentBubbles.splice(newChildBubblesparentbubblesIndex,1)
-		}
-		return {
-			...state,
-			parentbubbles: newParentBubbles
-		}
-	}
+
 	if (action.type === 'BUBBLE_TRANSFORM'){
-		var bubbleStateCopy = {}; //apply transformation to a copy of bubble states. If valid, replace the main state.
-		for (var bubblekey in state.bubbles){var bubble=state.bubbles[bubblekey];bubbleStateCopy[bubble.key]=bubbleCopy(bubble)}
-		Object.assign(bubbleStateCopy[action.key],action.changes)
-		if(JSON.stringify(state.bubbles[action.key])!==JSON.stringify(bubbleStateCopy[action.key])){
-			var newstate = tryReturnValidTransformState({bubbles:bubbleStateCopy,parentbubbles:state.parentbubbles});
-			if(newstate!==false){
+		//apply transformation to a copy of bubble states. If valid, replace the main state.
+		var oldBubbles = {}
+		for (var bubblekey in state.bubbles){
+				var bubble=state.bubbles[bubblekey]
+				oldBubbles[bubble.key]=bubbleCopy(bubble)
+		}
+		
+		//Object.assign(oldBubbles[action.key],action.changes)
+		if(JSON.stringify(state.bubbles[action.key])!==JSON.stringify({...state.bubbles[action.key],...action.changes})){
+			var newStateBubbles = tryReturnValidTransformState(oldBubbles,action);
+			if(newStateBubbles!==false){
 				return {
 					...state,
-					bubbles: newstate.bubbles
+					bubbles: newStateBubbles
 				}
 			}
+			else{return state}
 		}else{return state}
 	}
 	if (action.type === 'PERFORM_LINK'){
+		console.log(action)
 		var finalstate = {...state}
 		var parentpoint = 'right'===action.parentside ? "enddate" : "startdate"
 		var childpoint = 'right'===action.childside ? "enddate" : "startdate"
 		// if not linking to self AND child doesnt have parent AND parent hasnt already linked child
+		//TODO MORE IFS BECAUSE OF ASSOCIATION!
 		if((action.childkey!==action.parentkey)&&(state.bubbles[action.childkey]["ParentBubble"]==='')&&(state.bubbles[action.parentkey]["ChildBubbles"][action.childkey]==null)){
 			var xGapDate = state.bubbles[action.childkey][childpoint]-state.bubbles[action.parentkey][parentpoint];
-			console.log("[FS]: "+finalstate)
 			finalstate = reducer(finalstate,{type:'ADD_CHILD_LINK',parentkey:action.parentkey,childkey:action.childkey,parentside:action.parentside,childside:action.childside,xGapDate:xGapDate})
 			finalstate = reducer(finalstate,{type:'ADD_PARENT_LINK',childkey:action.childkey,parentkey:action.parentkey})
-			// if parent bubble has no parent, add to main list of parents
-			if(state.bubbles[action.parentkey]["ParentBubble"]===''){
-				finalstate = reducer(finalstate,{type:'ADD_PARENT_BUBBLE',key:action.parentkey})
-			}
-			// if child bubble was in list of parents, remove.
-			if(state.bubbles[action.childkey]["ParentBubble"]!==''){
-				finalstate = reducer(finalstate,{type: 'TRY_REMOVE_PARENT_BUBBLE',key:action.childkeykey})
-			}
 			return finalstate
 		}
 		else{console.log('already linked!'); return state}
 	}
-	if (action.type === 'DELETE_BUBBLE'){
-		const {[action.key]:placeholder, ...rest} = state.bubbles
-		return {...state,
-			bubbles: {...rest}}
+	if (action.type==='PERFORM_ASSOCIATION'){
+		var finalstate = {...state}
+		// if not linking to self AND child doesnt have parent AND parent hasnt already linked child
+		if((action.childkey!==action.parentkey)&&(state.bubbles[action.childkey]["ParentAssociatedBubble"]==='')&&(!state.bubbles[action.parentkey]["ChildAssociatedBubbles"].includes(action.childkey))){
+			console.log(state.bubbles[action.parentkey]["ChildAssociatedBubbles"])
+			finalstate = reducer(finalstate,{type:'ADD_CHILD_ASSOCIATION',parentkey:action.parentkey,childkey:action.childkey})
+			finalstate = reducer(finalstate,{type:'ADD_PARENT_ASSOCIATION',childkey:action.childkey,parentkey:action.parentkey})
+			return finalstate
+		}
+		else{return state}
+
 	}
-	if (action.type === 'CHANGE_BUBBLE_COLOUR'){
-		var newState =  {...state,
-				bubbles: {...state.bubbles,
-							[action.key]:{...state.bubbles[action.key],
-											colour:action.colour}}}
-		newState = reducer(newState,{type:'SET_BUBBLE_SIDE_COLOUR',key:action.key,side:'left',colour:action.colour})
-		newState = reducer(newState,{type:'SET_BUBBLE_SIDE_COLOUR',key:action.key,side:'right',colour:action.colour})
+	if (action.type === 'DELETE_BUBBLE'){
+		var newState = {...state}
+		//Delete all Child references to this bubble
+		for(var childkey in state.bubbles[action.key].ChildBubbles){
+			newState = reducer(newState,{type:'UNLINK_PARENT_BUBBLE',key:childkey})
+		}
+		for(var childkeyINDEX in state.bubbles[action.key].ChildAssociatedBubbles){
+			newState = reducer(newState,{type:'UNLINK_PARENT_ASSOCIATED_BUBBLE',key:state.bubbles[action.key].ChildAssociatedBubbles[childkeyINDEX]})
+		}
+		//Delete the Parent reference from the parent
+		newState = reducer(newState,{type:'UNLINK_PARENT_BUBBLE',key:action.key})
+		newState = reducer(newState,{type:'UNLINK_PARENT_ASSOCIATED_BUBBLE',key:action.key})
+
+		//Safely delete the bubble
+		const {[action.key]:placeholder, ...rest} = newState.bubbles
+		newState = {...newState, bubbles: {...rest}}
 		return newState
 	}
 	if (action.type === 'RENAME_BUBBLE'){
@@ -181,7 +177,7 @@ const reducer = (state=initialState,action)=>{
 	if (action.type === 'UNLINK_PARENT_BUBBLE'){
 		var newState = {...state}
 		var parentBubbleKey = state.bubbles[action.key].ParentBubble
-		if(parentBubbleKey!=''){
+		if(parentBubbleKey!==''){
 			//remove ParentBubble property value
 			newState = {...newState,
 					bubbles: {...newState.bubbles,
@@ -189,50 +185,62 @@ const reducer = (state=initialState,action)=>{
 												ParentBubble:''}}}
 			//remove ChildBubble property from the parent
 			const {[action.key]:value, ...rest} = newState.bubbles[parentBubbleKey]["ChildBubbles"]
-			console.log({...rest})
 			newState = { ...newState,
 						bubbles: {...newState.bubbles,
 								[parentBubbleKey]:{...newState.bubbles[parentBubbleKey],
 												ChildBubbles:{...rest}}}}
 
-			//add self to list of ParentBubbles
+			//sort out side colours
+			newState = reducer(newState,{type:'SET_ORIGINAL_COLOUR',key:action.key,side:'left'})
+			newState = reducer(newState,{type:'SET_ORIGINAL_COLOUR',key:action.key,side:'right'})
+			newState = reducer(newState,{type:'SET_ORIGINAL_COLOUR',key:action.key,side:'middle'})
+		}
+		return newState
+	}
+	if (action.type === 'UNLINK_PARENT_ASSOCIATED_BUBBLE'){
+		var newState = {...state}
+		console.log(action)
+		var parentAssociatedBubbleKey = newState.bubbles[action.key].ParentAssociatedBubble
+		if(parentAssociatedBubbleKey){
+			//remove ParentAssociatedBubble property value
 			newState = {...newState,
-						parentbubbles:[...newState.parentbubbles,action.key]}
+					bubbles: {...newState.bubbles,
+								[action.key]:{...newState.bubbles[action.key],
+												ParentAssociatedBubble:''}}}
+			//remove ChildBubble property from the parent
+			console.log(parentAssociatedBubbleKey)
+			console.log(newState.bubbles)
+			const ChildIndex = newState.bubbles[parentAssociatedBubbleKey]["ChildAssociatedBubbles"].indexOf(action.key)
+			var newChildAssociatedBubbles = [...newState.bubbles[parentAssociatedBubbleKey].ChildAssociatedBubbles]
+			newChildAssociatedBubbles.splice(ChildIndex,1)
+			console.log(ChildIndex)
+			const {[action.key]:value, ...rest} = newState.bubbles[parentAssociatedBubbleKey]["ChildAssociatedBubbles"]
+			newState = { ...newState,
+						bubbles: {...newState.bubbles,
+								[parentAssociatedBubbleKey]:{...newState.bubbles[parentAssociatedBubbleKey],
+												ChildAssociatedBubbles:newChildAssociatedBubbles}}}
+
+			//sort out side colours
+			newState = reducer(newState,{type:'SET_ORIGINAL_COLOUR',key:action.key,side:'left'})
+			newState = reducer(newState,{type:'SET_ORIGINAL_COLOUR',key:action.key,side:'right'})
+			newState = reducer(newState,{type:'SET_ORIGINAL_COLOUR',key:action.key,side:'middle'})
+			
 		}
 		return newState
 	}
 	if (action.type === 'SET_ORIGINAL_COLOUR'){
-			var colourtoset=state.bubbles[action.key].colour
+			var colourtoset=state.bubbles[action.key].colours.original
 			var parentkey = state.bubbles[action.key]["ParentBubble"]
-			if(parentkey!==''){
+			if(parentkey){
 				var thislink = state.bubbles[parentkey]["ChildBubbles"][action.key]
 				if(thislink!=null){
 					if(thislink.childside===action.side){
-						colourtoset=state.bubbles[parentkey].colour}}}
+						colourtoset=state.bubbles[parentkey].colours.original}}}
 			return reducer(state,{type:'SET_BUBBLE_SIDE_COLOUR',key:action.key,side:action.side,colour:colourtoset})
 	}
+	console.log("ERROR!!!!!!!! ATTEMPTED TO DO: "+ action.type)
 	return state
 }
-
-function bubbleCopy(bubble){
-		return recursiveDeepCopy(bubble)
-	}
-
-function recursiveDeepCopy(o) {
-		var newO,i;	
-		if (typeof o !== 'object') {return o;}
-		if (!o) {return o;}
-		var str = Object.prototype.toString.apply(o)
-		if ('[object Array]' === str) {
-			newO = [];
-			for (i = 0; i < o.length; i += 1) {newO[i] = recursiveDeepCopy(o[i]);}
-			return newO;}		
-		if('[object Date]' === str){return new Date(o)}	
-		newO = {};
-		for (i in o) {
-		if (o.hasOwnProperty(i)) {newO[i] = recursiveDeepCopy(o[i]);}}
-		return newO;
-  	}
 
 export default reducer
 
