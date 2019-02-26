@@ -1,0 +1,17 @@
+.caret{
+    color: white;
+    margin-right: -6px; 
+}
+.active{
+    margin-right: -10px; 
+}
+.caret:hover{
+    color: teal;
+    cursor: pointer;
+}
+.node{
+    margin-left: 20px;
+}
+.nodeWrapper{
+    display: flex;
+}

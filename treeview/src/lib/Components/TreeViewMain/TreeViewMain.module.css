@@ -1,0 +1,7 @@
+.main{
+    display: flex;
+    text-align: initial !important;
+}
+.treeView{
+    margin-top: 36px;
+}
