@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './DropdownCell.css';
 
 export default class DropdownCellEditor extends Component {
   constructor(props) {

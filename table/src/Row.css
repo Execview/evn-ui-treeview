@@ -1,0 +1,12 @@
+.active-cell{
+   height:100%;
+}
+
+.table-label {
+  height: 100%;
+  word-break: break-word;
+}
+
+.no-edit{
+  cursor:default;
+}

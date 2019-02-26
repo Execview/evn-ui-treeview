@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { days, months } from './store/constants';
+import './DateCell.css';
 
 export default class DateCellDisplay extends Component {
   render() {

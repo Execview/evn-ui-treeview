@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import xd from './resources/icons-info.svg';
+import errorIcon from './resources/icons-info.svg';
+import './InputCell.css';
 
 class InputCellDisplay extends Component {
   constructor(props) {
@@ -21,7 +22,7 @@ class InputCellDisplay extends Component {
       return (
         <div className="cell-container cell-error">
           <p style={this.props.style} className="cell-text-error">{this.props.text}</p>
-          {this.props.errorText !== '' && <img className="error-icon" src={xd} alt="info" onClick={e => this.showError(e)} />}
+          {this.props.errorText !== '' && <img className="error-icon" src={errorIcon} alt="info" onClick={e => this.showError(e)} />}
           <div className={'error-info ' + (this.state.showText ? 'error-shown' : 'error-hidden')}><p className="error-text">{this.props.errorText}</p></div>
         </div>
       );

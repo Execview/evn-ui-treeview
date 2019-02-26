@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './NumberCell.css';
 
 export default class NumberCellEditor extends Component {
   constructor(props) {

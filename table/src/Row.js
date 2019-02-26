@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Cell from './Cell';
 import InputCellDisplay from './InputCellDisplay';
 import InputCellEditor from './InputCellEditor';
+import './Row.css';
 
 
 export default class Row extends Component {

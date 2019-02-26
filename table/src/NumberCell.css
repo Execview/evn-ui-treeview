@@ -1,0 +1,26 @@
+.text-input{
+  font-size: 16px;
+  color:white;
+  padding-left:5px;
+  border: none;
+  background-color: inherit;
+  width:98%;
+  font-family: Arial, Helvetica, sans-serif;
+  margin-top:7px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+  resize: both;
+}
+
+.text-input:focus { outline: none; }
+
+.text-container{
+  background-color: #282c34;
+  border:1px solid white;
+  height:100%;
+  width:100%;
+  box-sizing: border-box;
+}

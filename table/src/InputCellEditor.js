@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './InputCell.css';
 
 export default class InputCellEditor extends Component {
   constructor(props) {
