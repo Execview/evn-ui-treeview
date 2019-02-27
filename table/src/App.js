@@ -32,7 +32,6 @@ class App extends Component {
     for (let i = 4; i < Object.keys(this.state.data).length; i++) {
       t2[Object.keys(this.state.data)[i]] = this.state.data[Object.keys(this.state.data)[i]];
     }
-    console.log(this.props.data);
     const randomNumber = Math.floor((Math.random() * 37));
     return (
       <div className="App">

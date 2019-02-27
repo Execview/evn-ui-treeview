@@ -7,6 +7,8 @@ const crypto = require('crypto');
 const hash = crypto.createHash('sha256');
 
 export default class TableWrapper extends Component {
+  tableWidth = this.props.tableWidth;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -25,7 +27,6 @@ export default class TableWrapper extends Component {
     // this.props.onSave(newId, {}, { company: true, contact: true, country: true, value: true, progress: true, dueDate: true });
   }
 
-  tableWidth = this.props.tableWidth;
 
   render() {
     return (
@@ -47,6 +48,7 @@ export default class TableWrapper extends Component {
           dataSort={this.props.dataSort}
           rowValidation={this.props.rowValidation}
           tableWidth={this.tableWidth}
+          dontPreserveOrder={true}
         />
       </div>
     );

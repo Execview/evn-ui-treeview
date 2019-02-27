@@ -57,11 +57,13 @@ export default class Table extends Component {
     }
 
     const keys = Object.keys(newProps.data);
+    let newOrderedData = Object.keys(newProps.data);
+    if (newProps.dontPreserveOrder) {
+      const alreadyOrderedData = this.state.orderedData.filter(el => keys.includes(el));
+      const dataToAdd = keys.filter(el => !this.state.orderedData.includes(el));
 
-    const alreadyOrderedData = this.state.orderedData.filter(el => keys.includes(el));
-    const dataToAdd = keys.filter(el => !this.state.orderedData.includes(el));
-
-    const newOrderedData = alreadyOrderedData.concat(dataToAdd);
+      newOrderedData = alreadyOrderedData.concat(dataToAdd);
+    }
 
     this.setState({
       columnsInfo: defaults.columnsInfo,
@@ -122,10 +124,7 @@ export default class Table extends Component {
   onMouseDown = (e, colName) => {
     e.stopPropagation();
     e.preventDefault();
-    console.log(this.state.widths[colName])
     const nextCol = Object.keys(this.state.columnsInfo)[Object.keys(this.state.columnsInfo).indexOf(colName) + 1];
-    console.log(this.state.widths[nextCol]);
-    // console.log('first width: ' + this.state.widths[colName] + ' 2nd width: ' + this.state.widths[nextCol]);
     this.setState({ positionClicked: e.clientX, columnClicked: colName, initialWidth: this.state.widths[colName], nextInitialWidth: this.state.widths[nextCol] });
     document.addEventListener('mousemove', this.onMouseMove);
     document.addEventListener('mouseup', this.removeListener);
@@ -156,9 +155,6 @@ export default class Table extends Component {
   }
 
   validateSave = (cellText) => {
-    console.log('trigger mouse down');
-    // console.log(action.cellText);
-
     const columnConfig = this.state.columnsInfo[this.state.activeCell[1]];
 
     let newInvalidCells = JSON.parse(JSON.stringify(this.state.invalidCells));
@@ -220,13 +216,10 @@ export default class Table extends Component {
       orderedData: dataToReturn,
       order: ordering,
       column: columnToOrder,
-      // activeCell: [null, null],
     });
-    // this.props.updateOrderedData(dataToReturn);
   }
 
   resizeTable() {
-    // console.log('fire resize on ' + window.innerWidth + ' width');
     const windowWidth = document.body.offsetWidth - 5 > this.state.maxTableWidth ? this.state.maxTableWidth : document.body.offsetWidth - 17;
     const toRet = Object.keys(this.state.widths).map(colName => this.state.widths[colName] * 100 / this.state.tableWidth);
     const newScale = toRet.map(wdt => wdt * windowWidth / 100);
@@ -244,7 +237,6 @@ export default class Table extends Component {
   }
 
   render() {
-    // console.log(this.state.orderedData);
     const style = { maxWidth: this.state.tableWidth, margin: 'auto' };
     if (this.state.tableWidth < this.state.maxTableWidth) {
       style.margin = 0;
@@ -288,10 +280,6 @@ export default class Table extends Component {
               if (entry === this.state.activeCell[0]) {
                 column = this.state.activeCell[1];
               }
-              // const colTitles = {};
-              // for (let i = 0; i < this.state.columnsInfo.length; i++) {
-              //   colTitles[this.state.columnsInfo[i].colName] = this.state.columnsInfo[i].colTitle;
-              // }
               return (
                 <tr key={`tr${entry}`}>
                   <Row
