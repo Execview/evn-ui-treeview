@@ -8,8 +8,27 @@ export default class Table extends Component {
     const defaults = this.getDefaults(props);
 
     const maxTableWidth = defaults.maxTableWidth;
-    const initWidth = maxTableWidth / Object.keys(defaults.columnsInfo).length;
-    const initialWidths = Object.keys(defaults.columnsInfo).reduce((total, key) => { return { ...total, [key]: initWidth }; }, {});
+    let newMaxTableWidth = maxTableWidth;
+    const keys = Object.keys(defaults.columnsInfo);
+
+    const initialWidths = {};
+
+    for (let i = 0; i < keys.length; i++) {
+      if (defaults.columnsInfo[keys[i]].width) {
+        newMaxTableWidth -= defaults.columnsInfo[keys[i]].width;
+        initialWidths[keys[i]] = defaults.columnsInfo[keys[i]].width;
+      }
+    }
+
+    const widthKeys = Object.keys(initialWidths);
+    if (keys.length !== widthKeys.length) {
+      const keysLeft = keys.filter(el => !widthKeys.includes(el));
+      const defaultWidth = newMaxTableWidth / keysLeft.length;
+      for (let i = 0; i < keysLeft.length; i++) {
+        initialWidths[keysLeft[i]] = defaultWidth;
+      }
+    }
+
     const minWidths = Object.keys(defaults.columnsInfo).reduce((total, key) => { return { ...total, [key]: 100 }; }, {});
     this.state = {
       columnsInfo: defaults.columnsInfo,

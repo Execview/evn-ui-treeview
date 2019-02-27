@@ -18,11 +18,11 @@ export const columnsInfo = {
   progress: { cellType: 'color', colTitle: 'Progress' } };
 
 export const columnsInfo2 = {
-  activityId: { cellType: 'text', colTitle: 'Activity ID' },
-  activityTitle: { cellType: 'text', colTitle: 'Activity Title', rule: 'textSize' },
+  activityId: { cellType: 'text', colTitle: 'Activity ID', width: 200 },
+  activityTitle: { cellType: 'text', colTitle: 'Activity Title', rule: 'textSize', width: 200 },
   startDate: { cellType: 'date', colTitle: 'Start Date' },
-  latestProgress: { cellType: 'text', colTitle: 'Latest Progress' },
-  employeeName: { cellType: 'dropdown', colTitle: 'Employee Name' },
+  latestProgress: { cellType: 'text', colTitle: 'Latest Progress', width: 300 },
+  employeeName: { cellType: 'dropdown', colTitle: 'Employee Name', width: 400 },
   progress: { cellType: 'color', colTitle: 'RAG' } };
 
 export const columnsInfo3 = {
