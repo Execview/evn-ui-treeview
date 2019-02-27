@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import TreeRow from './TreeRow'
-import {treeStructure, data} from './config'
+import {treeStructure, data, columnsInfo, cellTypes, editableCells} from './config'
+import Table from './TEMP-TABLE/table/Table'
 
 class TreeView extends Component {
 	constructor(props){
@@ -30,6 +30,23 @@ class TreeView extends Component {
 		return newDisplayedRows
 	}
 
+	getTableData(){
+		//inject TreeExpander data
+		const displayedRows = this.getDisplayedRows()
+		let tableData = {}
+		for(let i=0; i<displayedRows.length; i++){
+			const rowId = displayedRows[i].key
+			tableData[rowId] = {...data[rowId],
+									treeExpander:{
+										...displayedRows[i],
+										text: data[rowId].activityTitle,
+										toggleNode: (()=>this.toggleNode(rowId))
+									}
+								}
+		}
+		return tableData
+	}
+
 	toggleNode = (nodeKey) =>{
 		this.setState({tree: 
 						{...this.state.tree,
@@ -41,16 +58,29 @@ class TreeView extends Component {
 	}
 
   	render() {
+		const tableData = this.getTableData()
     	return (
 			<div className="table-container">
-			<table>
-				<tbody>
-					{this.getDisplayedRows().map(displayRow => {console.log(data[displayRow.key]); return <TreeRow key={displayRow.key} rowData={data[displayRow.key]} depth={displayRow.depth} nodeStatus={displayRow.nodeStatus} toggleNode={()=>this.toggleNode(displayRow.key)}/>})}
-				</tbody>
-			</table>
+				<Table 
+					columnsInfo={columnsInfo}
+					editableCells={editableCells}
+					cellTypes={cellTypes}
+					data={tableData}
+					tableWidth={1800}
+					dontPreserveOrder={true}
+					wrap={true}
+										
+				/>
 			</div>
 		);
   	}
 }
 
 export default TreeView;
+
+
+/*<table>
+	<tbody>
+	{this.getDisplayedRows().map(displayRow => {console.log(data[displayRow.key]); return <TreeRow key={displayRow.key} rowData={data[displayRow.key]} depth={displayRow.depth} nodeStatus={displayRow.nodeStatus} toggleNode={()=>this.toggleNode(displayRow.key)}/>})}
+	</tbody>
+</table>*/
