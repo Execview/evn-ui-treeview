@@ -39,7 +39,7 @@ export default class Row extends Component {
             >
               <Cell
                 style={style}
-                text={this.props.rowData[col]}
+                data={this.props.rowData[col]}
                 type={cellTypes[columnsInfo[col].cellType]}
                 isActive={isActive}
                 onValidateSave={this.props.onValidateSave}

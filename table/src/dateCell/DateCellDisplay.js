@@ -4,9 +4,8 @@ import './DateCell.css';
 
 export default class DateCellDisplay extends Component {
   render() {
-    // console.log(this.props.text);
-    const myDate = new Date(this.props.text);
-    const toReturn = this.props.text !== '' ? days[myDate.getDay()] + ' ' + myDate.getDate() + '/' + months[myDate.getMonth()] + '/' + myDate.getFullYear() : 'Date Unknown';
+    const myDate = new Date(this.props.data);
+    const toReturn = this.props.data !== '' ? days[myDate.getDay()] + ' ' + myDate.getDate() + '/' + months[myDate.getMonth()] + '/' + myDate.getFullYear() : 'Date Unknown';
     return (<div className="cell-container"><p style={this.props.style} className="cell-text">{toReturn}</p></div>);
   }
 }
