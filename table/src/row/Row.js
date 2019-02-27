@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import Cell from './Cell';
-import InputCellDisplay from './InputCellDisplay';
-import InputCellEditor from './InputCellEditor';
+import Cell from '../cell/Cell';
+import InputCellDisplay from '../inputCell/InputCellDisplay';
+import InputCellEditor from '../inputCell/InputCellEditor';
 import './Row.css';
 
 

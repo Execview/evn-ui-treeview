@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import TableWrapper from './TableWrapper';
+import TableWrapper from './tableWrapper/TableWrapper';
 import './App.css';
 import * as actionTypes from './store/actionTypes';
 import { cellTypes, dataSort, rowValidation, rules, columnsInfo2, columnsInfo3 } from './store/configs';

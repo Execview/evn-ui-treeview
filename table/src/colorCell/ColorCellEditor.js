@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { colors } from './store/constants';
+import { colors } from '../store/constants';
 import './ColorCell.css';
 
 export default class ColorCellEditor extends Component {

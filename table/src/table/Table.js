@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Row from './Row';
+import Row from '../row/Row';
 import './Table.css';
 
 export default class Table extends Component {

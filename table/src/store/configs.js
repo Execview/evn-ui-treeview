@@ -1,12 +1,12 @@
 import React from 'react';
-import InputCellEditor from '../InputCellEditor';
-import DropdownCellEditor from '../DropdownCellEditor';
-import NumberCellEditor from '../NumberCellEditor';
-import ColorCellEditor from '../ColorCellEditor';
-import ColorCellDisplay from '../ColorCellDisplay';
-import DateCellEditor from '../DateCellEditor';
-import DateCellDisplay from '../DateCellDisplay';
-import InputCellDisplay from '../InputCellDisplay';
+import InputCellEditor from '../inputCell/InputCellEditor';
+import DropdownCellEditor from '../dropdownCell/DropdownCellEditor';
+import NumberCellEditor from '../numberCell/NumberCellEditor';
+import ColorCellEditor from '../colorCell/ColorCellEditor';
+import ColorCellDisplay from '../colorCell/ColorCellDisplay';
+import DateCellEditor from '../dateCell/DateCellEditor';
+import DateCellDisplay from '../dateCell/DateCellDisplay';
+import InputCellDisplay from '../inputCell/InputCellDisplay';
 import { countries, priority } from './constants';
 
 export const columnsInfo = {

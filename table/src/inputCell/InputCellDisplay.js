@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import errorIcon from './resources/icons-info.svg';
+import errorIcon from '../resources/icons-info.svg';
 import './InputCell.css';
 
 class InputCellDisplay extends Component {
