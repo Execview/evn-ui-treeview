@@ -25,7 +25,7 @@ export default class Row extends Component {
         const onClickAction = isActive ? null : (() => onSetActive(this.props.rowId, col));
         const lastOne = index === Object.keys(columnsInfo).length - 1;
         let style = { width: widths[col] - 10 };
-        if (this.props.wrap) {
+        if (!this.props.wrap) {
           style = { ...style, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' };
         }
         const errorText = rules[columnsInfo[col].rule] ? rules[columnsInfo[col].rule].errorMessage : null;
