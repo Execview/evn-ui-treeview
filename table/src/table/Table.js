@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import Row from '../row/Row';
 import './Table.css';
 
@@ -226,7 +227,8 @@ export default class Table extends Component {
   }
 
   resizeTable() {
-    const windowWidth = document.body.offsetWidth - 5 > this.state.maxTableWidth ? this.state.maxTableWidth : document.body.offsetWidth - 17;
+    const xd = ReactDOM.findDOMNode(this).parentNode.offsetWidth;
+    const windowWidth = xd > this.state.maxTableWidth ? this.state.maxTableWidth : xd - 5;
     const toRet = Object.keys(this.state.widths).map(colName => this.state.widths[colName] * 100 / this.state.tableWidth);
     const newScale = toRet.map(wdt => wdt * windowWidth / 100);
     const keys = Object.keys(this.state.widths);
