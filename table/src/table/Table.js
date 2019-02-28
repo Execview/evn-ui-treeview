@@ -32,7 +32,6 @@ export default class Table extends Component {
     const minWidths = Object.keys(defaults.columnsInfo).reduce((total, key) => { return { ...total, [key]: 100 }; }, {});
     this.state = {
       columnsInfo: defaults.columnsInfo,
-      dataSort: defaults.dataSort,
       maxTableWidth,
       tableWidth: maxTableWidth,
       widths: { ...initialWidths },
@@ -86,7 +85,6 @@ export default class Table extends Component {
 
     this.setState({
       columnsInfo: defaults.columnsInfo,
-      dataSort: defaults.dataSort,
       maxTableWidth,
       tableWidth: newTableWidth,
       widths: { ...newWidths },
@@ -118,7 +116,6 @@ export default class Table extends Component {
     const toReturn = {
       columnsInfo: props.columnsInfo,
       editableCells: props.editableCells,
-      dataSort: props.dataSort
     };
 
     toReturn.columnsInfo = props.columnsInfo || Object.keys(props.data).reduce((total, objKey) => { return { ...total, [objKey]: { cellType: 'text', colTitle: objKey } }; }, {});
@@ -128,14 +125,6 @@ export default class Table extends Component {
       toReturn.editableCells[Object.keys(props.data)[i]] = props.editableCells ? props.editableCells[Object.keys(props.data)[i]] || [] : [];
     }
 
-    if (!props.dataSort) {
-      toReturn.dataSort = {};
-      toReturn.dataSort.text = (a, b) => {
-        const x = a ? a.toLowerCase() : '';
-        const y = b ? b.toLowerCase() : '';
-        return (x > y) ? -1 : ((x < y) ? 1 : 0);
-      };
-    }
     toReturn.maxTableWidth = props.tableWidth || 1800;
     return toReturn;
   }
@@ -219,15 +208,13 @@ export default class Table extends Component {
       ordering = 'asc';
     }
     const dataToOrder = this.state.orderedData.map((key) => { return ({ id: key, val: this.state.data[key][col] }); });
-    if (this.state.dataSort[cellType]) {
-      dataToOrder.sort((a, b) => {
-        return this.state.dataSort[cellType](a.val, b.val);
-      });
-      if (ordering === 'asc') {
-        dataToOrder.reverse();
-      }
-    }
 
+    dataToOrder.sort((a, b) => {
+      return this.props.dataSort[cellType](a.val, b.val);
+    });
+    if (ordering === 'asc') {
+      dataToOrder.reverse();
+    }
 
     const dataToReturn = dataToOrder.map(obj => obj.id);
 
@@ -270,21 +257,23 @@ export default class Table extends Component {
                 const col = this.state.columnsInfo[colkey];
                 const lastOne = index === Object.keys(this.state.columnsInfo).length - 1;
                 let spans = null;
-                if (this.state.column === '') {
-                  spans = (
-                    <div className="span-container">
-                      <span className="arrow-up" />
-                      <span className="arrow-down" />
-                    </div>);
-                } else if (this.state.column === colkey) {
-                  spans = (
-                    <div className="span-container">
-                      <span className={colkey === this.state.column ? (this.state.order === 'desc' ? 'arrow-down' : 'arrow-up') : ''} />
-                    </div>
-                  );
+                if (this.props.dataSort && this.props.dataSort[col.cellType]) {
+                  if (this.state.column === '') {
+                    spans = (
+                      <div className="span-container">
+                        <span className="arrow-up" />
+                        <span className="arrow-down" />
+                      </div>);
+                  } else if (this.state.column === colkey) {
+                    spans = (
+                      <div className="span-container">
+                        <span className={colkey === this.state.column ? (this.state.order === 'desc' ? 'arrow-down' : 'arrow-up') : ''} />
+                      </div>
+                    );
+                  }
                 }
                 return (
-                  <th key={colkey} onMouseDown={() => this.sortData(colkey, col.cellType)} title={col.colTitle} style={{ width: this.state.widths[colkey], MozUserSelect: 'none', WebkitUserSelect: 'none', msUserSelect: 'none' }}>
+                  <th key={colkey} onMouseDown={() => { if (this.props.dataSort && this.props.dataSort[col.cellType]) { this.sortData(colkey, col.cellType); } }} title={col.colTitle} style={{ width: this.state.widths[colkey], MozUserSelect: 'none', WebkitUserSelect: 'none', msUserSelect: 'none' }}>
                     {spans}
                     <div className="thead-container toggle-wrap" style={{ width: this.state.widths[colkey] - 30 }}>{col.colTitle}</div>
                     {!lastOne && <div style={{ position: 'absolute', zIndex: 1, transform: 'translateX(7px)', top: 0, right: 0, height: '100%', width: '15px', cursor: 'w-resize' }} onMouseDown={e => this.onMouseDown(e, colkey)} onClick={this.stopPr} /> }

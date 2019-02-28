@@ -19,3 +19,7 @@
 }
 
 .get-data:focus { outline: none; }
+
+.button-wrapper {
+  margin-bottom:30px;
+}

@@ -31,7 +31,7 @@ export default class TableWrapper extends Component {
   render() {
     return (
       <div>
-        <div>
+        <div className="button-wrapper">
           <button className="get-data" type="button" onClick={() => this.toggleWrap()}>Toggle Cell Wrap</button>
           <button className="get-data" type="button" onClick={() => this.addRow()}>Add Row</button>
           <button className="get-data" type="button" onClick={() => { this.tableWidth = 500; this.forceUpdate(); }}>change width</button>
