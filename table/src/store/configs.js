@@ -10,26 +10,26 @@ import InputCellDisplay from '../inputCell/InputCellDisplay';
 import { countries, priority } from './constants';
 
 export const columnsInfo = {
-  company: { cellType: 'text', colTitle: 'CompanyCompanyCompanyCompanyCompany', rule: 'textSize' },
-  contact: { cellType: 'text', colTitle: 'Contact', rule: 'textSize' },
-  country: { cellType: 'dropdown', colTitle: 'Country' },
-  dueDate: { cellType: 'date', colTitle: 'Due Date' },
-  value: { cellType: 'number', colTitle: 'Value (in $M)', rule: 'numberHigher' },
-  progress: { cellType: 'color', colTitle: 'Progress' } };
+  company: { cellType: 'text', headerData: 'CompanyCompanyCompanyCompanyCompany', rule: 'textSize' },
+  contact: { cellType: 'text', headerData: 'Contact', rule: 'textSize' },
+  country: { cellType: 'dropdown', headerData: 'Country' },
+  dueDate: { cellType: 'date', headerData: 'Due Date' },
+  value: { cellType: 'number', headerData: 'Value (in $M)', rule: 'numberHigher' },
+  progress: { cellType: 'color', headerData: 'Progress' } };
 
 export const columnsInfo2 = {
-  activityId: { cellType: 'text', colTitle: 'Activity ID', width: 200 },
-  activityTitle: { cellType: 'text', colTitle: 'Activity Title', rule: 'textSize', width: 200 },
-  startDate: { cellType: 'date', colTitle: 'Start Date' },
-  latestProgress: { cellType: 'text', colTitle: 'Latest Progress', width: 300 },
-  employeeName: { cellType: 'dropdown', colTitle: 'Employee Name', width: 400 },
-  progress: { cellType: 'color', colTitle: 'RAG' } };
+  activityId: { cellType: 'text', headerData: 'Activity ID', width: 200 },
+  activityTitle: { cellType: 'text', headerData: 'Activity Title', rule: 'textSize', width: 200, headerType: 'dropdown' },
+  startDate: { cellType: 'date', headerData: 'Start Date' },
+  latestProgress: { cellType: 'text', headerData: 'Latest Progress', width: 300 },
+  employeeName: { cellType: 'dropdown', headerData: 'Employee Name', width: 400 },
+  progress: { cellType: 'color', headerData: 'RAG' } };
 
 export const columnsInfo3 = {
-  activityId: { cellType: 'text', colTitle: 'Activity ID' },
-  activityTitle: { cellType: 'text', colTitle: 'Activity Title', rule: 'textSize' },
-  employeeName: { cellType: 'dropdown', colTitle: 'Employee Name' },
-  progress: { cellType: 'color', colTitle: 'RAG' } };
+  activityId: { cellType: 'text', headerData: 'Activity ID' },
+  activityTitle: { cellType: 'text', headerData: 'Activity Title', rule: 'textSize' },
+  employeeName: { cellType: 'dropdown', headerData: 'Employee Name' },
+  progress: { cellType: 'color', headerData: 'RAG' } };
 
 export const editableCells = {
   _w1232: ['company', 'contact', 'country', 'value', 'progress', 'dueDate'],
@@ -56,7 +56,7 @@ export const newData = { _w1232: { company: 'McLaren', contact: 'WL', country: '
   _k8450: { company: 'Bugatti', contact: 'DT', country: 'France', progress: 'red', dueDate: '2019-01-17T10:39:57.362Z' },
   _u184b: { company: 'Mercedes-Benz', contact: 'WL', country: 'Germany', progress: 'green' } };
 
-export const newData2 = { _w1232: { activityId: '12425', activityTitle: 'Fix PDF', startDate: '2017-08-17T10:39:57.362Z', latestProgress: 'Fix Chromium', progress: 'green', dueDate: '2018-03-17T10:39:57.362Z', employeeName: 'Andrei' },
+export const newData2 = { _w1232: { activityId: '12425', activityTitle: 'Fix PDF', startDate: '2017-08-17T10:39:57.362Z', latestProgress: 'Fix Chromium', progress: 'green', dueDate: '2018-03-17T10:39:57.362Z', employeeName: '' },
   _1235d: { activityId: '1251251', activityTitle: 'Mobile Shipment', startDate: '2017-08-17T10:39:57.362Z', latestProgress: 'The current task is in progress and about to be evaluated', progress: 'amber', dueDate: '2017-08-17T10:39:57.362Z', employeeName: 'Mark' },
   _m7ad1: { activityId: '11241', activityTitle: 'Things to Do', startDate: '2017-08-17T10:39:57.362Z', latestProgress: 'In progress', progress: 'red', employeeName: 'Paul' },
   _917gb: { activityId: '765976', activityTitle: 'Replace Tire', startDate: '2017-08-17T10:39:57.362Z', latestProgress: 'Done', dueDate: '1996-09-13T10:39:57.362Z', employeeName: 'Agam' },

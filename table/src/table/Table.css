@@ -1,11 +1,13 @@
 .span-container{
   position: relative;
   width:30px;
+  height: 40px;
+  display: inline-block;
 }
 
 .arrow-up {
   position:absolute;
-  top:1px;
+  top:13px;
   left:7px;
   display: inline-block;
   width: 0;
@@ -17,7 +19,7 @@
 
 .arrow-down {
   position:absolute;
-  top:8px;
+  top:21px;
   left:7px;
   display:inline-block;
   width: 0;
@@ -28,7 +30,8 @@
 }
 
 .thead-container {
-  margin-left:30px;
+  display: inline-block;
+  height: 40px;
 }
 
 .toggle-wrap {
@@ -86,4 +89,9 @@ td:hover,th:hover {
 .td-edit:hover{
   background-color: #282c34;
   border:1px solid white;
+}
+
+.header-cell {
+  height: 40px;
+  line-height: 40px;
 }

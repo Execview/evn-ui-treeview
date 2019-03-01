@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Row from '../row/Row';
+import Cell from '../cell/Cell';
+import HeaderCellDisplay from './HeaderCellDisplay';
 import './Table.css';
+
+// KNOWN BUG: MILLION RERENDERS
 
 export default class Table extends Component {
   constructor(props) {
@@ -119,7 +123,7 @@ export default class Table extends Component {
       editableCells: props.editableCells,
     };
 
-    toReturn.columnsInfo = props.columnsInfo || Object.keys(props.data).reduce((total, objKey) => { return { ...total, [objKey]: { cellType: 'text', colTitle: objKey } }; }, {});
+    toReturn.columnsInfo = props.columnsInfo || Object.keys(props.data).reduce((total, objKey) => { return { ...total, [objKey]: { cellType: 'text', headerData: objKey } }; }, {});
 
     toReturn.editableCells = {};
     for (let i = 0; i < Object.keys(props.data).length; i++) {
@@ -258,7 +262,7 @@ export default class Table extends Component {
               {Object.keys(this.state.columnsInfo).map((colkey, index) => {
                 const col = this.state.columnsInfo[colkey];
                 const lastOne = index === Object.keys(this.state.columnsInfo).length - 1;
-                let spans = null;
+                let spans = <div className="span-container" />;
                 if (this.props.dataSort && this.props.dataSort[col.cellType]) {
                   if (this.state.column === '') {
                     spans = (
@@ -274,10 +278,19 @@ export default class Table extends Component {
                     );
                   }
                 }
+                let data = null;
+                const headerStyle = { width: this.state.widths[colkey], overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' };
+                let type = null;
+                if (col.headerType) {
+                  data = col.headerData;
+                  type = this.props.cellTypes[col.headerType];
+                } else {
+                  data = { spans, title: col.headerData, sortData: () => { if (this.props.dataSort && this.props.dataSort[col.cellType]) { this.sortData(colkey, col.cellType); } }, };
+                  type = { display: <HeaderCellDisplay /> };
+                }
                 return (
-                  <th key={colkey} onMouseDown={() => { if (this.props.dataSort && this.props.dataSort[col.cellType]) { this.sortData(colkey, col.cellType); } }} title={col.colTitle} style={{ width: this.state.widths[colkey], MozUserSelect: 'none', WebkitUserSelect: 'none', msUserSelect: 'none' }}>
-                    {spans}
-                    <div className="thead-container toggle-wrap" style={{ width: this.state.widths[colkey] - 30 }}>{col.colTitle}</div>
+                  <th key={colkey} style={{ width: this.state.widths[colkey], MozUserSelect: 'none', WebkitUserSelect: 'none', msUserSelect: 'none' }}>
+                    <Cell data={data} style={headerStyle} type={type} />
                     {!lastOne && <div style={{ position: 'absolute', zIndex: 1, transform: 'translateX(7px)', top: 0, right: 0, height: '100%', width: '15px', cursor: 'w-resize' }} onMouseDown={e => this.onMouseDown(e, colkey)} onClick={this.stopPr} /> }
                   </th>
                 );
