@@ -9,13 +9,17 @@ body {
   font-size: 16px;
 }
 
+table{
+  position: relative;
+}
+
 td {
   text-align: left;
 }
 
-.table-container {
+/* .table-container {
   padding: 10px;
-}
+} */
 
 .arrow-container{
   position: relative;
@@ -50,4 +54,8 @@ td {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+pre {
+	margin: 0;
 }
