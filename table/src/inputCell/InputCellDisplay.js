@@ -20,14 +20,14 @@ class InputCellDisplay extends Component {
   render() {
     if (this.props.errorText !== null) {
       return (
-        <div className="cell-container cell-error">
+        <div className="cell-container no-select cell-error">
           <p style={this.props.style} className="cell-text-error">{this.props.data}</p>
           {this.props.errorText !== '' && <img className="error-icon" src={errorIcon} alt="info" onClick={e => this.showError(e)} />}
           <div className={'error-info ' + (this.state.showText ? 'error-shown' : 'error-hidden')}><p className="error-text">{this.props.errorText}</p></div>
         </div>
       );
     }
-    return <div className="cell-container"><p style={this.props.style} className="cell-text">{this.props.data}</p></div>;
+    return <div className="cell-container no-select"><p style={this.props.style} className="cell-text">{this.props.data}</p></div>;
   }
 }
 

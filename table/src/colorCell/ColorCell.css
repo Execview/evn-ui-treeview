@@ -19,6 +19,13 @@
   min-height: 100%;
 }
 
+.no-select {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 .progress-green {
   background-color: #00CC6F;
   height: 100%;

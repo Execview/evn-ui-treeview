@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import InputCellDisplay from '../inputCell/InputCellDisplay';
 import InputCellEditor from '../inputCell/InputCellEditor';
 
+
 export default class Cell extends PureComponent {
   render() {
     const data = this.props.data || '';
@@ -11,9 +12,9 @@ export default class Cell extends PureComponent {
     const onValidateSave = this.props.onValidateSave || (() => { console.log('cell needs onValidateSave brah'); });
     if (this.props.isActive) {
       return (
-        React.createElement(type.editor.type, { data, onValidateSave }));
+        React.createElement(type.editor.type, { ...type.editor.props, data, onValidateSave }));
     }
     return (
-      React.createElement(type.display.type, { data, errorText, style }));
+      React.createElement(type.display.type, { ...type.display.props, data, errorText, style }));
   }
 }

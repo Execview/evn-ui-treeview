@@ -20,6 +20,13 @@
   }
 }
 
+.no-select {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 .text-container{
   background-color: #282c34;
   border:1px solid white;

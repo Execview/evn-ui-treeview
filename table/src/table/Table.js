@@ -81,7 +81,7 @@ export default class Table extends Component {
 
     const keys = Object.keys(newProps.data);
     let newOrderedData = Object.keys(newProps.data);
-    if (newProps.dontPreserveOrder) {
+    if (!newProps.dontPreserveOrder) {
       const alreadyOrderedData = this.state.orderedData.filter(el => keys.includes(el));
       const dataToAdd = keys.filter(el => !this.state.orderedData.includes(el));
 
@@ -289,7 +289,7 @@ export default class Table extends Component {
                   type = { display: <HeaderCellDisplay /> };
                 }
                 return (
-                  <th key={colkey} style={{ width: this.state.widths[colkey], MozUserSelect: 'none', WebkitUserSelect: 'none', msUserSelect: 'none' }}>
+                  <th key={colkey} style={{ width: this.state.widths[colkey] }}>
                     <Cell data={data} style={headerStyle} type={type} />
                     {!lastOne && <div style={{ position: 'absolute', zIndex: 1, transform: 'translateX(7px)', top: 0, right: 0, height: '100%', width: '15px', cursor: 'w-resize' }} onMouseDown={e => this.onMouseDown(e, colkey)} onClick={this.stopPr} /> }
                   </th>
