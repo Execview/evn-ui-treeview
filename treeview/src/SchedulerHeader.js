@@ -1,37 +1,36 @@
 import React, { Component } from 'react';
+import SchedulerOverlay from './SchedulerOverlay'
 
 class SchedulerHeader extends Component {
 	constructor(){
 		super()
-		this.state = {rowHeights:[]}
+		this.state = {rowHeights:[], ref: null}
 	}
 
-  	render() {	
-		const text = parseInt(this.props.data.start)+'th       '+parseInt(this.props.data.start+1)+'th       '+parseInt(this.props.data.start+2)+'th'
-		const tableHeight = this.state.rowHeights ? this.state.rowHeights.reduce((total,rh)=>total+rh,0) : 100
+  	render() {
+		// console.log(this.props.data.snaps)
+		let days = this.props.data.snaps.map((snap,index)=>{return <tspan alignmentBaseline="middle" key={index} x={snap[1]} y={'50%'}>{snap[0].getDate()+"/"+(snap[0].getMonth()+1)}</tspan>})
     	return (
-			<div>
-				<pre>{text}</pre>
-				<svg height={tableHeight} width='100%' style={{top:'0px', left: '0px', position: "absolute", pointerEvents: 'none',zIndex:'100'}}>
-					<g style={{pointerEvents: 'auto'}}>
-						<circle cx="50" cy="20" r="50" stroke="black" strokeWidth="3" fill="red" onClick={()=>console.log("CIRCLE")}/>
-					</g>
+			<div className="header-cell" style={{width:this.props.style.width }} onMouseDown={this.props.data.mouseOnScheduler}>
+				<svg height='100%' width='100%'>
+					<text style={{fill:'white'}} >{days}</text>
 				</svg>
+				<SchedulerOverlay rowHeights={this.state.rowHeights}/>		
 			</div>
 		);
   	}
-
-	getRowHeights = (ref)=>{
-		return (ref && ref.current) ? [...ref.current.getElementsByTagName('tr')].map(el=>el.clientHeight) : []
-	}
+	
 	componentDidMount(){
-		let rh = this.getRowHeights(this.props.data.tableRef)
-		this.setState({rowHeights: rh })}
+		let rh = this.props.data.getRowHeights(this.props.data.tableRef)
+		this.setState({rowHeights: rh })
+		this.props.data.getWidth && this.props.data.getWidth(this.props.style.width)
+	}
 	componentDidUpdate(){
-		const newRowHeights = this.getRowHeights(this.props.data.tableRef)
+		const newRowHeights = this.props.data.getRowHeights(this.props.data.tableRef)
 		if(JSON.stringify(this.state.rowHeights)!==JSON.stringify(newRowHeights)){
 			this.setState({rowHeights: newRowHeights})
 		}
+		this.props.data.getWidth && this.props.data.getWidth(this.props.style.width)
 	}
 }
 

@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import Table from '../TEMP-TABLE/table/Table'
 
-import SchedulerHeader from '../SchedulerHeader'
-import SchedulerOverlay from '../SchedulerOverlay';
-
 export default class TreeAppender extends Component {
 	constructor(props){
 		super(props)
@@ -11,7 +8,7 @@ export default class TreeAppender extends Component {
 	}
 
 	addTreeData = ()=>{
-		//inject TreeExpander data and SchedulerCell Bubble data.
+		//inject TreeExpander dataBubble data.
 		const displayedRows = this.props.displayedTreeStructure
 		let tableData = {...this.props.data}
 		for(let i=0; i<displayedRows.length; i++){
@@ -27,17 +24,20 @@ export default class TreeAppender extends Component {
 		return tableData
 	}
 
-  	render() {
-		const tableData = this.addTreeData()
+	addTreeColumn = ()=>{
+		return {treeExpander: {cellType: 'tree', headerData: 'Tree'}, ...this.props.columnsInfo}
+	}
+
+  	render() {//TODO: Remove extra props before spreading!
+		const columnsInfo = this.addTreeColumn()
+		const tableData = this.addTreeData()	
     	return (
 			<div className="table-container">
-				<div>
-					<Table //TODO: Remove extra props before spreading!
-						{...this.props}
-						data={tableData}
-					/>	
-					<SchedulerOverlay />
-				</div>
+				{React.cloneElement(this.props.children, 
+				{...this.props,
+				children: this.props.children && this.props.children.props.children,
+				data: tableData,
+				columnsInfo: columnsInfo})}	
 			</div>
 		);
   	}

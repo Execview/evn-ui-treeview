@@ -9,6 +9,7 @@ import DateCellEditor from './TEMP-TABLE/dateCell/DateCellEditor'
 import TreeCell from './TreeCell';
 import SchedulerCell from './SchedulerCell'
 import SchedulerHeader from './SchedulerHeader';
+import Data from './configData.json'
 
 export const treeStructure = {
 	_1235d:{nodes:[]},
@@ -19,31 +20,33 @@ export const treeStructure = {
 	_u184b:{nodes:[]},
 }
 
-export const data = {
-	_1235d: { activityTitle: 'Mobile Shipment', startDate: '2017-08-17T10:39:57.362Z', endDate: '2017-08-17T10:39:57.362Z', progress: 'amber'},
-  	_m7ad1: { activityTitle: 'Activity 1', startDate: '2017-08-17T10:39:57.362Z', endDate: '2017-08-17T10:39:57.362Z', progress: 'red'},
-  	_917gb: { activityTitle: 'T1', startDate: '2017-08-17T10:39:57.362Z', endDate: '1996-09-13T10:39:57.362Z', progress: 'green'},
-  	_1236d: { activityTitle: 'ANUYIC', startDate: '2017-08-17T10:39:57.362Z', endDate: '2017-08-17T10:39:57.362Z', progress: 'green' },
-  	_k8450: { activityTitle: 'OAUWDAOAUWDAOAUWDAOAUWDAOAUWDAOAUWDAOAUWDAOAUWDAOAUWDAOAUWDAOAUWDAOAUWDA', startDate: '2017-08-17T10:39:57.362Z', endDate: '2019-01-17T10:39:57.362Z', progress: 'red' },
- 	_u184b: { activityTitle: 'AWDIA', startDate: '2017-08-17T10:39:57.362Z', endDate: '2017-08-17T10:39:57.362Z', progress: 'amber' } 
-}
+export const data = Data
+
+// export const data = {
+// 	_1235d: { activityTitle: 'Project Scorpio', startdate: '2018-12-17T10:39:57.362Z', enddate: '2018-12-23T10:39:57.362Z', progress: 'amber'},
+//   	_m7ad1: { activityTitle: 'Project X', startdate: '2018-12-18T10:39:57.362Z', enddate: '2018-12-26T10:39:57.362Z', progress: 'red'},
+//   	_917gb: { activityTitle: 'Activity Bravo', startdate: '2018-12-17T10:39:57.362Z', enddate: '2018-12-22T10:39:57.362Z', progress: 'green'},
+//   	_1236d: { activityTitle: 'Activity Echo', startdate: '2018-12-21T10:39:57.362Z', enddate: '2018-12-26T10:39:57.362Z', progress: 'green' },
+//   	_k8450: { activityTitle: 'Task with a very very very very long name', startdate: '2018-12-18T10:39:57.362Z', enddate: '2018-12-23T10:39:57.362Z', progress: 'red' },
+//  	_u184b: { activityTitle: 'Subtask Flower', startdate: '2018-12-18T10:39:57.362Z', enddate: '2018-12-23T10:39:57.362Z', progress: 'amber' } 
+// }
 
 export const columnsInfo = {
-	treeExpander: {cellType: 'tree', headerData: 'Tree'},
-	//activityTitle: { cellType: 'text', headerData: 'Activity Title' }, //cant edit activity title without this
-	startDate: { cellType: 'date', headerData: 'Start Date', width:140 },
-	endDate: { cellType: 'date', headerData: 'End Date', width:140 },
+	// treeExpander: {cellType: 'tree', headerData: 'Tree'},
+	activityTitle: { cellType: 'text', headerData: 'Activity Title' }, //cant edit activity title without this
+	startdate: { cellType: 'date', headerData: 'Start Date', width: 140 },
+	enddate: { cellType: 'date', headerData: 'End Date', width: 140 },
 	progress: { cellType: 'color', headerData: 'RAG' },
-	scheduler: {cellType: 'scheduler', headerData: 'SchedulerHeader goes here', width: 300, headerType: 'schedulerHeader'}
+	// scheduler: {cellType: 'scheduler', headerData: 'SchedulerHeader goes here', width: 600, headerType: 'schedulerHeader'}
 };
 
 export const editableCells = {
-	_1235d: ['activityTitle', 'startDate', 'progress', 'endDate'],
-	_m7ad1: ['activityTitle', 'startDate', 'progress', 'endDate'],
-	_917gb: ['activityTitle', 'startDate', 'progress', 'endDate'],
-	_1236d: ['activityTitle', 'startDate', 'progress', 'endDate'],
-	_k8450: ['activityTitle', 'startDate', 'progress', 'endDate'],
-	_u184b: ['activityTitle', 'startDate', 'progress', 'endDate'] };
+	_1235d: ['activityTitle', 'startdate', 'progress', 'enddate'],
+	_m7ad1: ['activityTitle', 'startdate', 'progress', 'enddate'],
+	_917gb: ['activityTitle', 'startdate', 'progress', 'enddate'],
+	_1236d: ['activityTitle', 'startdate', 'progress', 'enddate'],
+	_k8450: ['activityTitle', 'startdate', 'progress', 'enddate'],
+	_u184b: ['activityTitle', 'startdate', 'progress', 'enddate'] };
 
 export const cellTypes = {
 	schedulerHeader: {

@@ -1,21 +1,13 @@
 import React, { Component } from 'react';
-import Bubble from './TEMP-SCHEDULER/components/Bubble'
+import Bubble from './Bubble'
 
 class SchedulerCell extends Component {	
-	cellHeight = 40;
   	render() {
-		const bubbleX = {start:50,end:300}
     	return (
 			<div className="cell-container">
-				<svg height={this.cellHeight} width='100%'>
+				<svg onMouseDown={this.props.data.mouseOnScheduler} style={{position:'absolute', height:'100%', width: '100%', filter: this.props.data.shadow?"drop-shadow(-2px -2px 13px "+this.props.data.colour+")":""}}>
 					<Bubble
-					startpoint={[bubbleX.start,0]}
-					endpoint={[bubbleX.end,this.cellHeight]}
-					colour={'rgb(190,230,240)'}
-					leftcolour={'rgb(190,230,240)'}
-					rightcolour={'rgb(190,230,240)'}
-					middleclickdown={this.props.data.middleclickdown}
-					text={this.props.data.text}
+						{...this.props.data}
 					/>
 				</svg>
 			</div>
