@@ -7,6 +7,7 @@ import ColorCellDisplay from '../colorCell/ColorCellDisplay';
 import DateCellEditor from '../dateCell/DateCellEditor';
 import DateCellDisplay from '../dateCell/DateCellDisplay';
 import InputCellDisplay from '../inputCell/InputCellDisplay';
+import CircleUserDisplay from '../CircleUser/CircleUserDisplay';
 import { countries, priority } from './constants';
 
 export const columnsInfo = {
@@ -22,7 +23,8 @@ export const columnsInfo2 = {
   activityTitle: { cellType: 'text', headerData: 'Activity Title', rule: 'textSize', width: 200, headerType: 'dropdown' },
   startDate: { cellType: 'date', headerData: 'Start Date' },
   latestProgress: { cellType: 'text', headerData: 'Latest Progress', width: 300 },
-  employeeName: { cellType: 'dropdown', headerData: 'Employee Name', width: 400 },
+  //employeeName: { cellType: 'dropdown', headerData: 'Employee Name', width: 400 },
+  assignedUsers: { cellType: 'users', headerData: 'Assigned Users', width: 300 },
   progress: { cellType: 'color', headerData: 'RAG' } };
 
 export const columnsInfo3 = {
@@ -56,12 +58,12 @@ export const newData = { _w1232: { company: 'McLaren', contact: 'WL', country: '
   _k8450: { company: 'Bugatti', contact: 'DT', country: 'France', progress: 'red', dueDate: '2019-01-17T10:39:57.362Z' },
   _u184b: { company: 'Mercedes-Benz', contact: 'WL', country: 'Germany', progress: 'green' } };
 
-export const newData2 = { _w1232: { activityId: '12425', activityTitle: 'Fix PDF', startDate: '2017-08-17T10:39:57.362Z', latestProgress: 'Fix Chromium', progress: 'green', dueDate: '2018-03-17T10:39:57.362Z', employeeName: '' },
-  _1235d: { activityId: '1251251', activityTitle: 'Mobile Shipment', startDate: '2017-08-17T10:39:57.362Z', latestProgress: 'The current task is in progress and about to be evaluated', progress: 'amber', dueDate: '2017-08-17T10:39:57.362Z', employeeName: 'Mark' },
-  _m7ad1: { activityId: '11241', activityTitle: 'Things to Do', startDate: '2017-08-17T10:39:57.362Z', latestProgress: 'In progress', progress: 'red', employeeName: 'Paul' },
-  _917gb: { activityId: '765976', activityTitle: 'Replace Tire', startDate: '2017-08-17T10:39:57.362Z', latestProgress: 'Done', dueDate: '1996-09-13T10:39:57.362Z', employeeName: 'Agam' },
-  _1236d: { activityId: '783434', activityTitle: 'ANUYIC', startDate: '2017-08-17T10:39:57.362Z', latestProgress: '', employeeName: 'James', progress: 'green' },
-  _k8450: { activityId: '12657', activityTitle: 'OAUWDA', startDate: '2017-08-17T10:39:57.362Z', latestProgress: '', dueDate: '2019-01-17T10:39:57.362Z', employeeName: 'Andras', progress: 'red' },
+export const newData2 = { _w1232: { activityId: '12425', activityTitle: 'Fix PDF', startDate: '2017-08-17T10:39:57.362Z', latestProgress: 'Fix Chromium', progress: 'green', dueDate: '2018-03-17T10:39:57.362Z', employeeName: '', assignedUsers: ['abd4', 'gte3', 'plo4'] },
+  _1235d: { activityId: '1251251', activityTitle: 'Mobile Shipment', startDate: '2017-08-17T10:39:57.362Z', latestProgress: 'The current task is in progress and about to be evaluated', progress: 'amber', dueDate: '2017-08-17T10:39:57.362Z', employeeName: 'Mark', assignedUsers: ['abd4'] },
+  _m7ad1: { activityId: '11241', activityTitle: 'Things to Do', startDate: '2017-08-17T10:39:57.362Z', latestProgress: 'In progress', progress: 'red', employeeName: 'Paul', assignedUsers: ['rew7', 'gte3'] },
+  _917gb: { activityId: '765976', activityTitle: 'Replace Tire', startDate: '2017-08-17T10:39:57.362Z', latestProgress: 'Done', dueDate: '1996-09-13T10:39:57.362Z', employeeName: 'Agam', assignedUsers: ['jio9'] },
+  _1236d: { activityId: '783434', activityTitle: 'ANUYIC', startDate: '2017-08-17T10:39:57.362Z', latestProgress: '', employeeName: 'James', progress: 'green', assignedUsers: ['abd4', 'gte3', 'plo4', 'rew7', 'jio9'] },
+  _k8450: { activityId: '12657', activityTitle: 'OAUWDA', startDate: '2017-08-17T10:39:57.362Z', latestProgress: '', dueDate: '2019-01-17T10:39:57.362Z', employeeName: 'Andras', assignedUsers: [], progress: 'red' },
   _u184b: { activityId: '612422', activityTitle: 'AWDIA', startDate: '2017-08-17T10:39:57.362Z', latestProgress: '', employeeName: 'Salman', progress: 'amber' } };
 
 const crypto = require('crypto');
@@ -79,6 +81,24 @@ export { testData };
 
 const employees = ['Andrei', 'Andras', 'Agam', 'Salman', 'James', 'Mark', 'Claire'];
 
+const users = {
+  abd4: {
+    name: 'Jeremy', 
+    image: 'https://ichef.bbci.co.uk/images/ic/720x405/p0517py6.jpg' },
+  gte3: {
+    name: 'Samson', 
+    image: 'https://ae01.alicdn.com/kf/HTB1gfQdb9BYBeNjy0Feq6znmFXaO/2017-30x25CM-The-Scottish-Fold-Cat-Favorites-Diamond-Embroidery-DIY-Creative-Home-Decor-1PCS.jpg_640x640.jpg' },
+  plo4: {
+    name: 'Mr. Fluff', 
+    image: 'https://scontent-lht6-1.cdninstagram.com/vp/d6e3da25ed4ed4bee045d960ca30e718/5CC7A39C/t51.2885-15/sh0.08/e35/s750x750/24331625_123946978389083_1346025003761532928_n.jpg?_nc_ht=scontent-lht6-1.cdninstagram.com' },
+  rew7: {
+    name: 'Tom', 
+    image: 'https://scontent-lht6-1.cdninstagram.com/vp/54177056e03e5e2217e76ab9eeca557d/5CC2D0A7/t51.2885-15/sh0.08/e35/s640x640/21480286_1888458418148487_1167622992977461248_n.jpg?_nc_ht=scontent-lht6-1.cdninstagram.com' },
+  jio9: {
+    name: 'Sylvester SylvesterSylvester', 
+    image: 'https://i.imgur.com/hGiJyW0.jpg' }
+};
+
 export const cellTypes = {
   text: {
     display: <InputCellDisplay />,
@@ -87,6 +107,9 @@ export const cellTypes = {
   dropdown: {
     display: <InputCellDisplay />,
     editor: <DropdownCellEditor dropdownList={employees} />
+  },
+  users: {
+    display: <CircleUserDisplay userProfiles={users} />,
   },
   number: {
     display: <InputCellDisplay />,

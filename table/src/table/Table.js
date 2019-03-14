@@ -34,7 +34,7 @@ export default class Table extends Component {
       }
     }
 
-    const minWidths = Object.keys(defaults.columnsInfo).reduce((total, key) => { return { ...total, [key]: 100 }; }, {});
+    const minWidths = Object.keys(defaults.columnsInfo).reduce((total, key) => { return { ...total, [key]: 80 }; }, {});
     this.state = {
       columnsInfo: defaults.columnsInfo,
       maxTableWidth,

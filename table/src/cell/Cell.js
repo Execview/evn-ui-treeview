@@ -12,9 +12,9 @@ export default class Cell extends PureComponent {
     const onValidateSave = this.props.onValidateSave || (() => { console.log('cell needs onValidateSave brah'); });
     if (this.props.isActive) {
       return (
-        React.createElement(type.editor.type, { ...type.editor.props, data, onValidateSave }));
+        React.createElement(type.editor.type, { ...type.editor.props, data, onValidateSave, errorText, style }));
     }
     return (
-      React.createElement(type.display.type, { ...type.display.props, data, errorText, style }));
+      React.createElement(type.display.type, { ...type.display.props, data, onValidateSave, errorText, style }));
   }
 }
