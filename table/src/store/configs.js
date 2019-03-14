@@ -8,6 +8,7 @@ import DateCellEditor from '../dateCell/DateCellEditor';
 import DateCellDisplay from '../dateCell/DateCellDisplay';
 import InputCellDisplay from '../inputCell/InputCellDisplay';
 import CircleUserDisplay from '../CircleUser/CircleUserDisplay';
+import UserHeaderDisplay from '../headers/UserHeaderDisplay';
 import { countries, priority } from './constants';
 
 export const columnsInfo = {
@@ -24,7 +25,7 @@ export const columnsInfo2 = {
   startDate: { cellType: 'date', headerData: 'Start Date' },
   latestProgress: { cellType: 'text', headerData: 'Latest Progress', width: 300 },
   //employeeName: { cellType: 'dropdown', headerData: 'Employee Name', width: 400 },
-  assignedUsers: { cellType: 'users', headerData: 'Assigned Users', width: 300 },
+  assignedUsers: { cellType: 'users', headerData: 'Assigned Users', width: 70, headerType: 'userHeader' },
   progress: { cellType: 'color', headerData: 'RAG' } };
 
 export const columnsInfo3 = {
@@ -83,19 +84,19 @@ const employees = ['Andrei', 'Andras', 'Agam', 'Salman', 'James', 'Mark', 'Clair
 
 const users = {
   abd4: {
-    name: 'Jeremy', 
+    name: 'Jeremy',
     image: 'https://ichef.bbci.co.uk/images/ic/720x405/p0517py6.jpg' },
   gte3: {
-    name: 'Samson', 
+    name: 'Samson',
     image: 'https://ae01.alicdn.com/kf/HTB1gfQdb9BYBeNjy0Feq6znmFXaO/2017-30x25CM-The-Scottish-Fold-Cat-Favorites-Diamond-Embroidery-DIY-Creative-Home-Decor-1PCS.jpg_640x640.jpg' },
   plo4: {
-    name: 'Mr. Fluff', 
+    name: 'Mr. Fluff',
     image: 'https://scontent-lht6-1.cdninstagram.com/vp/d6e3da25ed4ed4bee045d960ca30e718/5CC7A39C/t51.2885-15/sh0.08/e35/s750x750/24331625_123946978389083_1346025003761532928_n.jpg?_nc_ht=scontent-lht6-1.cdninstagram.com' },
   rew7: {
-    name: 'Tom', 
+    name: 'Tom',
     image: 'https://scontent-lht6-1.cdninstagram.com/vp/54177056e03e5e2217e76ab9eeca557d/5CC2D0A7/t51.2885-15/sh0.08/e35/s640x640/21480286_1888458418148487_1167622992977461248_n.jpg?_nc_ht=scontent-lht6-1.cdninstagram.com' },
   jio9: {
-    name: 'Sylvester SylvesterSylvester', 
+    name: 'Sylvester SylvesterSylvester',
     image: 'https://i.imgur.com/hGiJyW0.jpg' }
 };
 
@@ -123,6 +124,9 @@ export const cellTypes = {
     display: <DateCellDisplay />,
     editor: <DateCellEditor />
   },
+  userHeader: {
+    display: <UserHeaderDisplay />
+  }
 };
 
 export const rules = {
