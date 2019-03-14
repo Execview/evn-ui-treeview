@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './CircleUser.css';
 import CircleUser from './CircleUser';
-import UserMenu from './UserMenu';
+import AssignUsers from './AssignUsers'
 
 export default class CircleUserDisplay extends Component {
   state = { open: false };
@@ -32,7 +32,7 @@ export default class CircleUserDisplay extends Component {
           })}
           {addAmount}
         </div>
-        {this.state.open && <UserMenu {...this.props} closeMenu={() => this.setState({ open: false })} unassignUser={this.unassignUser} />}
+        {this.state.open && <AssignUsers {...this.props} closeMenu={() => this.setState({ open: false })} unassignUser={this.unassignUser} />}
       </div>
     );
   }
