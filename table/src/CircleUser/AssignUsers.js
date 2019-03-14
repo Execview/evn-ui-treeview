@@ -11,8 +11,18 @@ export default class AssignUsers extends PureComponent {
 		this.state = {visiblePanel: 'UserMenu'}
 	}
 
+	unassignUser = (userid) => {
+		console.log(userid);
+		this.props.onValidateSave(this.props.assignedUsers.filter(el => el !== userid));
+	}
+
+	addUser = (userid) => {
+		console.log(userid);
+		this.props.onValidateSave([...this.props.assignedUsers,userid]);
+	}
+
+
 	onProgress = () => {
-		const pages = ['UserMenu','AddUserDropDown','UserAddedConfirmation']
 		let newPage = ''
 		switch(this.state.visiblePanel){
 			case 'UserMenu':
@@ -25,21 +35,36 @@ export default class AssignUsers extends PureComponent {
 				newPage = 'AddRole'
 				break;
 			case 'AddRole':
-				newPage = 'UserMenu'
+				newPage = 'UserAddedConfirmation'
 				break;
 		}
 		this.setState({visiblePanel: newPage})
 	}
 
-
   	render() {
-		console.log(this.state.visiblePanel)
     	return (
       		<div className="user-menu" onBlur={this.props.closeMenu}>
-      			{this.state.visiblePanel==="UserMenu" && <UserMenu {...this.props} nextScreen={this.onProgress}/>}
-				{this.state.visiblePanel==="AddUserDropDown" && <AddUserDropDown {...this.props} nextScreen={this.onProgress} data={Object.keys(this.props.userProfiles).filter(key=>!this.props.data.includes(key))}/>}
-				{this.state.visiblePanel==="UserAddedConfirmation" && <UserAddedConfirmation {...this.props} nextScreen={this.onProgress} />}
-				{this.state.visiblePanel==="AddRole" && <AddRole {...this.props} nextScreen={this.onProgress}/>}
+      			{this.state.visiblePanel==="UserMenu" && 
+				  	<UserMenu 
+					  	assignedUsers={this.props.assignedUsers} 
+						userProfiles={this.props.userProfiles} 
+						unassignUser={this.unassignUser}
+						nextScreen={this.onProgress}
+						/>}
+				{this.state.visiblePanel==="AddUserDropDown" && 
+					<AddUserDropDown 
+						nonAssignedUsers={Object.keys(this.props.userProfiles).filter(key=>!this.props.assignedUsers.includes(key))} 
+						userProfiles={this.props.userProfiles} 
+						nextScreen={this.onProgress}
+						addUser={this.addUser}
+						/>}
+				{this.state.visiblePanel==="UserAddedConfirmation" && 
+					<UserAddedConfirmation 
+						nextScreen={this.onProgress}
+						/>}
+				{this.state.visiblePanel==="AddRole" && 
+					<AddRole
+						nextScreen={this.onProgress}/>}
      		</div>
     	);
  	}

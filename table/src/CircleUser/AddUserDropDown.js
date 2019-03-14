@@ -8,25 +8,26 @@ export default class AddUserDropDown extends PureComponent {
     super(props);
     this.state = {
       	searchString: '',
-      	displayedRows: this.props.data
+      	displayedRows: this.props.nonAssignedUsers
     };
   	}
 
 	onSearchChange = (value)=>{
-		const newRows = this.props.data.filter(user => this.props.userProfiles[user].name.toLowerCase().includes(value));
+		const newRows = this.props.nonAssignedUsers.filter(user => this.props.userProfiles[user].name.toLowerCase().includes(value));
 		this.setState({ searchString: value, displayedRows: newRows });
 	}
 
 	submitUser = (user) => {
 		console.log(user)
 		console.log(this.props.userProfiles[user].name)
+		this.props.addUser(user)
 		this.props.nextScreen()
 	}
   	render() {
 		const dropDownOptions = this.state.displayedRows.reduce((total,user) => {
 			return {...total, [user]: (
 				<div>
-					<div style={{display:'inline-block'}}><CircleUser {...this.props} userid={user} /></div>
+					<div style={{display:'inline-block'}}><CircleUser url={this.props.userProfiles[user].image} /></div>
 					<div style={{display:'inline-block', color:'white'}}>{this.props.userProfiles[user].name}</div>					
 				</div>)}			
 			},{})
