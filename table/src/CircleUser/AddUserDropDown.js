@@ -8,7 +8,8 @@ export default class AddUserDropDown extends PureComponent {
     super(props);
     this.state = {
       	searchString: '',
-      	displayedRows: this.props.nonAssignedUsers
+      	displayedRows: this.props.nonAssignedUsers,
+		addUsers: []
     };
   	}
 
@@ -17,32 +18,38 @@ export default class AddUserDropDown extends PureComponent {
 		this.setState({ searchString: value, displayedRows: newRows });
 	}
 
-	submitUser = (user) => {
-		console.log(user)
-		console.log(this.props.userProfiles[user].name)
-		this.props.addUser(user)
-		this.props.nextScreen()
+	userClicked = (user) => {
+		let newArray = [...this.state.addUsers]
+		if(newArray.includes(user)){newArray=newArray.filter(el=>el!==user)}
+		else {newArray=[...newArray,user]}
+		this.setState({addUsers: newArray})
 	}
+
   	render() {
+		
 		const dropDownOptions = this.state.displayedRows.reduce((total,user) => {
+			const selectUser = this.state.addUsers.includes(user)
+			const tickColour =  selectUser ? 'green':'transparent'
 			return {...total, [user]: (
 				<div>
+					<i className="fas fa-check-circle" style={{position:'absolute', marginLeft:'4px', marginTop:'4px', color:tickColour, 
+					fontSize:'2em'}}></i>
 					<div style={{display:'inline-block'}}><CircleUser url={this.props.userProfiles[user].image} /></div>
-					<div style={{display:'inline-block', color:'white'}}>{this.props.userProfiles[user].name}</div>					
+					<div style={{display:'inline-block', color:'white'}}>{this.props.userProfiles[user].name}</div>						
 				</div>)}			
 			},{})
     	return (
 			<div className="user-menu">
-				ADD A USER
 				<GenericDropdown
-					options={dropDownOptions}
-					onBlur={this.onBlur} 
-					submit={this.submitUser} 
+					options={dropDownOptions} 
+					submit={this.userClicked} 
+					onBlur={()=>{console.log("blurred")}}
 					onSearchChange={this.onSearchChange} 
 					searchString={this.state.searchString}
 					placeholder={'Assign a user...'}
 					canSearch={true}
 				/>
+				<button onClick={()=>{this.props.submitUsers(this.state.addUsers);this.props.nextScreen()}}>Add Users!</button>
 		</div>
     	);
   	}

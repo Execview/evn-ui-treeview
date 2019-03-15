@@ -18,7 +18,7 @@ export default class AddRole extends PureComponent {
 	}
 
 	submitRole = (role) => {
-		console.log(role)
+		this.props.submitRole(this.props.addRoleTo,role)
 		this.props.nextScreen()		
 	}
   	render() {

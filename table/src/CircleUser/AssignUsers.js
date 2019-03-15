@@ -8,7 +8,11 @@ import AddRole from './AddRole'
 export default class AssignUsers extends PureComponent {
 	constructor(){
 		super()
-		this.state = {visiblePanel: 'UserMenu'}
+		this.state = {
+			visiblePanel: 'UserMenu',
+			assignUsers: [],
+			assignRoleTo: ''
+			}
 	}
 
 	unassignUser = (userid) => {
@@ -16,11 +20,17 @@ export default class AssignUsers extends PureComponent {
 		this.props.onValidateSave(this.props.assignedUsers.filter(el => el !== userid));
 	}
 
-	addUser = (userid) => {
-		console.log(userid);
-		this.props.onValidateSave([...this.props.assignedUsers,userid]);
+	assignUsers = (users) => {
+		console.log(users)
+		this.props.onValidateSave([...this.props.assignedUsers,...users])
+		this.setState({assignUsers: users})
 	}
 
+	submitRole = (user,role) => {
+		console.log(role);
+		console.log(user)
+		this.setState({assignUsers: this.state.assignUsers.filter(el=>el!==user)});
+	}
 
 	onProgress = () => {
 		let newPage = ''
@@ -43,7 +53,7 @@ export default class AssignUsers extends PureComponent {
 
   	render() {
     	return (
-      		<div className="user-menu" onBlur={this.props.closeMenu}>
+      		<div className="user-menu">
       			{this.state.visiblePanel==="UserMenu" && 
 				  	<UserMenu 
 					  	assignedUsers={this.props.assignedUsers} 
@@ -53,18 +63,24 @@ export default class AssignUsers extends PureComponent {
 						/>}
 				{this.state.visiblePanel==="AddUserDropDown" && 
 					<AddUserDropDown 
-						nonAssignedUsers={Object.keys(this.props.userProfiles).filter(key=>!this.props.assignedUsers.includes(key))} 
+						nonAssignedUsers={Object.keys(this.props.userProfiles).filter(key=>!this.props.assignedUsers.includes(key))}
+						submitUsers={this.assignUsers} 
 						userProfiles={this.props.userProfiles} 
 						nextScreen={this.onProgress}
-						addUser={this.addUser}
 						/>}
 				{this.state.visiblePanel==="UserAddedConfirmation" && 
 					<UserAddedConfirmation 
 						nextScreen={this.onProgress}
+						assignedUsers={this.state.assignUsers}
+						userProfiles={this.props.userProfiles}
+						addRoleTo={(user)=>this.setState({addRoleTo: user})}
 						/>}
 				{this.state.visiblePanel==="AddRole" && 
 					<AddRole
-						nextScreen={this.onProgress}/>}
+						nextScreen={this.onProgress}
+						submitRole={this.submitRole}
+						addRoleTo={this.state.addRoleTo}
+						/>}
      		</div>
     	);
  	}
