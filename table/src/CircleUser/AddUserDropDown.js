@@ -43,13 +43,12 @@ export default class AddUserDropDown extends PureComponent {
 				<GenericDropdown
 					options={dropDownOptions} 
 					submit={this.userClicked} 
-					onBlur={()=>{console.log("blurred")}}
 					onSearchChange={this.onSearchChange} 
 					searchString={this.state.searchString}
 					placeholder={'Assign a user...'}
 					canSearch={true}
 				/>
-				<button onClick={()=>{this.props.submitUsers(this.state.addUsers);this.props.nextScreen()}}>Add Users!</button>
+				<button onClick={()=>{this.props.submitUsers(this.state.addUsers)}}>Add Users!</button>
 		</div>
     	);
   	}

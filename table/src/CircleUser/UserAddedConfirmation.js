@@ -9,7 +9,7 @@ export default class UserAddedConfirmation extends PureComponent {
 				 {this.props.assignedUsers.map(id=>
 					<div key={id}>
 				 		<div>{id}</div>
-						 <button onClick={()=>{this.props.addRoleTo(id);this.props.nextScreen()}}>Add role</button>
+						 <button onClick={()=>{this.props.addRoleTo(id)}}>Add role</button>
 					</div>)}
       		</div>
     	);

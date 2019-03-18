@@ -29,23 +29,24 @@ export default class AssignUsers extends PureComponent {
 	}
 
 	unassignUser = (userid) => {
-		console.log(userid);
-		this.props.onValidateSave(this.props.assignedUsers.filter(el => el !== userid));
+		this.props.onValidateSave(this.props.assignedUsers.filter(el => el.user !== userid));
 	}
 
 	assignUsers = (users) => {
-		console.log(users)
-		this.props.onValidateSave([...this.props.assignedUsers,...users])
+		const newUsers = users.map(id=>{return {user:id, role:''} })
+		this.props.onValidateSave([...this.props.assignedUsers,...newUsers])
 		this.setState({assignUsers: users})
+		this.nextScreen()
 	}
 
 	submitRole = (user,role) => {
-		console.log(role);
-		console.log(user)
+		const newUsers = [...this.props.assignedUsers.filter(assigned=>assigned.user!==user),{user:user,role:role}]
+		this.props.onValidateSave(newUsers)
 		this.setState({assignUsers: this.state.assignUsers.filter(el=>el!==user)});
+		this.nextScreen()
 	}
 
-	onProgress = () => {
+	nextScreen = () => {
 		let newPage = ''
 		switch(this.state.visiblePanel){
 			case 'UserMenu':
@@ -72,25 +73,22 @@ export default class AssignUsers extends PureComponent {
 					  	assignedUsers={this.props.assignedUsers} 
 						userProfiles={this.props.userProfiles} 
 						unassignUser={this.unassignUser}
-						nextScreen={this.onProgress}
+						nextScreen={this.nextScreen}
 						/>}
 				{this.state.visiblePanel==="AddUserDropDown" && 
 					<AddUserDropDown 
-						nonAssignedUsers={Object.keys(this.props.userProfiles).filter(key=>!this.props.assignedUsers.includes(key))}
+						nonAssignedUsers={Object.keys(this.props.userProfiles).filter(key=>!(this.props.assignedUsers.map(el=>el.user)).includes(key))}
 						submitUsers={this.assignUsers} 
 						userProfiles={this.props.userProfiles} 
-						nextScreen={this.onProgress}
 						/>}
 				{this.state.visiblePanel==="UserAddedConfirmation" && 
 					<UserAddedConfirmation 
-						nextScreen={this.onProgress}
 						assignedUsers={this.state.assignUsers}
 						userProfiles={this.props.userProfiles}
-						addRoleTo={(user)=>this.setState({addRoleTo: user})}
+						addRoleTo={(user)=>{this.setState({addRoleTo: user});this.nextScreen()}}
 						/>}
 				{this.state.visiblePanel==="AddRole" && 
 					<AddRole
-						nextScreen={this.onProgress}
 						submitRole={this.submitRole}
 						addRoleTo={this.state.addRoleTo}
 						/>}

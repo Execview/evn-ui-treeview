@@ -5,7 +5,7 @@ import GenericDropdown from '../dropdownCell/GenericDropdown'
 export default class AddRole extends PureComponent {
 	constructor(props) {
 		super(props);
-		this.roles = ["Project Manager","Peasant","rOcKStaR dEVeLopEr"]
+		this.roles = ["Project Manager","Peasant","Wizard","Jester","Drunkard","Damsel","Dovahkiin FUS-RO-DAH"]
 		this.state = {
 			searchString: '',
 			displayedRows: this.roles
@@ -19,7 +19,6 @@ export default class AddRole extends PureComponent {
 
 	submitRole = (role) => {
 		this.props.submitRole(this.props.addRoleTo,role)
-		this.props.nextScreen()		
 	}
   	render() {
     	return (

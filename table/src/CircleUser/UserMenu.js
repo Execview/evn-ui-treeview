@@ -15,12 +15,12 @@ export default class UserMenu extends PureComponent {
 		console.log(user)
 	}
   	render() {
-		let dropDownOptions = this.props.assignedUsers.reduce((total,user) => {
-			return {...total, [user]: (
+		let dropDownOptions = this.props.assignedUsers.reduce((total,assigneduser) => {
+			return {...total, [assigneduser.user]: (
 				<div>
-					<div style={{display:'inline-block'}}><CircleUser url={this.props.userProfiles[user].image} /></div>
-					<div style={{display:'inline-block', color:'white'}}>{this.props.userProfiles[user].name}</div>
-					<div onClick={()=>this.props.unassignUser(user)} style={{display:'inline-block', width:'20px', height:'20px', marginLeft:'20px', color:'white',backgroundColor:'red', borderRadius:'50%'}}>X</div>		
+					<div style={{display:'inline-block'}}><CircleUser url={this.props.userProfiles[assigneduser.user].image} /></div>
+					<div style={{display:'inline-block', color:'white'}}>{this.props.userProfiles[assigneduser.user].name}</div>
+					<div onClick={()=>this.props.unassignUser(assigneduser.user)} style={{display:'inline-block', width:'20px', height:'20px', marginLeft:'20px', color:'white',backgroundColor:'red', borderRadius:'50%'}}>X</div>		
 				</div>)}			
 			},{})
 		dropDownOptions['addUser'] = (<div onClick={this.props.nextScreen}>

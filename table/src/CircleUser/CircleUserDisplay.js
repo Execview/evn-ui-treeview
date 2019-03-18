@@ -19,10 +19,10 @@ export default class CircleUserDisplay extends Component {
     return (
       <div className="user-cell">
         <div className="users-container" onClick={() => { this.setState({ open: !this.state.open }); }}>
-          {this.props.data && this.props.data.slice(0, circlesLimit).map((user, index) => {
+          {this.props.data && this.props.data.slice(0, circlesLimit).map((assigneduser, index) => {
             return (
               <div className="user-profile" key={'circle' + (index + 1)} style={{ zIndex: this.props.data.length - index, left: 20 * index }}>
-                <CircleUser url={this.props.userProfiles[user].image} />
+                <CircleUser url={this.props.userProfiles[assigneduser.user].image} />
               </div>
             );
           })}
