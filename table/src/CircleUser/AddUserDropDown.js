@@ -34,7 +34,7 @@ export default class AddUserDropDown extends PureComponent {
       const tickColour = selectUser ? 'green' : 'transparent';
       return { ...total,
         [user]: (
-          <div>
+          <div style={{ height: '40px' }}>
             <TripleFill
               left={(
                 <div>
