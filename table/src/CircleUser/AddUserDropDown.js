@@ -1,55 +1,68 @@
 import React, { PureComponent } from 'react';
-import CircleUser from './CircleUser'
-import GenericDropdown from '../dropdownCell/GenericDropdown'
+import GenericDropdown from '../dropdownCell/GenericDropdown';
+import TripleFill from './TripleFill';
 import './CircleUser.css';
 
 export default class AddUserDropDown extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      	searchString: '',
-      	displayedRows: this.props.nonAssignedUsers,
-		addUsers: []
+      searchString: '',
+      displayedRows: this.props.nonAssignedUsers,
+      addUsers: []
     };
-  	}
+  }
 
-	onSearchChange = (value)=>{
-		const newRows = this.props.nonAssignedUsers.filter(user => this.props.getUserProfile(user).name.toLowerCase().includes(value));
-		this.setState({ searchString: value, displayedRows: newRows });
-	}
+  onSearchChange = (value) => {
+    const newRows = this.props.nonAssignedUsers.filter(user => this.props.getUserProfile(user).name.toLowerCase().includes(value));
+    this.setState({ searchString: value, displayedRows: newRows });
+  }
 
-	userClicked = (user) => {
-		let newArray = [...this.state.addUsers]
-		if(newArray.includes(user)){newArray=newArray.filter(el=>el!==user)}
-		else {newArray=[...newArray,user]}
-		this.setState({addUsers: newArray})
-	}
+  userClicked = (user) => {
+    let newArray = [...this.state.addUsers];
+    if (newArray.includes(user)) {
+      newArray = newArray.filter(el => el !== user);
+    } else {
+      newArray = [...newArray, user];
+    }
+    this.setState({ addUsers: newArray });
+  }
 
-  	render() {
-		
-		const dropDownOptions = this.state.displayedRows.reduce((total,user) => {
-			const selectUser = this.state.addUsers.includes(user)
-			const tickColour =  selectUser ? 'green':'transparent'
-			return {...total, [user]: (
-				<div>
-					<i className="fas fa-check-circle" style={{position:'absolute', marginLeft:'4px', marginTop:'4px', color:tickColour, 
-					fontSize:'2em'}}></i>
-					<div style={{display:'inline-block'}}><CircleUser url={this.props.getUserProfile(user).image} /></div>
-					<div style={{display:'inline-block', color:'white'}}>{this.props.getUserProfile(user).name}</div>						
-				</div>)}			
-			},{})
-    	return (
-			<div className="user-menu">
-				<GenericDropdown
-					options={dropDownOptions} 
-					submit={this.userClicked} 
-					onSearchChange={this.onSearchChange} 
-					searchString={this.state.searchString}
-					placeholder={'Assign a user...'}
-					canSearch={true}
-				/>
-				<button onClick={()=>{this.props.submitUsers(this.state.addUsers)}}>Add Users!</button>
-		</div>
-    	);
-  	}
+  render() {
+    const dropDownOptions = this.state.displayedRows.reduce((total, user) => {
+      const selectUser = this.state.addUsers.includes(user);
+      const tickColour = selectUser ? 'green' : 'transparent';
+      return { ...total,
+        [user]: (
+          <div>
+            <TripleFill
+              left={(
+                <div>
+                  <div className="user-circle" style={{ position: 'relative' }}>
+                    <i className="fas fa-check-circle" style={{ position: 'absolute', color: tickColour, fontSize: '37px' }} />
+                    <img className="user-image" src={this.props.getUserProfile(user).image} alt="xd" />
+                  </div>
+                </div>
+              )}
+              center={<p className="user-name">{this.props.getUserProfile(user).name}</p>}
+              right={null}
+            />
+          </div>) };
+    }, {});
+    return (
+      <div>
+        <GenericDropdown
+          options={dropDownOptions}
+          style={{ dropdown: 'dropdown-wrapper' }}
+          submit={this.userClicked}
+          onBlur={() => { console.log('blurred'); }}
+          onSearchChange={this.onSearchChange}
+          searchString={this.state.searchString}
+          placeholder="Assign a user..."
+          canSearch={true}
+        />
+        <button className="add-role-button" type="button" onClick={() => this.props.submitUsers(this.state.addUsers)}>Add Users!</button>
+      </div>
+    );
+  }
 }

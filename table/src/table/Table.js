@@ -198,6 +198,7 @@ export default class Table extends Component {
         });
       }
     } else {
+      console.log(this.state.activeCell[0])
       this.onSave(this.state.activeCell[0], objReturned.updatedRow, objReturned.editableRow);
     }
     this.setState({ activeCell: [null, null], invalidCells: newInvalidCells });

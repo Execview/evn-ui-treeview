@@ -1,94 +1,104 @@
 import React, { PureComponent } from 'react';
-import onClickOutside from "react-onclickoutside";
+import onClickOutside from 'react-onclickoutside';
 import './CircleUser.css';
 import UserMenu from './UserMenu';
-import AddUserDropDown from './AddUserDropDown'
-import UserAddedConfirmation from './UserAddedConfirmation'
-import AddRole from './AddRole'
+import AddUserDropDown from './AddUserDropDown';
+import UserAddedConfirmation from './UserAddedConfirmation';
+import AddRole from './AddRole';
 
 class AssignUsers extends PureComponent {
-	constructor(){
-		super()
-		this.state = {
-			visiblePanel: 'UserMenu',
-			assignUsers: [],
-			assignRoleTo: ''
-			}
-	}
+  constructor() {
+    super();
+    this.state = {
+      visiblePanel: 'UserMenu',
+      assignUsers: [],
+      assignRoleTo: ''
+    };
+  }
 
-	handleClickOutside = evt => {
-		this.props.closeMenu();
-	};
+  handleClickOutside = (evt) => {
+    this.props.closeMenu();
+  };
 
-	unassignUser = (userid) => {
-		this.props.onValidateSave(this.props.assignedUsers.filter(el => el.user !== userid));
-	}
+  unassignUser = (userid) => {
+    this.props.onValidateSave(this.props.assignedUsers.filter(el => el.user !== userid));
+  }
 
-	assignUsers = (users) => {
-		const newUsers = users.map(id=>{return {user:id, role:''} })
-		this.props.onValidateSave([...this.props.assignedUsers,...newUsers])
-		this.setState({assignUsers: users})
-		this.nextScreen()
-	}
+  assignUsers = (users) => {
+    const newUsers = users.map(id => ({ user: id, role: '' }));
+    this.props.onValidateSave([...this.props.assignedUsers, ...newUsers]);
+    this.setState({ assignUsers: users });
+    this.nextScreen();
+  }
 
-	submitRole = (user,role) => {
-		const newUsers = [...this.props.assignedUsers.filter(assigned=>assigned.user!==user),{user:user,role:role}]
-		this.props.onValidateSave(newUsers)
-		this.setState({assignUsers: this.state.assignUsers.filter(el=>el!==user)});
-		console.log("HERE")
-		this.nextScreen()
-	}
+  submitRole = (user, role) => {
+    const newUsers = [...this.props.assignedUsers.filter(assigned => assigned.user !== user), { user, role }];
+    this.props.onValidateSave(newUsers);
+    this.setState({ assignUsers: this.state.assignUsers.filter(el => el !== user) });
+    console.log('HERE');
+    this.nextScreen();
+  }
 
-	nextScreen = () => {
-		let newPage = ''
-		switch(this.state.visiblePanel){
-			case 'UserMenu':
-				newPage = 'AddUserDropDown'
-				break;
-			case 'AddUserDropDown':
-				newPage = 'UserAddedConfirmation'
-				break;
-			case 'UserAddedConfirmation':
-				newPage = 'AddRole'
-				break;
-			case 'AddRole':
-				newPage = 'UserAddedConfirmation'
-				break;
-		}
-		console.log(newPage)
-		this.setState({visiblePanel: newPage})
-	}
+  nextScreen = () => {
+    let newPage = '';
+    switch (this.state.visiblePanel) {
+      case 'UserMenu':
+        newPage = 'AddUserDropDown';
+        break;
+      case 'AddUserDropDown':
+        newPage = 'UserAddedConfirmation';
+        break;
+      case 'UserAddedConfirmation':
+        newPage = 'AddRole';
+        break;
+      case 'AddRole':
+        newPage = 'UserAddedConfirmation';
+        break;
+      default:
+        break;
+    }
+    console.log(newPage);
+    this.setState({ visiblePanel: newPage });
+  }
 
-  	render() {
-    	return (
-      		<div className="user-menu" ref={node=> this.node=node}>
-      			{this.state.visiblePanel==="UserMenu" && 
-				  	<UserMenu 
-					  	assignedUsers={this.props.assignedUsers} 
-						getUserProfile={this.props.getUserProfile} 
-						unassignUser={this.unassignUser}
-						nextScreen={this.nextScreen}
-						/>}
-				{this.state.visiblePanel==="AddUserDropDown" && 
-					<AddUserDropDown 
-						nonAssignedUsers={Object.keys(this.props.getAllUserProfileKeys()).filter(key=>!(this.props.assignedUsers.map(el=>el.user)).includes(key))}
-						submitUsers={this.assignUsers} 
-						getUserProfile={this.props.getUserProfile} 
-						/>}
-				{this.state.visiblePanel==="UserAddedConfirmation" && 
-					<UserAddedConfirmation 
-						assignedUsers={this.state.assignUsers}
-						getUserProfile={this.props.getUserProfile}
-						addRoleTo={(user)=>{this.setState({addRoleTo: user});this.nextScreen()}}
-						/>}
-				{this.state.visiblePanel==="AddRole" && 
-					<AddRole
-						submitRole={this.submitRole}
-						addRoleTo={this.state.addRoleTo}
-						/>}
-     		</div>
-    	);
- 	}
+  render() {
+    return (
+      <div className="user-menu" ref={node => this.node = node}>
+        {this.state.visiblePanel === 'UserMenu'
+      && (
+      <UserMenu
+        assignedUsers={this.props.assignedUsers}
+        getUserProfile={this.props.getUserProfile}
+        unassignUser={this.unassignUser}
+        nextScreen={this.nextScreen}
+      />
+      )}
+        {this.state.visiblePanel === 'AddUserDropDown'
+      && (
+      <AddUserDropDown
+        nonAssignedUsers={Object.keys(this.props.getAllUserProfileKeys()).filter(key => !(this.props.assignedUsers.map(el => el.user)).includes(key))}
+        submitUsers={this.assignUsers}
+        getUserProfile={this.props.getUserProfile}
+      />
+      )}
+        {this.state.visiblePanel === 'UserAddedConfirmation'
+      && (
+      <UserAddedConfirmation
+        assignedUsers={this.state.assignUsers}
+        getUserProfile={this.props.getUserProfile}
+        addRoleTo={(user) => { this.setState({ addRoleTo: user }); this.nextScreen(); }}
+      />
+      )}
+        {this.state.visiblePanel === 'AddRole'
+      && (
+      <AddRole
+        submitRole={this.submitRole}
+        addRoleTo={this.state.addRoleTo}
+      />
+      )}
+      </div>
+    );
+  }
 }
 
-export default onClickOutside(AssignUsers)
+export default onClickOutside(AssignUsers);

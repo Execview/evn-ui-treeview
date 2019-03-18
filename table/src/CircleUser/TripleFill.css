@@ -1,0 +1,21 @@
+#parent {
+  height:100%;
+}
+#colLeft {
+  height:100%;
+  float: left;
+}
+#colwrap{
+  overflow:hidden;
+  height:100%;
+}
+#colCenter {
+  height:100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#colRight {
+  height:100%;
+  float: right;
+}

@@ -1,19 +1,18 @@
 import React, { Component } from 'react';
 import './CircleUser.css';
 import CircleUser from './CircleUser';
-import AssignUsers from './AssignUsers'
+import AssignUsers from './AssignUsers';
 
 export default class CircleUserDisplay extends Component {
   state = { open: false };
 
   getUserProfile = (user) => {
-	  return this.props.userProfiles[user]
+	  return this.props.userProfiles[user];
   }
 
   getAllUserProfileKeys = () => {
-	  return this.props.userProfiles
+	  return this.props.userProfiles;
   }
-
 
 
   render() {
@@ -35,14 +34,16 @@ export default class CircleUserDisplay extends Component {
           })}
           {addAmount}
         </div>
-        {this.state.open && 
-			<AssignUsers 
-				assignedUsers={this.props.data} 
-				getUserProfile={this.getUserProfile}
-				getAllUserProfileKeys={this.getAllUserProfileKeys}
-				style={this.props.style}
-				closeMenu={() => this.setState({ open: false })}
-				onValidateSave={this.props.onValidateSave}/>}
+        {this.state.open && (
+          <AssignUsers
+            assignedUsers={this.props.data}
+            getUserProfile={this.getUserProfile}
+            getAllUserProfileKeys={this.getAllUserProfileKeys}
+            style={this.props.style}
+            closeMenu={() => this.setState({ open: false })}
+            onValidateSave={this.props.onValidateSave}
+          />
+        )}
       </div>
     );
   }
