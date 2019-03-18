@@ -64,6 +64,7 @@ class AssignUsers extends PureComponent {
   render() {
     return (
       <div className="user-menu" ref={node => this.node = node}>
+        <div className="absolute-caret" />
         {this.state.visiblePanel === 'UserMenu'
       && (
       <UserMenu

@@ -18,25 +18,36 @@ export default class UserMenu extends PureComponent {
   }
 
   toggleDetails(userId) {
-    console.log(userId);
+    console.log();
     this.state.userOpen === userId ? this.setState({ userOpen: null }) : this.setState({ userOpen: userId });
   }
 
   render() {
     const dropDownOptions = this.props.assignedUsers.reduce((total, assigneduser) => {
-      const elHeight = assigneduser.user === this.state.userOpen ? '100px' : '40px';
+      const elHeight = assigneduser.user === this.state.userOpen ? '300px' : '40px';
+      const arrowType = assigneduser.user === this.state.userOpen ? <i className="fas fa-angle-up" /> : <i className="fas fa-angle-down" />;
       return { ...total,
         [assigneduser.user]: (
-          <div className="user-row" style={{ height: elHeight, overflow: 'hidden' }} onClick={() => this.toggleDetails(assigneduser.user)}>
+          <div className="user-row" style={{ maxHeight: elHeight, overflow: 'hidden' }} onClick={() => this.toggleDetails(assigneduser.user)}>
             <TripleFill
-              style={{ height: '40px' }}
+              style={{ height: '40px', cursor: 'pointer' }}
               left={<CircleUser url={this.props.getUserProfile(assigneduser.user).image} />}
               center={<p className="user-name">{this.props.getUserProfile(assigneduser.user).name}</p>}
-              right={<div className="close-container" onClick={() => this.props.unassignUser(assigneduser.user)}><i className="fas fa-trash close-icon" /></div>}
+              right={(
+                <div>
+                  <span className="arrow-more-info">
+                    {arrowType}
+                  </span>
+                  <span className="close-container" onClick={() => this.props.unassignUser(assigneduser.user)}><i className="fas fa-trash close-icon" /></span>
+                </div>
+              )}
             />
-            <div>
-
-            </div>
+            {assigneduser.user === this.state.userOpen && (assigneduser.department || assigneduser.role) && (
+              <div className="user-toggle-details">
+                {assigneduser.department && <p className="user-toggle-detail"><b>Department:</b> {assigneduser.department}</p>}
+                {assigneduser.role && <p className="user-toggle-detail"><b>Role:</b> {assigneduser.role}</p>}
+              </div>
+            )}
           </div>)
       };
     }, {});

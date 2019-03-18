@@ -109,6 +109,34 @@
   height:40px;
 }
 
+.user-toggle-details{
+  color: #ffbf00;
+  background-color: #434956;
+  padding: 10px;
+  margin-right: 5px;
+}
+
+.user-toggle-detail {
+  margin:0;
+  margin-bottom:5px;
+  margin-left: 10px;
+}
+
+.arrow-more-info {
+  margin-right: 10px;
+  font-size: 20px;
+}
+
+.absolute-caret {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 18px 17px 18px;
+  border-color: transparent transparent #282c34 transparent;
+  position: absolute;
+  top: -15px;
+}
+
 .user-row{
   /* height:40px; */
   color:white;

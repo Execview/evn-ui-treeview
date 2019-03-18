@@ -39,7 +39,7 @@ export default class AddUserDropDown extends PureComponent {
               left={(
                 <div>
                   <div className="user-circle" style={{ position: 'relative' }}>
-                    <i className="fas fa-check-circle" style={{ position: 'absolute', color: tickColour, fontSize: '37px' }} />
+                    <i className="fas fa-check-circle" style={{ position: 'absolute', color: tickColour, fontSize: '38px', top: '-1px', left: '-1px' }} />
                     <img className="user-image" src={this.props.getUserProfile(user).image} alt="xd" />
                   </div>
                 </div>
