@@ -15,6 +15,19 @@ export default class AssignUsers extends PureComponent {
 			}
 	}
 
+	componentDidMount(){
+		document.addEventListener('mousedown', this.handleClick)
+	}
+	componentWillUnmount(){
+		document.removeEventListener('mousedown', this.handleClick)
+	}
+
+	handleClick = (e)=>{
+		if(!this.node.contains(e.target)){
+			this.props.closeMenu()
+		}
+	}
+
 	unassignUser = (userid) => {
 		console.log(userid);
 		this.props.onValidateSave(this.props.assignedUsers.filter(el => el !== userid));
@@ -53,7 +66,7 @@ export default class AssignUsers extends PureComponent {
 
   	render() {
     	return (
-      		<div className="user-menu">
+      		<div className="user-menu" ref={node=> this.node=node}>
       			{this.state.visiblePanel==="UserMenu" && 
 				  	<UserMenu 
 					  	assignedUsers={this.props.assignedUsers} 
