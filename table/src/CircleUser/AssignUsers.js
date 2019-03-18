@@ -1,11 +1,12 @@
 import React, { PureComponent } from 'react';
+import onClickOutside from "react-onclickoutside";
 import './CircleUser.css';
 import UserMenu from './UserMenu';
 import AddUserDropDown from './AddUserDropDown'
 import UserAddedConfirmation from './UserAddedConfirmation'
 import AddRole from './AddRole'
 
-export default class AssignUsers extends PureComponent {
+class AssignUsers extends PureComponent {
 	constructor(){
 		super()
 		this.state = {
@@ -15,18 +16,9 @@ export default class AssignUsers extends PureComponent {
 			}
 	}
 
-	componentDidMount(){
-		document.addEventListener('mousedown', this.handleClick)
-	}
-	componentWillUnmount(){
-		document.removeEventListener('mousedown', this.handleClick)
-	}
-
-	handleClick = (e)=>{
-		if(!this.node.contains(e.target)){
-			this.props.closeMenu()
-		}
-	}
+	handleClickOutside = evt => {
+		this.props.closeMenu();
+	};
 
 	unassignUser = (userid) => {
 		this.props.onValidateSave(this.props.assignedUsers.filter(el => el.user !== userid));
@@ -43,6 +35,7 @@ export default class AssignUsers extends PureComponent {
 		const newUsers = [...this.props.assignedUsers.filter(assigned=>assigned.user!==user),{user:user,role:role}]
 		this.props.onValidateSave(newUsers)
 		this.setState({assignUsers: this.state.assignUsers.filter(el=>el!==user)});
+		console.log("HERE")
 		this.nextScreen()
 	}
 
@@ -62,6 +55,7 @@ export default class AssignUsers extends PureComponent {
 				newPage = 'UserAddedConfirmation'
 				break;
 		}
+		console.log(newPage)
 		this.setState({visiblePanel: newPage})
 	}
 
@@ -96,3 +90,5 @@ export default class AssignUsers extends PureComponent {
     	);
  	}
 }
+
+export default onClickOutside(AssignUsers)
