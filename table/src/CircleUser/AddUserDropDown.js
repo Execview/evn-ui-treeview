@@ -14,7 +14,7 @@ export default class AddUserDropDown extends PureComponent {
   	}
 
 	onSearchChange = (value)=>{
-		const newRows = this.props.nonAssignedUsers.filter(user => this.props.userProfiles[user].name.toLowerCase().includes(value));
+		const newRows = this.props.nonAssignedUsers.filter(user => this.props.getUserProfile(user).name.toLowerCase().includes(value));
 		this.setState({ searchString: value, displayedRows: newRows });
 	}
 
@@ -34,8 +34,8 @@ export default class AddUserDropDown extends PureComponent {
 				<div>
 					<i className="fas fa-check-circle" style={{position:'absolute', marginLeft:'4px', marginTop:'4px', color:tickColour, 
 					fontSize:'2em'}}></i>
-					<div style={{display:'inline-block'}}><CircleUser url={this.props.userProfiles[user].image} /></div>
-					<div style={{display:'inline-block', color:'white'}}>{this.props.userProfiles[user].name}</div>						
+					<div style={{display:'inline-block'}}><CircleUser url={this.props.getUserProfile(user).image} /></div>
+					<div style={{display:'inline-block', color:'white'}}>{this.props.getUserProfile(user).name}</div>						
 				</div>)}			
 			},{})
     	return (

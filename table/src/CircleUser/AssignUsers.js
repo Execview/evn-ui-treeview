@@ -65,20 +65,20 @@ class AssignUsers extends PureComponent {
       			{this.state.visiblePanel==="UserMenu" && 
 				  	<UserMenu 
 					  	assignedUsers={this.props.assignedUsers} 
-						userProfiles={this.props.userProfiles} 
+						getUserProfile={this.props.getUserProfile} 
 						unassignUser={this.unassignUser}
 						nextScreen={this.nextScreen}
 						/>}
 				{this.state.visiblePanel==="AddUserDropDown" && 
 					<AddUserDropDown 
-						nonAssignedUsers={Object.keys(this.props.userProfiles).filter(key=>!(this.props.assignedUsers.map(el=>el.user)).includes(key))}
+						nonAssignedUsers={Object.keys(this.props.getAllUserProfileKeys()).filter(key=>!(this.props.assignedUsers.map(el=>el.user)).includes(key))}
 						submitUsers={this.assignUsers} 
-						userProfiles={this.props.userProfiles} 
+						getUserProfile={this.props.getUserProfile} 
 						/>}
 				{this.state.visiblePanel==="UserAddedConfirmation" && 
 					<UserAddedConfirmation 
 						assignedUsers={this.state.assignUsers}
-						userProfiles={this.props.userProfiles}
+						getUserProfile={this.props.getUserProfile}
 						addRoleTo={(user)=>{this.setState({addRoleTo: user});this.nextScreen()}}
 						/>}
 				{this.state.visiblePanel==="AddRole" && 

@@ -6,7 +6,14 @@ import AssignUsers from './AssignUsers'
 export default class CircleUserDisplay extends Component {
   state = { open: false };
 
-  
+  getUserProfile = (user) => {
+	  return this.props.userProfiles[user]
+  }
+
+  getAllUserProfileKeys = () => {
+	  return this.props.userProfiles
+  }
+
 
 
   render() {
@@ -22,7 +29,7 @@ export default class CircleUserDisplay extends Component {
           {this.props.data && this.props.data.slice(0, circlesLimit).map((assigneduser, index) => {
             return (
               <div className="user-profile" key={'circle' + (index + 1)} style={{ zIndex: this.props.data.length - index, left: 20 * index }}>
-                <CircleUser url={this.props.userProfiles[assigneduser.user].image} />
+                <CircleUser url={this.getUserProfile(assigneduser.user).image} />
               </div>
             );
           })}
@@ -31,7 +38,8 @@ export default class CircleUserDisplay extends Component {
         {this.state.open && 
 			<AssignUsers 
 				assignedUsers={this.props.data} 
-				userProfiles={this.props.userProfiles} 
+				getUserProfile={this.getUserProfile}
+				getAllUserProfileKeys={this.getAllUserProfileKeys}
 				style={this.props.style}
 				closeMenu={() => this.setState({ open: false })}
 				onValidateSave={this.props.onValidateSave}/>}
