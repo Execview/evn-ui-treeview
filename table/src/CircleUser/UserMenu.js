@@ -40,7 +40,7 @@ export default class UserMenu extends PureComponent {
             />
             {assigneduser.user === this.state.userOpen && (
               <div className="user-toggle-details">
-                <UserDetails user={assigneduser}/>
+                <UserDetails user={assigneduser} editExistingRole={this.props.editExistingRole}/>
               </div>
             )}
           </div>)
