@@ -25,6 +25,7 @@
   z-index: 100;
   width: 300px;
   border-radius: 4px;
+  left: -125px;
 }
 
 
@@ -134,7 +135,8 @@
   border-width: 0 18px 17px 18px;
   border-color: transparent transparent #282c34 transparent;
   position: absolute;
-  top: -15px;
+  top: -10px;
+  left: 142px;
 }
 
 .user-row{
