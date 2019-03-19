@@ -1,0 +1,11 @@
+.user-header-container {
+  text-align: center;
+  margin:auto;
+  cursor: default;
+  height: 100%;
+}
+
+.user-header {
+  font-size:30px;
+  margin-top: 5px;
+}

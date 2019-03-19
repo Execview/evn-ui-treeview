@@ -34,7 +34,7 @@ export default class Table extends Component {
       }
     }
 
-    const minWidths = Object.keys(defaults.columnsInfo).reduce((total, key) => { return { ...total, [key]: 100 }; }, {});
+    const minWidths = Object.keys(defaults.columnsInfo).reduce((total, key) => { return { ...total, [key]: 70 }; }, {});
     this.state = {
       columnsInfo: defaults.columnsInfo,
       maxTableWidth,
@@ -232,7 +232,7 @@ export default class Table extends Component {
 
   resizeTable() {
     const xd = ReactDOM.findDOMNode(this).parentNode.offsetWidth;
-    const windowWidth = xd > this.state.maxTableWidth ? this.state.maxTableWidth : xd - 5;
+    const windowWidth = xd > this.state.maxTableWidth ? this.state.maxTableWidth : xd;
     const toRet = Object.keys(this.state.widths).map(colName => this.state.widths[colName] * 100 / this.state.tableWidth);
     const newScale = toRet.map(wdt => wdt * windowWidth / 100);
     const keys = Object.keys(this.state.widths);
@@ -284,6 +284,7 @@ export default class Table extends Component {
                 if (col.headerType) {
                   data = col.headerData;
                   type = this.props.cellTypes[col.headerType];
+                  headerStyle.width = this.state.widths[colkey] - 10;
                 } else {
                   data = { spans, title: col.headerData, sortData: () => { if (this.props.dataSort && this.props.dataSort[col.cellType]) { this.sortData(colkey, col.cellType); } }, };
                   type = { display: <HeaderCellDisplay /> };
