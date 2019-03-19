@@ -3,6 +3,7 @@ import CircleUser from './CircleUser';
 import TripleFill from './TripleFill';
 import GenericDropdown from '../dropdownCell/GenericDropdown';
 import './CircleUser.css';
+import UserDetails from './UserDetails';
 
 export default class UserMenu extends PureComponent {
   constructor(props) {
@@ -13,12 +14,7 @@ export default class UserMenu extends PureComponent {
     };
   }
 
-  submitUser = (user) => {
-    console.log(user);
-  }
-
   toggleDetails(userId) {
-    console.log();
     this.state.userOpen === userId ? this.setState({ userOpen: null }) : this.setState({ userOpen: userId });
   }
 
@@ -26,7 +22,7 @@ export default class UserMenu extends PureComponent {
     const dropDownOptions = this.props.assignedUsers.reduce((total, assigneduser) => {
       const elHeight = assigneduser.user === this.state.userOpen ? '300px' : '40px';
       const arrowType = assigneduser.user === this.state.userOpen ? <i className="fas fa-angle-up" /> : <i className="fas fa-angle-down" />;
-      return { ...total,
+	  return { ...total,
         [assigneduser.user]: (
           <div className="user-row" style={{ maxHeight: elHeight, overflow: 'hidden' }} onClick={() => this.toggleDetails(assigneduser.user)}>
             <TripleFill
@@ -42,10 +38,9 @@ export default class UserMenu extends PureComponent {
                 </div>
               )}
             />
-            {assigneduser.user === this.state.userOpen && (assigneduser.department || assigneduser.role) && (
+            {assigneduser.user === this.state.userOpen && (
               <div className="user-toggle-details">
-                {assigneduser.department && <p className="user-toggle-detail"><b>Department:</b> {assigneduser.department}</p>}
-                {assigneduser.role && <p className="user-toggle-detail"><b>Role:</b> {assigneduser.role}</p>}
+                <UserDetails user={assigneduser}/>
               </div>
             )}
           </div>)
@@ -62,7 +57,6 @@ export default class UserMenu extends PureComponent {
           style={{ dropdownItem: 'hover-class', dropdown: 'dropdown-wrapper' }}
           options={dropDownOptions}
           onBlur={this.onBlur}
-          submit={this.submitUser}
           searchString={this.state.searchString}
         />
         <div className="plus-container" onClick={this.props.nextScreen}>

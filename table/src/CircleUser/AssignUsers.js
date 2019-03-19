@@ -25,18 +25,22 @@ class AssignUsers extends PureComponent {
   }
 
   assignUsers = (users) => {
-    const newUsers = users.map(id => ({ user: id, role: '' }));
+    const newUsers = users.map(id => ({ user: id }));
     this.props.onValidateSave([...this.props.assignedUsers, ...newUsers]);
     this.setState({ assignUsers: users });
     this.nextScreen();
   }
 
   submitRole = (user, role) => {
-    const newUsers = [...this.props.assignedUsers.filter(assigned => assigned.user !== user), { user, role }];
+	const currentUser = this.props.assignedUsers.filter(assigned => assigned.user === user)[0]
+    const newUsers = [...this.props.assignedUsers.filter(assigned => assigned.user !== user), { ...currentUser, user, role }];
     this.props.onValidateSave(newUsers);
     this.setState({ assignUsers: this.state.assignUsers.filter(el => el !== user) });
-    console.log('HERE');
     this.nextScreen();
+  }
+
+  editExistingRole = (user) => {
+	  this.setState({addRoleTo:user,visiblePanel:"AddRole"})
   }
 
   nextScreen = () => {
@@ -57,7 +61,6 @@ class AssignUsers extends PureComponent {
       default:
         break;
     }
-    console.log(newPage);
     this.setState({ visiblePanel: newPage });
   }
 
@@ -70,6 +73,7 @@ class AssignUsers extends PureComponent {
       <UserMenu
         assignedUsers={this.props.assignedUsers}
         getUserProfile={this.props.getUserProfile}
+		editExistingRole={this.editExistingRole}
         unassignUser={this.unassignUser}
         nextScreen={this.nextScreen}
       />
