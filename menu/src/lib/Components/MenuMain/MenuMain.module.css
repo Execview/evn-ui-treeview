@@ -1,0 +1,80 @@
+.list{
+    list-style-type: none;
+    float: left;
+    padding: 0;
+    margin: 5px;
+    border: 1px solid gray;
+    border-radius: 2px;
+    background-color: #282c34;
+    box-shadow: 1px 3px 9px 0px rgba(0,0,0,0.75);
+    margin-top: 0;
+    margin-left: 0;
+}
+.listHori{
+    float: none;
+    display: inline-flex;
+}
+.notMainClass .listHori{
+    display: block;
+    float: left;
+}
+.main > .listHori > li{
+    display: block;
+}
+.main > .listHori > li > div > div {
+    margin-top: 0px;
+    margin-left: -7px;
+}
+.notMainClass{
+    display: -webkit-box;
+    position: absolute;
+    padding-left: 6px;
+    padding-top: 6px;
+    margin-top: -7px;
+}
+.phoneBar{
+    display: none;
+}
+@media only screen and (max-width: 430px){
+    .notMainClass{
+        position: relative;
+        width: 100%;
+        padding-left: 0;
+    }
+    .phoneBar{
+        display: block;
+        height: 50px;
+        background-color: #282c34;
+        border-bottom: 1px solid gray;
+    }
+    .main .list{
+        width: 100%;
+        border: none;
+        border-bottom: 1px solid gray;
+        position: absolute;
+    }
+    .main > ul > li{
+        width: calc(100% - 20px);
+    }
+    .barsIcon{
+        float: right;
+        padding: 17px;
+    }
+    .barsIcon:hover{
+        background-color:#1b4d4d;
+    }
+    .barsIcon svg{
+        color:white;
+    }
+    .item{
+        display: block;
+    }
+    .main ul li {
+        display: block;
+    }
+    .notMainClass > .list{
+        position: relative;
+        border-bottom: none;
+        box-shadow: none;
+    }
+}
