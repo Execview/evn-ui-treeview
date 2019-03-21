@@ -22,7 +22,7 @@ export default class UserMenu extends PureComponent {
     const dropDownOptions = this.props.assignedUsers.reduce((total, assigneduser) => {
       const elHeight = assigneduser.user === this.state.userOpen ? '300px' : '40px';
       const arrowType = assigneduser.user === this.state.userOpen ? <i className="fas fa-angle-up" /> : <i className="fas fa-angle-down" />;
-	  return { ...total,
+      return { ...total,
         [assigneduser.user]: (
           <div className="user-row" style={{ maxHeight: elHeight, overflow: 'hidden' }} onClick={() => this.toggleDetails(assigneduser.user)}>
             <TripleFill
@@ -40,7 +40,7 @@ export default class UserMenu extends PureComponent {
             />
             {assigneduser.user === this.state.userOpen && (
               <div className="user-toggle-details">
-                <UserDetails user={assigneduser} editExistingRole={this.props.editExistingRole}/>
+                <UserDetails user={assigneduser} editExistingRole={this.props.editExistingRole} />
               </div>
             )}
           </div>)

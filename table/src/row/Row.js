@@ -24,7 +24,7 @@ export default class Row extends Component {
 
         const onClickAction = isActive ? null : (() => onSetActive(this.props.rowId, col));
         const lastOne = index === Object.keys(columnsInfo).length - 1;
-        let style = { width: widths[col] - 10 };
+        let style = { width: widths[col] };
         if (!this.props.wrap) {
           style = { ...style, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' };
         }

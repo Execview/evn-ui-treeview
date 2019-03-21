@@ -5,18 +5,21 @@
   align-items: center;
   height: 100%;
   word-wrap: break-word;
+  padding: 0 5px;
 }
 
 .progress-red {
   background-color: #ff3d57;
   height: 100%;
   min-height: 100%;
+  border-radius: 4px;
 }
 
 .progress-amber {
   background-color: #ffbf00;
   height: 100%;
   min-height: 100%;
+  border-radius: 4px;
 }
 
 .no-select {
@@ -30,12 +33,14 @@
   background-color: #00CC6F;
   height: 100%;
   min-height: 100%;
+  border-radius: 4px;
 }
 
 .progress-grey {
   background-color: grey;
   height: 100%;
   min-height: 100%;
+  border-radius: 4px;
 }
 
 .color-dropdown {

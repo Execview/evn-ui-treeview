@@ -7,11 +7,11 @@ export default class CircleUserDisplay extends Component {
   state = { open: false };
 
   getUserProfile = (user) => {
-	  return this.props.userProfiles[user];
+    return this.props.userProfiles[user];
   }
 
   getAllUserProfileKeys = () => {
-	  return this.props.userProfiles;
+    return this.props.userProfiles;
   }
 
 
