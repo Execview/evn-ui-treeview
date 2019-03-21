@@ -16,7 +16,7 @@ class AssignUsers extends PureComponent {
     };
   }
 
-  handleClickOutside = (evt) => {
+  handleClickOutside = () => {
     this.props.closeMenu();
   };
 
@@ -32,7 +32,7 @@ class AssignUsers extends PureComponent {
   }
 
   submitRole = (user, role) => {
-	const currentUser = this.props.assignedUsers.filter(assigned => assigned.user === user)[0]
+    const currentUser = this.props.assignedUsers.filter(assigned => assigned.user === user)[0];
     const newUsers = [...this.props.assignedUsers.filter(assigned => assigned.user !== user), { ...currentUser, user, role }];
     this.props.onValidateSave(newUsers);
     this.setState({ assignUsers: this.state.assignUsers.filter(el => el !== user) });
@@ -40,7 +40,7 @@ class AssignUsers extends PureComponent {
   }
 
   editExistingRole = (user) => {
-	  this.setState({addRoleTo:user,visiblePanel:"AddRole"})
+    this.setState({ addRoleTo: user, visiblePanel: 'AddRole' });
   }
 
   nextScreen = () => {
@@ -73,7 +73,7 @@ class AssignUsers extends PureComponent {
       <UserMenu
         assignedUsers={this.props.assignedUsers}
         getUserProfile={this.props.getUserProfile}
-		editExistingRole={this.editExistingRole}
+        editExistingRole={this.editExistingRole}
         unassignUser={this.unassignUser}
         nextScreen={this.nextScreen}
       />

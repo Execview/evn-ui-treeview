@@ -29,7 +29,7 @@ export default class AddUserDropDown extends PureComponent {
   }
 
   render() {
-	const addButtonCSS = "add-role-button" +" "+ (this.state.addUsers.length>0 ? '' : "add-role-button-grey")
+    const addButtonCSS = 'add-role-button ' + (this.state.addUsers.length > 0 ? '' : 'add-role-button-grey');
     const dropDownOptions = this.state.displayedRows.reduce((total, user) => {
       const selectUser = this.state.addUsers.includes(user);
       const tickColour = selectUser ? 'green' : 'transparent';
@@ -50,7 +50,7 @@ export default class AddUserDropDown extends PureComponent {
             />
           </div>) };
     }, {});
-    return (	  
+    return (
       <div>
         <GenericDropdown
           options={dropDownOptions}
@@ -63,7 +63,7 @@ export default class AddUserDropDown extends PureComponent {
           canSearch={true}
         />
 
-        <button className={addButtonCSS} type="button" onClick={() => {if(this.state.addUsers.length>0){this.props.submitUsers(this.state.addUsers)}}}>Add Users!</button>
+        <button className={addButtonCSS} type="button" onClick={() => { if (this.state.addUsers.length > 0) { this.props.submitUsers(this.state.addUsers); } }}>Add Users!</button>
       </div>
     );
   }

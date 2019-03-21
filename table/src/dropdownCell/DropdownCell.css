@@ -6,10 +6,12 @@
 }
 
 .dropdown {
-  padding:10px 0;
-  padding-left: 10px;
   background-color: #282c34;
   z-index: 1;
+}
+
+.dropdown-content {
+  padding:10px;
 }
 
 .dropdown-input {

@@ -5,6 +5,6 @@ import './ColorCell.css';
 export default class ColorCellDisplay extends Component {
   render() {
     const text = this.props.data || 'grey';
-    return (<div className={'no-select progress-' + text} style={{ ...this.props.style, width: this.props.style.width + 10 }}><div className="progress-text">{colors[text]}</div></div>);
+    return (<div className={'no-select progress-' + text} style={this.props.style}><div className="progress-text">{colors[text]}</div></div>);
   }
 }
