@@ -2,10 +2,29 @@ import React, { Component } from 'react';
 import Cell from '../cell/Cell';
 import InputCellDisplay from '../inputCell/InputCellDisplay';
 import InputCellEditor from '../inputCell/InputCellEditor';
+import { recursiveDeepDiffs } from '../functions';
 import './Row.css';
 
 
 export default class Row extends Component {
+  shouldComponentUpdate(nextProps) {
+    const filterReactComponent = (c) => {
+      const { _owner, $$typeof, ...rest } = c;
+      return rest;
+    };
+    const stopRecursion = (o, u) => {
+      if (React.isValidElement(o) && React.isValidElement(u)) {
+        if (recursiveDeepDiffs(filterReactComponent(o), filterReactComponent(u), { stopRecursion })) {
+          return 'updated';
+        }
+        return 'ignore';
+      }
+      return 'continue';
+    };
+    const diffs = recursiveDeepDiffs(this.props, nextProps, { stopRecursion });
+    return diffs;
+  }
+
   render() {
     const editableCells = this.props.editableCells || [];
     const columnsInfo = this.props.columnsInfo || Object.keys(this.props.rowData).reduce((total, objKey) => { return { ...total, [objKey]: { cellType: 'text', colTitle: objKey } }; }, {});
@@ -15,6 +34,7 @@ export default class Row extends Component {
     const cellTypes = this.props.cellTypes || { text: { display: <InputCellDisplay />, editor: <InputCellEditor /> } };
     const rules = this.props.rules || {};
     const onMouseDown = this.props.onMouseDown || (() => false);
+    const cellStyleClass = this.props.style || {};
     return (
       Object.keys(columnsInfo).map((col, index) => {
         const editRights = editableCells.includes(col);
@@ -30,7 +50,7 @@ export default class Row extends Component {
         }
         const errorText = rules[columnsInfo[col].rule] ? rules[columnsInfo[col].rule].errorMessage : null;
         return (
-          <td key={col + this.props.rowId}>
+          <td className={cellStyleClass.tableDatum || 'table-datum'} key={col + this.props.rowId}>
             {!lastOne && this.props.onMouseDown && <div style={{ position: 'absolute', zIndex: 1, transform: 'translateX(7px)', top: 0, right: 0, height: '100%', width: '15px', cursor: 'w-resize' }} onMouseDown={e => onMouseDown(e, col)} /> }
             <div
               title={columnsInfo[col].colTitle}
@@ -51,4 +71,5 @@ export default class Row extends Component {
       })
     );
   }
+  
 }

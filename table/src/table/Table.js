@@ -78,7 +78,7 @@ export default class Table extends Component {
       newWidths = initialWidths;
       newMinWidths = minWidths;
     }
-
+    
     const keys = Object.keys(newProps.data);
     let newOrderedData = Object.keys(newProps.data);
     if (!newProps.dontPreserveOrder) {
@@ -88,6 +88,13 @@ export default class Table extends Component {
       newOrderedData = alreadyOrderedData.concat(dataToAdd);
     }
 
+    const newData = newProps.data;
+    const newInvalidCells = this.state.invalidCells.filter(el => keys.includes(el.id));
+    for (let i = 0; i < newInvalidCells.length; i++) {
+      newData[newInvalidCells[i].id][newInvalidCells[i].col] = this.state.data[newInvalidCells[i].id][newInvalidCells[i].col];
+    }
+
+
     this.setState({
       columnsInfo: defaults.columnsInfo,
       maxTableWidth,
@@ -95,8 +102,9 @@ export default class Table extends Component {
       widths: { ...newWidths },
       minWidths: { ...newMinWidths },
       orderedData: newOrderedData,
-      data: newProps.data,
-      editableCells: defaults.editableCells
+      data: newData,
+      editableCells: defaults.editableCells,
+      invalidCells: newInvalidCells
     }, this.resizeTable);
   }
 
@@ -122,12 +130,13 @@ export default class Table extends Component {
       columnsInfo: props.columnsInfo,
       editableCells: props.editableCells,
     };
-
-    toReturn.columnsInfo = props.columnsInfo || Object.keys(props.data).reduce((total, objKey) => { return { ...total, [objKey]: { cellType: 'text', headerData: objKey } }; }, {});
+    const dataKeys = Object.keys(props.data);
+    toReturn.columnsInfo = props.columnsInfo || dataKeys.reduce((total, objKey) => { return { ...total, [objKey]: { cellType: 'text', headerData: objKey } }; }, {});
 
     toReturn.editableCells = {};
-    for (let i = 0; i < Object.keys(props.data).length; i++) {
-      toReturn.editableCells[Object.keys(props.data)[i]] = props.editableCells ? props.editableCells[Object.keys(props.data)[i]] || [] : [];
+
+    for (let i = 0; i < dataKeys.length; i++) {
+      toReturn.editableCells[dataKeys[i]] = props.editableCells ? props.editableCells[dataKeys[i]] || [] : [];
     }
 
     toReturn.maxTableWidth = props.tableWidth || 1800;
@@ -170,7 +179,7 @@ export default class Table extends Component {
   validateSave = (cellText) => {
     const columnConfig = this.state.columnsInfo[this.state.activeCell[1]];
 
-    let newInvalidCells = JSON.parse(JSON.stringify(this.state.invalidCells));
+    let newInvalidCells = this.state.invalidCells;
     const editableRow = [...this.state.editableCells[this.state.activeCell[0]]];
     const updatedRow = { ...this.state.data[this.state.activeCell[0]] };
     updatedRow[this.state.activeCell[1]] = cellText;
@@ -233,14 +242,17 @@ export default class Table extends Component {
   resizeTable() {
     const xd = ReactDOM.findDOMNode(this).parentNode.offsetWidth;
     const windowWidth = xd > this.state.maxTableWidth ? this.state.maxTableWidth : xd;
-    const toRet = Object.keys(this.state.widths).map(colName => this.state.widths[colName] * 100 / this.state.tableWidth);
-    const newScale = toRet.map(wdt => wdt * windowWidth / 100);
-    const keys = Object.keys(this.state.widths);
-    const newCopy = JSON.parse(JSON.stringify(this.state.widths));
-    for (let i = 0; i < keys.length; i++) {
-      newCopy[keys[i]] = newScale[i];
+    if (this.state.tableWidth !== windowWidth) {
+      const keys = Object.keys(this.state.widths);
+      const toRet = keys.map(colName => this.state.widths[colName] * 100 / this.state.tableWidth);
+      const newScale = toRet.map(wdt => wdt * windowWidth / 100);
+      
+      const newCopy = { ...this.state.widths };
+      for (let i = 0; i < keys.length; i++) {
+        newCopy[keys[i]] = newScale[i];
+      }
+      this.setState({ widths: newCopy, tableWidth: windowWidth });
     }
-    this.setState({ widths: newCopy, tableWidth: windowWidth });
   }
 
   stopPr(e) {
@@ -249,35 +261,29 @@ export default class Table extends Component {
   }
 
   render() {
-    const style = { maxWidth: this.state.tableWidth, margin: 'auto' };
+    const tableCentering = { maxWidth: this.state.tableWidth, margin: 'auto' };
     if (this.state.tableWidth < this.state.maxTableWidth) {
-      style.margin = 0;
+      tableCentering.margin = 0;
     }
-
+    const style = this.props.style || {};
     return (
-      <div style={style}>
-        <table>
+      <div style={tableCentering}>
+        <table className={style.table || 'table'}>
           <thead>
-            <tr>
+            <tr className={style.tableRow || 'table-row'}>
               {Object.keys(this.state.columnsInfo).map((colkey, index) => {
                 const col = this.state.columnsInfo[colkey];
                 const lastOne = index === Object.keys(this.state.columnsInfo).length - 1;
-                let spans = <div className="span-container" />;
+
+                let spans = 'both';
                 if (this.props.dataSort && this.props.dataSort[col.cellType]) {
-                  if (this.state.column === '') {
-                    spans = (
-                      <div className="span-container">
-                        <span className="arrow-up" />
-                        <span className="arrow-down" />
-                      </div>);
-                  } else if (this.state.column === colkey) {
-                    spans = (
-                      <div className="span-container">
-                        <span className={colkey === this.state.column ? (this.state.order === 'desc' ? 'arrow-down' : 'arrow-up') : ''} />
-                      </div>
-                    );
+                  if (this.state.column) {
+                    spans = colkey === this.state.column ? (this.state.order === 'desc' ? 'arrow-down' : 'arrow-up') : '';
                   }
+                } else {
+                  spans = '';
                 }
+
                 let data = null;
                 const headerStyle = { width: this.state.widths[colkey], overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' };
                 let type = null;
@@ -289,8 +295,9 @@ export default class Table extends Component {
                   data = { spans, title: col.headerData, sortData: () => { if (this.props.dataSort && this.props.dataSort[col.cellType]) { this.sortData(colkey, col.cellType); } }, };
                   type = { display: <HeaderCellDisplay /> };
                 }
+
                 return (
-                  <th key={colkey} style={{ width: this.state.widths[colkey] }}>
+                  <th className={style.tableHeader || 'table-header'} key={colkey} style={{ width: this.state.widths[colkey] }}>
                     <Cell data={data} style={headerStyle} type={type} />
                     {!lastOne && <div style={{ position: 'absolute', zIndex: 1, transform: 'translateX(7px)', top: 0, right: 0, height: '100%', width: '15px', cursor: 'w-resize' }} onMouseDown={e => this.onMouseDown(e, colkey)} onClick={this.stopPr} /> }
                   </th>
@@ -305,7 +312,7 @@ export default class Table extends Component {
                 column = this.state.activeCell[1];
               }
               return (
-                <tr key={`tr${entry}`}>
+                <tr className={style.tableRow || 'table-row'} key={`tr${entry}`}>
                   <Row
                     rowId={entry}
                     columnsInfo={this.props.columnsInfo}
@@ -320,6 +327,7 @@ export default class Table extends Component {
                     onValidateSave={this.validateSave}
                     rules={this.props.rules}
                     onMouseDown={this.onMouseDown}
+                    style={style}
                   />
                 </tr>
               );

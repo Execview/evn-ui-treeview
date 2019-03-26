@@ -11,15 +11,15 @@ export default class CircleUserDisplay extends Component {
   }
 
   getAllUserProfileKeys = () => {
-    return this.props.userProfiles;
+    return Object.keys(this.props.userProfiles);
   }
 
 
   render() {
     let circlesLimit = this.props.data.length;
     let addAmount = null;
-    if (this.props.style.width < (this.props.data.length + 1) * 20) {
-      circlesLimit = parseInt((this.props.style.width - 40) / 20, 10);
+    if (this.props.style.width - 10 < (this.props.data.length + 1) * 20) {
+      circlesLimit = parseInt((this.props.style.width - 50) / 20, 10);
       addAmount = <div className="add-container" style={{ left: ((circlesLimit + 1) * 20) + 1 }}>{'+' + (this.props.data.length - circlesLimit)}</div>;
     }
     return (

@@ -46,9 +46,7 @@ export default class TableWrapper extends Component {
           onSave={this.props.onSave}
           rules={this.props.rules}
           dataSort={this.props.dataSort}
-          rowValidation={this.props.rowValidation}
           tableWidth={this.tableWidth}
-          dontPreserveOrder={true}
         />
       </div>
     );

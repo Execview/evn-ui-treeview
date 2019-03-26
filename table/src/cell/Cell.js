@@ -1,9 +1,30 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import InputCellDisplay from '../inputCell/InputCellDisplay';
 import InputCellEditor from '../inputCell/InputCellEditor';
+import { recursiveDeepDiffs } from '../functions';
 
 
-export default class Cell extends PureComponent {
+export default class Cell extends Component {
+  shouldComponentUpdate(nextProps) {
+    const filterReactComponent = (c) => {
+      const { _owner, $$typeof, ...rest } = c;
+      return rest;
+    };
+    const stopRecursion = (o, u) => {
+      if (React.isValidElement(o) && React.isValidElement(u)) {
+        if (recursiveDeepDiffs(filterReactComponent(o), filterReactComponent(u), { stopRecursion })) {
+          return 'updated';
+        }
+        return 'ignore';
+      }
+      return 'continue';
+    };
+    const diffs = recursiveDeepDiffs(this.props, nextProps, { stopRecursion });
+    if (!diffs) { return false; }
+    return true;
+  }
+  // dd && (!o || Object.keys(dd).length !== 0)
+
   render() {
     const data = this.props.data || '';
     const errorText = this.props.errorText || this.props.errorText === '' ? this.props.errorText : null;

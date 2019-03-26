@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import TableWrapper from './tableWrapper/TableWrapper';
 import './App.css';
 import * as actionTypes from './store/actionTypes';
-import { cellTypes, dataSort, rowValidation, rules, columnsInfo2, columnsInfo3 } from './store/configs';
+import { cellTypes, dataSort, rowValidation, rules, columnsInfo, columnsInfo2 } from './store/configs';
 import { cats } from './store/constants';
 
 class App extends Component {
@@ -24,13 +24,14 @@ class App extends Component {
   }
 
   render() {
-    const t1 = {};
-    for (let i = 0; i < 5; i++) {
-      t1[Object.keys(this.state.data)[i]] = this.state.data[Object.keys(this.state.data)[i]];
-    }
+    // const t1 = {};
+    // for (let i = 0; i < 5; i++) {
+    //   t1[Object.keys(this.state.data)[i]] = this.state.data[Object.keys(this.state.data)[i]];
+    // }
+    const dataKeys = Object.keys(this.state.data);
     const t2 = {};
-    for (let i = 4; i < Object.keys(this.state.data).length; i++) {
-      t2[Object.keys(this.state.data)[i]] = this.state.data[Object.keys(this.state.data)[i]];
+    for (let i = 0; i < dataKeys.length; i++) {
+      t2[dataKeys[i]] = this.state.data[dataKeys[i]];
     }
     const randomNumber = Math.floor((Math.random() * 37));
     return (
@@ -41,23 +42,11 @@ class App extends Component {
             <TableWrapper
               columnsInfo={columnsInfo2}
               editableCells={this.props.editableCells}
-              data={t1}
-              cellTypes={cellTypes}
-              onSave={this.props.onSave}
-              rules={rules}
-              dataSort={dataSort}
-              rowValidation={rowValidation}
-              tableWidth={1800}
-            />
-            <TableWrapper
-              columnsInfo={columnsInfo3}
-              editableCells={this.props.editableCells}
               data={t2}
               cellTypes={cellTypes}
               onSave={this.props.onSave}
               rules={rules}
               dataSort={dataSort}
-              rowValidation={rowValidation}
               tableWidth={1200}
             />
           </div>

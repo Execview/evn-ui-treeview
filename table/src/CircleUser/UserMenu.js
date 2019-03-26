@@ -19,7 +19,8 @@ export default class UserMenu extends PureComponent {
   }
 
   render() {
-    const dropDownOptions = this.props.assignedUsers.reduce((total, assigneduser) => {
+    const assignedUsers = this.props.assignedUsers || [];
+    const dropDownOptions = assignedUsers.reduce((total, assigneduser) => {
       const elHeight = assigneduser.user === this.state.userOpen ? '300px' : '40px';
       const arrowType = assigneduser.user === this.state.userOpen ? <i className="fas fa-angle-up" /> : <i className="fas fa-angle-down" />;
       return { ...total,
