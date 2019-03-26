@@ -4,18 +4,21 @@ import './App.css';
 import SchedulerConnector from './TableColumnAppenders/SchedulerConnector'
 import { columnsInfo, cellTypes, editableCells } from './config';
 import * as actionTypes from './actionTypes'
+import * as actionCreators from './actionCreators'
 import TreeConnector from './TableColumnAppenders/TreeConnector';
 import Table from './TEMP-TABLE/table/Table';
-import SchedulerAppender from './TableColumnAppenders/SchedulerAppender';
+import JamesTest from './JamesTest'
 
 class App extends Component {
-	// App -> SchedulerConnector -> SchedulerAppender -> TreeConnector -> TreeAppender -> Table
-	//React.cloneElement(this.props.children, {...this.props})}
+	componentDidMount() {
+		this.props.onGetInitialData();
+		//this.props.loadpls();
+	}
 
   	render() {
     	return (
 			<div className="App">
-				<SchedulerConnector 
+				{this.props.data !== null && <SchedulerConnector 
 					data={this.props.data}
 					columnsInfo={columnsInfo}
 					editableCells={editableCells}
@@ -29,6 +32,7 @@ class App extends Component {
 						<Table />
 					</TreeConnector>
 				</SchedulerConnector>
+				}
 			</div>
 		);
   	}
@@ -42,7 +46,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+	onGetInitialData: () => dispatch(actionCreators.getInitialData()),
     onSave: (rowId, rowValues, editableValues) => dispatch({ type: actionTypes.SAVE_TABLE, rowId, rowValues, editableValues }),
+	loadpls: ()=>dispatch({type:"loadFromConfig"})
   };
 };
 

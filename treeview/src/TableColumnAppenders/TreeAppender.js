@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Table from '../TEMP-TABLE/table/Table'
 
 export default class TreeAppender extends Component {
 	constructor(props){
