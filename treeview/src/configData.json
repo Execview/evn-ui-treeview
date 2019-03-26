@@ -10,66 +10,67 @@
 		"open":false,      
         "activityTitle": "Project Scorpio",
         "progress": "amber"
-
 	},
 	"_m7ad1": {
 		"startdate": "2018-12-19T00:00:00.000Z",
 		"enddate": "2018-12-26T00:00:00.000Z",
 		"colour": "Red",
 		"ChildAssociatedBubbles":["_917gb", "_1236d"],
-        "ParentAssociatedBubble": "",
+		"ParentAssociatedBubble": "",
 		"ChildBubbles": {},
-        "ParentBubble": "",
+		"ParentBubble": "",
 		"open":false,
-        "activityTitle": "Project X",
-        "progress": "red"
+		"activityTitle": "Project X",
+		"progress": "red"
 	},
 	"_917gb": {
 		"startdate": "2018-12-19T00:00:00.000Z",
 		"enddate": "2018-12-21T00:00:00.000Z",
 		"colour": "Green",
 		"ChildAssociatedBubbles":[],
-        "ParentAssociatedBubble": "_m7ad1",
+		"ParentAssociatedBubble": "_m7ad1",
 		"ChildBubbles": {},
-        "ParentBubble": "",
+		"ParentBubble": "",
 		"open":false,
-        "activityTitle": "Activity Bravo",
-        "progress": "green"
+		"activityTitle": "Activity Bravo",
+		"progress": "green"
 	},
 	"_1236d": {
 		"startdate": "2018-12-21T00:00:00.000Z",
 		"enddate": "2018-12-26T00:00:00.000Z",
 		"colour": "Yellow",
 		"ChildAssociatedBubbles":["_k8450"],
-        "ParentAssociatedBubble": "_m7ad1",
+		"ParentAssociatedBubble": "_m7ad1",
 		"ChildBubbles": {},
 		"ParentBubble": "",
-        "open":false,
-        "activityTitle": "Activity Echo",
-        "progress": "green"
+		"open":false,
+		"activityTitle": "Activity Echo",
+		"progress": "green"
 	},
 	"_k8450": {
 		"startdate": "2018-12-21T00:00:00.000Z",
 		"enddate": "2018-12-26T00:00:00.000Z",
 		"colour": "Purple",
 		"ChildAssociatedBubbles":["_u184b"],
-        "ParentAssociatedBubble": "_1236d",
+		"ParentAssociatedBubble": "_1236d",
 		"ChildBubbles": {},
 		"ParentBubble": "",
-        "open":false,
-        "activityTitle": "Task with a very very very very long name",
-        "progress": "red"
+		"open":false,
+		"activityTitle": "Task with a very very very very long name",
+		"progress": "red"
 	},
 	"_u184b": {
 		"startdate": "2018-12-21T00:00:00.000Z",
 		"enddate": "2018-12-26T00:00:00.000Z",
 		"colour": "Blue",
 		"ChildAssociatedBubbles":[],
-        "ParentAssociatedBubble": "_k8450",
+		"ParentAssociatedBubble": "_k8450",
 		"ChildBubbles": {},
 		"ParentBubble": "",
-        "open":false,
-        "activityTitle": "Subtask Flower",
-        "progress": "amber"
+		"open":false,
+		"activityTitle": "Subtask Flower",
+		"progress": "amber"
 	}
+	
 }
+

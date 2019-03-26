@@ -13,7 +13,7 @@ const tryReturnValidTransformState = (bubbles,action) =>{
 		for(var childkey in bubbles[parentbubblekey]["ChildBubbles"]){
 			var parentside = 'right'===bubbles[parentbubblekey]["ChildBubbles"][childkey].parentside ? "enddate" : "startdate"
 			var childside = 'right'===bubbles[parentbubblekey]["ChildBubbles"][childkey].childside ? "enddate" : "startdate"
-			var childotherside = 'right'===bubbles[parentbubblekey]["ChildBubbles"][childkey].childside ? "startdate" : "enddate";
+			//var childotherside = 'right'===bubbles[parentbubblekey]["ChildBubbles"][childkey].childside ? "startdate" : "enddate";
 			var xGapx = bubbles[parentbubblekey]["ChildBubbles"][childkey].xGapDate
 			var ChildSideMoment = moment(bubbles[childkey][childside])
 			var ParentSideMoment = moment(bubbles[parentbubblekey][parentside]).add(xGapx)
@@ -40,7 +40,7 @@ const tryReturnValidTransformState = (bubbles,action) =>{
 				var endDiff = !moment(bubbles[parentassociatebubblekey].enddate).isSame(moment(latestDate))
 				var startshiftamount = earliestDate-bubbles[parentassociatebubblekey].startdate
 				var endshiftamount = latestDate-bubbles[parentassociatebubblekey].enddate
-				var multiside = Object.keys(bubbles[bubbles[bubblekey].ParentAssociatedBubble]["ChildAssociatedBubbles"]).length==1? 'start':'middle'
+				var multiside = Object.keys(bubbles[bubbles[bubblekey].ParentAssociatedBubble]["ChildAssociatedBubbles"]).length===1? 'start':'middle'
 				if(startDiff){TransformBubble(parentassociatebubblekey,multiside,startshiftamount,bubblekey)} 
 				if(endDiff){TransformBubble(parentassociatebubblekey,'end',endshiftamount,bubblekey)}
 			}
@@ -90,6 +90,8 @@ const tryReturnValidTransformState = (bubbles,action) =>{
 				if(cantMoveSide(bubblekey,'right')){InvalidMovement=true}
 				ShiftBubble(bubblekey,amount,keynottochange)
 			break;
+			default:
+			break;
 		}	
 		AssociateForcingAlgorithm(bubblekey)
 	}
@@ -121,10 +123,10 @@ const tryReturnValidTransformState = (bubbles,action) =>{
 	if(!Object.keys(bubbles).every(bubblekey => {var bubble = bubbles[bubblekey];return bubble.startdate<bubble.enddate})){console.log('negative width!');return false}
 	
 	//Dont allow bubbles to collide
-	//sif(!Object.keys(bubbles).every(bubblekey => {var bubble = bubbles[bubblekey];return checkForNoBubbleCollisions(bubble,bubbles)})){/*console.log('collision!')*/;return false}
+	//if(!Object.keys(bubbles).every(bubblekey => {var bubble = bubbles[bubblekey];return checkForNoBubbleCollisions(bubble,bubbles)})){/*console.log('collision!')*/;return false}
 	return bubbles
 }
-
+/*
 const checkForNoBubbleCollisions = (bubble,bubbles) => {
 		var bubblekeyswithoutthis = []
 		for (var bubblekey in bubbles){bubblekeyswithoutthis.push(bubblekey)}
@@ -145,5 +147,6 @@ const checkForNoBubbleCollisions = (bubble,bubbles) => {
 			)			
 			)
 		})
-	}
+}
+*/
 export default tryReturnValidTransformState

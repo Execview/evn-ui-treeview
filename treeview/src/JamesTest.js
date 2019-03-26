@@ -1,24 +1,39 @@
-export function bubbleCopy(bubble){
-		return recursiveDeepCopy(bubble)
+import React, { Component } from 'react';
+import { SIGTRAP } from 'constants';
+
+const JamesTest = () => {	
+	const original = {
+		a: [5,6,7,{x:true}],
+		b: null,
+		c: false,
+		d: {
+			dog: 4,
+			cat: {foot: true, hair: ["okay"]}
+		},
+		e: 5
+	}
+	const updated = {
+		a: [5,6,7],
+		b: null,
+		c: false,
+		d: {
+			dog: 4,
+			cat: {foot: false, hair: ["okay"]}
+		}
 	}
 
-export function recursiveDeepCopy(o) {
-		var newO,i;	
-		if (typeof o !== 'object') {return o;}
-		if (!o) {return o;}
-		var str = Object.prototype.toString.apply(o)
-		if ('[object Array]' === str) {
-			newO = [];
-			for (i = 0; i < o.length; i += 1) {newO[i] = recursiveDeepCopy(o[i]);}
-			return newO;}		
-		if('[object Date]' === str){return new Date(o)}	
-		newO = {};
-		for (i in o) {
-		if (o.hasOwnProperty(i)) {newO[i] = recursiveDeepCopy(o[i]);}}
-		return newO;
+	const diffs = NEWrecursiveDeepDiffs(original,updated)
+	console.log(diffs)
+
+	return (
+		<div>
+			JAMES TEST
+		</div>
+	);	
 }
 
-export const recursiveDeepDiffs = (o,u,options={}) => {
+
+const NEWrecursiveDeepDiffs = (o,u,options={}) => {
 	const sitoptions = options.sit || {}
 	const stopRecursion = options.stopRecursion || (()=>false)
 
@@ -95,27 +110,4 @@ export const recursiveDeepDiffs = (o,u,options={}) => {
 	const result = RDD(o,u)
 	return result===sit.equal ? null : result
 }
-
-const ISOSTRINGPATTERN = /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/
-export function objectCopierWithStringToDate(o) {
-		var newO,i;
-		if (typeof o !== 'object') {
-			if(typeof o === 'string' && RegExp(ISOSTRINGPATTERN).test(o)){return new Date(o)}
-			return o;
-		}
-		if (!o) {return o;}
-		var str = Object.prototype.toString.apply(o)		
-		if ('[object Array]' === str) { 
-			newO = [];
-			for (i = 0; i < o.length; i += 1) {newO[i] = objectCopierWithStringToDate(o[i]);}
-			return newO;}		
-		if('[object Date]' === str){return new Date(o)}	
-		newO = {};
-		for (i in o) {
-			if (o.hasOwnProperty(i)) {newO[i] = objectCopierWithStringToDate(o[i]);}
-		}
-		return newO;
-}
-
-
-export default 0
+export default JamesTest;

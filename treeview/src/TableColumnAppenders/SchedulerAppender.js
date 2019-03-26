@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import TreeConnector from './TreeConnector';
 
 var Rx = require('rxjs/Rx')
 var moment = require('moment')
@@ -7,15 +6,16 @@ var moment = require('moment')
 var mousepositionstream = Rx.Observable.fromEvent(document,'mousemove').merge(Rx.Observable.fromEvent(document,'mousedown'))
 
 export default class SchedulerAppender extends Component {
-	constructor(){
-		super()
+	constructor(props){
+		super(props)
 		mousepositionstream.subscribe((event)=>this.mouseEvent(event))
 		this.tableRef= React.createRef();
-		let startdate = new Date("2018-12-15")
-		let enddate = new Date("2018-12-22")
-		this.state = {startdate: startdate, enddate: enddate, snaps: [], dayWidth: 80}
+
+		this.state = {startdate: null, enddate: null, snaps: [], dayWidth: 80}
 		this.extrasnaps = 15
 
+		this.InitialStartDate = new Date("2019-2-15")
+		//Object.keys(this.props.data).map(key=>{return this.props.data[key].startdate})[0] ;//new Date("2019-02-15")
 		this.Lightcolours = [	['Blue','rgb(190,230,240)'],
 								['Red','rgb(240,180,190)'],
 								['Green','rgb(180,240,200)'],
@@ -57,7 +57,7 @@ export default class SchedulerAppender extends Component {
 		this.highlightcolour = 'Grey'
 	}
 	componentDidMount(){
-		this.setStartAndEndDate(new Date("2018-12-15"));
+		this.setStartAndEndDate(this.InitialStartDate);
 	}
 
 	setStartAndEndDate = (start)=>{
@@ -138,6 +138,7 @@ export default class SchedulerAppender extends Component {
 		this.props.setOriginalColour(this.mouseDownOnBubble.key,'middle')}}
 
 	mouseEvent = (event) => {
+		event.preventDefault();
 		var mouse = this.getInternalMousePosition(event,this.schedulerCTM)
 		var bubble=this.props.data[this.mouseDownOnBubble.key];
 		if(event.buttons===0) {
