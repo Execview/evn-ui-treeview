@@ -77,7 +77,7 @@ const testData = {};
 for (let i = 0; i < 200; i++) {
   const newId = '_' + hash.update(Date.now() + Math.random().toString()).digest('hex').substring(0, 5);
   testData[newId] = { company: 'McLaren', contact: 'WL', country: 'United Kingdom', value: 26, progress: 'green', dueDate: '2018-03-17T10:39:57.362Z' };
-  // editableCells[newId] = { company: true, contact: true, country: true, value: true, progress: true, dueDate: true };
+  editableCells[newId] = [ 'company', 'contact', 'country', 'value', 'progress', 'dueDate' ];
 }
 
 export { testData };
@@ -180,8 +180,8 @@ export function rowValidation(row, editableRow) {
   if (row.latestProgress === '') {
     editCells = editCells.filter(el => el !== 'progress');
     newRow.progress = 'red';
-  } else {
-    editCells.indexOf('progress') === -1 ? editCells.push('progress') : console.log('item already exists');
+  } else if (editCells.indexOf('progress') === -1) { 
+    editCells.push('progress'); 
   }
   return { updatedRow: newRow, editableRow: editCells };
 }

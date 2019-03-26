@@ -1,6 +1,6 @@
 // import React from 'react';
 import * as actionTypes from './actionTypes';
-import { testData, newData2, editableCells2 } from './configs';
+import { testData, newData2, editableCells, editableCells2 } from './configs';
 
 const initialState = {
   data: newData2,

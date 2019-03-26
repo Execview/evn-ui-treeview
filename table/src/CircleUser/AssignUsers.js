@@ -21,19 +21,19 @@ class AssignUsers extends PureComponent {
   };
 
   unassignUser = (userid) => {
-    this.props.onValidateSave(this.props.assignedUsers.filter(el => el.user !== userid));
+    this.props.onValidateSave(this.assignedUsers.filter(el => el.user !== userid));
   }
 
   assignUsers = (users) => {
     const newUsers = users.map(id => ({ user: id }));
-    this.props.onValidateSave([...this.props.assignedUsers, ...newUsers]);
+    this.props.onValidateSave([...this.assignedUsers, ...newUsers]);
     this.setState({ assignUsers: users });
     this.nextScreen();
   }
 
   submitRole = (user, role) => {
-    const currentUser = this.props.assignedUsers.filter(assigned => assigned.user === user)[0];
-    const newUsers = [...this.props.assignedUsers.filter(assigned => assigned.user !== user), { ...currentUser, user, role }];
+    const currentUser = this.assignedUsers.filter(assigned => assigned.user === user)[0];
+    const newUsers = [...this.assignedUsers.filter(assigned => assigned.user !== user), { ...currentUser, user, role }];
     this.props.onValidateSave(newUsers);
     this.setState({ assignUsers: this.state.assignUsers.filter(el => el !== user) });
     this.nextScreen();
@@ -65,13 +65,14 @@ class AssignUsers extends PureComponent {
   }
 
   render() {
+    this.assignedUsers = this.props.assignedUsers || [];
     return (
       <div className="user-menu" ref={node => this.node = node}>
         <div className="absolute-caret" />
         {this.state.visiblePanel === 'UserMenu'
       && (
       <UserMenu
-        assignedUsers={this.props.assignedUsers}
+        assignedUsers={this.assignedUsers}
         getUserProfile={this.props.getUserProfile}
         editExistingRole={this.editExistingRole}
         unassignUser={this.unassignUser}
@@ -81,7 +82,7 @@ class AssignUsers extends PureComponent {
         {this.state.visiblePanel === 'AddUserDropDown'
       && (
       <AddUserDropDown
-        nonAssignedUsers={Object.keys(this.props.getAllUserProfileKeys()).filter(key => !(this.props.assignedUsers.map(el => el.user)).includes(key))}
+        nonAssignedUsers={this.props.getAllUserProfileKeys().filter(key => !(this.assignedUsers.map(el => el.user)).includes(key))}
         submitUsers={this.assignUsers}
         getUserProfile={this.props.getUserProfile}
       />

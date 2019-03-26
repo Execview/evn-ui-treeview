@@ -25,6 +25,7 @@ module.exports = {
       "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
       "jsx-a11y/no-static-element-interactions": 0,
       "no-tabs": 0,
+      "no-restricted-syntax": 0,
       'jsx-a11y/no-noninteractive-element-interactions': [
         'error',
         {
