@@ -27,7 +27,7 @@ export const columnsInfo2 = {
   assignedUsers: { cellType: 'users', headerData: 'Assigned Users', width: 70, headerType: 'userHeader' },
   progress: { cellType: 'color', headerData: 'RAG', width: 150 },
   latestProgress: { cellType: 'text', headerData: 'Latest Progress' }
-  //employeeName: { cellType: 'dropdown', headerData: 'Employee Name', width: 400 },
+  // employeeName: { cellType: 'dropdown', headerData: 'Employee Name', width: 400 },
 };
 
 export const columnsInfo3 = {
@@ -77,7 +77,7 @@ const testData = {};
 for (let i = 0; i < 200; i++) {
   const newId = '_' + hash.update(Date.now() + Math.random().toString()).digest('hex').substring(0, 5);
   testData[newId] = { company: 'McLaren', contact: 'WL', country: 'United Kingdom', value: 26, progress: 'green', dueDate: '2018-03-17T10:39:57.362Z' };
-  editableCells[newId] = [ 'company', 'contact', 'country', 'value', 'progress', 'dueDate' ];
+  editableCells[newId] = ['company', 'contact', 'country', 'value', 'progress', 'dueDate'];
 }
 
 export { testData };
@@ -135,7 +135,7 @@ export const rules = {
   textSize: {
     errorMessage: 'The size of the field must be of at least 60 characters',
     validator: function validateString(text) {
-      if (text.replace(/\n/g, '').length > 60) {
+      if (text.replace(/\n/g, '').length > 10) {
         return true;
       }
       return false;
@@ -180,8 +180,8 @@ export function rowValidation(row, editableRow) {
   if (row.latestProgress === '') {
     editCells = editCells.filter(el => el !== 'progress');
     newRow.progress = 'red';
-  } else if (editCells.indexOf('progress') === -1) { 
-    editCells.push('progress'); 
+  } else if (editCells.indexOf('progress') === -1) {
+    editCells.push('progress');
   }
   return { updatedRow: newRow, editableRow: editCells };
 }

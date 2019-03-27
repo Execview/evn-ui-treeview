@@ -78,7 +78,7 @@ export default class Table extends Component {
       newWidths = initialWidths;
       newMinWidths = minWidths;
     }
-    
+
     const keys = Object.keys(newProps.data);
     let newOrderedData = Object.keys(newProps.data);
     if (!newProps.dontPreserveOrder) {
@@ -91,7 +91,7 @@ export default class Table extends Component {
     const newData = newProps.data;
     const newInvalidCells = this.state.invalidCells.filter(el => keys.includes(el.id));
     for (let i = 0; i < newInvalidCells.length; i++) {
-      newData[newInvalidCells[i].id][newInvalidCells[i].col] = this.state.data[newInvalidCells[i].id][newInvalidCells[i].col];
+      newData[newInvalidCells[i].id] = this.state.data[newInvalidCells[i].id];
     }
 
 
@@ -104,7 +104,6 @@ export default class Table extends Component {
       orderedData: newOrderedData,
       data: newData,
       editableCells: defaults.editableCells,
-      invalidCells: newInvalidCells
     }, this.resizeTable);
   }
 
@@ -177,8 +176,6 @@ export default class Table extends Component {
   }
 
   validateSave = (cellText) => {
-    const columnConfig = this.state.columnsInfo[this.state.activeCell[1]];
-
     let newInvalidCells = this.state.invalidCells;
     const editableRow = [...this.state.editableCells[this.state.activeCell[0]]];
     const updatedRow = { ...this.state.data[this.state.activeCell[0]] };
@@ -189,27 +186,37 @@ export default class Table extends Component {
       objReturned = this.props.rowValidation(updatedRow, editableRow);
     }
 
-    if (columnConfig.rule !== undefined) {
-      if (this.props.rules[columnConfig.rule].validator(cellText)) {
-        newInvalidCells = newInvalidCells.filter(obj => !(obj.id === this.state.activeCell[0] && obj.col === this.state.activeCell[1]));
-        this.onSave(this.state.activeCell[0], objReturned.updatedRow, objReturned.editableRow);
-      } else {
-        newInvalidCells.push({ id: this.state.activeCell[0], col: this.state.activeCell[1] });
-        this.setState({
-          data: {
-            ...this.state.data,
-            [this.state.activeCell[0]]: objReturned.updatedRow
-          },
-          editableCells: {
-            ...this.state.editableCells,
-            [this.state.activeCell[0]]: objReturned.editableRow
+    let hasErrors = false;
+
+    for (const column in this.state.columnsInfo) {
+      if (this.state.columnsInfo[column].rule) {
+        if (!this.props.rules[this.state.columnsInfo[column].rule].validator(updatedRow[column])) {
+          hasErrors = true;
+          if (newInvalidCells.filter(el => el.id === this.state.activeCell[0] && el.col === column).length === 0) {
+            newInvalidCells.push({ id: this.state.activeCell[0], col: column });
           }
-        });
+        }
       }
-    } else {
-      this.onSave(this.state.activeCell[0], objReturned.updatedRow, objReturned.editableRow);
     }
-    this.setState({ activeCell: [null, null], invalidCells: newInvalidCells });
+
+    if (hasErrors) {
+      this.setState({
+        data: {
+          ...this.state.data,
+          [this.state.activeCell[0]]: objReturned.updatedRow
+        },
+        editableCells: {
+          ...this.state.editableCells,
+          [this.state.activeCell[0]]: objReturned.editableRow
+        },
+        invalidCells: newInvalidCells,
+        activeCell: [null, null]
+      });
+    } else {
+      newInvalidCells = newInvalidCells.filter(obj => !(obj.id === this.state.activeCell[0] && obj.col === this.state.activeCell[1]));
+      const activeRow = this.state.activeCell[0];
+      this.setState({ invalidCells: newInvalidCells, activeCell: [null, null] }, (() => this.onSave(activeRow, objReturned.updatedRow, objReturned.editableRow)));
+    }
   }
 
   sortData(col, cellType) {
@@ -246,7 +253,7 @@ export default class Table extends Component {
       const keys = Object.keys(this.state.widths);
       const toRet = keys.map(colName => this.state.widths[colName] * 100 / this.state.tableWidth);
       const newScale = toRet.map(wdt => wdt * windowWidth / 100);
-      
+
       const newCopy = { ...this.state.widths };
       for (let i = 0; i < keys.length; i++) {
         newCopy[keys[i]] = newScale[i];
@@ -292,6 +299,7 @@ export default class Table extends Component {
                   type = this.props.cellTypes[col.headerType];
                   headerStyle.width = this.state.widths[colkey] - 10;
                 } else {
+                  headerStyle.width = Math.floor(this.state.widths[colkey]);
                   data = { spans, title: col.headerData, sortData: () => { if (this.props.dataSort && this.props.dataSort[col.cellType]) { this.sortData(colkey, col.cellType); } }, };
                   type = { display: <HeaderCellDisplay /> };
                 }
