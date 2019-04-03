@@ -1,5 +1,5 @@
 {
-  "name": "treeview",
+  "name": "@evn-ui-lib/treeview",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -17,6 +17,13 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
+  },
+  "keywords": [],
+  "author": "james.styman@execview.com",
+  "license": "ISC",
+  "readme": "README.md",
+  "publishConfig": {
+    "registry": "https://npm.evlem.net"
   },
   "eslintConfig": {
     "extends": "react-app"

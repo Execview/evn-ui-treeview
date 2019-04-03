@@ -1,7 +1,7 @@
 {
-  "name": "react-table",
+  "name": "@evn-ui-lib/table",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "dependencies": {
     "column-resizer": "^1.1.2",
     "react": "^16.7.0",
@@ -17,6 +17,13 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
+  },
+  "keywords": [],
+  "author": "teodor-andrei.jalba@execview.com",
+  "license": "ISC",
+  "readme": "README.md",
+  "publishConfig": {
+    "registry": "https://npm.evlem.net"
   },
   "eslintConfig": {
     "extends": "react-app"

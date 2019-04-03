@@ -1,5 +1,5 @@
 {
-  "name": "menu",
+  "name": "@evn-ui-lib/menu",
   "version": "0.1.0",
   "peerDependencies": {
     "react": "^16.7.0",
@@ -21,6 +21,13 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "rm -rf dist && NODE_ENV=production babel src/lib --out-dir dist --copy-files --ignore __tests__,spec.js,test.js,__snapshots__"
+  },
+  "keywords": [],
+  "author": "vygantas.skirius@execview.com",
+  "license": "ISC",
+  "readme": "README.md",
+  "publishConfig": {
+    "registry": "https://npm.evlem.net"
   },
   "eslintConfig": {
     "extends": "react-app"
