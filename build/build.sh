@@ -6,7 +6,7 @@ npm set registry https://npm.evlem.net
 
 npm install -g npm-cli-login
 
-npm-cli-login -u jenkins -p $1 -e 'andras.ludanyi@execview.com'
+npm-cli-login -u jenkins -p $1 -e $2
 
 ./../menu/npm publish
 ./../table/npm publish
