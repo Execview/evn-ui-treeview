@@ -28,8 +28,11 @@ export const getParentNodes = (data) => {
 	return Object.keys(data).filter(key=>data[key].ParentAssociatedBubble==='')
 }
 
-export const translateData = (db) =>{
-	return db.reduce((total,el) => {
+export const translateData = (dbdata,dblinks) =>{
+	// console.log(dbdata)
+	// console.log(dblinks)
+	let newData = null
+	newData = dbdata.reduce((total,el) => {
 		const startdate = new Date(el.start)
 		const enddate = new Date(el.end)
 		return {
@@ -38,64 +41,78 @@ export const translateData = (db) =>{
 				startdate:(new Date(startdate.getFullYear(),startdate.getMonth(),startdate.getDate())).toISOString(),
 				enddate:(new Date(enddate.getFullYear(),enddate.getMonth(),enddate.getDate())).toISOString(),
 				colour:el.colour || "Blue",
-				ChildAssociatedBubbles: el.ChildAssociatedBubbles || [],
-				ParentAssociatedBubble: el.ParentAssociatedBubble || "",
-				ChildBubbles: el.ChildBubbles || {},
-				ParentBubble: el.ParentBubble || "",
+				ChildAssociatedBubbles: [],
+				ParentAssociatedBubble: "",
+				ChildBubbles: {},
+				ParentBubble: "",
 				open: el.open || false,
 				activityTitle: el.activityTitle || el.name,
 				progress: el.progress || "amber"
 			}
 		}
 	},{})
+	dblinks.forEach(link => {
+		//id, children[], type
+		link.children.forEach(child=>
+				newData[child.id] = {...newData[child.id],
+				ParentAssociatedBubble: link.id
+			}
+		)	
+		newData[link.id] = { 
+			...newData[link.id],
+			ChildAssociatedBubbles: link.children.map(child=>child.id), 
+			ChildBubbles:{},
+			ParentBubble:""
+		} 
+	});
+	return newData
 }
 
 export class EventStoreSynchroniser {
+	
 	oldState = {}
 	sendToDB = (token, state) =>{
+		const ACTUALLY_SEND_TO_DB = false
+
 		if(Object.keys(this.oldState).length===0){this.oldState=state; return}
 		let stateChanges = getDiffs(this.oldState,state);
 		this.oldState = state
-		const baseUrl = "https://evnext-api.evlem.net/api/command/mutate/"
-		if(stateChanges._data){
-			for(let key in stateChanges._data){
+		if(stateChanges){
+			for(let key in stateChanges._data){				
 				const bubbleChanges = stateChanges._data[key]
-
-				const {startdate,enddate,colours,...otherChanges} = bubbleChanges
-				const Bubblepayload = {
-					...otherChanges
-				}
-				if(startdate){Bubblepayload.start = startdate}
-				if(enddate){Bubblepayload.end = enddate}
-
-				console.log(Bubblepayload)
-
-				const body = {
-					type: "activity.mutated",
-					aggregate: "activity",
-					data: {
-						meta: {
-							source: "local",
-							correlation_id: "00000000-0000-0000-0000-000000000000",
-							causation_id: "00000000-0000-0000-0000-000000000000"
-						},
-						payload: Bubblepayload
+				//ASSOCIATE LINKS
+				if(Object.keys(bubbleChanges).includes("ParentAssociatedBubble")){
+					console.log(bubbleChanges)
+					console.log(bubbleChanges.ParentAssociatedBubble)
+					if(bubbleChanges.ParentAssociatedBubble){
+						if(ACTUALLY_SEND_TO_DB){console.log("CHANGED PARENT OF: "+key)
+						//delete
+						//create
+						}
+					}
+					else{
+						// not sure this will ever be reached... 
+						if(ACTUALLY_SEND_TO_DB){console.log("DELETED PARENT OF: "+key)}
 					}
 				}
 
-				const x = 'dont run please';
-				if(x==="run please"){
-					console.log("send event")
-					fetch(baseUrl+key, {
-						method:"POST",
-						headers: {
-							"Content-Type": "application/json",
-							"Authorization": `Bearer ${token}`
-						},
-						body:JSON.stringify(body)
-					})
-					.then(response=>response.text())
-					.then(txt=>console.log(txt))
+				//REMOVE EVERYTHING ELSE
+				const {
+					startdate,
+					enddate,
+					colours,
+					ParentAssociatedBubble,
+					ChildAssociatedBubbles,
+					...otherChanges} = bubbleChanges
+				const Bubblepayload = {
+					...otherChanges
+				}
+				//RENAME PROPERTIES
+				if(startdate){Bubblepayload.start = startdate}
+				if(enddate){Bubblepayload.end = enddate}
+
+				if(ACTUALLY_SEND_TO_DB){
+					sendEvent(token,"https://evnext-api.evlem.net/api/command/mutate/"+key,"activity.mutated","activity",Bubblepayload)
 				}
 			}
 		}
@@ -103,17 +120,30 @@ export class EventStoreSynchroniser {
 	}
 }
 
-
-
-
-
-
-
-
-
-
-
-
+export const sendEvent = (token,link,type,aggregate,payload)=>{
+	console.log("send event")
+	let Eventbody = {
+		type: type,
+		aggregate: aggregate,
+		data: {
+			meta: {
+				source: "local",
+				correlation_id: "00000000-0000-0000-0000-000000000000",
+				causation_id: "00000000-0000-0000-0000-000000000000"
+			},
+			payload: payload
+		}
+	}
+	return fetch(link, {
+		method:"POST",
+		headers: {
+			"Content-Type": "application/json",
+			"Authorization": `Bearer ${token}`
+		},
+		body:JSON.stringify(Eventbody)
+	})
+	.then(response=>response.text())
+}
 
 
 export default 0

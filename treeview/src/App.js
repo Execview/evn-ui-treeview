@@ -9,11 +9,12 @@ import TreeConnector from './TableColumnAppenders/TreeConnector';
 import Table from './TEMP-TABLE/table/Table';
 import AddRow from './AddRow';
 import { cats } from './TEMP-TABLE/store/ElCatso';
+import './App.css'
 
 class App extends Component {
 	componentDidMount() {
-		// this.props.onGetInitialData();
-		this.props.loadpls();
+		this.props.onGetInitialData();
+		//this.props.loadpls();
 	}
 
   	render() {
@@ -26,7 +27,6 @@ class App extends Component {
 					columnsInfo={columnsInfo}
 					editableCells={this.props.editableCells}
 					cellTypes={cellTypes}
-					tableWidth={1800}
 					onSave={this.props.onSave}
 					dontPreserveOrder={true}
 					wrap={true}

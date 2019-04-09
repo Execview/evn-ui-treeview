@@ -38,21 +38,21 @@ const Bubble = React.memo((props) => {
 					<feDropShadow dx="0" dy="0" floodColor={"black"} stdDeviation="1"/>
 				</filter>
 			</defs>
-			<path d={leftend} fill={leftcolour} strokeWidth='0' 
-				onMouseDown  =	{(event)=>leftclickdown(key,event)}
-				onMouseUp    =	{(event)=>leftclickup(key,event)}
-				onMouseEnter =	{(event)=>leftmousein(key,event)}
-				onMouseOut   =	{(event)=>leftmouseout(key,event)}/>
+			<path d={leftend} fill={leftcolour} strokeWidth='0'
+				onPointerDown  =	{(event)=>leftclickdown(key,event)}
+				onPointerUp    =	{(event)=>leftclickup(key,event)}
+				onPointerEnter =	{(event)=>leftmousein(key,event)}
+				onPointerLeave   =	{(event)=>leftmouseout(key,event)}/>
 			<path d={middle} fill={colour} strokeWidth='0'
-				onMouseDown  =	{(event)=>middleclickdown(key,event)}
-				onMouseUp  =	{(event)=>middleclickup(key,event)}
-				onMouseEnter =	{(event)=>middlemousein(key,event)}
-				onMouseOut   =	{(event)=>middlemouseout(key,event)}/>
-			<path d={rightend} fill={rightcolour} strokeWidth='0' 
-				onMouseDown  =	{(event)=>rightclickdown(key,event)}
-				onMouseUp    =	{(event)=>rightclickup(key,event)}
-				onMouseEnter =	{(event)=>rightmousein(key,event)}
-				onMouseOut   =	{(event)=>rightmouseout(key,event)}/> 
+				onPointerDown  =	{(event)=>middleclickdown(key,event)}
+				onPointerUp  =	{(event)=>middleclickup(key,event)}
+				onPointerEnter =	{(event)=>middlemousein(key,event)}
+				onPointerLeave   =	{(event)=>middlemouseout(key,event)}/>
+			<path d={rightend} fill={rightcolour} strokeWidth='0'
+				onPointerDown  =	{(event)=>rightclickdown(key,event)}
+				onPointerUp    =	{(event)=>rightclickup(key,event)}
+				onPointerEnter =	{(event)=>rightmousein(key,event)}
+				onPointerLeave   =	{(event)=>rightmouseout(key,event)}/> 
 
 			<text style={{filter:filterStyle, fill: 'white', MozUserSelect:"none", WebkitUserSelect:"none", msUserSelect:"none", pointerEvents: "none"}}
 				x={(props.startpoint[0]+props.endpoint[0])/2}

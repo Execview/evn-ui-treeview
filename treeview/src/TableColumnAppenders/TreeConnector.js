@@ -8,13 +8,11 @@ class TreeConector extends Component {
 	
   	render() {
     	return (
-			<div>
-				<TreeAppender
-					{...this.props}
-					onToggleNode={this.props.onToggleNode}
-					displayedTreeStructure={this.props.displayedTreeStructure}
-				/>
-			</div>
+		<TreeAppender
+			{...this.props}
+			onToggleNode={this.props.onToggleNode}
+			displayedTreeStructure={this.props.displayedTreeStructure}
+		/>
 		);
   	}
 }

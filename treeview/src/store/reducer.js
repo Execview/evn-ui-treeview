@@ -85,12 +85,12 @@ function reducer(state=initialState,action) {
 		}
 		case actionTypes.LOAD_DATA: {
 			let translateddata = data;
-			// translateddata = action.data
-			translateddata = data
+			translateddata = action.data
+			// translateddata = data
 			let newData = objectCopierWithStringToDate(translateddata)
 			newData = Object.keys(newData).reduce((total,el)=>{return {...total,[el]:{...newData[el],colours:{left:newData[el].colour,right:newData[el].colour,middle:newData[el].colour,original:newData[el].colour}}}},{})
 
-			let newState = {...state, _data:newData, token:action.token}
+			let newState = {...state, _data:newData, token:action.token, editableCells:action.editableCells}
 
 			Object.keys(newState._data).forEach(bubblekey=>{
 				newState = reducer(newState,{type: actionTypes.SET_ORIGINAL_COLOUR, key:bubblekey, side: 'left'})
@@ -100,7 +100,7 @@ function reducer(state=initialState,action) {
 
 			// newData = Object.keys(newData).reduce((total,el)=>{return {...total,[el]:{...newData[el],colour:null}}},{})
 			// ess.sendToDB(state.token,newState) //This just sets the initial state for the EventStoreSynchroniser
-			return reducer(newState,{type:actionTypes.UPDATE_DATA})
+			return reducer(newState,{type:actionTypes.UPDATE_DATA, sendEvents: true})
 		}
 		case actionTypes.UPDATE_DATA: {
 			if (action.sendEvents) {

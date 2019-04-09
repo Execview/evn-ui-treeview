@@ -7,11 +7,9 @@ class SchedulerConnector extends Component {
 	// SchedulerConnector -> SchedulerAppender -> TreeConnector -> TreeAppender -> Table
   	render() {
     	return (
-			<div>
-				<SchedulerAppender 
-				    {...this.props}
-				/>
-			</div>
+			<SchedulerAppender 
+				{...this.props}
+			/>
 		);
   	}
 }

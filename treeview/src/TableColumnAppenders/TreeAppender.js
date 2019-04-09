@@ -31,13 +31,11 @@ export default class TreeAppender extends Component {
 		const columnsInfo = this.addTreeColumn()
 		const tableData = this.addTreeData()
     	return (
-			<div className="table-container">
-				{React.cloneElement(this.props.children,
-				{...this.props,
-				children: this.props.children && this.props.children.props.children,
-				data: tableData,
-				columnsInfo: columnsInfo})}
-			</div>
+			React.cloneElement(this.props.children,
+			{...this.props,
+			children: this.props.children && this.props.children.props.children,
+			data: tableData,
+			columnsInfo: columnsInfo})
 		);
   	}
 

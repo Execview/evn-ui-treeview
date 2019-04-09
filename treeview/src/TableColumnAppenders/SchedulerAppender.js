@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 var Rx = require('rxjs/Rx')
 var moment = require('moment')
 
-var mousepositionstream = Rx.Observable.fromEvent(document,'mousemove').merge(Rx.Observable.fromEvent(document,'mousedown'))
+var mousepositionstream = Rx.Observable.fromEvent(document,'pointermove').merge(Rx.Observable.fromEvent(document,'pointerdown')).merge(Rx.Observable.fromEvent(document,'pointerup'))
 
 export default class SchedulerAppender extends Component {
 		constructor(props){
@@ -12,9 +12,9 @@ export default class SchedulerAppender extends Component {
 		this.tableRef= React.createRef();
 
 		this.state = {startdate: null, enddate: null, snaps: [], dayWidth: 80}
-		this.extrasnaps = 15
+		this.extrasnaps = 2
 
-		this.InitialStartDate = new Date("2018-12-17")
+		this.InitialStartDate = new Date("2019-02-15")
 		//Object.keys(this.props.data).map(key=>{return this.props.data[key].startdate})[0] ;//new Date("2019-02-15")
 		this.Lightcolours = [	['Blue','rgb(190,230,240)'],
 								['Red','rgb(240,180,190)'],
@@ -28,7 +28,7 @@ export default class SchedulerAppender extends Component {
 								['Yellow','rgb(240,240,160)'],
 								['Purple','rgb(220,160,230)'],
 								['Grey','rgb(240,240,240)']]
-		/*this.RAGcolours = 	[	['Blue','grey'],
+		/*this.RAGcolours = 	[['Blue','grey'],
 								['Red','#ff3d57'],
 								['Green','#00CC6F'],
 								['Yellow','#ffbf00'],
@@ -102,7 +102,7 @@ export default class SchedulerAppender extends Component {
 									this.props.setBubbleSideColour(key,this.highlightcolour,'right')
 									this.forceUpdate();}
 
-	middleclickdown = (key,event)=>{this.mouseDownOnBubble.key = key
+	middleclickdown = (key,event)=>{this.mouseDownOnBubble.key = key;
 		this.mouseDownOnBubble.location = 'middle'
 		this.schedulerCTM = event.target.closest('svg').getScreenCTM();
 		var mousedownpos = this.getInternalMousePosition(event,this.schedulerCTM)
@@ -111,6 +111,7 @@ export default class SchedulerAppender extends Component {
 			mousedownpos[0]-this.getNearestSnapXToDate(this.props.data[key].startdate),
 			mousedownpos[0]-this.getNearestSnapXToDate(this.props.data[key].enddate)
 		]
+		this.forceUpdate();
 	}
 	leftclickup = (key,event)=>{
 		this.props.tryToPerformLink(key,this.mouseDownOnBubble.key,'left',this.mouseDownOnBubble.location);
@@ -193,9 +194,6 @@ export default class SchedulerAppender extends Component {
 	}
 
 
-
-
-
 	getNearestValueInArray = (snapsarray,value)=>{ if(snapsarray===[]){return value}
 		var distancefromsnapsarray = snapsarray.slice().map((i)=>Math.abs(i-value))
 		return snapsarray[distancefromsnapsarray.indexOf(Math.min(...distancefromsnapsarray))]
@@ -242,7 +240,7 @@ export default class SchedulerAppender extends Component {
 				getWidth: this.setWidth,
 				mouseOnScheduler: this.clickedOnScheduler
 			}
-			newColumnsInfo = {...this.props.columnsInfo, scheduler: {cellType: 'scheduler', width: 1000, headerType: 'schedulerHeader', headerData: schedulerheaderdata}}
+			newColumnsInfo = {...this.props.columnsInfo, scheduler: {cellType: 'scheduler', width: 50, headerType: 'schedulerHeader', headerData: schedulerheaderdata}}
 		return newColumnsInfo
 	}
 
@@ -284,15 +282,13 @@ export default class SchedulerAppender extends Component {
 	}
 
   	render() {
-    	return (
-			<div ref={this.tableRef}>
-				{React.cloneElement(this.props.children,
-					{...this.props,
-					children: this.props.children && this.props.children.props.children,
-					data: this.addSchedulerData(),
-					columnsInfo: this.addSchedulerColumn()
-					})}
-			</div>
+    	return (			
+			React.cloneElement(this.props.children,
+				{...this.props,
+				children: this.props.children && this.props.children.props.children,
+				data: this.addSchedulerData(),
+				columnsInfo: this.addSchedulerColumn()
+			})
 		);
   	}
 
