@@ -4,12 +4,12 @@
 		"enddate": "2018-12-19T00:00:00.000Z",
 		"colour": "Blue",
 		"ChildAssociatedBubbles":[],
-        "ParentAssociatedBubble": "",
+    "ParentAssociatedBubble": "",
 		"ChildBubbles": {			},
-        "ParentBubble": "", 
-		"open":false,      
-        "activityTitle": "Project Scorpio",
-        "progress": "amber"
+    "ParentBubble": "",
+		"open":false,
+    "activityTitle": "Project Scorpio",
+    "progress": "amber"
 	},
 	"_m7ad1": {
 		"startdate": "2018-12-19T00:00:00.000Z",
@@ -71,6 +71,6 @@
 		"activityTitle": "Subtask Flower",
 		"progress": "amber"
 	}
-	
+
 }
 

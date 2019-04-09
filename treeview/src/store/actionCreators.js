@@ -1,5 +1,5 @@
 import * as actionTypes from './actionTypes';
-import {translateData} from './functions'
+import {translateData, getParentNodes} from './functions'
 
 export const getInitialData = () => (dispatch) => {
 	var token = ''
@@ -21,8 +21,4 @@ export const getInitialData = () => (dispatch) => {
 			parentNodes: getParentNodes(ourData)
         })
 	})
-}
-
-const getParentNodes = (data) => {	
-	return Object.keys(data).filter(key=>data[key].ParentAssociatedBubble==='')
 }

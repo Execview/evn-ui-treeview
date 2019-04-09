@@ -11,7 +11,7 @@ class SchedulerHeader extends Component {
 		// console.log(this.props.data.snaps)
 		let days = this.props.data.snaps.map((snap,index)=>{return <tspan alignmentBaseline="middle" key={index} x={snap[1]} y={'50%'}>{snap[0].getDate()+"/"+(snap[0].getMonth()+1)}</tspan>})
     	return (
-			<div className="header-cell" style={{width:this.props.style.width }} onMouseDown={this.props.data.mouseOnScheduler}>
+			<div className="header-cell no-select" style={{width:this.props.style.width }} onMouseDown={this.props.data.mouseOnScheduler}>
 				<svg height='100%' width='100%'>
 					<text style={{fill:'white'}} >{days}</text>
 				</svg>

@@ -4,7 +4,7 @@ import TableWrapper from './tableWrapper/TableWrapper';
 import './App.css';
 import * as actionTypes from './store/actionTypes';
 import { cellTypes, dataSort, rowValidation, rules, columnsInfo, columnsInfo2 } from './store/configs';
-import { cats } from './store/constants';
+import { cats } from './store/ElCatso';
 
 class App extends Component {
   constructor(props) {
@@ -33,7 +33,7 @@ class App extends Component {
     for (let i = 0; i < dataKeys.length; i++) {
       t2[dataKeys[i]] = this.state.data[dataKeys[i]];
     }
-    const randomNumber = Math.floor((Math.random() * 37));
+    const randomNumber = Math.floor((Math.random() * 35));
     return (
       <div className="App">
         <button className="get-data" type="button" onClick={() => this.onGetData()}>Get Data!</button>

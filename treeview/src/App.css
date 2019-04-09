@@ -59,3 +59,29 @@ td {
 pre {
 	margin: 0;
 }
+
+.button-container {
+  margin: 15px 0;
+}
+
+.get-data {
+  background-color: #434956;
+  color: white;
+  border: 2px solid white;
+  border-radius: 4px;
+  padding:15px 30px;
+  font-size: 14px;
+  font-weight: bold;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+  cursor: pointer;
+  margin:auto;
+  margin-left:20px;
+}
+
+.get-data:hover {
+    background-color: white;
+    color: black;
+}
+
+.get-data:focus { outline: none; }

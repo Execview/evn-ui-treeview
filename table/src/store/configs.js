@@ -99,7 +99,15 @@ const users = {
     image: 'https://scontent-lht6-1.cdninstagram.com/vp/54177056e03e5e2217e76ab9eeca557d/5CC2D0A7/t51.2885-15/sh0.08/e35/s640x640/21480286_1888458418148487_1167622992977461248_n.jpg?_nc_ht=scontent-lht6-1.cdninstagram.com' },
   jio9: {
     name: 'Sylvester SylvesterSylvester',
-    image: 'https://i.imgur.com/hGiJyW0.jpg' }
+    image: 'https://i.imgur.com/hGiJyW0.jpg' },
+  ahwyd: {
+    name: 'Billy',
+    image: 'https://i.imgur.com/V7hvM91.jpg'
+  },
+  hawyd: {
+    name: 'Billy&Lucky',
+    image: 'https://i.imgur.com/gQo8FSe.jpg'
+  }
 };
 
 export const cellTypes = {

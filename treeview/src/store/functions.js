@@ -1,4 +1,4 @@
-import {recursiveDeepDiffs} from './bubbleCopy'
+import {recursiveDeepDiffs} from '../bubbleCopy'
 
 export const getDisplayedTreeStructure = (tree, parentNodes)=>{
 	//an array of arrays of the rows to display, their corresponding depths, and whether they are open/closed/neither.
@@ -8,8 +8,8 @@ export const getDisplayedTreeStructure = (tree, parentNodes)=>{
 		let currentRow = childnodes[i]
 		let arrowstatus = tree[currentRow].open ? 'open': 'closed';
 		if(tree[currentRow].ChildAssociatedBubbles.length===0){arrowstatus='none'}
-		newDisplayedRows.push({	key:currentRow, 
-								depth:currentdepth, 
+		newDisplayedRows.push({	key:currentRow,
+								depth:currentdepth,
 								nodeStatus: arrowstatus
 							})
 		if(tree[currentRow].open){
@@ -21,31 +21,15 @@ export const getDisplayedTreeStructure = (tree, parentNodes)=>{
 }
 
 export const getDiffs = (original, updated)=>{
-	/*
-	let changeObject = {}
-	let okeys = Object.keys(original)
-	let ukeys = Object.keys(updated)
-
-	const notequal = (a,b)=>{
-		return JSON.stringify(a)!==JSON.stringify(b)
-	}
-	
-	for(let okey of okeys){
-		if(ukeys.includes(okey)){
-			if(notequal(original[okey], updated[okey])){
-				changeObject[okey] = getDiffs(changeObject[okey],updated[okey]) //updated[okey]
-			}
-		}
-		//TODO else {}
-	}
-	return changeObject
-	*/
 	return recursiveDeepDiffs(original,updated)
 }
 
+export const getParentNodes = (data) => {
+	return Object.keys(data).filter(key=>data[key].ParentAssociatedBubble==='')
+}
 
 export const translateData = (db) =>{
-	return db.reduce((total,el)=>{
+	return db.reduce((total,el) => {
 		const startdate = new Date(el.start)
 		const enddate = new Date(el.end)
 		return {
@@ -57,8 +41,8 @@ export const translateData = (db) =>{
 				ChildAssociatedBubbles: el.ChildAssociatedBubbles || [],
 				ParentAssociatedBubble: el.ParentAssociatedBubble || "",
 				ChildBubbles: el.ChildBubbles || {},
-				ParentBubble: el.ParentBubble || "", 
-				open: el.open || false,      
+				ParentBubble: el.ParentBubble || "",
+				open: el.open || false,
 				activityTitle: el.activityTitle || el.name,
 				progress: el.progress || "amber"
 			}
@@ -77,7 +61,7 @@ export class EventStoreSynchroniser {
 			for(let key in stateChanges._data){
 				const bubbleChanges = stateChanges._data[key]
 
-				const {startdate,enddate,colours,...otherChanges} = bubbleChanges				
+				const {startdate,enddate,colours,...otherChanges} = bubbleChanges
 				const Bubblepayload = {
 					...otherChanges
 				}
@@ -99,7 +83,7 @@ export class EventStoreSynchroniser {
 					}
 				}
 
-				const x = 'run please';
+				const x = 'dont run please';
 				if(x==="run please"){
 					console.log("send event")
 					fetch(baseUrl+key, {
@@ -115,7 +99,7 @@ export class EventStoreSynchroniser {
 				}
 			}
 		}
-		
+
 	}
 }
 

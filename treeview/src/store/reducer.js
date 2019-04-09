@@ -1,28 +1,27 @@
 import { columnsInfo, cellTypes, editableCells, data } from './config'
-import { getDisplayedTreeStructure, getDiffs, EventStoreSynchroniser } from './functions'
+import { getDisplayedTreeStructure, getDiffs, EventStoreSynchroniser, getParentNodes } from './functions'
 import * as actionTypes from './actionTypes';
-import {bubbleCopy, objectCopierWithStringToDate} from './bubbleCopy'
+import {bubbleCopy, objectCopierWithStringToDate} from '../bubbleCopy'
 import tryReturnValidTransformState from './stateValidator'
 
-//display rows that have no parents. ASSUME THIS LIST EXISTS FOR NOW. cycle through those and add child rows.
-//const parentNodes = ["_1235d","_m7ad1"];
+const crypto = require('crypto');
+
+const hash = crypto.createHash('sha256');
 
 let initialState = {
 	_data: {},
-	columnsInfo,
 	cellTypes,
 	editableCells,
-	parentNodes: [],
 	displayedTreeStructure: [],
 	displayedData: {},
 	token: ''
 }
 
-const ess = new EventStoreSynchroniser() 
+const ess = new EventStoreSynchroniser()
 
 function reducer(state=initialState,action) {
 	switch(action.type) {
-		case "loadFromConfig": {return reducer(initialState,{type:actionTypes.LOAD_DATA, parentNodes:["_1235d","_m7ad1"]});}
+		case "loadFromConfig": {return reducer(initialState,{type:actionTypes.LOAD_DATA});}
 
 		case actionTypes.TOGGLE_NODE: {
 			const updatedState = { ...state,
@@ -35,52 +34,88 @@ function reducer(state=initialState,action) {
 			return reducer(updatedState, { type: actionTypes.UPDATE_DATA, sendEvents: true});
 		}
 
+		// startdate: new Date(new Date().toDateString()),
+		// enddate: new Date(new Date(new Date().setDate((new Date()).getDate() + 2)).toDateString()),
+
+
+		case actionTypes.ADD_ROW: {
+			const newId = '_' + hash.update(Date.now() + Math.random().toString()).digest('hex').substring(0, 5);
+			const tempTitle = 'Untitled Activity';
+			const colors = ['Blue','Red', 'Green', 'Yellow', 'Purple'];
+			const colorIndex = Math.floor((Math.random() * 5));
+			const newRow = {
+					startdate: new Date('2018-12-26'),
+					enddate: new Date('2018-12-28'),
+					colours: {left: colors[colorIndex], middle: colors[colorIndex], right: colors[colorIndex], original: colors[colorIndex]},
+					ChildAssociatedBubbles:[],
+					ParentAssociatedBubble: '',
+					ChildBubbles: {},
+					ParentBubble: '',
+					open:true,
+					activityTitle: tempTitle,
+					progress: 'amber'
+			};
+			const newState =  {
+				...state,
+				_data: {
+					...state._data,
+					[newId] : newRow
+				},
+				editableCells: {
+					...state.editableCells,
+					[newId]: action.columns
+				}
+			};
+			return reducer(newState,{type:actionTypes.UPDATE_DATA})
+		}
+
 		case actionTypes.SAVE_TABLE: {
-			console.log(Object.keys(state.columnsInfo))
-			const TableRowValues = Object.keys(state.columnsInfo).reduce((total,col)=>{return {...total,[col]:action.rowValues[col]}},{})
-			let newRowValues = objectCopierWithStringToDate(TableRowValues)
+			const tableRowValues = Object.keys(state._data[action.rowId]).reduce((total,col)=>{return {...total,[col]:action.rowValues[col]}},{})
+			let newRowValues = objectCopierWithStringToDate(tableRowValues)
 			let newState = {...state,
 				editableCells: {
 					...state.editableCells,
-					[action.rowId]: action.editableValues 
+					[action.rowId]: action.editableValues
 				}
 			};
 			let changeObject = getDiffs(state._data[action.rowId],newRowValues)
+
+
 			return reducer(newState,{type:actionTypes.BUBBLE_TRANSFORM, key: action.rowId, changes: changeObject})
 		}
 		case actionTypes.LOAD_DATA: {
 			let translateddata = data;
-			translateddata = action.data
-			//translateddata = data
+			// translateddata = action.data
+			translateddata = data
 			let newData = objectCopierWithStringToDate(translateddata)
 			newData = Object.keys(newData).reduce((total,el)=>{return {...total,[el]:{...newData[el],colours:{left:newData[el].colour,right:newData[el].colour,middle:newData[el].colour,original:newData[el].colour}}}},{})
 
-			let newState = {...state, _data:newData, token:action.token, parentNodes:action.parentNodes}
+			let newState = {...state, _data:newData, token:action.token}
 
 			Object.keys(newState._data).forEach(bubblekey=>{
 				newState = reducer(newState,{type: actionTypes.SET_ORIGINAL_COLOUR, key:bubblekey, side: 'left'})
 				newState = reducer(newState,{type: actionTypes.SET_ORIGINAL_COLOUR, key:bubblekey, side: 'middle'})
 				newState = reducer(newState,{type: actionTypes.SET_ORIGINAL_COLOUR, key:bubblekey, side: 'right'})
-			})	
-			
-			//newData = Object.keys(newData).reduce((total,el)=>{return {...total,[el]:{...newData[el],colour:null}}},{})
-			ess.sendToDB(state.token,newState) //This just sets the initial state for the EventStoreSynchroniser
+			})
+
+			// newData = Object.keys(newData).reduce((total,el)=>{return {...total,[el]:{...newData[el],colour:null}}},{})
+			// ess.sendToDB(state.token,newState) //This just sets the initial state for the EventStoreSynchroniser
 			return reducer(newState,{type:actionTypes.UPDATE_DATA})
 		}
-		case actionTypes.UPDATE_DATA: {			
-			if (action.sendEvents) {		
+		case actionTypes.UPDATE_DATA: {
+			if (action.sendEvents) {
 				ess.sendToDB(state.token,state);
 			}
 
 			let newState = {...state}
-			const displayedTreeStructure = getDisplayedTreeStructure(newState._data, newState.parentNodes);
+			const displayedTreeStructure = getDisplayedTreeStructure(newState._data, getParentNodes(newState._data));
 			const dataToDisplay = {}
 			for (let i = 0; i < displayedTreeStructure.length; i++) {
 				dataToDisplay[displayedTreeStructure[i].key] = newState._data[displayedTreeStructure[i].key];
 			}
-			
+
 			newState = {
-				...state,
+				...newState,
 				displayedTreeStructure: displayedTreeStructure,
 				displayedData: dataToDisplay,
 			};
@@ -103,14 +138,14 @@ function reducer(state=initialState,action) {
 						...newState,
 						_data: newStateBubbles
 					}
-					return reducer(newState,{type:actionTypes.UPDATE_DATA, sendEvents: true})
+					return reducer(newState,{type:actionTypes.UPDATE_DATA, sendEvents:true });
 				}
 				else { return state }
 			}
 			return state
 		}
 
-		case actionTypes.SET_ORIGINAL_COLOUR: {			
+		case actionTypes.SET_ORIGINAL_COLOUR: {
 			var colourtoset=state._data[action.key].colours.original
 			var parentkey = state._data[action.key]["ParentBubble"]
 			if(parentkey){
@@ -132,8 +167,8 @@ function reducer(state=initialState,action) {
 						colours:{...state._data[action.key].colours,
 							[action.side]:action.colour
 						}
-					}								
-				} 
+					}
+				}
 			}
 			return reducer(newState,{type:actionTypes.UPDATE_DATA})
 		}
@@ -150,7 +185,7 @@ function reducer(state=initialState,action) {
 					var xGapDate = state._data[action.childkey][childpoint]-state._data[action.parentkey][parentpoint];
 					finalstate = reducer(finalstate,{type:actionTypes.ADD_CHILD_LINK,parentkey:action.parentkey,childkey:action.childkey,parentside:action.parentside,childside:action.childside,xGapDate:xGapDate})
 					finalstate = reducer(finalstate,{type:actionTypes.ADD_PARENT_LINK,childkey:action.childkey,parentkey:action.parentkey})
-					return reducer(finalstate,{type:actionTypes.UPDATE_DATA, sendEvents: true})
+					return reducer(finalstate,{type:actionTypes.UPDATE_DATA, sendEvents:true});
 				} else {
 					console.log('already linked!');
 					return state
@@ -169,11 +204,11 @@ function reducer(state=initialState,action) {
 						}
 					}
 				}
-			}		
+			}
 		}
-		
+
 		case actionTypes.ADD_PARENT_LINK :{
-			return {	
+			return {
 				...state,
 				_data: {...state._data,
 						[action.childkey]:{...state._data[action.childkey],
@@ -185,12 +220,11 @@ function reducer(state=initialState,action) {
 
 		case actionTypes.PERFORM_ASSOCIATION: {
 			let finalstate = {...state}
-			if((action.childkey!==action.parentkey)&&(!state._data[action.parentkey]["ChildAssociatedBubbles"].includes(action.childkey))){
+			if((action.childkey!==action.parentkey)&& action.childkey &&(!state._data[action.parentkey]["ChildAssociatedBubbles"].includes(action.childkey))){
 				finalstate = reducer(finalstate,{type: actionTypes.UNLINK_PARENT_ASSOCIATED_BUBBLE, key:action.childkey })
 				finalstate = reducer(finalstate,{type: actionTypes.ADD_CHILD_ASSOCIATION,parentkey:action.parentkey,childkey:action.childkey})
 				finalstate = reducer(finalstate,{type: actionTypes.ADD_PARENT_ASSOCIATION,childkey:action.childkey,parentkey:action.parentkey})
-				finalstate = reducer(finalstate,{type: actionTypes.TRY_REMOVE_FROM_PARENT_NODES, key:action.childkey})
-				return reducer(finalstate,{type:actionTypes.UPDATE_DATA, sendEvents: true})
+				return reducer(finalstate,{type:actionTypes.UPDATE_DATA, sendEvents: true});
 			}
 			return state
 		}
@@ -203,10 +237,10 @@ function reducer(state=initialState,action) {
 						ChildAssociatedBubbles:[...state._data[action.parentkey]["ChildAssociatedBubbles"], action.childkey],
 					}
 				}
-			}		
+			}
 		}
 		case actionTypes.ADD_PARENT_ASSOCIATION: {
-			return {	
+			return {
 				...state,
 				_data: {...state._data,
 					[action.childkey]:{...state._data[action.childkey],
@@ -215,12 +249,7 @@ function reducer(state=initialState,action) {
 					}
 			}
 		}
-		case actionTypes.TRY_REMOVE_FROM_PARENT_NODES: {
-			return {
-				...state,
-				parentNodes: [...state.parentNodes].filter(el=>el!==action.key)
-			}
-		}
+
 		case actionTypes.UNLINK_PARENT_ASSOCIATED_BUBBLE: {
 		var newState = {...state}
 		var parentAssociatedBubbleKey = newState._data[action.key].ParentAssociatedBubble
@@ -244,8 +273,8 @@ function reducer(state=initialState,action) {
 					}
 				}
 			}
-			reducer(newState,{type:actionTypes.UPDATE_DATA, sendEvents: true})
-			
+			reducer(newState,{type:actionTypes.UPDATE_DATA, sendEvents: true });
+
 		}
 		return newState
 	}
@@ -254,7 +283,7 @@ function reducer(state=initialState,action) {
 		default:
 			return state;
 	}
-	
+
 }
 
 export default reducer

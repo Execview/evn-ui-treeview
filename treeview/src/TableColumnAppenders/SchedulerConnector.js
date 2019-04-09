@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import SchedulerAppender from './SchedulerAppender';
-import * as actionTypes from '../actionTypes';
+import * as actionTypes from '../store/actionTypes';
 import { connect } from 'react-redux';
 
 class SchedulerConnector extends Component {

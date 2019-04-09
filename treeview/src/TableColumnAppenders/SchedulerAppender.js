@@ -6,15 +6,15 @@ var moment = require('moment')
 var mousepositionstream = Rx.Observable.fromEvent(document,'mousemove').merge(Rx.Observable.fromEvent(document,'mousedown'))
 
 export default class SchedulerAppender extends Component {
-	constructor(props){
-		super(props)
+		constructor(props){
+		super(props)		
 		mousepositionstream.subscribe((event)=>this.mouseEvent(event))
 		this.tableRef= React.createRef();
 
 		this.state = {startdate: null, enddate: null, snaps: [], dayWidth: 80}
 		this.extrasnaps = 15
 
-		this.InitialStartDate = new Date("2019-2-15")
+		this.InitialStartDate = new Date("2018-12-17")
 		//Object.keys(this.props.data).map(key=>{return this.props.data[key].startdate})[0] ;//new Date("2019-02-15")
 		this.Lightcolours = [	['Blue','rgb(190,230,240)'],
 								['Red','rgb(240,180,190)'],
@@ -45,7 +45,7 @@ export default class SchedulerAppender extends Component {
 								['Yellow','rgb(240, 255, 84)'],
 								['Purple','rgb(250, 107, 255)'],
 								['Grey','rgb(240,240,240)']]
-								
+
 
 		this.colours = this.UNSATColours
 		this.schedulerWidth= 0;
@@ -81,7 +81,7 @@ export default class SchedulerAppender extends Component {
 			startdate: start,
 			enddate: end,
 			snaps: newXsnaps})
-	}	
+	}
 
 	getInternalMousePosition = (event,CTM)=>{
 		var mouse = document.querySelector("svg").createSVGPoint();
@@ -138,19 +138,19 @@ export default class SchedulerAppender extends Component {
 		this.props.setOriginalColour(this.mouseDownOnBubble.key,'middle')}}
 
 	mouseEvent = (event) => {
-		event.preventDefault();
+		if(this.isOnScheduler){event.preventDefault()}
 		var mouse = this.getInternalMousePosition(event,this.schedulerCTM)
 		var bubble=this.props.data[this.mouseDownOnBubble.key];
 		if(event.buttons===0) {
 			this.schedulerCTM=null
-			if(this.mouseDownOnBubble.key){					
+			if(this.mouseDownOnBubble.key){
 				this.mouseDownOnBubble.dragDiffs=[0,0]
 				//TODO SET ORIGINAL COLOUR
 				this.props.setOriginalColour(this.mouseDownOnBubble.key,'left')
 				this.props.setOriginalColour(this.mouseDownOnBubble.key,'right')
 				this.props.setOriginalColour(this.mouseDownOnBubble.key,'middle')
 				this.mouseDownOnBubble.location="";
-				this.mouseDownOnBubble.key='';				
+				this.mouseDownOnBubble.key='';
 				this.forceUpdate()}}
 		//TODO BUBBLE TRANSFORM
 		if(this.mouseDownOnBubble.location==='left' && !event.shiftKey){
@@ -159,10 +159,10 @@ export default class SchedulerAppender extends Component {
 		if(this.mouseDownOnBubble.location==='right' && !event.shiftKey){
 			this.props.bubbleTransform(	this.mouseDownOnBubble.key,
 										{enddate:this.getNearestDateToX(mouse[0])})}
-		if(this.mouseDownOnBubble.location==='middle' && !event.shiftKey){ 
+		if(this.mouseDownOnBubble.location==='middle' && !event.shiftKey){
 			var newstart = this.getNearestDateToX(mouse[0]-this.mouseDownOnBubble.dragDiffs[0])
 			this.props.bubbleTransform(	this.mouseDownOnBubble.key,
-										{startdate: newstart, 
+										{startdate: newstart,
 										enddate: moment(newstart).add(bubble.enddate-bubble.startdate).toDate()})
 		}
 		//check column interaction.
@@ -173,10 +173,10 @@ export default class SchedulerAppender extends Component {
 			var mousedate = this.getNearestDateToX(mouse[0])
 			var datediff = (mousedate-this.DownDateandSchedulerWidth[0])
 			if(datediff!==0){
-				newstart = moment(this.state.startdate.getTime()-datediff).toDate()		
+				newstart = moment(this.state.startdate.getTime()-datediff).toDate()
 				this.setStartAndEndDate(newstart)
 			}
-		}		
+		}
 	}
 
 	clickedOnScheduler = (event) => {
@@ -236,8 +236,8 @@ export default class SchedulerAppender extends Component {
 	addSchedulerColumn = ()=>{
 		let newColumnsInfo = {...this.props.columnsInfo}
 			const schedulerheaderdata = {
-				snaps: this.state.snaps, 
-				tableRef:this.tableRef, 
+				snaps: this.state.snaps,
+				tableRef:this.tableRef,
 				getRowHeights: this.getRowHeights,
 				getWidth: this.setWidth,
 				mouseOnScheduler: this.clickedOnScheduler
@@ -276,25 +276,25 @@ export default class SchedulerAppender extends Component {
 										middlemouseout:this.middlemouseout,
 										text:tableData[rowId].activityTitle,
 										shadow: shadow,
-										mouseOnScheduler: this.clickedOnScheduler										
+										mouseOnScheduler: this.clickedOnScheduler
 									}
 								}
 		}
 		return tableData
 	}
-	
+
   	render() {
     	return (
 			<div ref={this.tableRef}>
-				{React.cloneElement(this.props.children, 
+				{React.cloneElement(this.props.children,
 					{...this.props,
 					children: this.props.children && this.props.children.props.children,
 					data: this.addSchedulerData(),
 					columnsInfo: this.addSchedulerColumn()
-					})}					
+					})}
 			</div>
 		);
   	}
 
-	
+
 }

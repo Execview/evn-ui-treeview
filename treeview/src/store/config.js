@@ -1,14 +1,14 @@
 import React from 'react';
 
-import InputCellDisplay from './TEMP-TABLE/inputCell/InputCellDisplay'
-import InputCellEditor from './TEMP-TABLE/inputCell/InputCellEditor'
-import ColorCellDisplay from './TEMP-TABLE/colorCell/ColorCellDisplay'
-import ColorCellEditor from './TEMP-TABLE/colorCell/ColorCellEditor'
-import DateCellDisplay from './TEMP-TABLE/dateCell/DateCellDisplay'
-import DateCellEditor from './TEMP-TABLE/dateCell/DateCellEditor'
-import TreeCell from './TreeCell';
-import SchedulerCell from './SchedulerCell'
-import SchedulerHeader from './SchedulerHeader';
+import InputCellDisplay from '../TEMP-TABLE/inputCell/InputCellDisplay'
+import InputCellEditor from '../TEMP-TABLE/inputCell/InputCellEditor'
+import ColorCellDisplay from '../TEMP-TABLE/colorCell/ColorCellDisplay'
+import ColorCellEditor from '../TEMP-TABLE/colorCell/ColorCellEditor'
+import DateCellDisplay from '../TEMP-TABLE/dateCell/DateCellDisplay'
+import DateCellEditor from '../TEMP-TABLE/dateCell/DateCellEditor'
+import TreeCell from '../treeCell/TreeCell';
+import SchedulerCell from '../schedulerCell/SchedulerCell'
+import SchedulerHeader from '../schedulerCell/SchedulerHeader';
 import Data from './configData.json'
 
 export const treeStructure = {
@@ -28,12 +28,12 @@ export const data = Data
 //   	_917gb: { activityTitle: 'Activity Bravo', startdate: '2018-12-17T10:39:57.362Z', enddate: '2018-12-22T10:39:57.362Z', progress: 'green'},
 //   	_1236d: { activityTitle: 'Activity Echo', startdate: '2018-12-21T10:39:57.362Z', enddate: '2018-12-26T10:39:57.362Z', progress: 'green' },
 //   	_k8450: { activityTitle: 'Task with a very very very very long name', startdate: '2018-12-18T10:39:57.362Z', enddate: '2018-12-23T10:39:57.362Z', progress: 'red' },
-//  	_u184b: { activityTitle: 'Subtask Flower', startdate: '2018-12-18T10:39:57.362Z', enddate: '2018-12-23T10:39:57.362Z', progress: 'amber' } 
+//  	_u184b: { activityTitle: 'Subtask Flower', startdate: '2018-12-18T10:39:57.362Z', enddate: '2018-12-23T10:39:57.362Z', progress: 'amber' }
 // }
 
 export const columnsInfo = {
 	// treeExpander: {cellType: 'tree', headerData: 'Tree'},
-	activityTitle: { cellType: 'text', headerData: 'Activity Title' }, //cant edit activity title without this
+	activityTitle: { cellType: 'text', headerData: 'Activity Title', rule: 'textSize' }, //cant edit activity title without this
 	startdate: { cellType: 'date', headerData: 'Start Date', width: 140 },
 	enddate: { cellType: 'date', headerData: 'End Date', width: 140 },
 	progress: { cellType: 'color', headerData: 'RAG' },
@@ -70,4 +70,25 @@ export const cellTypes = {
 		display: <DateCellDisplay />,
 		editor: <DateCellEditor />
 	},
+};
+
+export const rules = {
+  textSize: {
+    errorMessage: 'The size of the field must be of at least 60 characters',
+    validator: function validateString(text) {
+      if (text.replace(/\n/g, '').length > 10) {
+        return true;
+      }
+      return false;
+    }
+  },
+  numberHigher: {
+    errorMessage: 'Field must be a number and higher than 25',
+    validator: function validateNumberInput(text) {
+      if (text > 25) {
+        return true;
+      }
+      return false;
+    }
+  }
 };
