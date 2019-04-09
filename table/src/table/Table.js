@@ -32,7 +32,7 @@ export default class Table extends Component {
       }
     }
 
-    const minWidths = Object.keys(defaults.columnsInfo).reduce((total, key) => { return { ...total, [key]: 70 }; }, {}); 
+    const minWidths = Object.keys(defaults.columnsInfo).reduce((total, key) => { return { ...total, [key]: 70 }; }, {});
 
     this.state = {
       columnsInfo: defaults.columnsInfo,
@@ -258,81 +258,75 @@ export default class Table extends Component {
   }
 
   render() {
-    const tableCentering = { margin: 'auto' };
-    if (this.state.tableWidth < this.state.maxTableWidth) {
-      tableCentering.margin = 0;
-    }
     const style = this.props.style || {};
     return (
-      <div style={tableCentering}>
-        <table className={'table ' + (style.table || '')}>
-          <thead>
-            <tr className={'table-row ' + (style.tableRow || 'table-row-visuals')}>
-              {Object.keys(this.state.columnsInfo).map((colkey, index) => {
-                const col = this.state.columnsInfo[colkey];
-                const lastOne = index === Object.keys(this.state.columnsInfo).length - 1;
+      <table className={'table ' + (style.table || '')} ref={this.props.tableRef}>
+        <thead>
+          <tr className={'table-row ' + (style.tableRow || 'table-row-visuals')}>
+            {Object.keys(this.state.columnsInfo).map((colkey, index) => {
+              const col = this.state.columnsInfo[colkey];
+              const lastOne = index === Object.keys(this.state.columnsInfo).length - 1;
 
-                let spans = 'both';
-                if (this.props.dataSort && this.props.dataSort[col.cellType]) {
-                  if (this.state.column) {
-                    spans = colkey === this.state.column ? (this.state.order === 'desc' ? 'arrow-down' : 'arrow-up') : '';
-                  }
-                } else {
-                  spans = '';
+              let spans = 'both';
+              if (this.props.dataSort && this.props.dataSort[col.cellType]) {
+                if (this.state.column) {
+                  spans = colkey === this.state.column ? (this.state.order === 'desc' ? 'arrow-down' : 'arrow-up') : '';
                 }
-
-                let data = null;
-                const headerStyle = { width: this.state.widths[colkey], overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' };
-                let type = null;
-                if (col.headerType) {
-                  data = col.headerData;
-                  type = this.props.cellTypes[col.headerType];
-                  headerStyle.width = this.state.widths[colkey] - 10;
-                } else {
-                  headerStyle.width = Math.floor(this.state.widths[colkey]);
-                  data = { spans, title: col.headerData, sortData: () => { if (this.props.dataSort && this.props.dataSort[col.cellType]) { this.sortData(colkey, col.cellType); } }, };
-                  type = { display: <HeaderCellDisplay /> };
-                }
-
-                return (
-                  <th className={'table-header ' + (style.tableHeader || 'table-header-visuals')} key={colkey} style={{ width: this.state.widths[colkey] }}>
-                    <Cell data={data} style={headerStyle} type={type} />
-                    {!lastOne && <div style={{ touchAction: 'none', position: 'absolute', zIndex: 1, WebkitTransform: 'translate(7px)', transform: 'translateX(7px)', top: 0, right: 0, height: '100%', width: '15px', cursor: 'w-resize' }} onPointerDown={e => this.onMouseDown(e, colkey)} onPointerUp={this.stopPr} /> }
-                  </th>
-                );
-              })}
-            </tr>
-          </thead>
-          <tbody>
-            {this.state.orderedData.map((entry) => {
-              let column = null;
-              if (entry === this.state.activeCell[0]) {
-                column = this.state.activeCell[1];
+              } else {
+                spans = '';
               }
+
+              let data = null;
+              const headerStyle = { width: this.state.widths[colkey], overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' };
+              let type = null;
+              if (col.headerType) {
+                data = col.headerData;
+                type = this.props.cellTypes[col.headerType];
+                headerStyle.width = this.state.widths[colkey] - 10;
+              } else {
+                headerStyle.width = Math.floor(this.state.widths[colkey]);
+                data = { spans, title: col.headerData, sortData: () => { if (this.props.dataSort && this.props.dataSort[col.cellType]) { this.sortData(colkey, col.cellType); } }, };
+                type = { display: <HeaderCellDisplay /> };
+              }
+
               return (
-                <tr className={'table-row ' + (style.tableRow || 'table-row-visuals')} key={`tr${entry}`}>
-                  <Row
-                    rowId={entry}
-                    columnsInfo={this.props.columnsInfo}
-                    activeColumn={column}
-                    editableCells={this.state.editableCells[entry]}
-                    invalidCells={this.state.invalidCells.filter(obj => obj.id === entry).map(el => el.col)}
-                    rowData={this.state.data[entry]}
-                    widths={this.state.widths}
-                    wrap={this.props.wrap}
-                    onSetActive={this.setActive}
-                    cellTypes={this.props.cellTypes}
-                    onValidateSave={this.validateSave}
-                    rules={this.props.rules}
-                    onMouseDown={this.onMouseDown}
-                    style={style}
-                  />
-                </tr>
+                <th className={'table-header ' + (style.tableHeader || 'table-header-visuals')} key={colkey} style={{ width: this.state.widths[colkey] }}>
+                  <Cell data={data} style={headerStyle} type={type} />
+                  {!lastOne && <div style={{ touchAction: 'none', position: 'absolute', zIndex: 1, WebkitTransform: 'translate(7px)', transform: 'translateX(7px)', top: 0, right: 0, height: '100%', width: '15px', cursor: 'w-resize' }} onPointerDown={e => this.onMouseDown(e, colkey)} onPointerUp={this.stopPr} /> }
+                </th>
               );
             })}
-          </tbody>
-        </table>
-      </div>
+          </tr>
+        </thead>
+        <tbody>
+          {this.state.orderedData.map((entry) => {
+            let column = null;
+            if (entry === this.state.activeCell[0]) {
+              column = this.state.activeCell[1];
+            }
+            return (
+              <tr className={'table-row ' + (style.tableRow || 'table-row-visuals')} key={`tr${entry}`}>
+                <Row
+                  rowId={entry}
+                  columnsInfo={this.props.columnsInfo}
+                  activeColumn={column}
+                  editableCells={this.state.editableCells[entry]}
+                  invalidCells={this.state.invalidCells.filter(obj => obj.id === entry).map(el => el.col)}
+                  rowData={this.state.data[entry]}
+                  widths={this.state.widths}
+                  wrap={this.props.wrap}
+                  onSetActive={this.setActive}
+                  cellTypes={this.props.cellTypes}
+                  onValidateSave={this.validateSave}
+                  rules={this.props.rules}
+                  onMouseDown={this.onMouseDown}
+                  style={style}
+                />
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
     );
   }
 }
