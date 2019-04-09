@@ -1,16 +1,22 @@
 import React, { Component } from 'react';
+import onClickOutside from 'react-onclickoutside';
 import { colors } from '../store/constants';
 import './ColorCell.css';
 
-export default class ColorCellEditor extends Component {
+class ColorCellEditor extends Component {
+  handleClickOutside = () => {
+    this.props.onValidateSave(this.props.data);
+  };
+  
   render() {
     return (
       <div className="color-dropdown" style={this.props.style}>
-        <input type="text" autoFocus onBlur={() => this.props.onValidateSave(this.props.data)} style={{ position: 'absolute', zIndex: -1, border: 0, padding: 0, height: 0 }} />
         <ul className="color-dropdown-menu">
-          {Object.keys(colors).map(objKey => <li className={'color-dropdown-item color-' + objKey} key={objKey} onMouseDown={() => this.props.onValidateSave(objKey)}>{colors[objKey]}</li>)}
+          {Object.keys(colors).map(objKey => <li className={'color-dropdown-item color-' + objKey} key={objKey} onClick={(e) => { e.stopPropagation(); e.preventDefault(); this.props.onValidateSave(objKey); }}>{colors[objKey]}</li>)}
         </ul>
       </div>
     );
   }
 }
+
+export default onClickOutside(ColorCellEditor);

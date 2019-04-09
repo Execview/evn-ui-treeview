@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import './CircleUser.css';
 import GenericDropdown from '../dropdownCell/GenericDropdown';
+import { isMobile } from 'react-device-detect';
 
 export default class AddRole extends PureComponent {
   constructor(props) {
@@ -13,7 +14,7 @@ export default class AddRole extends PureComponent {
   }
 
   onSearchChange = (value) => {
-    const newRows = this.roles.filter(v => v.toLowerCase().includes(value));
+    const newRows = this.roles.filter(v => v.toLowerCase().includes(value.toLowerCase()));
     this.setState({ searchString: value, displayedRows: newRows });
   }
 
@@ -30,6 +31,7 @@ export default class AddRole extends PureComponent {
           searchString={this.state.searchString}
           onSearchChange={this.onSearchChange}
           canSearch={true}
+          autoFocus={!isMobile}
           placeholder="Assign a role..."
           style={{ color: 'white' }}
         />

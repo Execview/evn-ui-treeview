@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import GenericDropdown from '../dropdownCell/GenericDropdown';
+import { isMobile } from 'react-device-detect';
 import TripleFill from './TripleFill';
 import './CircleUser.css';
 
@@ -59,6 +60,7 @@ export default class AddUserDropDown extends PureComponent {
           onBlur={() => { console.log('blurred'); }}
           onSearchChange={this.onSearchChange}
           searchString={this.state.searchString}
+          autoFocus={!isMobile}
           placeholder="Assign a user..."
           canSearch={true}
         />

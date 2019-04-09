@@ -11,16 +11,14 @@ export default class Table extends Component {
   constructor(props) {
     super(props);
     const defaults = this.getDefaults(props);
-
-    const maxTableWidth = defaults.maxTableWidth;
-    let newMaxTableWidth = maxTableWidth;
+    let maxTableWidth = 100;
     const keys = Object.keys(defaults.columnsInfo);
 
     const initialWidths = {};
 
     for (let i = 0; i < keys.length; i++) {
       if (defaults.columnsInfo[keys[i]].width) {
-        newMaxTableWidth -= defaults.columnsInfo[keys[i]].width;
+        maxTableWidth -= defaults.columnsInfo[keys[i]].width;
         initialWidths[keys[i]] = defaults.columnsInfo[keys[i]].width;
       }
     }
@@ -28,19 +26,19 @@ export default class Table extends Component {
     const widthKeys = Object.keys(initialWidths);
     if (keys.length !== widthKeys.length) {
       const keysLeft = keys.filter(el => !widthKeys.includes(el));
-      const defaultWidth = newMaxTableWidth / keysLeft.length;
+      const defaultWidth = maxTableWidth / keysLeft.length;
       for (let i = 0; i < keysLeft.length; i++) {
         initialWidths[keysLeft[i]] = defaultWidth;
       }
     }
 
-    const minWidths = Object.keys(defaults.columnsInfo).reduce((total, key) => { return { ...total, [key]: 70 }; }, {});
+    const minWidths = Object.keys(defaults.columnsInfo).reduce((total, key) => { return { ...total, [key]: 70 }; }, {}); 
+
     this.state = {
       columnsInfo: defaults.columnsInfo,
-      maxTableWidth,
-      tableWidth: maxTableWidth,
       widths: { ...initialWidths },
-      minWidths: { ...minWidths },
+	  minWidths: { ...minWidths },
+      tableWidth: 100,
       columnClicked: null,
       positionClicked: null,
       initialWidth: null,
@@ -61,23 +59,24 @@ export default class Table extends Component {
     window.addEventListener('resize', this.resizeTable);
   }
 
+
   componentWillReceiveProps(newProps) {
     const defaults = this.getDefaults(newProps);
 
-    const maxTableWidth = defaults.maxTableWidth;
-    const initWidth = maxTableWidth / Object.keys(defaults.columnsInfo).length;
-    const initialWidths = Object.keys(defaults.columnsInfo).reduce((total, key) => { return { ...total, [key]: initWidth }; }, {});
-    const minWidths = Object.keys(defaults.columnsInfo).reduce((total, key) => { return { ...total, [key]: 100 }; }, {});
+    // const maxTableWidth = ReactDOM.findDOMNode(this).parentNode.offsetWidth;
+    // const initWidth = maxTableWidth / Object.keys(defaults.columnsInfo).length;
+    // const initialWidths = Object.keys(defaults.columnsInfo).reduce((total, key) => { return { ...total, [key]: initWidth }; }, {});
+    // const minWidths = Object.keys(defaults.columnsInfo).reduce((total, key) => { return { ...total, [key]: 5 }; }, {});
 
-    let newTableWidth = this.state.tableWidth;
-    let newWidths = this.state.widths;
-    let newMinWidths = this.state.minWidths;
+    // let newTableWidth = this.state.tableWidth;
+    // let newWidths = this.state.widths;
+    // let newMinWidths = this.state.minWidths;
 
-    if (JSON.stringify(Object.keys(this.state.columnsInfo)) !== JSON.stringify(Object.keys(defaults.columnsInfo))) {
-      newTableWidth = maxTableWidth;
-      newWidths = initialWidths;
-      newMinWidths = minWidths;
-    }
+    // if (JSON.stringify(Object.keys(this.state.columnsInfo)) !== JSON.stringify(Object.keys(defaults.columnsInfo))) {
+    //   newTableWidth = maxTableWidth;
+    //   newWidths = initialWidths;
+    //   newMinWidths = minWidths;
+    // }
 
     const keys = Object.keys(newProps.data);
     let newOrderedData = Object.keys(newProps.data);
@@ -87,20 +86,17 @@ export default class Table extends Component {
 
       newOrderedData = alreadyOrderedData.concat(dataToAdd);
     }
-
     const newData = newProps.data;
     const newInvalidCells = this.state.invalidCells.filter(el => keys.includes(el.id));
     for (let i = 0; i < newInvalidCells.length; i++) {
       newData[newInvalidCells[i].id] = this.state.data[newInvalidCells[i].id];
     }
 
+    // console.log(newWidths);
 
     this.setState({
       columnsInfo: defaults.columnsInfo,
-      maxTableWidth,
-      tableWidth: newTableWidth,
-      widths: { ...newWidths },
-      minWidths: { ...newMinWidths },
+
       orderedData: newOrderedData,
       data: newData,
       editableCells: defaults.editableCells,
@@ -138,7 +134,6 @@ export default class Table extends Component {
       toReturn.editableCells[dataKeys[i]] = props.editableCells ? props.editableCells[dataKeys[i]] || [] : [];
     }
 
-    toReturn.maxTableWidth = props.tableWidth || 1800;
     return toReturn;
   }
 
@@ -146,9 +141,10 @@ export default class Table extends Component {
     e.stopPropagation();
     e.preventDefault();
     const nextCol = Object.keys(this.state.columnsInfo)[Object.keys(this.state.columnsInfo).indexOf(colName) + 1];
-    this.setState({ positionClicked: e.clientX, columnClicked: colName, initialWidth: this.state.widths[colName], nextInitialWidth: this.state.widths[nextCol] });
-    document.addEventListener('mousemove', this.onMouseMove);
-    document.addEventListener('mouseup', this.removeListener);
+    const newX = e.clientX;
+    this.setState({ positionClicked: newX, columnClicked: colName, initialWidth: this.state.widths[colName], nextInitialWidth: this.state.widths[nextCol] });
+    document.addEventListener('pointermove', this.onMouseMove);
+    document.addEventListener('pointerup', this.removeListener);
   }
 
   onMouseMove = (e) => {
@@ -171,8 +167,9 @@ export default class Table extends Component {
   removeListener = (e) => {
     e.stopPropagation();
     e.preventDefault();
-    document.removeEventListener('mousemove', this.onMouseMove);
-    document.removeEventListener('mouseup', this.removeListener);
+    this.setState({ positionClicked: null });
+    document.removeEventListener('pointermove', this.onMouseMove);
+    document.removeEventListener('pointerup', this.removeListener);
   }
 
   validateSave = (cellText) => {
@@ -247,18 +244,11 @@ export default class Table extends Component {
   }
 
   resizeTable() {
-    const xd = ReactDOM.findDOMNode(this).parentNode.offsetWidth;
-    const windowWidth = xd > this.state.maxTableWidth ? this.state.maxTableWidth : xd;
+    const windowWidth = ReactDOM.findDOMNode(this).parentNode.offsetWidth - 5;
     if (this.state.tableWidth !== windowWidth) {
-      const keys = Object.keys(this.state.widths);
-      const toRet = keys.map(colName => this.state.widths[colName] * 100 / this.state.tableWidth);
-      const newScale = toRet.map(wdt => wdt * windowWidth / 100);
-
-      const newCopy = { ...this.state.widths };
-      for (let i = 0; i < keys.length; i++) {
-        newCopy[keys[i]] = newScale[i];
-      }
-      this.setState({ widths: newCopy, tableWidth: windowWidth });
+      const scaleFactor = (windowWidth / this.state.tableWidth);
+      const scaledWidths = Object.keys(this.state.widths).reduce((total, col) => { return { ...total, [col]: this.state.widths[col] * scaleFactor }; }, {});
+      this.setState({ widths: scaledWidths, tableWidth: windowWidth });
     }
   }
 
@@ -268,16 +258,16 @@ export default class Table extends Component {
   }
 
   render() {
-    const tableCentering = { maxWidth: this.state.tableWidth, margin: 'auto' };
+    const tableCentering = { margin: 'auto' };
     if (this.state.tableWidth < this.state.maxTableWidth) {
       tableCentering.margin = 0;
     }
     const style = this.props.style || {};
     return (
       <div style={tableCentering}>
-        <table className={style.table || 'table'}>
+        <table className={'table ' + (style.table || '')}>
           <thead>
-            <tr className={style.tableRow || 'table-row'}>
+            <tr className={'table-row ' + (style.tableRow || 'table-row-visuals')}>
               {Object.keys(this.state.columnsInfo).map((colkey, index) => {
                 const col = this.state.columnsInfo[colkey];
                 const lastOne = index === Object.keys(this.state.columnsInfo).length - 1;
@@ -305,9 +295,9 @@ export default class Table extends Component {
                 }
 
                 return (
-                  <th className={style.tableHeader || 'table-header'} key={colkey} style={{ width: this.state.widths[colkey] }}>
+                  <th className={'table-header ' + (style.tableHeader || 'table-header-visuals')} key={colkey} style={{ width: this.state.widths[colkey] }}>
                     <Cell data={data} style={headerStyle} type={type} />
-                    {!lastOne && <div style={{ position: 'absolute', zIndex: 1, transform: 'translateX(7px)', top: 0, right: 0, height: '100%', width: '15px', cursor: 'w-resize' }} onMouseDown={e => this.onMouseDown(e, colkey)} onClick={this.stopPr} /> }
+                    {!lastOne && <div style={{ touchAction: 'none', position: 'absolute', zIndex: 1, WebkitTransform: 'translate(7px)', transform: 'translateX(7px)', top: 0, right: 0, height: '100%', width: '15px', cursor: 'w-resize' }} onPointerDown={e => this.onMouseDown(e, colkey)} onPointerUp={this.stopPr} /> }
                   </th>
                 );
               })}
@@ -320,7 +310,7 @@ export default class Table extends Component {
                 column = this.state.activeCell[1];
               }
               return (
-                <tr className={style.tableRow || 'table-row'} key={`tr${entry}`}>
+                <tr className={'table-row ' + (style.tableRow || 'table-row-visuals')} key={`tr${entry}`}>
                   <Row
                     rowId={entry}
                     columnsInfo={this.props.columnsInfo}

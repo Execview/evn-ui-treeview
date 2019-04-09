@@ -11,7 +11,8 @@ import CircleUserDisplay from '../CircleUser/CircleUserDisplay';
 import UserHeaderDisplay from '../headers/UserHeaderDisplay';
 import { countries, priority } from './constants';
 
-export const columnsInfo = {
+
+export const columnsInfo1 = {
   company: { cellType: 'text', headerData: 'CompanyCompanyCompanyCompanyCompany', rule: 'textSize' },
   contact: { cellType: 'text', headerData: 'Contact', rule: 'textSize' },
   country: { cellType: 'dropdown', headerData: 'Country' },
@@ -20,12 +21,11 @@ export const columnsInfo = {
   progress: { cellType: 'color', headerData: 'Progress' } };
 
 export const columnsInfo2 = {
-  activityId: { cellType: 'text', headerData: 'Activity ID', width: 200 },
-  activityTitle: { cellType: 'text', headerData: 'Activity Title', rule: 'textSize', headerType: 'dropdown' },
-  startDate: { cellType: 'date', headerData: 'Start Date', width: 200 },
-  dueDate: { cellType: 'date', headerData: 'Due Date', width: 200 },
-  assignedUsers: { cellType: 'users', headerData: 'Assigned Users', width: 70, headerType: 'userHeader' },
-  progress: { cellType: 'color', headerData: 'RAG', width: 150 },
+  activityId: { cellType: 'text', headerData: 'Activity ID', width: 5 },
+  startDate: { cellType: 'date', headerData: 'Start Date', width: 10 },
+  dueDate: { cellType: 'date', headerData: 'Due Date', width: 10 },
+  assignedUsers: { cellType: 'users', headerData: 'Assigned Users', width: 10, headerType: 'userHeader' },
+  progress: { cellType: 'color', headerData: 'RAG', width: 10 },
   latestProgress: { cellType: 'text', headerData: 'Latest Progress' }
   // employeeName: { cellType: 'dropdown', headerData: 'Employee Name', width: 400 },
 };
@@ -36,7 +36,7 @@ export const columnsInfo3 = {
   employeeName: { cellType: 'dropdown', headerData: 'Employee Name' },
   progress: { cellType: 'color', headerData: 'RAG' } };
 
-export const editableCells = {
+export const editableCells1 = {
   _w1232: ['company', 'contact', 'country', 'value', 'progress', 'dueDate'],
   _1235d: ['company', 'contact', 'country', 'value', 'progress', 'dueDate'],
   _m7ad1: ['company', 'contact', 'country', 'value', 'progress', 'dueDate'],
@@ -46,14 +46,16 @@ export const editableCells = {
   _u184b: ['company', 'contact', 'country', 'value', 'progress', 'dueDate'] };
 
 export const editableCells2 = {
-  _m7ad1: ['activityId', 'activityTitle', 'startDate', 'latestProgress', 'progress', 'dueDate', 'employeeName'],
-  _917gb: ['activityId', 'activityTitle', 'startDate', 'latestProgress', 'progress', 'dueDate', 'employeeName'],
-  _1236d: ['activityId', 'activityTitle', 'startDate', 'latestProgress', 'progress', 'dueDate', 'employeeName'],
-  _k8450: ['activityId', 'activityTitle', 'startDate', 'latestProgress', 'progress', 'dueDate', 'employeeName'],
-  _u184b: ['activityId', 'activityTitle', 'startDate', 'latestProgress', 'progress', 'dueDate', 'employeeName'] };
+  _1: ['activityId', 'activityTitle', 'startDate', 'latestProgress', 'progress', 'dueDate', 'employeeName'],
+  _2: ['activityId', 'activityTitle', 'startDate', 'latestProgress', 'progress', 'dueDate', 'employeeName'],
+  _3: ['activityId', 'activityTitle', 'startDate', 'latestProgress', 'progress', 'dueDate', 'employeeName'],
+  _4: ['activityId', 'activityTitle', 'startDate', 'latestProgress', 'progress', 'dueDate', 'employeeName'],
+  _5: ['activityId', 'activityTitle', 'startDate', 'latestProgress', 'progress', 'dueDate', 'employeeName'],
+  _6: ['activityId', 'activityTitle', 'startDate', 'latestProgress', 'progress', 'dueDate', 'employeeName'],
+  _7: ['activityId', 'activityTitle', 'startDate', 'latestProgress', 'progress', 'dueDate', 'employeeName'] };
 
 
-export const newData = { _w1232: { company: 'McLaren', contact: 'WL', country: 'United Kingdom', value: 26, progress: 'red', dueDate: '2018-03-17T10:39:57.362Z' },
+export const newData1 = { _w1232: { company: 'McLaren', contact: 'WL', country: 'United Kingdom', value: 26, progress: 'red', dueDate: '2018-03-17T10:39:57.362Z' },
   _1235d: { company: 'Koenigsegg', contact: 'JJ', country: 'Sweden', value: 54, progress: 'amber', dueDate: '2017-08-17T10:39:57.362Z' },
   _m7ad1: { company: 'Porche', contact: 'ZG', country: 'Germany', value: 78, progress: 'green' },
   _917gb: { company: 'Aston Martin', contact: 'JD', country: 'United Kingdom', value: 132, progress: 'amber', dueDate: '1996-09-13T10:39:57.362Z' },
@@ -61,26 +63,27 @@ export const newData = { _w1232: { company: 'McLaren', contact: 'WL', country: '
   _k8450: { company: 'Bugatti', contact: 'DT', country: 'France', progress: 'red', dueDate: '2019-01-17T10:39:57.362Z' },
   _u184b: { company: 'Mercedes-Benz', contact: 'WL', country: 'Germany', progress: 'green' } };
 
-export const newData2 = { _w1232: { activityId: '12425', activityTitle: 'Fix PDF', startDate: '2017-08-17T10:39:57.362Z', latestProgress: 'Fix Chromium', progress: 'green', dueDate: '2018-03-17T10:39:57.362Z', employeeName: '', assignedUsers: [{ user: 'abd4', role: 'Project Manager', department: 'Kitten Petter' }, { user: 'gte3', role: 'Project Manager' }, { user: 'plo4', role: 'Pleb' }] },
-  _1235d: { activityId: '1251251', activityTitle: 'Mobile Shipment', startDate: '2017-08-17T10:39:57.362Z', latestProgress: 'The current task is in progress and about to be evaluated', progress: 'amber', dueDate: '2017-08-17T10:39:57.362Z', employeeName: 'Mark', assignedUsers: [{ user: 'abd4', role: 'Legendary Consumer' }] },
-  _m7ad1: { activityId: '11241', activityTitle: 'Things to Do', startDate: '2017-08-17T10:39:57.362Z', latestProgress: 'In progress', progress: 'red', employeeName: 'Paul', assignedUsers: [{ user: 'rew7', role: 'Wizard' }, { user: 'gte3', role: 'Project Manager' }] },
-  _917gb: { activityId: '765976', activityTitle: 'Replace Tire', startDate: '2017-08-17T10:39:57.362Z', latestProgress: 'Done', dueDate: '1996-09-13T10:39:57.362Z', employeeName: 'Agam', assignedUsers: [{ user: 'jio9', role: 'Project Manager' }] },
-  _1236d: { activityId: '783434', activityTitle: 'ANUYIC', startDate: '2017-08-17T10:39:57.362Z', latestProgress: '', employeeName: 'James', progress: 'green', assignedUsers: [{ user: 'abd4', role: 'Peasant' }, { user: 'gte3', role: 'Project Manager' }, { user: 'plo4', role: 'Peasant' }, { user: 'rew7', role: 'Project Manager' }, { user: 'jio9', role: 'Slacker' }] },
-  _k8450: { activityId: '12657', activityTitle: 'OAUWDA', startDate: '2017-08-17T10:39:57.362Z', latestProgress: '', dueDate: '2019-01-17T10:39:57.362Z', employeeName: 'Andras', assignedUsers: [], progress: 'red' },
-  _u184b: { activityId: '612422', activityTitle: 'AWDIA', startDate: '2017-08-17T10:39:57.362Z', latestProgress: '', employeeName: 'Salman', progress: 'amber' } };
+export const newData2 = { _1: { activityId: '12425', activityTitle: 'Fix PDF', startDate: '2017-08-17T10:39:57.362Z', latestProgress: 'Fix Chromium', progress: 'green', dueDate: '2018-03-17T10:39:57.362Z', employeeName: '', assignedUsers: [{ user: 'abd4', role: 'Project Manager', department: 'Kitten Petter' }, { user: 'gte3', role: 'Project Manager' }, { user: 'plo4', role: 'Pleb' }] },
+  _2: { activityId: '1251251', activityTitle: 'Mobile Shipment', startDate: '2017-08-17T10:39:57.362Z', latestProgress: 'The current task is in progress and about to be evaluated', progress: 'amber', dueDate: '2017-08-17T10:39:57.362Z', employeeName: 'Mark', assignedUsers: [{ user: 'abd4', role: 'Legendary Consumer' }] },
+  _3: { activityId: '11241', activityTitle: 'Things to Do', startDate: '2017-08-17T10:39:57.362Z', latestProgress: 'In progress', progress: 'red', employeeName: 'Paul', assignedUsers: [{ user: 'rew7', role: 'Wizard' }, { user: 'gte3', role: 'Project Manager' }] },
+  _4: { activityId: '765976', activityTitle: 'Replace Tire', startDate: '2017-08-17T10:39:57.362Z', latestProgress: 'Done', dueDate: '1996-09-13T10:39:57.362Z', employeeName: 'Agam', assignedUsers: [{ user: 'jio9', role: 'Project Manager' }] },
+  _5: { activityId: '783434', activityTitle: 'ANUYIC', startDate: '2017-08-17T10:39:57.362Z', latestProgress: '', employeeName: 'James', progress: 'green', assignedUsers: [{ user: 'abd4', role: 'Peasant' }, { user: 'gte3', role: 'Project Manager' }, { user: 'plo4', role: 'Peasant' }, { user: 'rew7', role: 'Project Manager' }, { user: 'jio9', role: 'Slacker' }] },
+  _6: { activityId: '12657', activityTitle: 'OAUWDA', startDate: '2017-08-17T10:39:57.362Z', latestProgress: '', dueDate: '2019-01-17T10:39:57.362Z', employeeName: 'Andras', assignedUsers: [], progress: 'red' },
+  _7: { activityId: '612422', activityTitle: 'AWDIA', startDate: '2017-08-17T10:39:57.362Z', latestProgress: '', employeeName: 'Salman', progress: 'amber' } };
 
 const crypto = require('crypto');
 
 const hash = crypto.createHash('sha256');
 
+
 const testData = {};
+const testEditableCells = {};
 for (let i = 0; i < 200; i++) {
   const newId = '_' + hash.update(Date.now() + Math.random().toString()).digest('hex').substring(0, 5);
   testData[newId] = { company: 'McLaren', contact: 'WL', country: 'United Kingdom', value: 26, progress: 'green', dueDate: '2018-03-17T10:39:57.362Z' };
-  editableCells[newId] = ['company', 'contact', 'country', 'value', 'progress', 'dueDate'];
+  testEditableCells[newId] = ['company', 'contact', 'country', 'value', 'progress', 'dueDate'];
 }
-
-export { testData };
+export { testData, testEditableCells }
 
 const employees = ['Andrei', 'Andras', 'Agam', 'Salman', 'James', 'Mark', 'Claire'];
 
@@ -117,7 +120,7 @@ export const cellTypes = {
   },
   dropdown: {
     display: <InputCellDisplay />,
-    editor: <DropdownCellEditor dropdownList={employees} />
+    editor: <DropdownCellEditor dropdownList={countries} />
   },
   users: {
     display: <CircleUserDisplay userProfiles={users} />,
@@ -141,9 +144,9 @@ export const cellTypes = {
 
 export const rules = {
   textSize: {
-    errorMessage: 'The size of the field must be of at least 60 characters',
+    errorMessage: 'The size of the field must be of at least 10 characters',
     validator: function validateString(text) {
-      if (text.replace(/\n/g, '').length > 10) {
+      if (text.replace(/\n/g, '').length >= 10) {
         return true;
       }
       return false;

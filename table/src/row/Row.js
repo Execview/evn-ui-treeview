@@ -37,7 +37,7 @@ export default class Row extends Component {
     const cellStyleClass = this.props.style || {};
     return (
       Object.keys(columnsInfo).map((col, index) => {
-        const editRights = editableCells.includes(col);
+        let editRights = editableCells.includes(col);
         const red = invalidCells.includes(col);
 
         const isActive = (col === this.props.activeColumn && editRights);
@@ -50,8 +50,8 @@ export default class Row extends Component {
         }
         const errorText = rules[columnsInfo[col].rule] ? rules[columnsInfo[col].rule].errorMessage : null;
         return (
-          <td className={cellStyleClass.tableDatum || 'table-datum'} key={col + this.props.rowId}>
-            {!lastOne && this.props.onMouseDown && <div style={{ position: 'absolute', zIndex: 1, transform: 'translateX(7px)', top: 0, right: 0, height: '100%', width: '15px', cursor: 'w-resize' }} onMouseDown={e => onMouseDown(e, col)} /> }
+          <td className={'table-datum ' + (cellStyleClass.tableDatum || 'table-datum-visuals')} key={col + this.props.rowId}>
+            {!lastOne && this.props.onMouseDown && <div style={{ touchAction: 'none', position: 'absolute', zIndex: 1, transform: 'translateX(7px)', top: 0, right: 0, height: '100%', width: '15px', cursor: 'w-resize' }} onPointerDown={e => onMouseDown(e, col)} /> }
             <div
               title={columnsInfo[col].colTitle}
               className={(isActive ? 'active-cell' : 'table-label ') + (editRights ? '' : 'no-edit')}
@@ -71,5 +71,4 @@ export default class Row extends Component {
       })
     );
   }
-  
 }

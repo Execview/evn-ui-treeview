@@ -11,7 +11,7 @@ export default class DropdownCellEditor extends Component {
     };
   }
 
-  archChange = (value) => {
+  onSearchChange = (value) => {
     const newRows = this.props.dropdownList.filter(v => v.toLowerCase().includes(value));
     this.setState({ searchString: value, displayedRows: newRows });
   }
@@ -29,6 +29,7 @@ export default class DropdownCellEditor extends Component {
           canSearch={true}
           onSearchChange={this.onSearchChange}
           searchString={this.state.searchString}
+          autoFocus={true}
           options={options}
         />
       </div>

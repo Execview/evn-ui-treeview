@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import TableWrapper from './tableWrapper/TableWrapper';
 import './App.css';
 import * as actionTypes from './store/actionTypes';
-import { cellTypes, dataSort, rowValidation, rules, columnsInfo, columnsInfo2 } from './store/configs';
+import { cellTypes, dataSort, rowValidation, rules, columnsInfo } from './store/configSwitch';
 import { cats } from './store/ElCatso';
 
 class App extends Component {
@@ -40,7 +40,7 @@ class App extends Component {
         {this.state.display && (
           <div>
             <TableWrapper
-              columnsInfo={columnsInfo2}
+              columnsInfo={columnsInfo}
               editableCells={this.props.editableCells}
               data={t2}
               cellTypes={cellTypes}

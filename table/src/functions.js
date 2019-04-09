@@ -73,4 +73,8 @@ export const recursiveDeepDiffs = (o, u, options = {}) => {
   return result === sit.equal ? null : result;
 };
 
-export default 0; 
+export const OrderedObjectAssign = (o, ukey, uval) => {
+  return Object.keys(o).reduce((total, key) => { const newVal = key === ukey ? uval : o[key]; return { ...total, [key]: newVal }; }, {});
+};
+
+export default 0;
