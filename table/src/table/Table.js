@@ -259,7 +259,9 @@ export default class Table extends Component {
 
   render() {
     const style = this.props.style || {};
+    this.props.onRender && this.props.onRender();
     return (
+      <div>
       <table className={'table ' + (style.table || '')} ref={this.props.tableRef}>
         <thead>
           <tr className={'table-row ' + (style.tableRow || 'table-row-visuals')}>
@@ -327,6 +329,7 @@ export default class Table extends Component {
           })}
         </tbody>
       </table>
+      </div>
     );
   }
 }
