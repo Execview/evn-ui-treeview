@@ -57,6 +57,7 @@ export default class Table extends Component {
   componentDidMount() {
     this.resizeTable();
     window.addEventListener('resize', this.resizeTable);
+    this.props.onRender && this.props.onRender();
   }
 
 
@@ -101,6 +102,10 @@ export default class Table extends Component {
       data: newData,
       editableCells: defaults.editableCells,
     }, this.resizeTable);
+  }
+
+  componentDidUpdate() {
+    this.props.onRender && this.props.onRender();
   }
 
   componentWillUnmount() {
@@ -259,7 +264,6 @@ export default class Table extends Component {
 
   render() {
     const style = this.props.style || {};
-    this.props.onRender && this.props.onRender();
     return (
       <div>
       <table className={'table ' + (style.table || '')} ref={this.props.tableRef}>
