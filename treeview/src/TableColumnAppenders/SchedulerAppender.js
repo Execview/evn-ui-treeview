@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 var Rx = require('rxjs/Rx')
 var moment = require('moment')
 
-var mousepositionstream = Rx.Observable.fromEvent(document,'pointermove').merge(Rx.Observable.fromEvent(document,'pointerdown')).merge(Rx.Observable.fromEvent(document,'pointerup'))
+var mousepositionstream = Rx.Observable.fromEvent(document,'pointermove').merge(Rx.Observable.fromEvent(document,'pointerdown'))
 
 export default class SchedulerAppender extends Component {
 		constructor(props){
@@ -11,10 +11,12 @@ export default class SchedulerAppender extends Component {
 		mousepositionstream.subscribe((event)=>this.mouseEvent(event))
 		this.tableRef= React.createRef();
 
-		this.state = {startdate: null, enddate: null, snaps: [], dayWidth: 80}
+		this.bubbleHeight = 40;
+
+		this.state = {startdate: null, enddate: null, snaps: [], dayWidth: 80, rowHeights: []}
 		this.extrasnaps = 2
 
-		this.InitialStartDate = new Date("2019-02-15")
+		this.InitialStartDate = new Date("2018-12-15")
 		//Object.keys(this.props.data).map(key=>{return this.props.data[key].startdate})[0] ;//new Date("2019-02-15")
 		this.Lightcolours = [	['Blue','rgb(190,230,240)'],
 								['Red','rgb(240,180,190)'],
@@ -114,9 +116,11 @@ export default class SchedulerAppender extends Component {
 		this.forceUpdate();
 	}
 	leftclickup = (key,event)=>{
+		console.log(this.mouseDownOnBubble.key);
 		this.props.tryToPerformLink(key,this.mouseDownOnBubble.key,'left',this.mouseDownOnBubble.location);
 		this.props.setOriginalColour(key,'left')}
 	rightclickup = (key,event)=>{
+		
 		this.props.tryToPerformLink(key,this.mouseDownOnBubble.key,'right',this.mouseDownOnBubble.location);
 		this.props.setOriginalColour(key,'right')}
 	middleclickup = (key,event)=>{
@@ -230,65 +234,108 @@ export default class SchedulerAppender extends Component {
 			this.setStartAndEndDate(this.state.startdate,this.state.enddate)
 		}
 	}
+	
+	onTableRender = ()=>{
+		const newRowHeights=this.getRowHeights(this.tableRef);
+		if(JSON.stringify(this.state.rowHeights)!=JSON.stringify(newRowHeights)){
+			this.setState({rowHeights: newRowHeights})
+		}
+	}
+
+	// go through each row, find all the children
+	// go thought each child, find the row number they're on                displayedRows.indexOf(childId)
+	//getrowY needs to return the sum of all the rows till the row number provided + half of that(??)
+	//add that link to the array of links
 
 	addSchedulerColumn = ()=>{
+		const rowHeights = this.getRowHeights(this.tableRef);
+		const getRowY = (i) => {
+			console.log([...rowHeights].splice(0,i).reduce((total,rh)=>total+rh,0)+this.bubbleHeight/2);
+			return [...rowHeights].splice(0,i).reduce((total,rh)=>total+rh,0)+this.bubbleHeight/2
+		}
+		console.log(rowHeights);
+		const displayedRows = Object.keys(this.props.data)
+		const drawLinks = [] 
+		for(let i=0; i<displayedRows.length; i++){
+			const rowId = displayedRows[i]
+			let childlinks = this.props.data[rowId].ChildBubbles
+			for(const childId in childlinks){
+				const parentdate = this.props.data[rowId]['right'=== childlinks[childId].parentside ? "enddate" : "startdate"]
+				const childdate = this.props.data[childId]['right'=== childlinks[childId].childside ? "enddate" : "startdate"]
+
+				const parentx = this.getNearestSnapXToDate(parentdate)
+				const parenty = getRowY(i+1)
+
+				const childx = this.getNearestSnapXToDate(childdate) 
+				const childy = getRowY(displayedRows.indexOf(childId)+1) - 1
+
+				const link = [parentx,parenty,childx,childy]
+				drawLinks.push(link)
+			}
+		}
+
+
 		let newColumnsInfo = {...this.props.columnsInfo}
 			const schedulerheaderdata = {
 				snaps: this.state.snaps,
-				tableRef:this.tableRef,
-				getRowHeights: this.getRowHeights,
+				tableHeight: this.state.rowHeights.reduce((total,rh)=>total+rh,0),
+				links: drawLinks, //[[10,10,80,100],[30,50,100,130]],
 				getWidth: this.setWidth,
 				mouseOnScheduler: this.clickedOnScheduler
 			}
-			newColumnsInfo = {...this.props.columnsInfo, scheduler: {cellType: 'scheduler', width: 50, headerType: 'schedulerHeader', headerData: schedulerheaderdata}}
+			newColumnsInfo = {...this.props.columnsInfo, scheduler: {cellType: 'scheduler', width: 65, headerType: 'schedulerHeader', headerData: schedulerheaderdata}}
 		return newColumnsInfo
 	}
 
 	addSchedulerData() {
-		let cellHeight = 40;
 		const displayedRows = Object.keys(this.props.data)
 		let tableData = {...this.props.data}
 		for(let i=0; i<displayedRows.length; i++){
 			const rowId = displayedRows[i]
 			const shadow = rowId===this.mouseDownOnBubble.key ? true : false
 			tableData[rowId] = {...tableData[rowId],
-									scheduler:{
-										//Bubble Data
-										bkey: rowId,
-										startpoint: [this.getNearestSnapXToDate(tableData[rowId].startdate),0],
-										endpoint: [this.getNearestSnapXToDate(tableData[rowId].enddate),cellHeight],
-										colour: this.getColourFromMap(tableData[rowId].colours.middle,this.colours),
-										leftcolour: this.getColourFromMap(tableData[rowId].colours.left,this.colours),
-										rightcolour: this.getColourFromMap(tableData[rowId].colours.right,this.colours),
-										leftclickdown:this.leftclickdown,
-										rightclickdown:this.rightclickdown,
-										middleclickdown:this.middleclickdown,
-										leftclickup:this.leftclickup,
-										rightclickup:this.rightclickup,
-										middleclickup:this.middleclickup,
-										leftmousein:this.leftmousein,
-										leftmouseout:this.leftmouseout,
-										rightmousein:this.rightmousein,
-										rightmouseout:this.rightmouseout,
-										middlemousein:this.middlemousein,
-										middlemouseout:this.middlemouseout,
-										text:tableData[rowId].activityTitle,
-										shadow: shadow,
-										mouseOnScheduler: this.clickedOnScheduler
-									}
-								}
+				scheduler:{
+					//Bubble Data
+					bkey: rowId,
+					startpoint: [this.getNearestSnapXToDate(tableData[rowId].startdate),0],
+					endpoint: [this.getNearestSnapXToDate(tableData[rowId].enddate),this.bubbleHeight],
+					colour: this.getColourFromMap(tableData[rowId].colours.middle,this.colours),
+					leftcolour: this.getColourFromMap(tableData[rowId].colours.left,this.colours),
+					rightcolour: this.getColourFromMap(tableData[rowId].colours.right,this.colours),
+					leftclickdown:this.leftclickdown,
+					rightclickdown:this.rightclickdown,
+					middleclickdown:this.middleclickdown,
+					leftclickup:this.leftclickup,
+					rightclickup:this.rightclickup,
+					middleclickup:this.middleclickup,
+					leftmousein:this.leftmousein,
+					leftmouseout:this.leftmouseout,
+					rightmousein:this.rightmousein,
+					rightmouseout:this.rightmouseout,
+					middlemousein:this.middlemousein,
+					middlemouseout:this.middlemouseout,
+					text:tableData[rowId].activityTitle,
+					shadow: shadow,
+					mouseOnScheduler: this.clickedOnScheduler,
+					shape: tableData[rowId].type
+				}
+			}
 		}
 		return tableData
 	}
 
   	render() {
-    	return (			
-			React.cloneElement(this.props.children,
-				{...this.props,
-				children: this.props.children && this.props.children.props.children,
-				data: this.addSchedulerData(),
-				columnsInfo: this.addSchedulerColumn()
-			})
+		const {bubbleTransform,setBubbleSideColour,setOriginalColour,tryToPerformLink,tryToPerformAssociation,...newProps} = this.props
+    	return (
+			React.cloneElement(newProps.children,
+				{...newProps,
+					children: newProps.children && newProps.children.props.children,
+					data: this.addSchedulerData(),
+					columnsInfo: this.addSchedulerColumn(),
+					tableRef: this.tableRef,
+					onRender: ((x)=>{(newProps.onRender && newProps.onRender(x));this.onTableRender()})
+				}
+			)
 		);
   	}
 

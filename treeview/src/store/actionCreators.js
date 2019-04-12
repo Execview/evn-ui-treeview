@@ -17,7 +17,7 @@ export const getInitialData = () => (dispatch) => {
 			fetch("https://evnext-api.evlem.net/api/activity_tree_list/e55f6ee3-a96e-4ea7-bcfa-b75e39ebcfb2",{method:"GET", headers: {Authorization: `Bearer ${token}`}}).then(data=> data.json())
 		])
 	})
-    .then(([data,links]) => { 
+    .then(([data,links]) => {
 		const ourData = translateData(data,links)
 		const newEditableCells = Object.keys(ourData).reduce((total,key)=>{return {...total,[key]:['activityTitle', 'startdate', 'progress', 'enddate']}},{})
 		dispatch({

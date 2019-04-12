@@ -4,7 +4,6 @@ import * as actionTypes from '../store/actionTypes';
 import { connect } from 'react-redux';
 
 class SchedulerConnector extends Component {
-	// SchedulerConnector -> SchedulerAppender -> TreeConnector -> TreeAppender -> Table
   	render() {
     	return (
 			<SchedulerAppender 

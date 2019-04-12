@@ -13,8 +13,8 @@ import './App.css'
 
 class App extends Component {
 	componentDidMount() {
-		this.props.onGetInitialData();
-		//this.props.loadpls();
+		//this.props.onGetInitialData();
+		this.props.loadpls();
 	}
 
   	render() {
@@ -29,7 +29,7 @@ class App extends Component {
 					cellTypes={cellTypes}
 					onSave={this.props.onSave}
 					dontPreserveOrder={true}
-					wrap={true}
+					wrap={false}
 					rules={rules}
 				>
 					<SchedulerConnector>

@@ -21,7 +21,7 @@ const ess = new EventStoreSynchroniser()
 
 function reducer(state=initialState,action) {
 	switch(action.type) {
-		case "loadFromConfig": {return reducer(initialState,{type:actionTypes.LOAD_DATA});}
+		case "loadFromConfig": {return reducer(initialState,{type:actionTypes.LOAD_DATA, editableCells: state.editableCells});}
 
 		case actionTypes.TOGGLE_NODE: {
 			const updatedState = { ...state,
@@ -85,11 +85,10 @@ function reducer(state=initialState,action) {
 		}
 		case actionTypes.LOAD_DATA: {
 			let translateddata = data;
-			translateddata = action.data
-			// translateddata = data
+			// translateddata = action.data
+			translateddata = data
 			let newData = objectCopierWithStringToDate(translateddata)
 			newData = Object.keys(newData).reduce((total,el)=>{return {...total,[el]:{...newData[el],colours:{left:newData[el].colour,right:newData[el].colour,middle:newData[el].colour,original:newData[el].colour}}}},{})
-
 			let newState = {...state, _data:newData, token:action.token, editableCells:action.editableCells}
 
 			Object.keys(newState._data).forEach(bubblekey=>{
@@ -106,7 +105,6 @@ function reducer(state=initialState,action) {
 			if (action.sendEvents) {
 				ess.sendToDB(state.token,state);
 			}
-
 			let newState = {...state}
 			const displayedTreeStructure = getDisplayedTreeStructure(newState._data, getParentNodes(newState._data));
 			const dataToDisplay = {}
@@ -175,16 +173,19 @@ function reducer(state=initialState,action) {
 
 		case actionTypes.PERFORM_LINK: {
 			console.log("performing link")
+			console.log(action)
 			if((action.parentside === 'left' || action.parentside === 'right') && action.childkey!==action.parentkey){
 				var finalstate = {...state}
 				var parentpoint = 'right'===action.parentside ? "enddate" : "startdate"
 				var childpoint = 'right'===action.childside ? "enddate" : "startdate"
 				// if child doesnt have parent AND parent hasnt already linked child
 				//TODO MORE IFS BECAUSE OF ASSOCIATION!
+				console.log("if number 2")
 				if((state._data[action.childkey]["ParentBubble"]==='')&&(state._data[action.parentkey]["ChildBubbles"][action.childkey]==null)){
 					var xGapDate = state._data[action.childkey][childpoint]-state._data[action.parentkey][parentpoint];
 					finalstate = reducer(finalstate,{type:actionTypes.ADD_CHILD_LINK,parentkey:action.parentkey,childkey:action.childkey,parentside:action.parentside,childside:action.childside,xGapDate:xGapDate})
 					finalstate = reducer(finalstate,{type:actionTypes.ADD_PARENT_LINK,childkey:action.childkey,parentkey:action.parentkey})
+					console.log(finalstate);
 					return reducer(finalstate,{type:actionTypes.UPDATE_DATA, sendEvents:true});
 				} else {
 					console.log('already linked!');

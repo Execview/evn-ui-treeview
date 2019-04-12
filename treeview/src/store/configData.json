@@ -1,15 +1,18 @@
 {
 	"_1235d": {
-		"startdate": "2018-12-17T00:00:00.000Z",
-		"enddate": "2018-12-19T00:00:00.000Z",
+		"startdate": "2018-12-16T00:00:00.000Z",
+		"enddate": "2018-12-18T00:00:00.000Z",
 		"colour": "Blue",
 		"ChildAssociatedBubbles":[],
-    "ParentAssociatedBubble": "",
-		"ChildBubbles": {			},
-    "ParentBubble": "",
+    	"ParentAssociatedBubble": "",
+		"ChildBubbles": {
+			"_m7ad1":{"childside":"left", "parentside":"right", "xGapDate": 86400000}
+			},
+   		"ParentBubble": "",
 		"open":false,
-    "activityTitle": "Project Scorpio",
-    "progress": "amber"
+    	"activityTitle": "Project Scorpio",
+		"progress": "amber",
+		"type": "bubble"
 	},
 	"_m7ad1": {
 		"startdate": "2018-12-19T00:00:00.000Z",
@@ -18,10 +21,11 @@
 		"ChildAssociatedBubbles":["_917gb", "_1236d"],
 		"ParentAssociatedBubble": "",
 		"ChildBubbles": {},
-		"ParentBubble": "",
+		"ParentBubble": "_1235d",
 		"open":false,
 		"activityTitle": "Project X",
-		"progress": "red"
+		"progress": "red",
+		"type": "square"
 	},
 	"_917gb": {
 		"startdate": "2018-12-19T00:00:00.000Z",
@@ -33,7 +37,8 @@
 		"ParentBubble": "",
 		"open":false,
 		"activityTitle": "Activity Bravo",
-		"progress": "green"
+		"progress": "green",
+		"type": "bubble"
 	},
 	"_1236d": {
 		"startdate": "2018-12-21T00:00:00.000Z",
@@ -45,7 +50,8 @@
 		"ParentBubble": "",
 		"open":false,
 		"activityTitle": "Activity Echo",
-		"progress": "green"
+		"progress": "green",
+		"type": "square"
 	},
 	"_k8450": {
 		"startdate": "2018-12-21T00:00:00.000Z",
@@ -57,7 +63,8 @@
 		"ParentBubble": "",
 		"open":false,
 		"activityTitle": "Task with a very very very very long name",
-		"progress": "red"
+		"progress": "red",
+		"type": "square"
 	},
 	"_u184b": {
 		"startdate": "2018-12-21T00:00:00.000Z",
@@ -69,8 +76,21 @@
 		"ParentBubble": "",
 		"open":false,
 		"activityTitle": "Subtask Flower",
-		"progress": "amber"
+		"progress": "amber",
+		"type": "bubble"
+	},
+	"tempTriangle": {
+		"startdate": "2018-12-19T00:00:00.000Z",
+		"enddate": "2018-12-19T00:00:00.001Z",
+		"colour": "Green",
+		"ChildAssociatedBubbles":[],
+		"ParentAssociatedBubble": "",
+		"ChildBubbles": {},
+		"ParentBubble": "",
+		"open":false,
+		"activityTitle": "XD",
+		"progress": "amber",
+		"type": "triangle"
 	}
-
 }
 
