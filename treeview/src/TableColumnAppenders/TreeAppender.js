@@ -30,10 +30,11 @@ export default class TreeAppender extends Component {
   	render() {//TODO: Remove extra props before spreading!
 		const columnsInfo = this.addTreeColumn()
 		const tableData = this.addTreeData()
+		const {onToggleNode, displayedTreeStructure, ...newProps} = this.props
     	return (
-			React.cloneElement(this.props.children,
-			{...this.props,
-			children: this.props.children && this.props.children.props.children,
+			React.cloneElement(newProps.children,
+			{...newProps,
+			children: newProps.children && newProps.children.props.children,
 			data: tableData,
 			columnsInfo: columnsInfo})
 		);

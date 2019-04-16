@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 var Rx = require('rxjs/Rx')
 var moment = require('moment')
 
-var mousepositionstream = Rx.Observable.fromEvent(document,'pointermove').merge(Rx.Observable.fromEvent(document,'pointerdown')).merge(Rx.Observable.fromEvent(document,'pointerup'))
+var mousepositionstream = Rx.Observable.fromEvent(document,'pointermove').merge(Rx.Observable.fromEvent(document,'pointerdown'))
 
 export default class SchedulerAppender extends Component {
 		constructor(props){
@@ -11,10 +11,12 @@ export default class SchedulerAppender extends Component {
 		mousepositionstream.subscribe((event)=>this.mouseEvent(event))
 		this.tableRef= React.createRef();
 
-		this.state = {startdate: null, enddate: null, snaps: [], dayWidth: 80}
+		this.bubbleHeight = 40;
+
+		this.state = {startdate: null, enddate: null, snaps: [], dayWidth: 80, rowHeights: [], bubbleContextMenu: {key:null,position:null}}
 		this.extrasnaps = 2
 
-		this.InitialStartDate = new Date("2019-02-15")
+		//this.InitialStartDate = new Date("2018-12-15")
 		//Object.keys(this.props.data).map(key=>{return this.props.data[key].startdate})[0] ;//new Date("2019-02-15")
 		this.Lightcolours = [	['Blue','rgb(190,230,240)'],
 								['Red','rgb(240,180,190)'],
@@ -57,7 +59,13 @@ export default class SchedulerAppender extends Component {
 		this.highlightcolour = 'Grey'
 	}
 	componentDidMount(){
-		this.setStartAndEndDate(this.InitialStartDate);
+		//this.setStartAndEndDate(this.InitialStartDate);
+	}
+	componentWillReceiveProps(newProps){
+		if(Object.keys(this.props.data).length===0 && Object.keys(newProps.data).length>0){
+			let earliestBubble = new Date(Math.min(...Object.keys(newProps.data).map(key=>newProps.data[key].startdate)))
+			this.setStartAndEndDate(earliestBubble);
+		}
 	}
 
 	setStartAndEndDate = (start)=>{
@@ -91,32 +99,40 @@ export default class SchedulerAppender extends Component {
 		return [mouseSVG.x,mouseSVG.y]
 	}
 
-	leftclickdown = (key,event)=>{	this.mouseDownOnBubble.key = key
-									this.mouseDownOnBubble.location = 'left'
-									this.schedulerCTM = event.target.closest('svg').getScreenCTM();
-									this.props.setBubbleSideColour(key,this.highlightcolour,'left')
-									this.forceUpdate();}
-	rightclickdown = (key,event)=>{	this.mouseDownOnBubble.key = key
-									this.mouseDownOnBubble.location = 'right'
-									this.schedulerCTM = event.target.closest('svg').getScreenCTM();
-									this.props.setBubbleSideColour(key,this.highlightcolour,'right')
-									this.forceUpdate();}
+	leftclickdown = (key,event)=>{	
+		this.mouseDownOnBubble.key = key
+		this.mouseDownOnBubble.location = 'left'
+		this.schedulerCTM = event.target.closest('svg').getScreenCTM();
+		this.props.setBubbleSideColour(key,this.highlightcolour,'left')
+		this.forceUpdate();}
+	rightclickdown = (key,event)=>{	
+		this.mouseDownOnBubble.key = key
+		this.mouseDownOnBubble.location = 'right'
+		this.schedulerCTM = event.target.closest('svg').getScreenCTM();
+		this.props.setBubbleSideColour(key,this.highlightcolour,'right')
+		this.forceUpdate();}
 
-	middleclickdown = (key,event)=>{this.mouseDownOnBubble.key = key;
+	middleclickdown = (key,event)=>{
+		this.mouseDownOnBubble.key = key;
 		this.mouseDownOnBubble.location = 'middle'
 		this.schedulerCTM = event.target.closest('svg').getScreenCTM();
 		var mousedownpos = this.getInternalMousePosition(event,this.schedulerCTM)
-		if(event.buttons===2){this.activeBubbleContextMenu = [key,mousedownpos]}
 		this.mouseDownOnBubble.dragDiffs =[
 			mousedownpos[0]-this.getNearestSnapXToDate(this.props.data[key].startdate),
 			mousedownpos[0]-this.getNearestSnapXToDate(this.props.data[key].enddate)
 		]
 		this.forceUpdate();
 	}
+
+	onContextMenu = (key,event)=>{
+		event.preventDefault();
+		var mousedownpos = this.getInternalMousePosition(event,this.schedulerCTM)	
+		this.setState({bubbleContextMenu:{key:key,position:mousedownpos}})
+	}
 	leftclickup = (key,event)=>{
 		this.props.tryToPerformLink(key,this.mouseDownOnBubble.key,'left',this.mouseDownOnBubble.location);
 		this.props.setOriginalColour(key,'left')}
-	rightclickup = (key,event)=>{
+	rightclickup = (key,event)=>{		
 		this.props.tryToPerformLink(key,this.mouseDownOnBubble.key,'right',this.mouseDownOnBubble.location);
 		this.props.setOriginalColour(key,'right')}
 	middleclickup = (key,event)=>{
@@ -230,67 +246,122 @@ export default class SchedulerAppender extends Component {
 			this.setStartAndEndDate(this.state.startdate,this.state.enddate)
 		}
 	}
+	
+	onTableRender = ()=>{
+		const newRowHeights=this.getRowHeights(this.tableRef);
+		if(JSON.stringify(this.state.rowHeights)!=JSON.stringify(newRowHeights)){
+			this.setState({rowHeights: newRowHeights})
+		}
+	}
 
 	addSchedulerColumn = ()=>{
+		const rowHeights = this.getRowHeights(this.tableRef);
+		const getRowY = (i) => {
+			return [...rowHeights].splice(0,i).reduce((total,rh)=>total+rh,0)
+		}
+		const displayedRows = Object.keys(this.props.data)
+		const drawLinks = [] 
+		for(let i=0; i<displayedRows.length; i++){
+			const rowId = displayedRows[i]
+			let childlinks = this.props.data[rowId].ChildBubbles
+			for(const childId in childlinks){
+				const parentdate = this.props.data[rowId]['right'=== childlinks[childId].parentside ? "enddate" : "startdate"]
+				const childdate = this.props.data[childId]['right'=== childlinks[childId].childside ? "enddate" : "startdate"]
+
+				const parentx = this.getNearestSnapXToDate(parentdate)
+				const parenty = getRowY(i+1)+this.bubbleHeight/2
+
+				const childx = this.getNearestSnapXToDate(childdate) 
+				const childy = getRowY(displayedRows.indexOf(childId)+1) - 1 + this.bubbleHeight/2
+
+				const xDirection = Math.abs((childx-parentx)/2)
+
+				const parentvectorx = parentx + xDirection * ('right'=== childlinks[childId].parentside ? 1 : -1)
+				const parentvectory = parenty
+
+				const childvectorx = childx + xDirection * ('right'=== childlinks[childId].childside ? 1 : -1)
+				const childvectory = childy			
+
+				const link = {
+					parent: [parentx,parenty],
+					parentVector: [parentvectorx,parentvectory],
+				 	child: [childx,childy],					
+					childVector: [childvectorx,childvectory]
+				}
+				drawLinks.push(link)
+			}
+		}
+
 		let newColumnsInfo = {...this.props.columnsInfo}
 			const schedulerheaderdata = {
 				snaps: this.state.snaps,
-				tableRef:this.tableRef,
-				getRowHeights: this.getRowHeights,
+				tableHeight: this.state.rowHeights.reduce((total,rh)=>total+rh,0),
+				links: drawLinks,
 				getWidth: this.setWidth,
-				mouseOnScheduler: this.clickedOnScheduler
+				mouseOnScheduler: this.clickedOnScheduler,
+				contextMenu: {
+					key: this.state.bubbleContextMenu.key,
+					position: this.state.bubbleContextMenu.position?[this.state.bubbleContextMenu.position[0],getRowY(displayedRows.indexOf(this.state.bubbleContextMenu.key)+1)+this.state.bubbleContextMenu.position[1]]:[0,0],
+					closeMenu: ()=>{this.setState({bubbleContextMenu:{key:null,position:null}})},
+					options: {
+						removeLink: <div onClick={() => this.props.onRemoveLink(this.state.bubbleContextMenu.key)}>Remove Link</div>, 
+						deleteBubble: <div onClick={()=>this.props.deleteBubble(this.state.bubbleContextMenu.key)}>Delete bubble</div> }
+				}
 			}
-			newColumnsInfo = {...this.props.columnsInfo, scheduler: {cellType: 'scheduler', width: 50, headerType: 'schedulerHeader', headerData: schedulerheaderdata}}
+			newColumnsInfo = {...this.props.columnsInfo, scheduler: {cellType: 'scheduler', width: 65, headerType: 'schedulerHeader', headerData: schedulerheaderdata}}
 		return newColumnsInfo
 	}
 
-	addSchedulerData() {
-		let cellHeight = 40;
+	addSchedulerData = ()=>{
 		const displayedRows = Object.keys(this.props.data)
 		let tableData = {...this.props.data}
 		for(let i=0; i<displayedRows.length; i++){
 			const rowId = displayedRows[i]
 			const shadow = rowId===this.mouseDownOnBubble.key ? true : false
 			tableData[rowId] = {...tableData[rowId],
-									scheduler:{
-										//Bubble Data
-										bkey: rowId,
-										startpoint: [this.getNearestSnapXToDate(tableData[rowId].startdate),0],
-										endpoint: [this.getNearestSnapXToDate(tableData[rowId].enddate),cellHeight],
-										colour: this.getColourFromMap(tableData[rowId].colours.middle,this.colours),
-										leftcolour: this.getColourFromMap(tableData[rowId].colours.left,this.colours),
-										rightcolour: this.getColourFromMap(tableData[rowId].colours.right,this.colours),
-										leftclickdown:this.leftclickdown,
-										rightclickdown:this.rightclickdown,
-										middleclickdown:this.middleclickdown,
-										leftclickup:this.leftclickup,
-										rightclickup:this.rightclickup,
-										middleclickup:this.middleclickup,
-										leftmousein:this.leftmousein,
-										leftmouseout:this.leftmouseout,
-										rightmousein:this.rightmousein,
-										rightmouseout:this.rightmouseout,
-										middlemousein:this.middlemousein,
-										middlemouseout:this.middlemouseout,
-										text:tableData[rowId].activityTitle,
-										shadow: shadow,
-										mouseOnScheduler: this.clickedOnScheduler
-									}
-								}
+				scheduler:{
+					//Bubble Data
+					bkey: rowId,
+					startpoint: [this.getNearestSnapXToDate(tableData[rowId].startdate),0],
+					endpoint: [this.getNearestSnapXToDate(tableData[rowId].enddate),this.bubbleHeight],
+					colour: this.getColourFromMap(tableData[rowId].colours.middle,this.colours),
+					leftcolour: this.getColourFromMap(tableData[rowId].colours.left,this.colours),
+					rightcolour: this.getColourFromMap(tableData[rowId].colours.right,this.colours),
+					leftclickdown:this.leftclickdown,
+					rightclickdown:this.rightclickdown,
+					middleclickdown:this.middleclickdown,
+					leftclickup:this.leftclickup,
+					rightclickup:this.rightclickup,
+					middleclickup:this.middleclickup,
+					leftmousein:this.leftmousein,
+					leftmouseout:this.leftmouseout,
+					rightmousein:this.rightmousein,
+					rightmouseout:this.rightmouseout,
+					middlemousein:this.middlemousein,
+					middlemouseout:this.middlemouseout,
+					onContextMenu:this.onContextMenu,
+					text:tableData[rowId].activityTitle,
+					shadow: shadow,
+					mouseOnScheduler: this.clickedOnScheduler,
+					shape: tableData[rowId].type
+				}
+			}
 		}
 		return tableData
 	}
 
   	render() {
-    	return (			
-			React.cloneElement(this.props.children,
-				{...this.props,
-				children: this.props.children && this.props.children.props.children,
-				data: this.addSchedulerData(),
-				columnsInfo: this.addSchedulerColumn()
-			})
+		const {bubbleTransform,setBubbleSideColour,setOriginalColour,tryToPerformLink,tryToPerformAssociation,onRemoveLink,deleteBubble,...newProps} = this.props
+    	return (
+			React.cloneElement(newProps.children,
+				{...newProps,
+					children: newProps.children && newProps.children.props.children,
+					data: this.addSchedulerData(),
+					columnsInfo: this.addSchedulerColumn(),
+					tableRef: this.tableRef,
+					onRender: ((x)=>{(newProps.onRender && newProps.onRender(x));this.onTableRender()})
+				}
+			)
 		);
   	}
-
-
 }

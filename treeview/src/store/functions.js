@@ -1,4 +1,5 @@
 import {recursiveDeepDiffs} from '../bubbleCopy'
+const ACTUALLY_SEND_TO_DB = false
 
 export const getDisplayedTreeStructure = (tree, parentNodes)=>{
 	//an array of arrays of the rows to display, their corresponding depths, and whether they are open/closed/neither.
@@ -29,8 +30,7 @@ export const getParentNodes = (data) => {
 }
 
 export const translateData = (dbdata,dblinks) =>{
-	// console.log(dbdata)
-	// console.log(dblinks)
+	const shapes = {activity:'square', task:'bubble', milestone:'triangle'}
 	let newData = null
 	newData = dbdata.reduce((total,el) => {
 		const startdate = new Date(el.start)
@@ -47,7 +47,8 @@ export const translateData = (dbdata,dblinks) =>{
 				ParentBubble: "",
 				open: el.open || false,
 				activityTitle: el.activityTitle || el.name,
-				progress: el.progress || "amber"
+				progress: el.progress || "amber",
+				shape: shapes[el.type]
 			}
 		}
 	},{})
@@ -69,30 +70,28 @@ export const translateData = (dbdata,dblinks) =>{
 }
 
 export class EventStoreSynchroniser {
-	
 	oldState = {}
 	sendToDB = (token, state) =>{
-		const ACTUALLY_SEND_TO_DB = false
-
 		if(Object.keys(this.oldState).length===0){this.oldState=state; return}
 		let stateChanges = getDiffs(this.oldState,state);
 		this.oldState = state
 		if(stateChanges){
-			for(let key in stateChanges._data){				
+			for(let key in stateChanges._data){			
 				const bubbleChanges = stateChanges._data[key]
+				if(bubbleChanges===undefined){
+					console.log(key+" has been deleted")
+					sendEvent(token,"https://evnext-api.evlem.net/api/command/delete/"+key,"activity.deleted","activity",{})
+					continue}
 				//ASSOCIATE LINKS
 				if(Object.keys(bubbleChanges).includes("ParentAssociatedBubble")){
-					console.log(bubbleChanges)
-					console.log(bubbleChanges.ParentAssociatedBubble)
 					if(bubbleChanges.ParentAssociatedBubble){
-						if(ACTUALLY_SEND_TO_DB){console.log("CHANGED PARENT OF: "+key)
+						console.log("CHANGED PARENT OF: "+key)
 						//delete
-						//create
-						}
+						//create						
 					}
 					else{
 						// not sure this will ever be reached... 
-						if(ACTUALLY_SEND_TO_DB){console.log("DELETED PARENT OF: "+key)}
+						console.log("DELETED PARENT OF: "+key)
 					}
 				}
 
@@ -111,9 +110,9 @@ export class EventStoreSynchroniser {
 				if(startdate){Bubblepayload.start = startdate}
 				if(enddate){Bubblepayload.end = enddate}
 
-				if(ACTUALLY_SEND_TO_DB){
-					sendEvent(token,"https://evnext-api.evlem.net/api/command/mutate/"+key,"activity.mutated","activity",Bubblepayload)
-				}
+				
+				sendEvent(token,"https://evnext-api.evlem.net/api/command/mutate/"+key,"activity.mutated","activity",Bubblepayload)
+				
 			}
 		}
 
@@ -121,6 +120,7 @@ export class EventStoreSynchroniser {
 }
 
 export const sendEvent = (token,link,type,aggregate,payload)=>{
+	if(!ACTUALLY_SEND_TO_DB){return}
 	console.log("send event")
 	let Eventbody = {
 		type: type,

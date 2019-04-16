@@ -34,8 +34,8 @@ export const data = Data
 export const columnsInfo = {
 	// treeExpander: {cellType: 'tree', headerData: 'Tree'},
 	activityTitle: { cellType: 'text', headerData: 'Activity Title', rule: 'textSize' }, //cant edit activity title without this
-	startdate: { cellType: 'date', headerData: 'Start Date', width: 10 },
-	enddate: { cellType: 'date', headerData: 'End Date', width: 10 },
+	startdate: { cellType: 'date', headerData: 'Start Date'},
+	enddate: { cellType: 'date', headerData: 'End Date' },
 	progress: { cellType: 'color', headerData: 'RAG' },
 	// scheduler: {cellType: 'scheduler', headerData: 'SchedulerHeader goes here', width: 600, headerType: 'schedulerHeader'}
 };

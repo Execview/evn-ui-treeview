@@ -53,7 +53,7 @@ const tryReturnValidTransformState = (bubbles,action) =>{
 		for(var childassociatekeyINDEX in bubbles[bubblekey]["ChildAssociatedBubbles"]){
 			var childassociatekey= bubbles[bubblekey]["ChildAssociatedBubbles"][childassociatekeyINDEX]
 			if(childassociatekey===keynottochange){continue;}
-			ShiftBubble(childassociatekey,amount)
+			//ShiftBubble(childassociatekey,amount)
 		}
 		for(var childkey in bubbles[bubblekey]["ChildBubbles"]){
 			if(childkey===keynottochange){continue;}
@@ -93,7 +93,7 @@ const tryReturnValidTransformState = (bubbles,action) =>{
 			default:
 			break;
 		}	
-		AssociateForcingAlgorithm(bubblekey)
+		//AssociateForcingAlgorithm(bubblekey)
 	}
 	const {startdate, enddate, ...rest} = changes
 

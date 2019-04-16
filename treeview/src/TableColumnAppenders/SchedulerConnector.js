@@ -4,7 +4,6 @@ import * as actionTypes from '../store/actionTypes';
 import { connect } from 'react-redux';
 
 class SchedulerConnector extends Component {
-	// SchedulerConnector -> SchedulerAppender -> TreeConnector -> TreeAppender -> Table
   	render() {
     	return (
 			<SchedulerAppender 
@@ -25,7 +24,9 @@ const mapDispatchToProps = dispatch => {
 		setBubbleSideColour: (key,colour,side) => dispatch({type: actionTypes.SET_BUBBLE_SIDE_COLOUR, key:key, colour:colour, side:side}),
 		setOriginalColour: (key,side) => dispatch({type: actionTypes.SET_ORIGINAL_COLOUR, key:key, side:side}),  
 		tryToPerformLink: (childkey,parentkey,childside,parentside) => dispatch({type: actionTypes.PERFORM_LINK, parentkey:parentkey,childkey:childkey,parentside:parentside,childside:childside}),
-		tryToPerformAssociation: (parentkey,childkey) => dispatch({type: actionTypes.PERFORM_ASSOCIATION, childkey:childkey,parentkey:parentkey}),  
+		tryToPerformAssociation: (parentkey,childkey) => dispatch({type: actionTypes.PERFORM_ASSOCIATION, childkey:childkey,parentkey:parentkey}),
+		onRemoveLink: (key) => dispatch({type: actionTypes.UNLINK_PARENT_BUBBLE, key}),
+		deleteBubble: (key) => dispatch({type: actionTypes.DELETE_BUBBLE, key})
 	}
 }
 
