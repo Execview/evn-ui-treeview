@@ -3,7 +3,7 @@ import onClickOutside from 'react-onclickoutside';
 import './DropdownCell.css';
 
 class GenericDropDown extends Component {
-  handleClickOutside = this.props.onBlur;
+  handleClickOutside = this.props.onBlur || (()=>{});
   
   render() {
     const style = this.props.style || {};
