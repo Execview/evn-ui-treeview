@@ -14,6 +14,7 @@ const Bubble = React.memo((props) => {
 	var rightmouseout = props.rightmouseout || (()=>console.log("right mouseout"))
 	var middlemousein = props.middlemousein || (()=>console.log("middle mouse in"))
 	var middlemouseout = props.middlemouseout || (()=>console.log("middle mouseout"))
+	var onContextMenu = props.onContextMenu || (()=>console.log("context menu"))
 	var leftcolour = props.leftcolour 
 	var rightcolour = props.rightcolour
 	var key = props.bkey
@@ -56,13 +57,9 @@ const Bubble = React.memo((props) => {
 		}	
 	}
 
-	
-
-	
-
 	let filterStyle = !props.shadow ? 'url(#'+key+')' : ''
 	return(
-		<g key={key} style={{cursor: 'pointer'}}>
+		<g key={key} style={{cursor: 'pointer'}} onContextMenu={(event=>onContextMenu(key,event))}>
 			<defs>
 				<filter id={key}>
 					<feDropShadow dx="0" dy="0" floodColor={"black"} stdDeviation="1"/>

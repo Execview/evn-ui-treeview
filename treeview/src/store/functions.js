@@ -30,8 +30,6 @@ export const getParentNodes = (data) => {
 }
 
 export const translateData = (dbdata,dblinks) =>{
-	// console.log(dbdata)
-	// console.log(dblinks)
 	const shapes = {activity:'square', task:'bubble', milestone:'triangle'}
 	let newData = null
 	newData = dbdata.reduce((total,el) => {
@@ -72,21 +70,20 @@ export const translateData = (dbdata,dblinks) =>{
 }
 
 export class EventStoreSynchroniser {
-	
 	oldState = {}
 	sendToDB = (token, state) =>{
-		
-
 		if(Object.keys(this.oldState).length===0){this.oldState=state; return}
 		let stateChanges = getDiffs(this.oldState,state);
 		this.oldState = state
 		if(stateChanges){
-			for(let key in stateChanges._data){				
+			for(let key in stateChanges._data){			
 				const bubbleChanges = stateChanges._data[key]
+				if(bubbleChanges===undefined){
+					console.log(key+" has been deleted")
+					sendEvent(token,"https://evnext-api.evlem.net/api/command/delete/"+key,"activity.deleted","activity",{})
+					continue}
 				//ASSOCIATE LINKS
 				if(Object.keys(bubbleChanges).includes("ParentAssociatedBubble")){
-					console.log(bubbleChanges)
-					console.log(bubbleChanges.ParentAssociatedBubble)
 					if(bubbleChanges.ParentAssociatedBubble){
 						console.log("CHANGED PARENT OF: "+key)
 						//delete

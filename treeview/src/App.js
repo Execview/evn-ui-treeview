@@ -53,12 +53,12 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-	  onGetInitialData: () => dispatch(actionCreators.getInitialData()),
-    onSave: (rowId, rowValues, editableValues) => dispatch({ type: actionTypes.SAVE_TABLE, rowId, rowValues, editableValues }),
-	  loadpls: ()=>dispatch({type:"loadFromConfig"}),
-	  onAddRow: () => dispatch({type: actionTypes.ADD_ROW})
-  };
+	return {
+		onGetInitialData: () => dispatch(actionCreators.getInitialData()),
+		onSave: (rowId, rowValues, editableValues) => dispatch({ type: actionTypes.SAVE_TABLE, rowId, rowValues, editableValues }),
+		loadpls: ()=>dispatch({type:"loadFromConfig"}),
+		onAddRow: () => dispatch({type: actionTypes.ADD_ROW})
+	};
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
