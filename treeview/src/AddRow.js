@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import * as actionTypes from './store/actionTypes';
+import * as actionTypes from './store/actions/actionTypes';
 
 
 class AddRow extends Component {

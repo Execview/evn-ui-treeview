@@ -1,4 +1,5 @@
 export const TOGGLE_NODE = 'TOGGLE_NODE';
+export const LOAD_FROM_CONFIG = 'LOAD_FROM_CONFIG';
 export const LOAD_DATA = 'LOAD_DATA';
 export const UPDATE_DATA = 'UPDATE_DATA';
 export const SAVE_TABLE = 'SAVE_TABLE';

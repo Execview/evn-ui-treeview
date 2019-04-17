@@ -14,6 +14,7 @@ class SchedulerOverlay extends Component {
 			//path = `M ${fx} ${fy} h ${(tx-fx)/2} v ${ty-fy} h ${(tx-fx)/2}` // x-y-x line
 			//path = `M ${fx} ${fy} C ${tx} ${fy} ${fx} ${ty} ${tx} ${ty}`
 			path = `M ${fx} ${fy} C ${fvx} ${fvy} ${tvx} ${tvy} ${tx} ${ty}`
+			//path = `M ${fx} ${fy} L ${fvx} ${fvy} L ${tvx} ${tvy} L ${tx} ${ty}`
 
 			let pathColour ='rgb(255,255,255)'
 			const drawLink = (
@@ -25,10 +26,9 @@ class SchedulerOverlay extends Component {
 			return drawLink
 		}
 		let showMenu = this.props.contextMenu && this.props.contextMenu.key
-    	return (		
-			<svg height={tableHeight + (showMenu?500:0)} width='100%' style={{border: '2px solid red',top:'0px', left: '0px', position: "absolute", pointerEvents: 'none',zIndex:'100'}}>
-				<g style={{pointerEvents: 'auto'}}>						
-					<circle cx="100" cy="130" r="10" stroke="black" strokeWidth="3" fill="red" onClick={()=>console.log("CIRCLE")}/>
+    	return ( //border: '2px solid red',
+			<svg height={tableHeight + (showMenu?500:0)} width='100%' style={{top:'0px', left: '0px', position: "absolute", pointerEvents: 'none',zIndex:'100'}}>
+				<g style={{pointerEvents: 'auto'}}>
 					{this.props.links && this.props.links.map((l, i)=>drawLink(l,i))}
 				</g>
 				{showMenu && <g style={{pointerEvents: 'auto'}}>

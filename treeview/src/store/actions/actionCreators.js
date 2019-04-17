@@ -1,5 +1,5 @@
 import * as actionTypes from './actionTypes';
-import {translateData, getParentNodes} from './functions'
+import {translateData, getParentNodes} from '../functions'
 
 export const getInitialData = () => (dispatch) => {
 	var token = ''

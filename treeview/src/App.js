@@ -3,8 +3,8 @@ import {connect} from 'react-redux';
 import './App.css';
 import SchedulerConnector from './TableColumnAppenders/SchedulerConnector'
 import { columnsInfo, cellTypes, rules } from './store/config';
-import * as actionTypes from './store/actionTypes'
-import * as actionCreators from './store/actionCreators'
+import * as actionTypes from './store/actions/actionTypes'
+import * as actionCreators from './store/actions/actionCreators'
 import TreeConnector from './TableColumnAppenders/TreeConnector';
 import Table from './TEMP-TABLE/table/Table';
 import AddRow from './AddRow';
@@ -13,8 +13,8 @@ import './App.css'
 
 class App extends Component {
 	componentDidMount() {
-		//this.props.onGetInitialData();
-		this.props.loadpls();
+		// this.props.onGetInitialData();
+		this.props.onGetLocalData();
 	}
 
   	render() {
@@ -56,7 +56,7 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		onGetInitialData: () => dispatch(actionCreators.getInitialData()),
 		onSave: (rowId, rowValues, editableValues) => dispatch({ type: actionTypes.SAVE_TABLE, rowId, rowValues, editableValues }),
-		loadpls: ()=>dispatch({type:"loadFromConfig"}),
+		onGetLocalData: ()=>dispatch({type: actionTypes.LOAD_FROM_CONFIG}),
 		onAddRow: () => dispatch({type: actionTypes.ADD_ROW})
 	};
 };
