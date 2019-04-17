@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import TreeAppender from './TreeAppender';
 import { connect } from 'react-redux';
-import * as actionTypes from '../store/actionTypes'
+import * as actionTypes from '../store/actions/actionTypes'
 
 
 class TreeConector extends Component {
