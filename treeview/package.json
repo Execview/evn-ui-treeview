@@ -1,7 +1,7 @@
 {
   "name": "@execview/treeview",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "dependencies": {
     "moment": "^2.24.0",
     "react": "^16.8.3",
