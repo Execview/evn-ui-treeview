@@ -1,7 +1,7 @@
 {
-  "name": "@evn-ui-lib/scheduler",
+  "name": "@execview/scheduler",
   "version": "0.1.0",
-  "private": false,
+  "private": true,
   "dependencies": {
     "moment": "^2.22.2",
     "react": "^16.7.0",
@@ -24,7 +24,7 @@
   "license": "ISC",
   "readme": "README.md",
   "publishConfig": {
-    "registry": "https://npm.evlem.net"
+    "registry": "https://registry.npmjs.org"
   },
   "browserslist": [
     ">0.2%",

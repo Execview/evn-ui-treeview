@@ -1,7 +1,7 @@
 {
-  "name": "@evn-ui-lib/treeview",
+  "name": "@execview/treeview",
   "version": "0.1.0",
-  "private": false,
+  "private": true,
   "dependencies": {
     "moment": "^2.24.0",
     "react": "^16.8.3",
@@ -23,7 +23,7 @@
   "license": "ISC",
   "readme": "README.md",
   "publishConfig": {
-    "registry": "https://npm.evlem.net"
+    "registry": "https://registry.npmjs.org"
   },
   "eslintConfig": {
     "extends": "react-app"

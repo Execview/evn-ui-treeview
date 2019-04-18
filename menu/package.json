@@ -1,6 +1,7 @@
 {
-  "name": "@evn-ui-lib/menu",
+  "name": "@execview/menu",
   "version": "0.1.0",
+  "private": true,
   "peerDependencies": {
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
@@ -27,7 +28,7 @@
   "license": "ISC",
   "readme": "README.md",
   "publishConfig": {
-    "registry": "https://npm.evlem.net"
+    "registry": "https://registry.npmjs.org"
   },
   "eslintConfig": {
     "extends": "react-app"
