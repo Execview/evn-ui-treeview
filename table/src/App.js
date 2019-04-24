@@ -4,7 +4,7 @@ import TableWrapper from './tableWrapper/TableWrapper';
 import './App.css';
 import * as actionTypes from './store/actionTypes';
 import { cellTypes, dataSort, rowValidation, rules, columnsInfo } from './store/configSwitch';
-import { cats } from './store/ElCatso';
+import cats from './store/ElCatso';
 
 class App extends Component {
   constructor(props) {
