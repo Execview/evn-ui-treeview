@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import GenericDropdown from '../TEMP-TABLE/dropdownCell/GenericDropdown'
+import GenericDropdown from '@execview/table'
 
 class SchedulerRightClickMenu extends Component {
 	onSubmit = () => {
