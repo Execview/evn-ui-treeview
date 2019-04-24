@@ -1,11 +1,6 @@
 import React from 'react';
 
-import InputCellDisplay from '../TEMP-TABLE/inputCell/InputCellDisplay'
-import InputCellEditor from '../TEMP-TABLE/inputCell/InputCellEditor'
-import ColorCellDisplay from '../TEMP-TABLE/colorCell/ColorCellDisplay'
-import ColorCellEditor from '../TEMP-TABLE/colorCell/ColorCellEditor'
-import DateCellDisplay from '../TEMP-TABLE/dateCell/DateCellDisplay'
-import DateCellEditor from '../TEMP-TABLE/dateCell/DateCellEditor'
+import { InputCellDisplay, InputCellEditor, ColorCellDisplay, ColorCellEditor, DateCellDisplay, DateCellEditor } from '@execview/table'
 import TreeCell from '../treeCell/TreeCell';
 import SchedulerCell from '../schedulerCell/SchedulerCell'
 import SchedulerHeader from '../schedulerCell/SchedulerHeader';
