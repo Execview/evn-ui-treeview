@@ -1,4 +1,4 @@
-export const cats = ['https://ichef.bbci.co.uk/images/ic/720x405/p0517py6.jpg',
+const cats = ['https://ichef.bbci.co.uk/images/ic/720x405/p0517py6.jpg',
   'https://ae01.alicdn.com/kf/HTB1gfQdb9BYBeNjy0Feq6znmFXaO/2017-30x25CM-The-Scottish-Fold-Cat-Favorites-Diamond-Embroidery-DIY-Creative-Home-Decor-1PCS.jpg_640x640.jpg',
   'https://scontent-lht6-1.cdninstagram.com/vp/d6e3da25ed4ed4bee045d960ca30e718/5CC7A39C/t51.2885-15/sh0.08/e35/s750x750/24331625_123946978389083_1346025003761532928_n.jpg?_nc_ht=scontent-lht6-1.cdninstagram.com',
   'https://scontent-lht6-1.cdninstagram.com/vp/54177056e03e5e2217e76ab9eeca557d/5CC2D0A7/t51.2885-15/sh0.08/e35/s640x640/21480286_1888458418148487_1167622992977461248_n.jpg?_nc_ht=scontent-lht6-1.cdninstagram.com',
@@ -35,5 +35,4 @@ export const cats = ['https://ichef.bbci.co.uk/images/ic/720x405/p0517py6.jpg',
   'https://scontent-lht6-1.xx.fbcdn.net/v/t1.0-9/49485853_332974550879065_1419268103262437376_n.jpg?_nc_cat=106&_nc_ht=scontent-lht6-1.xx&oh=4667c66dc8f5db8f8d85f82039ce8db2&oe=5CF69C53',
   'https://scontent-lht6-1.xx.fbcdn.net/v/t1.0-9/49528576_341870709980580_4771892911363063808_n.jpg?_nc_cat=104&_nc_ht=scontent-lht6-1.xx&oh=c641d7605030c8838f9e70bc934ab9a7&oe=5CF68200'
 ];
-
-export default 0;
+export default cats;
