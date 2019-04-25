@@ -1,4 +1,6 @@
 import React, { PureComponent } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import GenericDropdown from '../dropdownCell/GenericDropdown';
 import { isMobile } from 'react-device-detect';
 import TripleFill from './TripleFill';
@@ -41,7 +43,7 @@ export default class AddUserDropDown extends PureComponent {
               left={(
                 <div>
                   <div className="user-circle" style={{ position: 'relative' }}>
-                    <i className="fas fa-check-circle" style={{ position: 'absolute', color: tickColour, fontSize: '38px', top: '-1px', left: '-1px' }} />
+                    <FontAwesomeIcon icon={faCheckCircle} style={{ position: 'absolute', color: tickColour, fontSize: '38px', top: '-1px', left: '-1px' }} />
                     <img className="user-image" src={this.props.getUserProfile(user).image} alt="xd" />
                   </div>
                 </div>
