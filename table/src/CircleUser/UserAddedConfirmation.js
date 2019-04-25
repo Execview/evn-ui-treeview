@@ -1,4 +1,6 @@
 import React, { PureComponent } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import TripleFill from './TripleFill';
 import CircleUser from './CircleUser';
 import './CircleUser.css';
@@ -8,7 +10,7 @@ export default class UserAddedConfirmation extends PureComponent {
     return (
       <div className="confirmation-container">
         <div className="check-container">
-          <i className="fas fa-check" />
+          <FontAwesomeIcon icon={faCheck} />
         </div>
         <div className="confirmation-content">
           <p className="text-focus-in check-success">Success!</p>

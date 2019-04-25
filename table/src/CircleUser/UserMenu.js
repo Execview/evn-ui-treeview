@@ -1,4 +1,6 @@
 import React, { PureComponent } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleUp, faAngleDown, faTrash, faUsers } from '@fortawesome/free-solid-svg-icons';
 import CircleUser from './CircleUser';
 import TripleFill from './TripleFill';
 import GenericDropdown from '../dropdownCell/GenericDropdown';
@@ -22,7 +24,7 @@ export default class UserMenu extends PureComponent {
     const assignedUsers = this.props.assignedUsers || [];
     const dropDownOptions = assignedUsers.reduce((total, assigneduser) => {
       const elHeight = assigneduser.user === this.state.userOpen ? '300px' : '40px';
-      const arrowType = assigneduser.user === this.state.userOpen ? <i className="fas fa-angle-up" /> : <i className="fas fa-angle-down" />;
+      const arrowType = assigneduser.user === this.state.userOpen ? <FontAwesomeIcon icon={faAngleUp} /> : <FontAwesomeIcon icon={faAngleDown} />;
       return { ...total,
         [assigneduser.user]: (
           <div className="user-row" style={{ maxHeight: elHeight, overflow: 'hidden' }} onClick={() => this.toggleDetails(assigneduser.user)}>
@@ -35,7 +37,7 @@ export default class UserMenu extends PureComponent {
                   <span className="arrow-more-info">
                     {arrowType}
                   </span>
-                  <span className="close-container" onClick={() => this.props.unassignUser(assigneduser.user)}><i className="fas fa-trash close-icon" /></span>
+                  <span className="close-container" onClick={() => this.props.unassignUser(assigneduser.user)}><FontAwesomeIcon icon={faTrash} className="close-icon" /></span>
                 </div>
               )}
             />
@@ -52,7 +54,7 @@ export default class UserMenu extends PureComponent {
       : <p className="no-users-message">There are no users currently assigned to this project!</p>;
     return (
       <div>
-        <div className="check-container"><i className="fas fa-users" style={{ color: 'white' }} /></div>
+        <div className="check-container"><FontAwesomeIcon icon={faUsers} style={{ color: 'white' }} /></div>
         {welcomeMessage}
         <GenericDropdown
           style={{ dropdownItem: 'hover-class', dropdown: 'dropdown-wrapper' }}
