@@ -44,7 +44,7 @@ function reducer(state=initialState,action) {
 	const ACTUALLY_SEND_TO_DB = false
 	if (newState.sendEvents && newState.development_token) {
 		ess.sendToDB(newState.development_token,newState,ACTUALLY_SEND_TO_DB)
-		newState = {...state, sendEvents: false}
+		newState = {...newState, sendEvents: false}
 	};
 	return newState
 }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import Bubble from './Bubble'
+import Bubble from './Bubble';
+import './SchedulerCell.css';
 
 class SchedulerCell extends Component {	
   	render() {
