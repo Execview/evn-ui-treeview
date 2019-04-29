@@ -5,7 +5,6 @@ import * as actionTypes from '../store/actions/actionTypes'
 
 
 class TreeConector extends Component {
-	
   	render() {
     	return (
 		<TreeAppender
@@ -17,7 +16,6 @@ class TreeConector extends Component {
 
 const mapStateToProps = state => {
 	return {
-        displayedTreeStructure: state.displayedTreeStructure
 	}
 }
 

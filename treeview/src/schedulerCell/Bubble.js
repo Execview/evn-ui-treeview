@@ -54,7 +54,8 @@ const Bubble = React.memo((props) => {
 			//middle = 'M '+props.startpoint[0]+" "+(props.startpoint[1]+thickness)+" h "+thickness+" l "+(-1*thickness/2)+" "+(-1*thickness)+" z"
 			middle = `M ${props.startpoint[0]} ${props.startpoint[1]+(thickness)/2} L ${(props.startpoint[0]+(thickness)/2)} ${props.startpoint[1]+(thickness)} L ${props.startpoint[0]+(thickness)} ${props.startpoint[1]+(thickness)/2} L ${props.startpoint[0]+thickness/2} ${props.startpoint[1]} z`
 			break;
-		}	
+		}
+		default: {console.log(key+" has no shape")}
 	}
 
 	let filterStyle = !props.shadow ? 'url(#'+key+')' : ''

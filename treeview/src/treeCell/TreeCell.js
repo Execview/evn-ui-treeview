@@ -1,17 +1,19 @@
 import React, { Component } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCaretDown, faCaretRight } from '@fortawesome/free-solid-svg-icons';
+
 
 class TreeCell extends Component {	
   	render() {
-		let arrow = <i className="fas fa-caret-down" style={{width:'10px', opacity:'0'}}/>;
+		let arrow = <FontAwesomeIcon icon={faCaretDown} style={{width:'10px', opacity:'0'}}/>;
 
 		// var closestElement = element.closest(selectors); 
-
 		let showPointerStyle = {};
 		if (this.props.data.nodeStatus === 'open') {
-			arrow = <i className="fas fa-caret-down" style={{width:'10px'}}/>
+			arrow = <FontAwesomeIcon icon={faCaretDown} style={{width:'10px'}}/>
 			showPointerStyle = {cursor: 'pointer'};
 		} else if (this.props.data.nodeStatus === 'closed') {
-			arrow = <i className="fas fa-caret-right" style={{width:'10px'}}/>
+			arrow = <FontAwesomeIcon icon={faCaretRight} style={{width:'10px'}}/>
 			showPointerStyle = {cursor: 'pointer'};
 		}
     	return (

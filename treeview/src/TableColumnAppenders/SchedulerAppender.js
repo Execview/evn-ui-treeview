@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import SchedulerCell from '../schedulerCell/SchedulerCell'
+import SchedulerHeader from '../schedulerCell/SchedulerHeader';
 
 var Rx = require('rxjs/Rx')
 var moment = require('moment')
@@ -126,6 +128,7 @@ export default class SchedulerAppender extends Component {
 
 	onContextMenu = (key,event)=>{
 		event.preventDefault();
+		this.schedulerCTM = event.target.closest('svg').getScreenCTM();
 		var mousedownpos = this.getInternalMousePosition(event,this.schedulerCTM)	
 		this.setState({bubbleContextMenu:{key:key,position:mousedownpos}})
 	}
@@ -249,7 +252,7 @@ export default class SchedulerAppender extends Component {
 	
 	onTableRender = ()=>{
 		const newRowHeights=this.getRowHeights(this.tableRef);
-		if(JSON.stringify(this.state.rowHeights)!=JSON.stringify(newRowHeights)){
+		if(JSON.stringify(this.state.rowHeights)!==JSON.stringify(newRowHeights)){
 			this.setState({rowHeights: newRowHeights})
 		}
 	}
@@ -343,7 +346,7 @@ export default class SchedulerAppender extends Component {
 					text:tableData[rowId].activityTitle,
 					shadow: shadow,
 					mouseOnScheduler: this.clickedOnScheduler,
-					shape: tableData[rowId].type
+					shape: tableData[rowId].shape
 				}
 			}
 		}
@@ -358,6 +361,7 @@ export default class SchedulerAppender extends Component {
 					children: newProps.children && newProps.children.props.children,
 					data: this.addSchedulerData(),
 					columnsInfo: this.addSchedulerColumn(),
+					cellTypes: {...newProps.cellTypes, schedulerHeader: {display: <SchedulerHeader/>}, scheduler: {display: <SchedulerCell/>}},
 					tableRef: this.tableRef,
 					onRender: ((x)=>{(newProps.onRender && newProps.onRender(x));this.onTableRender()})
 				}

@@ -81,7 +81,7 @@
 	},
 	"tempTriangle": {
 		"startdate": "2018-12-19T00:00:00.000Z",
-		"enddate": "2018-12-19T00:00:00.001Z",
+		"enddate": "2018-12-20T00:00:00.000Z",
 		"colour": "Green",
 		"ChildAssociatedBubbles":[],
 		"ParentAssociatedBubble": "",

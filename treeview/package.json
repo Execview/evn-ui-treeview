@@ -1,10 +1,13 @@
 {
   "name": "@execview/treeview",
-  "version": "0.1.4",
-  "main":"./transpiled/exports.js",
+  "version": "0.1.10",
+  "main": "./transpiled/exports.js",
   "private": false,
   "dependencies": {
-    "@execview/table": "^0.1.21",
+    "@execview/table": "^0.1.22",
+    "@fortawesome/fontawesome-svg-core": "^1.2.17",
+    "@fortawesome/free-solid-svg-icons": "^5.8.1",
+    "@fortawesome/react-fontawesome": "^0.1.4",
     "moment": "^2.24.0",
     "react": "^16.8.6",
     "react-dom": "^16.7.0",

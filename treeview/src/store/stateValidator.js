@@ -74,7 +74,7 @@ const tryReturnValidTransformState = (bubbles,action) =>{
 	}
 
 	const TransformBubble = (bubblekey,part,amount,keynottochange) =>{
-		if(InvalidMovement){console.log('isInvalid');return false}
+		if(InvalidMovement){return false}
 		switch (part) {
 			case 'start':
 				if(cantMoveSide(bubblekey,'left')){InvalidMovement=true}
