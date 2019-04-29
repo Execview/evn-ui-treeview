@@ -14,10 +14,11 @@ export default class HeaderCellDisplay extends Component {
         </div>
       );
     }
+    const cellWidth = this.props.style.width > 30 ? this.props.style.width - 30 : this.props.style.width;
     return (
       <div className="header-cell no-select" onClick={this.props.data.sortData}>
         {spans}
-        <div className="thead-container toggle-wrap" style={{ width: this.props.style.width - 30 }}>{this.props.data.title}</div>
+        <div className="thead-container toggle-wrap" style={{ width: cellWidth }}>{this.props.data.title}</div>
       </div>
     );
   }

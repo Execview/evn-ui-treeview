@@ -6,7 +6,7 @@ import './UserHeader.css';
 export default class UserHeaderDisplay extends Component {
   render() {
     return (
-      <div className="user-header-container" title="Assigned Users">
+      <div className="user-header-container" title="Assigned Users" style={{ width: this.props.style.width }}>
         <FontAwesomeIcon icon={faUserCircle} className="user-header" />
       </div>
     );

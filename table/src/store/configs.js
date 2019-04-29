@@ -78,7 +78,7 @@ const hash = crypto.createHash('sha256');
 
 const testData = {};
 const testEditableCells = {};
-for (let i = 0; i < 200; i++) {
+for (let i = 0; i < 50; i++) {
   const newId = '_' + hash.update(Date.now() + Math.random().toString()).digest('hex').substring(0, 5);
   testData[newId] = { company: 'McLaren', contact: 'WL', country: 'United Kingdom', value: 26, progress: 'green', dueDate: '2018-03-17T10:39:57.362Z' };
   testEditableCells[newId] = ['company', 'contact', 'country', 'value', 'progress', 'dueDate'];
