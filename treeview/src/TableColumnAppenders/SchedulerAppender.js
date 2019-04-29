@@ -61,13 +61,8 @@ export default class SchedulerAppender extends Component {
 		this.highlightcolour = 'Grey'
 	}
 	componentDidMount(){
-		//this.setStartAndEndDate(this.InitialStartDate);
-	}
-	componentWillReceiveProps(newProps){
-		if(Object.keys(this.props.data).length===0 && Object.keys(newProps.data).length>0){
-			let earliestBubble = new Date(Math.min(...Object.keys(newProps.data).map(key=>newProps.data[key].startdate)))
-			this.setStartAndEndDate(earliestBubble);
-		}
+		let earliestBubble = new Date(Math.min(...Object.keys(this.props.data).map(key=>this.props.data[key].startdate)))
+		this.setStartAndEndDate(earliestBubble);
 	}
 
 	setStartAndEndDate = (start)=>{
@@ -354,6 +349,7 @@ export default class SchedulerAppender extends Component {
 	}
 
   	render() {
+		  console.log(this.props.data)
 		const {bubbleTransform,setBubbleSideColour,setOriginalColour,tryToPerformLink,tryToPerformAssociation,onRemoveLink,deleteBubble,...newProps} = this.props
     	return (
 			React.cloneElement(newProps.children,

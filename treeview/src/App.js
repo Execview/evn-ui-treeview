@@ -21,7 +21,7 @@ class App extends Component {
     	return (
 			<div className="App">
 				<AddRow addRow={this.props.onAddRow} columnsInfo={columnsInfo}/>
-				{this.props.data !== null && <TreeConnector
+				{Object.keys(this.props.data).length !== 0 && <TreeConnector
 					data={this.props.data}
 					columnsInfo={columnsInfo}
 					editableCells={this.props.editableCells}
