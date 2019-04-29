@@ -31,6 +31,7 @@ export default class Table extends Component {
       }
     }
     const minWidths = Object.keys(defaults.columnsInfo).reduce((total, key) => { return { ...total, [key]: 70 }; }, {});
+    const data = this.props.data || {};
 
     this.state = {
       columnsInfo: defaults.columnsInfo,
@@ -43,7 +44,7 @@ export default class Table extends Component {
       nextInitialWidth: null,
       column: '',
       order: 'desc',
-      orderedData: Object.keys(props.data),
+      orderedData: Object.keys(data),
       activeCell: [null, null],
       invalidCells: [],
       data: this.props.data,
@@ -128,7 +129,8 @@ export default class Table extends Component {
       columnsInfo: props.columnsInfo,
       editableCells: props.editableCells,
     };
-    const dataKeys = Object.keys(props.data);
+    const data = props.data || {};
+    const dataKeys = Object.keys(data);
     toReturn.columnsInfo = props.columnsInfo || dataKeys.reduce((total, objKey) => { return { ...total, [objKey]: { cellType: 'text', headerData: objKey } }; }, {});
 
     toReturn.editableCells = {};
