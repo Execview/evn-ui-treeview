@@ -1,9 +1,7 @@
 import React from 'react';
 
 import { InputCellDisplay, InputCellEditor, ColorCellDisplay, ColorCellEditor, DateCellDisplay, DateCellEditor } from '@execview/table'
-import TreeCell from '../treeCell/TreeCell';
-import SchedulerCell from '../schedulerCell/SchedulerCell'
-import SchedulerHeader from '../schedulerCell/SchedulerHeader';
+
 import Data from './configData.json'
 
 export const treeStructure = {
@@ -44,15 +42,6 @@ export const editableCells = {
 	_u184b: ['activityTitle', 'startdate', 'progress', 'enddate'] };
 
 export const cellTypes = {
-	schedulerHeader: {
-		display: <SchedulerHeader/>
-	},
-	tree: {
-		display: <TreeCell />
-	},
-	scheduler: {
-		display: <SchedulerCell/>
-	},
 	text: {
 		display: <InputCellDisplay />,
 		editor: <InputCellEditor />

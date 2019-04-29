@@ -1,6 +1,5 @@
 import * as actionTypes from './actionTypes';
-import { getDiffs } from '../functions';
-import { objectCopierWithStringToDate, bubbleCopy } from '../../bubbleCopy';
+import { objectCopierWithStringToDate, bubbleCopy, recursiveDeepDiffs } from '../../bubbleCopy';
 import tryReturnValidTransformState from '../stateValidator';
 
 const moment = require('moment')
@@ -37,7 +36,7 @@ export const ADD_ROW = (state,action,reducer) => {
             [newId]: action.columns
         }
     };
-    return reducer(newState,{type:actionTypes.UPDATE_DATA})
+    return newState
 }
 
 export const DELETE_BUBBLE = (state,action,reducer) => {
@@ -58,7 +57,7 @@ export const DELETE_BUBBLE = (state,action,reducer) => {
     const {[action.key]:placeholder, ...rest} = newState._data
     newState = {...newState, _data: {...rest}}
     
-    return reducer(newState,{type:actionTypes.UPDATE_DATA, sendEvents:true });
+    return reducer(newState,{type:actionTypes.SEND_EVENTS});
 }
 
 export const TOGGLE_NODE = (state,action,reducer) => {
@@ -69,7 +68,7 @@ export const TOGGLE_NODE = (state,action,reducer) => {
             }
         }
     };
-    return reducer(updatedState, { type: actionTypes.UPDATE_DATA, sendEvents: true});
+    return reducer(updatedState, { type: actionTypes.SEND_EVENTS});
 }
 
 export const SAVE_TABLE = (state,action,reducer) => {
@@ -81,7 +80,7 @@ export const SAVE_TABLE = (state,action,reducer) => {
             [action.rowId]: action.editableValues
         }
     };
-    let changeObject = getDiffs(state._data[action.rowId],newRowValues)
+    let changeObject = recursiveDeepDiffs(state._data[action.rowId],newRowValues)
 
 
     return reducer(newState,{type:actionTypes.BUBBLE_TRANSFORM, key: action.rowId, changes: changeObject})
@@ -103,7 +102,7 @@ export const BUBBLE_TRANSFORM = (state,action,reducer) => {
                 ...newState,
                 _data: newStateBubbles
             }
-            return reducer(newState,{type:actionTypes.UPDATE_DATA, sendEvents:true });
+            return reducer(newState,{type:actionTypes.SEND_EVENTS});
         }
         else { return state }
     }

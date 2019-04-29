@@ -12,7 +12,7 @@ import './App.css'
 
 class App extends Component {
 	componentDidMount() {
-		// this.props.onGetInitialData();
+		//this.props.onGetInitialData();
 		this.props.onGetLocalData();
 	}
 
@@ -46,7 +46,7 @@ class App extends Component {
 
 const mapStateToProps = state => {
 	return {
-		data: state.displayedData,
+		data: state._data,
 		editableCells: state.editableCells
 	}
 }

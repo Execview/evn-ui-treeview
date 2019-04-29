@@ -25,5 +25,5 @@ export const SET_BUBBLE_SIDE_COLOUR = (state,action,reducer) => {
 			}
 		}
 	}
-	return reducer(newState,{type:actionTypes.UPDATE_DATA})
+	return newState
 }

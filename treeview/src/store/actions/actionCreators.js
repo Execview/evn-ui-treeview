@@ -1,5 +1,4 @@
 import * as actionTypes from './actionTypes';
-import {translateData, getParentNodes} from '../functions'
 
 export const getInitialData = () => (dispatch) => {
 	var token = ''
@@ -21,11 +20,51 @@ export const getInitialData = () => (dispatch) => {
 		const ourData = translateData(data,links)
 		const newEditableCells = Object.keys(ourData).reduce((total,key)=>{return {...total,[key]:['activityTitle', 'startdate', 'progress', 'enddate']}},{})
 		dispatch({
-            type: actionTypes.LOAD_DATA,
+            type: actionTypes.LOAD_DATA_DEVELOPMENT,
 			token: token,
 			data: ourData,
-			parentNodes: getParentNodes(ourData),
 			editableCells: newEditableCells
         })
     })
+}
+
+const translateData = (dbdata,dblinks) =>{
+	const shapes = {activity:'square', task:'bubble', milestone:'triangle'}
+	let newData = null
+	newData = dbdata.reduce((total,el) => {
+		const startdate = new Date(el.start)
+		const enddate = new Date(el.end)
+		const colour = el.colour || "Blue"
+		return {
+			...total,
+			[el.id]: {
+				startdate:(new Date(startdate.getFullYear(),startdate.getMonth(),startdate.getDate())),
+				enddate:(new Date(enddate.getFullYear(),enddate.getMonth(),enddate.getDate())),
+				colours: {left: colour, right: colour, middle: colour, original: colour},
+				ChildAssociatedBubbles: [],
+				ParentAssociatedBubble: "",
+				ChildBubbles: {},
+				ParentBubble: "",
+				open: el.open || false,
+				activityTitle: el.activityTitle || el.name,
+				progress: el.progress || "amber",
+				shape: shapes[el.type]
+			}
+		}
+	},{})
+	dblinks.forEach(link => {
+		//id, children[], type
+		link.children.forEach(child=>
+				newData[child.id] = {...newData[child.id],
+				ParentAssociatedBubble: link.id
+			}
+		)	
+		newData[link.id] = { 
+			...newData[link.id],
+			ChildAssociatedBubbles: link.children.map(child=>child.id), 
+			ChildBubbles:{},
+			ParentBubble:""
+		} 
+	});
+	return newData
 }
