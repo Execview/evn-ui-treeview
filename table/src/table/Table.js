@@ -15,7 +15,6 @@ export default class Table extends Component {
     const keys = Object.keys(defaults.columnsInfo);
 
     const initialWidths = {};
-
     for (let i = 0; i < keys.length; i++) {
       if (defaults.columnsInfo[keys[i]].width) {
         maxTableWidth -= defaults.columnsInfo[keys[i]].width;
@@ -31,13 +30,12 @@ export default class Table extends Component {
         initialWidths[keysLeft[i]] = defaultWidth;
       }
     }
-
     const minWidths = Object.keys(defaults.columnsInfo).reduce((total, key) => { return { ...total, [key]: 70 }; }, {});
 
     this.state = {
       columnsInfo: defaults.columnsInfo,
       widths: { ...initialWidths },
-	  minWidths: { ...minWidths },
+      minWidths: { ...minWidths },
       tableWidth: 100,
       columnClicked: null,
       positionClicked: null,
@@ -288,7 +286,7 @@ export default class Table extends Component {
               if (col.headerType) {
                 data = col.headerData;
                 type = this.props.cellTypes[col.headerType];
-                headerStyle.width = this.state.widths[colkey] - 10;
+                // headerStyle.width = this.state.widths[colkey] - 10;
               } else {
                 headerStyle.width = Math.floor(this.state.widths[colkey]);
                 data = { spans, title: col.headerData, sortData: () => { if (this.props.dataSort && this.props.dataSort[col.cellType]) { this.sortData(colkey, col.cellType); } }, };
