@@ -33,7 +33,7 @@ class App extends Component {
     for (let i = 0; i < dataKeys.length; i++) {
       t2[dataKeys[i]] = this.state.data[dataKeys[i]];
     }
-    const randomNumber = Math.floor((Math.random() * 35));
+    const randomNumber = Math.floor((Math.random() * cats.length));
     return (
       <div className="App">
         <button className="get-data" type="button" onClick={() => this.onGetData()}>Get Data!</button>

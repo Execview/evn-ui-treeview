@@ -6,14 +6,11 @@
   float: left;
 }
 #colwrap{
-  overflow:hidden;
   height:100%;
 }
 #colCenter {
   height:100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow-x: hidden;
 }
 #colRight {
   height:100%;

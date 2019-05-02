@@ -33,7 +33,7 @@ export default class UserMenu extends PureComponent {
               left={<CircleUser url={this.props.getUserProfile(assigneduser.user).image} />}
               center={<p className="user-name">{this.props.getUserProfile(assigneduser.user).name}</p>}
               right={(
-                <div>
+                <div style={{ lineHeight: '40px' }}>
                   <span className="arrow-more-info">
                     {arrowType}
                   </span>
