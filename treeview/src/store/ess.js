@@ -14,19 +14,19 @@ export class EventStoreSynchroniser {
 			for(let key in stateChanges._data){			
 				const bubbleChanges = stateChanges._data[key]
 				if(bubbleChanges===undefined){
-					console.log(key+" has been deleted")
+					//console.log(key+" has been deleted")
 					this.sendEvent(token,"https://evnext-api.evlem.net/api/command/delete/"+key,"activity.deleted","activity",{})
 					continue}
 				//ASSOCIATE LINKS
 				if(Object.keys(bubbleChanges).includes("ParentAssociatedBubble")){
 					if(bubbleChanges.ParentAssociatedBubble){
-						console.log("CHANGED PARENT OF: "+key)
+						//console.log("CHANGED PARENT OF: "+key)
 						//delete
 						//create						
 					}
 					else{
 						// not sure this will ever be reached... 
-						console.log("DELETED PARENT OF: "+key)
+						//console.log("DELETED PARENT OF: "+key)
 					}
 				}
 
@@ -55,7 +55,7 @@ export class EventStoreSynchroniser {
 
 	sendEvent = (token,link,type,aggregate,payload)=>{	
 		if(!this.ACTUALLY_SEND_TO_DB){return}
-		console.log("send event")
+		//console.log("send event")
 		let Eventbody = {
 			type: type,
 			aggregate: aggregate,

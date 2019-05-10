@@ -23,7 +23,6 @@ export default class TreeAppender extends Component {
         return 'continue';
       };
       const diffs = recursiveDeepDiffs(this.props, nextProps, { stopRecursion });
-	  //console.log(diffs)
       return diffs;
     }
 

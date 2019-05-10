@@ -65,27 +65,27 @@ export default class SchedulerAppender extends Component {
 		let earliestBubble = new Date(Math.min(...Object.keys(this.props.data).map(key=>this.props.data[key].startdate)))
 		this.setStartAndEndDate(earliestBubble);
 	}
-    shouldComponentUpdate(nextProps) {
-      const filterReactComponent = (c) => {
-        const { _owner, $$typeof, ...rest } = c;
-        return rest;
-      };
-      const stopRecursion = (o, u) => {
-        if (React.isValidElement(o) && React.isValidElement(u)) {
-          if (recursiveDeepDiffs(filterReactComponent(o), filterReactComponent(u), { stopRecursion })) {
-            return 'updated';
-          }
-          return 'ignore';
-        }
-        return 'continue';
-      };
-      const diffs = recursiveDeepDiffs(this.props, nextProps, { stopRecursion });
-	  //console.log(diffs)
-      return diffs;
-    }
+    shouldComponentUpdate(nextProps,nextState) {
+	if(nextState!==this.state){return true}
+	const filterReactComponent = (c) => {
+		const { _owner, $$typeof, ...rest } = c;
+		return rest;
+	};
+	const stopRecursion = (o, u) => {
+		if (React.isValidElement(o) && React.isValidElement(u)) {
+			if (recursiveDeepDiffs(filterReactComponent(o), filterReactComponent(u), { stopRecursion })) {
+			return 'updated';
+			}
+			return 'ignore';
+		}
+		return 'continue';
+	};
+	const diffs = recursiveDeepDiffs(this.props, nextProps, { stopRecursion });
+	return diffs;
+	}
 
 	setStartAndEndDate = (start)=>{
-		let end = moment(start).add(this.schedulerWidth/this.state.dayWidth,'d')
+		let end = moment(start).add(this.schedulerWidth/this.state.dayWidth,'d').toDate()
 		if(end-start<0){return}
 		const getDateRange = (start, end)=>{
 			var daterange = []
@@ -100,7 +100,6 @@ export default class SchedulerAppender extends Component {
 			//newXsnaps.push([daterange[i],i*(this.state.schedulerWidth/(daterange.length))])
 			newXsnaps.push([daterange[i],(i-this.extrasnaps)*this.state.dayWidth])
 		}
-
 		this.setState({
 			startdate: start,
 			enddate: end,
@@ -260,7 +259,8 @@ export default class SchedulerAppender extends Component {
 		if(width!==this.schedulerWidth){
 			// this.setState({ schedulerWidth: width });
 			this.schedulerWidth=width;
-			this.setStartAndEndDate(this.state.startdate,this.state.enddate)
+			
+			if(this.state.startdate){this.setStartAndEndDate(this.state.startdate)}
 		}
 	}
 	
@@ -272,7 +272,6 @@ export default class SchedulerAppender extends Component {
 	}
 
 	addSchedulerColumn = ()=>{
-		const timeit = new Date()
 		const rowHeights = this.getRowHeights(this.tableRef);
 		const getRowY = (i) => {
 			return [...rowHeights].splice(0,i).reduce((total,rh)=>total+rh,0)
@@ -327,12 +326,10 @@ export default class SchedulerAppender extends Component {
 				}
 			}
 			newColumnsInfo = {...this.props.columnsInfo, scheduler: {cellType: 'scheduler', width: 65, headerType: 'schedulerHeader', headerData: schedulerheaderdata}}
-		console.log(`Scheduler column: ${(new Date())-timeit}`)
 		return newColumnsInfo
 	}
 
 	addSchedulerData = ()=>{
-		const timeit = new Date()
 		let tableData = {...this.props.data}
 		for(const rowId in this.props.data ){
 			const shadow = rowId===this.mouseDownOnBubble.key ? true : false
@@ -365,7 +362,6 @@ export default class SchedulerAppender extends Component {
 				}
 			}
 		}
-		console.log(`Scheduler data: ${(new Date())-timeit}`)
 		return tableData
 	}
 

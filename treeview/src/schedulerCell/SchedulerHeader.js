@@ -9,7 +9,7 @@ class SchedulerHeader extends Component {
 				<svg height='100%' width='100%'>
 					<text style={{fill:'white'}} >{days}</text>
 				</svg>
-				<SchedulerOverlay contextMenu={this.props.data.contextMenu} tableHeight={this.props.data.tableHeight} links={this.props.data.links}/>		
+				<SchedulerOverlay contextMenu={this.props.data.contextMenu} tableHeight={this.props.data.tableHeight} links={this.props.data.links}/>
 			</div>
 		);
   	}
