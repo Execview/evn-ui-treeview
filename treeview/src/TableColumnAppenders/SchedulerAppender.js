@@ -272,7 +272,6 @@ export default class SchedulerAppender extends Component {
 	}
 
 	addSchedulerColumn = ()=>{
-		const timeit = new Date()
 		const rowHeights = this.getRowHeights(this.tableRef);
 		const getRowY = (i) => {
 			return [...rowHeights].splice(0,i).reduce((total,rh)=>total+rh,0)
@@ -327,12 +326,10 @@ export default class SchedulerAppender extends Component {
 				}
 			}
 			newColumnsInfo = {...this.props.columnsInfo, scheduler: {cellType: 'scheduler', width: 65, headerType: 'schedulerHeader', headerData: schedulerheaderdata}}
-		console.log(`Scheduler column: ${(new Date())-timeit}`)
 		return newColumnsInfo
 	}
 
 	addSchedulerData = ()=>{
-		const timeit = new Date()
 		let tableData = {...this.props.data}
 		for(const rowId in this.props.data ){
 			const shadow = rowId===this.mouseDownOnBubble.key ? true : false
@@ -365,7 +362,6 @@ export default class SchedulerAppender extends Component {
 				}
 			}
 		}
-		console.log(`Scheduler data: ${(new Date())-timeit}`)
 		return tableData
 	}
 

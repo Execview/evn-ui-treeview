@@ -2,7 +2,7 @@ import * as actionTypes from './actionTypes';
 
 export const PERFORM_LINK = (state,action,reducer) => {
 	if((action.parentside === 'left' || action.parentside === 'right') && action.childkey!==action.parentkey){
-		console.log(action)
+		//console.log(action)
 		var finalstate = {...state}
 		var parentpoint = 'right'===action.parentside ? "enddate" : "startdate"
 		var childpoint = 'right'===action.childside ? "enddate" : "startdate"
@@ -14,7 +14,7 @@ export const PERFORM_LINK = (state,action,reducer) => {
 			finalstate = reducer(finalstate,{type:actionTypes.ADD_PARENT_LINK,childkey:action.childkey,parentkey:action.parentkey})
 			return reducer(finalstate,{type:actionTypes.SEND_EVENTS});
 		} else {
-			console.log('already linked!');
+			//console.log('already linked!');
 			return state
 		}
 	}

@@ -33,9 +33,7 @@ class App extends Component {
 					rules={rules}
 				>
 					<SchedulerConnector>
-						<PropInspector>
-							<Table />
-						</PropInspector>
+						<Table />
 					</SchedulerConnector>
 				</TreeConnector>}
 				<div style={{ margin: 'auto', marginTop: '30px', maxWidth: '400px' }}>
