@@ -1,4 +1,5 @@
 import {recursiveDeepDiffs} from '../bubbleCopy'
+import jwtDecode from 'jwt-decode'
 
 // shouldnt be part of treeview. move this into its own package
 export class EventStoreSynchroniser {
@@ -52,30 +53,31 @@ export class EventStoreSynchroniser {
 
 	}
 
-	sendEvent = (token,link,type,aggregate,payload)=>{
-	if(!this.ACTUALLY_SEND_TO_DB){return}
-	console.log("send event")
-	let Eventbody = {
-		type: type,
-		aggregate: aggregate,
-		data: {
-			meta: {
-				source: "local",
-				correlation_id: "00000000-0000-0000-0000-000000000000",
-				causation_id: "00000000-0000-0000-0000-000000000000"
-			},
-			payload: payload
+	sendEvent = (token,link,type,aggregate,payload)=>{	
+		if(!this.ACTUALLY_SEND_TO_DB){return}
+		console.log("send event")
+		let Eventbody = {
+			type: type,
+			aggregate: aggregate,
+			data: {
+				meta: {
+					source: "local",
+					correlation_id: null,
+					causation_id: null,
+					//holder: `user/${jwtDecode(token).id}`// what to link to. users have activity links. Link to user's root activity.
+				},
+				payload: payload
+			}
 		}
-	}
-	return fetch(link, {
-		method:"POST",
-		headers: {
-			"Content-Type": "application/json",
-			"Authorization": `Bearer ${token}`
-		},
-		body:JSON.stringify(Eventbody)
-	})
-	.then(response=>response.text())
+		return fetch(link, {
+			method:"POST",
+			headers: {
+				"Content-Type": "application/json",
+				"Authorization": `Bearer ${token}`
+			},
+			body:JSON.stringify(Eventbody)
+		})
+		.then(response=>response.text())
 }
 
 }

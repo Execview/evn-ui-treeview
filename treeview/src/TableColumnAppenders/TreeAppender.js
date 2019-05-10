@@ -1,18 +1,37 @@
 import React, { Component } from 'react';
 import TreeCell from '../treeCell/TreeCell';
+import { recursiveDeepDiffs } from '../bubbleCopy';
 
 export default class TreeAppender extends Component {
 	constructor(props){
 		super(props)
 		this.state = { rowHeights: []}
 	}
-	
+
+	shouldComponentUpdate(nextProps) {
+      const filterReactComponent = (c) => {
+        const { _owner, $$typeof, ...rest } = c;
+        return rest;
+      };
+      const stopRecursion = (o, u) => {
+        if (React.isValidElement(o) && React.isValidElement(u)) {
+          if (recursiveDeepDiffs(filterReactComponent(o), filterReactComponent(u), { stopRecursion })) {
+            return 'updated';
+          }
+          return 'ignore';
+        }
+        return 'continue';
+      };
+      const diffs = recursiveDeepDiffs(this.props, nextProps, { stopRecursion });
+	  //console.log(diffs)
+      return diffs;
+    }
+
 	getDisplayedTreeStructure = (tree, parentNodes)=>{
 		//an array of arrays of the rows to display, their corresponding depths, and whether they are open/closed/neither.
 		var newDisplayedRows = []
 		const pushChildRows = (childnodes,currentdepth=0) => {
-			for(let i=0;i<childnodes.length;i++){
-			let currentRow = childnodes[i]
+			for(const currentRow of childnodes){
 			let arrowstatus = tree[currentRow].open ? 'open': 'closed';
 			if(tree[currentRow].ChildAssociatedBubbles.length===0){arrowstatus='none'}
 			newDisplayedRows.push({	key:currentRow,

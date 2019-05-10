@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import SchedulerCell from '../schedulerCell/SchedulerCell'
 import SchedulerHeader from '../schedulerCell/SchedulerHeader';
+import { recursiveDeepDiffs } from '../bubbleCopy';
 
 var Rx = require('rxjs/Rx')
 var moment = require('moment')
@@ -64,6 +65,24 @@ export default class SchedulerAppender extends Component {
 		let earliestBubble = new Date(Math.min(...Object.keys(this.props.data).map(key=>this.props.data[key].startdate)))
 		this.setStartAndEndDate(earliestBubble);
 	}
+    shouldComponentUpdate(nextProps) {
+      const filterReactComponent = (c) => {
+        const { _owner, $$typeof, ...rest } = c;
+        return rest;
+      };
+      const stopRecursion = (o, u) => {
+        if (React.isValidElement(o) && React.isValidElement(u)) {
+          if (recursiveDeepDiffs(filterReactComponent(o), filterReactComponent(u), { stopRecursion })) {
+            return 'updated';
+          }
+          return 'ignore';
+        }
+        return 'continue';
+      };
+      const diffs = recursiveDeepDiffs(this.props, nextProps, { stopRecursion });
+	  //console.log(diffs)
+      return diffs;
+    }
 
 	setStartAndEndDate = (start)=>{
 		let end = moment(start).add(this.schedulerWidth/this.state.dayWidth,'d')
@@ -253,6 +272,7 @@ export default class SchedulerAppender extends Component {
 	}
 
 	addSchedulerColumn = ()=>{
+		const timeit = new Date()
 		const rowHeights = this.getRowHeights(this.tableRef);
 		const getRowY = (i) => {
 			return [...rowHeights].splice(0,i).reduce((total,rh)=>total+rh,0)
@@ -307,14 +327,14 @@ export default class SchedulerAppender extends Component {
 				}
 			}
 			newColumnsInfo = {...this.props.columnsInfo, scheduler: {cellType: 'scheduler', width: 65, headerType: 'schedulerHeader', headerData: schedulerheaderdata}}
+		console.log(`Scheduler column: ${(new Date())-timeit}`)
 		return newColumnsInfo
 	}
 
 	addSchedulerData = ()=>{
-		const displayedRows = Object.keys(this.props.data)
+		const timeit = new Date()
 		let tableData = {...this.props.data}
-		for(let i=0; i<displayedRows.length; i++){
-			const rowId = displayedRows[i]
+		for(const rowId in this.props.data ){
 			const shadow = rowId===this.mouseDownOnBubble.key ? true : false
 			tableData[rowId] = {...tableData[rowId],
 				scheduler:{
@@ -345,11 +365,11 @@ export default class SchedulerAppender extends Component {
 				}
 			}
 		}
+		console.log(`Scheduler data: ${(new Date())-timeit}`)
 		return tableData
 	}
 
   	render() {
-		  console.log(this.props.data)
 		const {bubbleTransform,setBubbleSideColour,setOriginalColour,tryToPerformLink,tryToPerformAssociation,onRemoveLink,deleteBubble,...newProps} = this.props
     	return (
 			React.cloneElement(newProps.children,
