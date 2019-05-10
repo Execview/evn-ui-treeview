@@ -249,7 +249,8 @@ export default class Table extends Component {
   }
 
   resizeTable() {
-    const windowWidth = ReactDOM.findDOMNode(this).parentNode.offsetWidth - 5;
+    const parentNode = ReactDOM.findDOMNode(this).parentNode;
+    const windowWidth = window.getComputedStyle(parentNode,null).getPropertyValue('width').slice(0, -2);
     if (this.state.tableWidth !== windowWidth) {
       const scaleFactor = (windowWidth / this.state.tableWidth);
       const scaledWidths = Object.keys(this.state.widths).reduce((total, col) => { return { ...total, [col]: this.state.widths[col] * scaleFactor }; }, {});
@@ -283,7 +284,7 @@ export default class Table extends Component {
               }
 
               let data = null;
-              const headerStyle = { width: this.state.widths[colkey], overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' };
+              const headerStyle = { width: Math.round(this.state.widths[colkey]), overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' };
               let type = null;
               if (col.headerType) {
                 data = col.headerData;
