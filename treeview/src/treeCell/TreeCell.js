@@ -18,7 +18,7 @@ class TreeCell extends Component {
 		}
     	return (
 			<div className="cell-container" onClick={this.props.data.toggleNode} style={showPointerStyle}>
-				<div style={this.props.style} className="cell-text">										
+				<div style={{...this.props.style,width:this.props.style.width - 10}} className="cell-text">										
 					<p className="tree-text" style={{marginLeft: 5 + 20 * this.props.data.depth}}>{arrow} {this.props.data.text}</p>					
 				</div>
 			</div>

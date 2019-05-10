@@ -9,6 +9,7 @@ import TreeConnector from './TableColumnAppenders/TreeConnector';
 import { Table, cats } from '@execview/table';
 import AddRow from './AddRow';
 import './App.css'
+import PropInspector from './PropInspector'
 
 class App extends Component {
 	componentDidMount() {
@@ -17,7 +18,7 @@ class App extends Component {
 	}
 
   	render() {
-			const randomNumber = Math.floor((Math.random() * 35));
+			const randomNumber = Math.floor((Math.random() * cats.length));
     	return (
 			<div className="App">
 				<AddRow addRow={this.props.onAddRow} columnsInfo={columnsInfo}/>
@@ -32,7 +33,9 @@ class App extends Component {
 					rules={rules}
 				>
 					<SchedulerConnector>
-						<Table />
+						<PropInspector>
+							<Table />
+						</PropInspector>
 					</SchedulerConnector>
 				</TreeConnector>}
 				<div style={{ margin: 'auto', marginTop: '30px', maxWidth: '400px' }}>
