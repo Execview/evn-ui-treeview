@@ -9,10 +9,17 @@ const hash = crypto.createHash('sha256');
 export const ADD_ROW = (state,action,reducer) => {
     const newId = '_' + hash.update(Date.now() + Math.random().toString()).digest('hex').substring(0, 5);
     const tempTitle = 'Untitled Activity';
+	const parent = action.parent || '';
     const colors = ['Blue','Red', 'Green', 'Yellow', 'Purple'];
     const colorIndex = Math.floor((Math.random() * 5));
-    let startdates = Object.keys(state._data).map(key=>state._data[key].startdate)
-    const date = startdates.length > 0 ? new Date(Math.min(...startdates)) : new Date()
+	let date = new Date()
+    if(parent){
+		date = state._data[parent].startdate
+	} else {
+ 		let startdates = Object.keys(state._data).map(key=>state._data[key].startdate)
+		date = startdates.length > 0 && new Date(Math.min(...startdates))
+	}
+    
     const newRow = {
             startdate: date,
             enddate: moment(date).add(2,'d').toDate(),
@@ -25,7 +32,7 @@ export const ADD_ROW = (state,action,reducer) => {
             activityTitle: tempTitle,
             progress: 'amber'
     };
-    const newState =  {
+    let newState =  {
         ...state,
         _data: {
             ...state._data,
@@ -36,6 +43,7 @@ export const ADD_ROW = (state,action,reducer) => {
             [newId]: action.columns
         }
     };
+	if(parent){newState = reducer(newState, {type:actionTypes.PERFORM_ASSOCIATION, childkey:newId,parentkey:parent})}
     return newState
 }
 
