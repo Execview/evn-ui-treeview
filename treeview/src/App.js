@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
-import './App.css';
 import SchedulerConnector from './TableColumnAppenders/SchedulerConnector'
-import { columnsInfo, cellTypes, rules } from './store/config';
+
 import * as actionTypes from './store/actions/actionTypes'
 import * as actionCreators from './store/actions/actionCreators'
 import TreeConnector from './TableColumnAppenders/TreeConnector';
 import { Table, cats } from '@execview/table';
 import AddRow from './AddRow';
-import './App.css'
+import { columnsInfo, cellTypes, rules } from './store/config';
 import PropInspector from './PropInspector'
+import './App.css'
 
 class App extends Component {
 	componentDidMount() {

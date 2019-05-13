@@ -19,7 +19,7 @@ class AddRow extends Component {
 
 const mapDispatchToProps = dispatch => {
 	return {
-        onAddRow: (columns) => dispatch({ type: actionTypes.ADD_ROW, columns })
+        onAddRow: (columns) => dispatch({ type: actionTypes.ADD_ROW, columns, parent:'_1235d' })
 	}
 }
 
