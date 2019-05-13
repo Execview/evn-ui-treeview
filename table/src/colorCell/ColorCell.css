@@ -6,6 +6,7 @@
   height: 100%;
   word-wrap: break-word;
   padding: 0 5px;
+
 }
 
 .progress-red {
@@ -13,6 +14,7 @@
   height: 100%;
   min-height: 100%;
   border-radius: 4px;
+  transition: background-color 0.7s;
 }
 
 .progress-amber {
@@ -20,6 +22,7 @@
   height: 100%;
   min-height: 100%;
   border-radius: 4px;
+  transition: background-color 0.7s;
 }
 
 .no-select {
@@ -34,6 +37,7 @@
   height: 100%;
   min-height: 100%;
   border-radius: 4px;
+  transition: background-color 0.7s;
 }
 
 .progress-grey {
@@ -41,6 +45,38 @@
   height: 100%;
   min-height: 100%;
   border-radius: 4px;
+  transition: background-color 0.7s;
+}
+
+.color-circle-container {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.color-circle {
+  height:21px;
+  width:21px;
+  border:1px solid transparent;
+  border-radius:50%;
+  transition: background-color 0.7s;
+}
+
+.circle-green {
+  background-color: #02d62b;
+}
+
+.circle-amber {
+  background-color: #f9e616;
+}
+
+.circle-red {
+  background-color: #f20e0e;
+}
+
+.circle-grey {
+  background-color: grey;
 }
 
 .color-dropdown {
@@ -48,8 +84,7 @@
   left:0;
   top:0;
   background-color: #282c34;
-  z-index: 1;
-  width:100%;
+  z-index: 2;
 }
 
 .color-dropdown-menu {
@@ -79,3 +114,5 @@
 .color-grey:hover{
   background-color: grey;
 }
+
+

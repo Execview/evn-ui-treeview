@@ -23,6 +23,7 @@ const cats = ['https://ichef.bbci.co.uk/images/ic/720x405/p0517py6.jpg',
   'https://scontent-lht6-1.xx.fbcdn.net/v/t31.0-8/17349836_1212468472204571_490417807580389361_o.jpg?_nc_cat=101&_nc_ht=scontent-lht6-1.xx&oh=ce5faf25fc888b8beeeb3e9613a03dec&oe=5CF707D3',
   'https://i.imgur.com/DL1M0S1.jpg',
   'https://i.imgur.com/6YXGVoz.jpg',
+  'https://i.imgur.com/b8OZrQL.jpg',
   'https://scontent-lht6-1.xx.fbcdn.net/v/t1.0-9/15826735_596969937167292_2775655212300681748_n.jpg?_nc_cat=101&_nc_ht=scontent-lht6-1.xx&oh=65c9305921b1dff8356f849678b3e2aa&oe=5CFDED60',
   'https://scontent-lht6-1.xx.fbcdn.net/v/t1.0-9/49485853_332974550879065_1419268103262437376_n.jpg?_nc_cat=106&_nc_ht=scontent-lht6-1.xx&oh=4667c66dc8f5db8f8d85f82039ce8db2&oe=5CF69C53',
   'https://scontent-lht6-1.xx.fbcdn.net/v/t1.0-9/49528576_341870709980580_4771892911363063808_n.jpg?_nc_cat=104&_nc_ht=scontent-lht6-1.xx&oh=c641d7605030c8838f9e70bc934ab9a7&oe=5CF68200'
