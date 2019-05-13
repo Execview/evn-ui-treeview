@@ -7,10 +7,11 @@ class ColorCellEditor extends Component {
   handleClickOutside = () => {
     this.props.onValidateSave(this.props.data);
   };
-  
+
   render() {
+    const width = this.props.style.width >= 137 ? '100%' : 137;
     return (
-      <div className="color-dropdown" style={this.props.style}>
+      <div className="color-dropdown" style={{ width }}>
         <ul className="color-dropdown-menu">
           {Object.keys(colors).map(objKey => <li className={'color-dropdown-item color-' + objKey} key={objKey} onClick={(e) => { e.stopPropagation(); e.preventDefault(); this.props.onValidateSave(objKey); }}>{colors[objKey]}</li>)}
         </ul>

@@ -30,7 +30,7 @@ export default class TableWrapper extends Component {
 
   render() {
     return (
-      <div style={{ width: '100%' }}>
+      <div style={{ width: '100%', '-moz-user-select': 'none', '-webkit-user-select': 'none', '-ms-user-select': 'none', 'user-select': 'none' }}>
         <div className="button-wrapper">
           <button className="get-data" type="button" onClick={() => this.toggleWrap()}>Toggle Cell Wrap</button>
           <button className="get-data" type="button" onClick={() => this.addRow()}>Add Row</button>
