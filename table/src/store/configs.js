@@ -21,11 +21,11 @@ export const columnsInfo1 = {
   progress: { cellType: 'color', headerData: 'Progress' } };
 
 export const columnsInfo2 = {
-  activityId: { cellType: 'text', headerData: 'Activity ID', width: 5 },
+  activityId: { cellType: 'text', headerData: 'Activity ID', width: 5, minWidth: 25 },
   startDate: { cellType: 'date', headerData: 'Start Date', width: 10 },
   dueDate: { cellType: 'date', headerData: 'Due Date', width: 10 },
   assignedUsers: { cellType: 'users', headerData: 'Assigned Users', width: 10, headerType: 'userHeader' },
-  progress: { cellType: 'color', headerData: 'RAG', width: 10 },
+  progress: { cellType: 'color', headerData: 'RAG', width: 10, minWidth: 25 },
   latestProgress: { cellType: 'text', headerData: 'Latest Progress' }
   // employeeName: { cellType: 'dropdown', headerData: 'Employee Name', width: 400 },
 };
