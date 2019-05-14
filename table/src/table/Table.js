@@ -30,7 +30,7 @@ export default class Table extends Component {
         initialWidths[keysLeft[i]] = defaultWidth;
       }
     }
-    const minWidths = Object.keys(defaults.columnsInfo).reduce((total, key) => { return { ...total, [key]: 70 }; }, {});
+    const minWidths = Object.keys(defaults.columnsInfo).reduce((total, key) => { return { ...total, [key]: defaults.columnsInfo[key].minWidth || 70 }; }, {});
     const data = this.props.data || {};
 
     this.state = {
@@ -132,7 +132,7 @@ export default class Table extends Component {
     const data = props.data || {};
     const dataKeys = Object.keys(data);
     toReturn.columnsInfo = props.columnsInfo || dataKeys.reduce((total, objKey) => { return { ...total, [objKey]: { cellType: 'text', headerData: objKey } }; }, {});
-
+    
     toReturn.editableCells = {};
 
     for (let i = 0; i < dataKeys.length; i++) {

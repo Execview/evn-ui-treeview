@@ -89,6 +89,7 @@
 .header-cell {
   height: 40px;
   line-height: 40px;
+  overflow: hidden;
 }
 
 .no-select {
