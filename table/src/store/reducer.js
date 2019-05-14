@@ -1,7 +1,7 @@
 // import React from 'react';
 import * as actionTypes from './actionTypes';
 import { data, editableCells } from './configSwitch';
-import { OrderedObjectAssign } from '../functions'
+import { orderedObjectAssign } from '@execview/reusable'
 
 const initialState = {
   data: data,
@@ -12,8 +12,8 @@ const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.SAVE: {
       let newState = state
-      newState = OrderedObjectAssign(newState, 'data', OrderedObjectAssign(state.data, action.rowId, action.rowValues));
-      newState = OrderedObjectAssign(newState, 'editableCells', OrderedObjectAssign(newState.editableCells, action.rowId, action.editableValues));
+      newState = orderedObjectAssign(newState, 'data', orderedObjectAssign(state.data, action.rowId, action.rowValues));
+      newState = orderedObjectAssign(newState, 'editableCells', orderedObjectAssign(newState.editableCells, action.rowId, action.editableValues));
       return newState;
     }
     default:

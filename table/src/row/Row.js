@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Cell from '../cell/Cell';
 import InputCellDisplay from '../inputCell/InputCellDisplay';
 import InputCellEditor from '../inputCell/InputCellEditor';
-import { recursiveDeepDiffs } from '../functions';
+import { recursiveDeepDiffs } from '@execview/reusable';
 import './Row.css';
 
 

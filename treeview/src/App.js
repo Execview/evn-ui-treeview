@@ -8,7 +8,7 @@ import TreeConnector from './TableColumnAppenders/TreeConnector';
 import { Table, cats } from '@execview/table';
 import AddRow from './AddRow';
 import { columnsInfo, cellTypes, rules } from './store/config';
-import PropInspector from './PropInspector'
+import { PropInspector } from '@execview/reusable'
 import './App.css'
 
 class App extends Component {

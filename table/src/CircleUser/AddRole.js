@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import './CircleUser.css';
-import GenericDropdown from '../dropdownCell/GenericDropdown';
+import { GenericDropdown } from '@execview/reusable';
 import { isMobile } from 'react-device-detect';
 
 export default class AddRole extends PureComponent {

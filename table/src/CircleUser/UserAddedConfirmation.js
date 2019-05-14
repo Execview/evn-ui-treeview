@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
-import TripleFill from './TripleFill';
+import { TripleFill } from '@execview/reusable';
 import CircleUser from './CircleUser';
 import './CircleUser.css';
 

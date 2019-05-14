@@ -1,5 +1,5 @@
 import * as actionTypes from './actionTypes';
-import { objectCopierWithStringToDate, bubbleCopy, recursiveDeepDiffs } from '../../bubbleCopy';
+import { objectCopierWithStringToDate, recursiveDeepCopy, recursiveDeepDiffs } from '@execview/reusable';
 import tryReturnValidTransformState from '../stateValidator';
 
 const moment = require('moment')
@@ -100,7 +100,7 @@ export const BUBBLE_TRANSFORM = (state,action,reducer) => {
     var oldBubbles = {}
     for (var bubblekey in newState._data){
         var bubble=newState._data[bubblekey]
-        oldBubbles[bubblekey]=bubbleCopy(bubble)
+        oldBubbles[bubblekey]=recursiveDeepCopy(bubble)
     }
     if(JSON.stringify(newState._data[action.key])!==JSON.stringify({...newState._data[action.key],...action.changes})){
         //newState = {...newState, _data: {...state._data,[action.key]:{...newState._data[action.key],...action.changes}}}
