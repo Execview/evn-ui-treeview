@@ -1,9 +1,8 @@
 import React, { PureComponent } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
-import GenericDropdown from '../dropdownCell/GenericDropdown';
 import { isMobile } from 'react-device-detect';
-import TripleFill from './TripleFill';
+import { TripleFill, GenericDropdown } from '@execview/reusable';
 import './CircleUser.css';
 
 export default class AddUserDropDown extends PureComponent {

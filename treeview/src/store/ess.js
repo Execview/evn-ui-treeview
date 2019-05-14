@@ -1,4 +1,4 @@
-import {recursiveDeepDiffs} from '../bubbleCopy'
+import {recursiveDeepDiffs} from '@execview/reusable'
 import jwtDecode from 'jwt-decode'
 
 // shouldnt be part of treeview. move this into its own package

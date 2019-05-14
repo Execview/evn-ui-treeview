@@ -1,37 +1,17 @@
-export function bubbleCopy(bubble){
-		return recursiveDeepCopy(bubble)
-	}
-
-export function recursiveDeepCopy(o) {
-		var newO,i;	
-		if (typeof o !== 'object') {return o;}
-		if (!o) {return o;}
-		var str = Object.prototype.toString.apply(o)
-		if ('[object Array]' === str) {
-			newO = [];
-			for (i = 0; i < o.length; i += 1) {newO[i] = recursiveDeepCopy(o[i]);}
-			return newO;}		
-		if('[object Date]' === str){return new Date(o)}	
-		newO = {};
-		for (i in o) {
-		if (o.hasOwnProperty(i)) {newO[i] = recursiveDeepCopy(o[i]);}}
-		return newO;
-}
-
-export const recursiveDeepDiffs = (o,u,options={}) => {
+const recursiveDeepAssign = (o,u,options={}) => {
 	const sitoptions = options.sit || {}
 	const stopRecursion = options.stopRecursion || (()=>false)
 
 	const sitdefaults = {
 		created: (o,u)=>{return u},
 		updated: (o,u)=>{return u},
-		deleted: (o,u)=>{return undefined},
-		equal: 	"SDFHIASFOPIHESDUPRFHGYIPU4YR7T89YSIUDHF34P8R9YWPORWJHF" //HAS TO BE UNIQUE
+		deleted: (o,u)=>{return o},
+		equal: 	"SDFHIASFOPIHESDUPRFHGYIPU4YR7T89YSIUDHF34P8R9YWPORWJHF" //HAS TO BE UNIQUE! COULD PROBABLY BE AN EMPTY OBJECT TBH SINCE {}!=={}
 	}
 	const sit = {...sitdefaults,...sitoptions}
-	const RDD = (o,u) => {
+	const RDA = (o,u) => {
 		switch(stopRecursion(o,u)){
-	  	case "updated": return u
+	  		case "updated": return u
 			case "ignore": return sit.equal
 			default:break;
 		}
@@ -69,13 +49,13 @@ export const recursiveDeepDiffs = (o,u,options={}) => {
 			if(utypereal === '[object Array]'){
 				let newArr = []
 				const ps = [...Array(Math.max(o.length,u.length)).keys()];
-				ps.forEach(i=>{const newValue=propertyLoop(o[i],u[i]);if(newValue!==sit.equal){newArr[i]=newValue}})
+				ps.forEach(i=>{const newValue=propertyLoop(o[i],u[i]);if(newValue!==sit.equal){newArr[i]=newValue}else{newArr[i]=u[i]}})
 				return newArr.length===0 ? sit.equal : newArr
 			}
 			if(utypereal === '[object Object]'){
 				let newO = {}
 				const ps = propertySet(o,u)
-				ps.forEach(i=>{const newValue=propertyLoop(o[i],u[i]);if(newValue!==sit.equal){newO[i]=newValue}})
+				ps.forEach(i=>{const newValue=propertyLoop(o[i],u[i]);if(newValue!==sit.equal){newO[i]=newValue}else{newO[i]=u[i]}})
 				return Object.keys(newO).length===0 ? sit.equal : newO
 			}
 			return sit.equal //both null? equal.
@@ -89,33 +69,27 @@ export const recursiveDeepDiffs = (o,u,options={}) => {
 		return [...okeys,...Object.keys(u).filter(ukey=>!okeys.includes(ukey))]
 	}
 	const propertyLoop = (oi,ui) => {	
-		return RDD(oi,ui)
+		return RDA(oi,ui)
 	}
 
-	const result = RDD(o,u)
+	const result = RDA(o,u)
 	return result===sit.equal ? null : result
 }
 
-const ISOSTRINGPATTERN = /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/
-export function objectCopierWithStringToDate(o) {
-		var newO,i;
-		if (typeof o !== 'object') {
-			if(typeof o === 'string' && RegExp(ISOSTRINGPATTERN).test(o)){return new Date(o)}
-			return o;
-		}
-		if (!o) {return o;}
-		var str = Object.prototype.toString.apply(o)		
-		if ('[object Array]' === str) { 
-			newO = [];
-			for (i = 0; i < o.length; i += 1) {newO[i] = objectCopierWithStringToDate(o[i]);}
-			return newO;}		
-		if('[object Date]' === str){return new Date(o)}	
-		newO = {};
-		for (i in o) {
-			if (o.hasOwnProperty(i)) {newO[i] = objectCopierWithStringToDate(o[i]);}
-		}
-		return newO;
-}
+export default recursiveDeepAssign;
 
 
-export default 0
+// let a;
+// let b;
+
+// a = {t:1,t2:{a:4,b:[5,7],c:{d:[3,4],e:'test'}}}
+// b = {t:1,t2:{a:4,b:[9,7],c:{d:[3,4],e:'test'}}}
+// console.log(recursiveDeepAssign(a,b))
+
+// a = {t:1,t2:{a:4,b:[5,7],c:{d:[3,4],e:'test'}}}
+// b = {t:1,t2:{a:4,b:[5,7]}}
+// console.log(recursiveDeepAssign(a,b))
+
+// a = {t:1,t2:{a:4,b:[5,7],c:{d:[3,4],e:'test'}}}
+// b = {t:1,t2:{a:4,b:[5,7],c:null}}
+// console.log(recursiveDeepAssign(a,b))

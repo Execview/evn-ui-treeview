@@ -2,8 +2,7 @@ import React, { PureComponent } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleUp, faAngleDown, faTrash, faUsers } from '@fortawesome/free-solid-svg-icons';
 import CircleUser from './CircleUser';
-import TripleFill from './TripleFill';
-import GenericDropdown from '../dropdownCell/GenericDropdown';
+import { TripleFill, GenericDropdown } from '@execview/reusable';
 import './CircleUser.css';
 import UserDetails from './UserDetails';
 

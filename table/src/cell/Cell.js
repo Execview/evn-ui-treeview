@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import InputCellDisplay from '../inputCell/InputCellDisplay';
 import InputCellEditor from '../inputCell/InputCellEditor';
-import { recursiveDeepDiffs } from '../functions';
+import { recursiveDeepDiffs } from '@execview/reusable';
 
 
 export default class Cell extends Component {

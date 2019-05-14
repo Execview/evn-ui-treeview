@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import SchedulerCell from '../schedulerCell/SchedulerCell'
 import SchedulerHeader from '../schedulerCell/SchedulerHeader';
-import { recursiveDeepDiffs } from '../bubbleCopy';
+import { recursiveDeepDiffs } from '@execview/reusable';
 
 var Rx = require('rxjs/Rx')
 var moment = require('moment')

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import TreeCell from '../treeCell/TreeCell';
-import { recursiveDeepDiffs } from '../bubbleCopy';
+import { recursiveDeepDiffs } from '@execview/reusable';
 
 export default class TreeAppender extends Component {
 	constructor(props){
