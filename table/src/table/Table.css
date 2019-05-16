@@ -33,6 +33,8 @@
   display: inline-block;
   height: 40px;
   vertical-align: top;
+  margin-left:5px;
+  white-space: nowrap;
 }
 
 .toggle-wrap {
