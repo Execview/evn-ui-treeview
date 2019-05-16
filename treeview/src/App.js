@@ -6,9 +6,8 @@ import * as actionTypes from './store/actions/actionTypes'
 import * as actionCreators from './store/actions/actionCreators'
 import TreeConnector from './TableColumnAppenders/TreeConnector';
 import { Table, cats } from '@execview/table';
-import AddRow from './AddRow';
 import { columnsInfo, cellTypes, rules } from './store/config';
-import { PropInspector } from '@execview/reusable'
+import { PropInspector, Button } from '@execview/reusable'
 import './App.css'
 
 class App extends Component {
@@ -21,7 +20,9 @@ class App extends Component {
 			const randomNumber = Math.floor((Math.random() * cats.length));
     	return (
 			<div className="App">
-				<AddRow addRow={this.props.onAddRow} columnsInfo={columnsInfo}/>
+				<div className="button-container">
+					<Button onClick={()=>this.props.onAddRow(Object.keys(columnsInfo))}>Add Row</Button>
+				</div>
 				{Object.keys(this.props.data).length !== 0 && <TreeConnector
 					data={this.props.data}
 					columnsInfo={columnsInfo}
@@ -57,7 +58,7 @@ const mapDispatchToProps = (dispatch) => {
 		onGetInitialData: () => dispatch(actionCreators.getInitialData()),
 		onSave: (rowId, rowValues, editableValues) => dispatch({ type: actionTypes.SAVE_TABLE, rowId, rowValues, editableValues }),
 		onGetLocalData: ()=>dispatch({type: actionTypes.LOAD_FROM_CONFIG}),
-		onAddRow: () => dispatch({type: actionTypes.ADD_ROW})
+		onAddRow: (columns) => dispatch({type: actionTypes.ADD_ROW, parent:'_1235d', shape:'square', columns})
 	};
 };
 
