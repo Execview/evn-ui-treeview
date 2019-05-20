@@ -1,5 +1,4 @@
 const injectObjectInObject = (o,a,pos) => {
-	console.log(pos)
 	let n;
 	switch(pos){
 		case 'start': n=0; break;
