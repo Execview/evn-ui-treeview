@@ -45,21 +45,49 @@ export const ADD_ROW = (state,action,reducer) => {
             [newId]: action.columns
         }
     };
-	if(parent){newState = reducer(newState, {type:actionTypes.PERFORM_ASSOCIATION, childkey:newId,parentkey:parent})}
+	if(parent){
+		newState = reducer(newState, {type:actionTypes.PERFORM_ASSOCIATION, childkey:newId,parentkey:parent})
+		if(!state._data[parent].open){newState = reducer(newState, {type:actionTypes.TOGGLE_NODE, nodeKey:parent})}
+		}
     return newState
 }
 
-export const DELETE_BUBBLE = (state,action,reducer) => {
+export const DELETE_SINGLE = (state,action,reducer) => {
     let newState = {...state}
-
+	let parentkey = state._data[action.key].ParentAssociatedBubble
     //Delete all Child references to this bubble
     for(var childkey in state._data[action.key].ChildBubbles){
         newState = reducer(newState,{type: actionTypes.UNLINK_PARENT_BUBBLE,key:childkey})
     }
-    for(var childkeyINDEX in state._data[action.key].ChildAssociatedBubbles){
-        newState = reducer(newState,{type: actionTypes.UNLINK_PARENT_ASSOCIATED_BUBBLE,key:state._data[action.key].ChildAssociatedBubbles[childkeyINDEX]})
+    for(var childkey of state._data[action.key].ChildAssociatedBubbles){
+        newState = reducer(newState,{type: actionTypes.UNLINK_PARENT_ASSOCIATED_BUBBLE,key:childkey})		
+		if(parentkey){newState = reducer(newState,{type: actionTypes.PERFORM_ASSOCIATION, childkey: childkey, parentkey: parentkey })}
     }
     //Delete the Parent reference from the parent
+    newState = reducer(newState,{type: actionTypes.UNLINK_PARENT_BUBBLE,key:action.key})
+    newState = reducer(newState,{type: actionTypes.UNLINK_PARENT_ASSOCIATED_BUBBLE,key:action.key})
+
+    //Safely delete the bubble
+    const {[action.key]:placeholder, ...rest} = newState._data
+    newState = {...newState, _data: {...rest}}
+    
+    return reducer(newState,{type:actionTypes.SEND_EVENTS});
+}
+
+export const DELETE_BUBBLE = (state,action,reducer) => {
+	let newState = {...state}
+
+	//Delete all Child references to this bubble
+	for(var childkey in state._data[action.key].ChildBubbles){
+        newState = reducer(newState,{type: actionTypes.UNLINK_PARENT_BUBBLE,key:childkey})
+    }
+
+	//Delete all Child associates of this bubble
+	for(var childkey of state._data[action.key].ChildAssociatedBubbles){
+        newState = reducer(newState,{type: actionTypes.DELETE_BUBBLE, key:childkey})
+    } 
+
+ 	//Delete the Parent reference from the parent
     newState = reducer(newState,{type: actionTypes.UNLINK_PARENT_BUBBLE,key:action.key})
     newState = reducer(newState,{type: actionTypes.UNLINK_PARENT_ASSOCIATED_BUBBLE,key:action.key})
 
