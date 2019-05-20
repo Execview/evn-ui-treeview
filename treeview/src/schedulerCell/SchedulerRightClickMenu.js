@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { GenericDropdown } from '@execview/table'
+import { GenericDropdown } from '@execview/reusable'
 
 class SchedulerRightClickMenu extends Component {
 	onSubmit = () => {

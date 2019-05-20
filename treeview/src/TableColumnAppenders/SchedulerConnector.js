@@ -26,6 +26,7 @@ const mapDispatchToProps = dispatch => {
 		tryToPerformLink: (childkey,parentkey,childside,parentside) => dispatch({type: actionTypes.PERFORM_LINK, parentkey:parentkey,childkey:childkey,parentside:parentside,childside:childside}),
 		tryToPerformAssociation: (parentkey,childkey) => dispatch({type: actionTypes.PERFORM_ASSOCIATION, childkey:childkey,parentkey:parentkey}),
 		onRemoveLink: (key) => dispatch({type: actionTypes.UNLINK_PARENT_BUBBLE, key}),
+		deleteSingle: (key) => dispatch({type: actionTypes.DELETE_SINGLE, key}),
 		deleteBubble: (key) => dispatch({type: actionTypes.DELETE_BUBBLE, key})
 	}
 }

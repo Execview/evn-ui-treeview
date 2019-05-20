@@ -107,7 +107,9 @@ export default class SchedulerAppender extends Component {
 	}
 
 	getInternalMousePosition = (event,CTM)=>{
-		var mouse = document.querySelector("svg").createSVGPoint();
+		const svg = document.querySelector("svg")
+		if(!svg){return [0,0]}
+		var mouse = svg.createSVGPoint();
 		mouse.x =event.clientX
 		mouse.y = event.clientY
 		var mouseSVG = CTM ? mouse.matrixTransform(CTM.inverse()) : {x:0,y:0}
@@ -322,7 +324,8 @@ export default class SchedulerAppender extends Component {
 					closeMenu: ()=>{this.setState({bubbleContextMenu:{key:null,position:null}})},
 					options: {
 						removeLink: <div onClick={() => this.props.onRemoveLink(this.state.bubbleContextMenu.key)}>Remove Link</div>, 
-						deleteBubble: <div onClick={()=>this.props.deleteBubble(this.state.bubbleContextMenu.key)}>Delete bubble</div> }
+						deleteSingle: <div onClick={()=>this.props.deleteSingle(this.state.bubbleContextMenu.key)}>Delete Single</div>,
+						deleteBubble: <div onClick={()=>this.props.deleteBubble(this.state.bubbleContextMenu.key)}>Delete Bubble</div> }
 				}
 			}
 			newColumnsInfo = {...this.props.columnsInfo, scheduler: {cellType: 'scheduler', width: 65, headerType: 'schedulerHeader', headerData: schedulerheaderdata}}
