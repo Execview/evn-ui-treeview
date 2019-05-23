@@ -9,6 +9,7 @@ import orderedObjectAssign from './Functions/orderedObjectAssign'
 import recursiveDeepAssign from './Functions/recursiveDeepAssign'
 import recursiveDeepCopy from './Functions/recursiveDeepCopy'
 import recursiveDeepDiffs from './Functions/recursiveDeepDiffs'
+import sendEvents from './Functions/sendEvents'
 
 module.exports = {
 	Button,
@@ -20,5 +21,6 @@ module.exports = {
 	orderedObjectAssign,
 	recursiveDeepAssign,
 	recursiveDeepCopy,
-	recursiveDeepDiffs
+	recursiveDeepDiffs,
+	sendEvents
 };
