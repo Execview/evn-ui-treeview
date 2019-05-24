@@ -1,10 +1,11 @@
 
-const sendEvent = (token,link,type,aggregate,argPayload,options={})=>{
+const sendEvent = (token,link,type,argPayload,options={})=>{
 	
-	if(!(token && link && type && aggregate)){console.log('missing arguments for sending events'); return}
+	if(!(token && link && type)){console.log('missing arguments for sending events'); return}
 	const payload = argPayload || {}
 	const holder = options.holder || ''
 	const method = options.method || 'POST'
+	const aggregate = type.split('.')[0]
 
 	let Eventbody = {
 		type: type,
@@ -28,7 +29,6 @@ const sendEvent = (token,link,type,aggregate,argPayload,options={})=>{
 		},
 		body:JSON.stringify(Eventbody)
 	})
-	.then(response=>response.text())
 }
 
 export default sendEvent
