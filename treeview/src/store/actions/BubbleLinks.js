@@ -12,7 +12,7 @@ export const PERFORM_LINK = (state,action,reducer) => {
 			var xGapDate = state._data[action.childkey][childpoint]-state._data[action.parentkey][parentpoint];
 			finalstate = reducer(finalstate,{type:actionTypes.ADD_CHILD_LINK,parentkey:action.parentkey,childkey:action.childkey,parentside:action.parentside,childside:action.childside,xGapDate:xGapDate})
 			finalstate = reducer(finalstate,{type:actionTypes.ADD_PARENT_LINK,childkey:action.childkey,parentkey:action.parentkey})
-			return reducer(finalstate,{type:actionTypes.SEND_EVENTS});
+			return finalstate
 		} else {
 			//console.log('already linked!');
 			return state
@@ -27,7 +27,7 @@ export const PERFORM_ASSOCIATION = (state,action,reducer) => {
 		finalstate = reducer(finalstate,{type: actionTypes.UNLINK_PARENT_ASSOCIATED_BUBBLE, key:action.childkey })
 		finalstate = reducer(finalstate,{type: actionTypes.ADD_CHILD_ASSOCIATION,parentkey:action.parentkey,childkey:action.childkey})
 		finalstate = reducer(finalstate,{type: actionTypes.ADD_PARENT_ASSOCIATION,childkey:action.childkey,parentkey:action.parentkey})
-		return reducer(finalstate,{type:actionTypes.SEND_EVENTS});
+		return finalstate
 	}
 	return state
 }
@@ -122,8 +122,6 @@ export const UNLINK_PARENT_ASSOCIATED_BUBBLE = (state,action,reducer) => {
 				}
 			}
 		}
-		reducer(newState,{type:actionTypes.SEND_EVENTS});
-
 	}
 	return newState
 }

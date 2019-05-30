@@ -1,5 +1,4 @@
-import {recursiveDeepDiffs} from '@execview/reusable'
-import jwtDecode from 'jwt-decode'
+import {recursiveDeepDiffs, sendEvent} from '@execview/reusable'
 
 // shouldnt be part of treeview. move this into its own package
 export class EventStoreSynchroniser {
@@ -15,7 +14,7 @@ export class EventStoreSynchroniser {
 				const bubbleChanges = stateChanges._data[key]
 				if(bubbleChanges===undefined){
 					//console.log(key+" has been deleted")
-					this.sendEvent(token,"https://evnext-api.evlem.net/api/command/delete/"+key,"activity.deleted","activity",{})
+					this.sendTheEvent(token,"https://evnext-api.evlem.net/api/command/delete/"+key,"activity.deleted",{})
 					continue}
 				//ASSOCIATE LINKS
 				if(Object.keys(bubbleChanges).includes("ParentAssociatedBubble")){
@@ -46,40 +45,18 @@ export class EventStoreSynchroniser {
 				if(enddate){Bubblepayload.end = enddate}
 
 				
-				this.sendEvent(token,"https://evnext-api.evlem.net/api/command/mutate/"+key,"activity.mutated","activity",Bubblepayload)
+				this.sendTheEvent(token,"https://evnext-api.evlem.net/api/command/mutate/"+key,"activity.mutated",Bubblepayload)
 				
 			}
 		}
 
 	}
 
-	sendEvent = (token,link,type,aggregate,payload)=>{	
+	sendTheEvent = (token,link,type,aggregate,payload)=>{	
 		if(!this.ACTUALLY_SEND_TO_DB){return}
 		//console.log("send event")
-		let Eventbody = {
-			type: type,
-			aggregate: aggregate,
-			data: {
-				meta: {
-					source: "local",
-					correlation_id: null,
-					causation_id: null,
-					//holder: `user/${jwtDecode(token).id}`// what to link to. users have activity links. Link to user's root activity.
-				},
-				payload: payload
-			}
-		}
-		return fetch(link, {
-			method:"POST",
-			headers: {
-				"Content-Type": "application/json",
-				"Authorization": `Bearer ${token}`
-			},
-			body:JSON.stringify(Eventbody)
-		})
-		.then(response=>response.text())
-}
-
+		sendEvent(token,link,type,aggregate,payload)
+	}
 }
 
 

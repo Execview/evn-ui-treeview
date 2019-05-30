@@ -1,23 +1,17 @@
-import { editableCells } from './config'
 import * as actionTypes from './actions/actionTypes';
 import * as BubbleLinks from './actions/BubbleLinks';
 import * as ColourChanges from './actions/ColourChanges';
 import * as DataManagement from './actions/DataManagement';
 import * as Interactions from './actions/Interactions';
-import { EventStoreSynchroniser } from './ess'
 
 let initialState = {
 	_data: {},
-	editableCells,
-	sendEvents: false
+	editableCells:{}
 }
-
-const ess = new EventStoreSynchroniser()
 
 function reducer(state=initialState,action) {
 	let newState = state
 	switch(action.type) {
-		case actionTypes.SEND_EVENTS: {	newState = {...state, sendEvents: true}; break;	}
 		case actionTypes.LOAD_FROM_CONFIG: { newState = DataManagement.LOAD_FROM_CONFIG(state,action,reducer); break; }
 		case actionTypes.LOAD_DATA_DEVELOPMENT: { newState = DataManagement.LOAD_DATA_DEVELOPMENT(state,action,reducer); break; }		
 
@@ -38,15 +32,11 @@ function reducer(state=initialState,action) {
 		case actionTypes.ADD_CHILD_ASSOCIATION: { newState = BubbleLinks.ADD_CHILD_ASSOCIATION(state,action,reducer); break; }
 		case actionTypes.ADD_PARENT_ASSOCIATION: { newState = BubbleLinks.ADD_PARENT_ASSOCIATION(state,action,reducer); break; }
 		case actionTypes.UNLINK_PARENT_BUBBLE: { newState = BubbleLinks.UNLINK_PARENT_BUBBLE(state,action,reducer); break; }
-		case actionTypes.UNLINK_PARENT_ASSOCIATED_BUBBLE: { newState = BubbleLinks.UNLINK_PARENT_ASSOCIATED_BUBBLE(state,action,reducer); break; }
+		case actionTypes.UNLINK_PARENT_ASSOCIATED_BUBBLE: { newState = BubbleLinks.UNLINK_PARENT_ASSOCIATED_BUBBLE(state,action,reducer); break}
 
 		default: { break; }
 	}
-	const ACTUALLY_SEND_TO_DB = false
-	if (newState.sendEvents && newState.development_token) {
-		ess.sendToDB(newState.development_token,newState,ACTUALLY_SEND_TO_DB)
-		newState = {...newState, sendEvents: false}
-	};
+
 	return newState
 }
 

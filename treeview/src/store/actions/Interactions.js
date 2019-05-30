@@ -71,7 +71,7 @@ export const DELETE_SINGLE = (state,action,reducer) => {
     const {[action.key]:placeholder, ...rest} = newState._data
     newState = {...newState, _data: {...rest}}
     
-    return reducer(newState,{type:actionTypes.SEND_EVENTS});
+    return newState;
 }
 
 export const DELETE_BUBBLE = (state,action,reducer) => {
@@ -95,7 +95,7 @@ export const DELETE_BUBBLE = (state,action,reducer) => {
     const {[action.key]:placeholder, ...rest} = newState._data
     newState = {...newState, _data: {...rest}}
     
-    return reducer(newState,{type:actionTypes.SEND_EVENTS});
+    return newState;
 }
 
 export const TOGGLE_NODE = (state,action,reducer) => {
@@ -106,7 +106,7 @@ export const TOGGLE_NODE = (state,action,reducer) => {
             }
         }
     };
-    return reducer(updatedState, { type: actionTypes.SEND_EVENTS});
+    return updatedState;
 }
 
 export const SAVE_TABLE = (state,action,reducer) => {
@@ -140,7 +140,7 @@ export const BUBBLE_TRANSFORM = (state,action,reducer) => {
                 ...newState,
                 _data: newStateBubbles
             }
-            return reducer(newState,{type:actionTypes.SEND_EVENTS});
+            return newState;
         }
         else { return state }
     }
