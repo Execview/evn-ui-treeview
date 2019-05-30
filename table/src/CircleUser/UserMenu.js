@@ -1,8 +1,7 @@
 import React, { PureComponent } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleUp, faAngleDown, faTrash, faUsers } from '@fortawesome/free-solid-svg-icons';
-import CircleUser from './CircleUser';
-import { TripleFill, GenericDropdown } from '@execview/reusable';
+import { faAngleUp, faAngleDown, faTrash, faUsers, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import { TripleFill, GenericDropdown, CircleUser } from '@execview/reusable';
 import './CircleUser.css';
 import UserDetails from './UserDetails';
 
@@ -63,7 +62,7 @@ export default class UserMenu extends PureComponent {
         />
         <div className="plus-container" onClick={this.props.nextScreen}>
           <TripleFill
-            left={<CircleUser url="https://www.unizambeze.ac.mz/wp-content/uploads/2016/07/plus-4-xxl.png" />}
+            left={<FontAwesomeIcon className="plus-container-icon" icon={faPlusCircle} />}
             center={<p className="user-name">Assign new user</p>}
           />
         </div>

@@ -2,6 +2,7 @@ import Button from './Components/Button/Button'
 import GenericDropdown from './Components/GenericDropdown/GenericDropdown';
 import PropInspector from './Components/PropInspector/PropInspector'
 import TripleFill from './Components/TripleFill/TripleFill'
+import CircleUser from './Components/CircleUser/CircleUser';
 
 import injectObjectInObject from './Functions/injectObjectInObject'
 import objectCopierWithStringToDate from './Functions/objectCopierWithStringToDate'
@@ -16,6 +17,7 @@ module.exports = {
 	GenericDropdown,
 	PropInspector,
 	TripleFill,
+	CircleUser,
 	injectObjectInObject,
 	objectCopierWithStringToDate,
 	orderedObjectAssign,

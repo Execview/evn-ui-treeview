@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './CircleUser.css';
-import CircleUser from './CircleUser';
+import { CircleUser } from '@execview/reusable';
 import AssignUsers from './AssignUsers';
 
 export default class CircleUserDisplay extends Component {

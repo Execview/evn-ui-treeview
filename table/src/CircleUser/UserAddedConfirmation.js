@@ -1,8 +1,7 @@
 import React, { PureComponent } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
-import { TripleFill } from '@execview/reusable';
-import CircleUser from './CircleUser';
+import { TripleFill, CircleUser } from '@execview/reusable';
 import './CircleUser.css';
 
 export default class UserAddedConfirmation extends PureComponent {

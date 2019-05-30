@@ -1,0 +1,13 @@
+.user-circle{
+    width: 36px;
+    height: 36px;
+    overflow: hidden;
+    border-radius:50%;
+    border: 2px solid white;
+}
+  
+.user-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}

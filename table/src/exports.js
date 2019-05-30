@@ -10,7 +10,6 @@ import DateCellDisplay from './dateCell/DateCellDisplay';
 import DateCellEditor from './dateCell/DateCellEditor';
 import NumberCellEditor from './numberCell/NumberCellEditor';
 import CircleUserDisplay from './CircleUser/CircleUserDisplay';
-import CircleUser from './CircleUser/CircleUser';
 import UserHeaderDisplay from './headers/UserHeaderDisplay';
 
 module.exports = { 
@@ -25,7 +24,6 @@ module.exports = {
   DateCellDisplay,
   DateCellEditor,
   NumberCellEditor,
-  CircleUser,
   CircleUserDisplay,
   UserHeaderDisplay
 };
