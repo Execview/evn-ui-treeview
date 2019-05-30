@@ -1,4 +1,4 @@
-import { data as configData} from '../config'
+import { data as configData, editableCells} from '../config'
 import * as actionTypes from './actionTypes';
 
 export const LOAD_FROM_CONFIG = (state,action,reducer) => {
@@ -27,17 +27,17 @@ export const LOAD_FROM_CONFIG = (state,action,reducer) => {
 		},{})
 		return newData
 	}
-    return reducer(state,{type:actionTypes.LOAD_DATA_DEVELOPMENT, data: translateConfigData(configData), editableCells: state.editableCells});
+    return reducer(state,{type:actionTypes.LOAD_DATA_DEVELOPMENT, data: translateConfigData(configData), editableCells: editableCells});
 }
 
 export const LOAD_DATA_DEVELOPMENT = (state,action,reducer) => {
-	let newState = {...state, _data:action.data, token:action.token, editableCells:action.editableCells}
+	let newState = {...state, _data:action.data, editableCells:action.editableCells}
 
 	Object.keys(newState._data).forEach(bubblekey=>{
 		newState = reducer(newState,{type: actionTypes.SET_ORIGINAL_COLOUR, key:bubblekey, side: 'left'})
 		newState = reducer(newState,{type: actionTypes.SET_ORIGINAL_COLOUR, key:bubblekey, side: 'middle'})
 		newState = reducer(newState,{type: actionTypes.SET_ORIGINAL_COLOUR, key:bubblekey, side: 'right'})
 	})
-	newState = {...newState, development_token: action.token}
-	return reducer(newState,{type:actionTypes.SEND_EVENTS})
+	newState = {...newState}
+	return newState
 }
