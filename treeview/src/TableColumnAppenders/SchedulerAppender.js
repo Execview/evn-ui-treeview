@@ -148,13 +148,15 @@ export default class SchedulerAppender extends Component {
 		this.setState({bubbleContextMenu:{key:key,position:mousedownpos}})
 	}
 	leftclickup = (key,event)=>{
-		this.props.tryToPerformLink(key,this.mouseDownOnBubble.key,'left',this.mouseDownOnBubble.location);
+		this.props.tryPerformLink(key,this.mouseDownOnBubble.key,'left',this.mouseDownOnBubble.location);
 		this.props.setOriginalColour(key,'left')}
 	rightclickup = (key,event)=>{		
-		this.props.tryToPerformLink(key,this.mouseDownOnBubble.key,'right',this.mouseDownOnBubble.location);
+		this.props.tryPerformLink(key,this.mouseDownOnBubble.key,'right',this.mouseDownOnBubble.location);
 		this.props.setOriginalColour(key,'right')}
 	middleclickup = (key,event)=>{
-		this.props.tryToPerformAssociation(key,this.mouseDownOnBubble.key);
+		if(!['left','right'].includes(this.mouseDownOnBubble.location)){
+			this.props.tryPerformAssociation(key,this.mouseDownOnBubble.key);
+		}
 		this.props.setOriginalColour(key,'left')
 		this.props.setOriginalColour(key,'middle')
 		this.props.setOriginalColour(key,'right')}
@@ -180,35 +182,33 @@ export default class SchedulerAppender extends Component {
 			this.schedulerCTM=null
 			if(this.mouseDownOnBubble.key){
 				this.mouseDownOnBubble.dragDiffs=[0,0]
-				//TODO SET ORIGINAL COLOUR
 				this.props.setOriginalColour(this.mouseDownOnBubble.key,'left')
 				this.props.setOriginalColour(this.mouseDownOnBubble.key,'right')
 				this.props.setOriginalColour(this.mouseDownOnBubble.key,'middle')
 				this.mouseDownOnBubble.location="";
 				this.mouseDownOnBubble.key='';
 				this.forceUpdate()}}
-		//TODO BUBBLE TRANSFORM
-		if(this.mouseDownOnBubble.location==='left' && !event.shiftKey){
-			this.props.bubbleTransform(	this.mouseDownOnBubble.key,
-										{startdate: this.getNearestDateToX(mouse[0])})}
-		if(this.mouseDownOnBubble.location==='right' && !event.shiftKey){
-			this.props.bubbleTransform(	this.mouseDownOnBubble.key,
-										{enddate:this.getNearestDateToX(mouse[0])})}
-		if(this.mouseDownOnBubble.location==='middle' && !event.shiftKey){
-			var newstart = this.getNearestDateToX(mouse[0]-this.mouseDownOnBubble.dragDiffs[0])
-			this.props.bubbleTransform(	this.mouseDownOnBubble.key,
-										{startdate: newstart,
-										enddate: moment(newstart).add(bubble.enddate-bubble.startdate).toDate()})
+		const key = this.mouseDownOnBubble.key
+		const nearestDateToX = this.getNearestDateToX(mouse[0]-this.mouseDownOnBubble.dragDiffs[0])
+		if(this.mouseDownOnBubble.location==='left' && !event.shiftKey && nearestDateToX.getTime()!==this.props.data[key].startdate.getTime()){
+			this.props.bubbleTransform(	key,
+										{startdate: nearestDateToX})}
+		if(this.mouseDownOnBubble.location==='right' && !event.shiftKey && nearestDateToX.getTime()!==this.props.data[key].enddate.getTime()){
+			this.props.bubbleTransform(	key,
+										{enddate: nearestDateToX})}
+		if(this.mouseDownOnBubble.location==='middle' && !event.shiftKey && nearestDateToX.getTime()!==this.props.data[key].startdate.getTime()){
+			this.props.bubbleTransform(	key,
+										{startdate: nearestDateToX,
+										enddate: moment(nearestDateToX).add(bubble.enddate-bubble.startdate).toDate()})
 		}
 		//check column interaction.
 		if((event.buttons===0 && this.isOnScheduler) || this.mouseDownOnBubble.key){this.isOnScheduler = false}
-		//TODO Add a context menu
 		if(event.buttons===1 && this.mouseDownOnBubble.key){/*this.removeContextMenu()*/}
 		if(event.buttons===1 && !this.mouseDownOnBubble.key && this.isOnScheduler){
 			var mousedate = this.getNearestDateToX(mouse[0])
 			var datediff = (mousedate-this.DownDateandSchedulerWidth[0])
 			if(datediff!==0){
-				newstart = moment(this.state.startdate.getTime()-datediff).toDate()
+				const newstart = moment(this.state.startdate.getTime()-datediff).toDate()
 				this.setStartAndEndDate(newstart)
 			}
 		}
@@ -369,7 +369,7 @@ export default class SchedulerAppender extends Component {
 	}
 
   	render() {
-		const {bubbleTransform,setBubbleSideColour,setOriginalColour,tryToPerformLink,tryToPerformAssociation,onRemoveLink,deleteBubble,...newProps} = this.props
+		const {bubbleTransform,setBubbleSideColour,setOriginalColour,tryPerformLink,tryPerformAssociation,onRemoveLink,deleteBubble,...newProps} = this.props
     	return (
 			React.cloneElement(newProps.children,
 				{...newProps,

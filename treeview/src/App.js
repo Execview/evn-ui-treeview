@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import SchedulerConnector from './TableColumnAppenders/SchedulerConnector'
 
 import * as actionTypes from './store/actions/actionTypes'
+import * as actionCreators from './store/actions/actionCreators'
 import TreeConnector from './TableColumnAppenders/TreeConnector';
 import { Table, cats } from '@execview/table';
 import { columnsInfo, cellTypes, rules } from './store/config';
@@ -53,7 +54,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		onSave: (rowId, rowValues, editableValues) => dispatch({ type: actionTypes.SAVE_TABLE, rowId, rowValues, editableValues }),
+		onSave: (rowId, rowValues, editableValues) => dispatch(actionCreators.saveTable({ rowId, rowValues, editableValues })),
 		onGetLocalData: ()=>dispatch({type: actionTypes.LOAD_FROM_CONFIG}),
 		onAddRow: (columns) => dispatch({type: actionTypes.ADD_ROW, parent:'_1235d', shape:'square', columns})
 	};

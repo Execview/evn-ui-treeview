@@ -109,40 +109,9 @@ export const TOGGLE_NODE = (state,action,reducer) => {
     return updatedState;
 }
 
-export const SAVE_TABLE = (state,action,reducer) => {
-    const tableRowValues = Object.keys(state._data[action.rowId]).reduce((total,col)=>{return {...total,[col]:action.rowValues[col]}},{})
-    let newRowValues = objectCopierWithStringToDate(tableRowValues)
-    let newState = {...state,
-        editableCells: {
-            ...state.editableCells,
-            [action.rowId]: action.editableValues
-        }
-    };
-    let changeObject = recursiveDeepDiffs(state._data[action.rowId],newRowValues)
-
-
-    return reducer(newState,{type:actionTypes.BUBBLE_TRANSFORM, key: action.rowId, changes: changeObject})
-}
-
-export const BUBBLE_TRANSFORM = (state,action,reducer) => {
-    let newState = {...state}
-    //apply transformation to a copy of bubble states. If valid, replace the main state.
-    var oldBubbles = {}
-    for (var bubblekey in newState._data){
-        var bubble=newState._data[bubblekey]
-        oldBubbles[bubblekey]=recursiveDeepCopy(bubble)
-    }
-    if(JSON.stringify(newState._data[action.key])!==JSON.stringify({...newState._data[action.key],...action.changes})){
-        //newState = {...newState, _data: {...state._data,[action.key]:{...newState._data[action.key],...action.changes}}}
-        var newStateBubbles = tryReturnValidTransformState(oldBubbles,action);
-        if(newStateBubbles!==false){
-            newState = {
-                ...newState,
-                _data: newStateBubbles
-            }
-            return newState;
-        }
-        else { return state }
-    }
-    return state
+export const MOVE_BUBBLES = (state,action,reducer) => {
+	return {
+		...state,
+		_data: action._data
+	}
 }

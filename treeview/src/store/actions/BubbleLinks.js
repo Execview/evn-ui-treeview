@@ -1,35 +1,24 @@
 import * as actionTypes from './actionTypes';
 
 export const PERFORM_LINK = (state,action,reducer) => {
-	if((action.parentside === 'left' || action.parentside === 'right') && action.childkey!==action.parentkey){
-		//console.log(action)
-		var finalstate = {...state}
-		var parentpoint = 'right'===action.parentside ? "enddate" : "startdate"
-		var childpoint = 'right'===action.childside ? "enddate" : "startdate"
-		// if child doesnt have parent AND parent hasnt already linked child
-		//TODO MORE IFS BECAUSE OF ASSOCIATION!
-		if((state._data[action.childkey]["ParentBubble"]==='')&&(state._data[action.parentkey]["ChildBubbles"][action.childkey]==null)){
-			var xGapDate = state._data[action.childkey][childpoint]-state._data[action.parentkey][parentpoint];
-			finalstate = reducer(finalstate,{type:actionTypes.ADD_CHILD_LINK,parentkey:action.parentkey,childkey:action.childkey,parentside:action.parentside,childside:action.childside,xGapDate:xGapDate})
-			finalstate = reducer(finalstate,{type:actionTypes.ADD_PARENT_LINK,childkey:action.childkey,parentkey:action.parentkey})
-			return finalstate
-		} else {
-			//console.log('already linked!');
-			return state
-		}
-	}
-	return state;
+	var newState = {...state}
+	var parentpoint = 'right'===action.parentside ? "enddate" : "startdate"
+	var childpoint = 'right'===action.childside ? "enddate" : "startdate"
+
+	var xGapDate = state._data[action.childkey][childpoint]-state._data[action.parentkey][parentpoint];
+	
+	newState = reducer(newState,{type:actionTypes.ADD_CHILD_LINK,parentkey:action.parentkey,childkey:action.childkey,parentside:action.parentside,childside:action.childside,xGapDate:xGapDate})
+	newState = reducer(newState,{type:actionTypes.ADD_PARENT_LINK,childkey:action.childkey,parentkey:action.parentkey})
+	
+	return newState
 }
 
 export const PERFORM_ASSOCIATION = (state,action,reducer) => {
-	let finalstate = {...state}
-	if((action.childkey!==action.parentkey)&& action.childkey &&(!state._data[action.parentkey]["ChildAssociatedBubbles"].includes(action.childkey))){
-		finalstate = reducer(finalstate,{type: actionTypes.UNLINK_PARENT_ASSOCIATED_BUBBLE, key:action.childkey })
-		finalstate = reducer(finalstate,{type: actionTypes.ADD_CHILD_ASSOCIATION,parentkey:action.parentkey,childkey:action.childkey})
-		finalstate = reducer(finalstate,{type: actionTypes.ADD_PARENT_ASSOCIATION,childkey:action.childkey,parentkey:action.parentkey})
-		return finalstate
-	}
-	return state
+	let newState = {...state}
+	newState = reducer(newState,{type: actionTypes.UNLINK_PARENT_ASSOCIATED_BUBBLE, key:action.childkey })
+	newState = reducer(newState,{type: actionTypes.ADD_CHILD_ASSOCIATION,parentkey:action.parentkey,childkey:action.childkey})
+	newState = reducer(newState,{type: actionTypes.ADD_PARENT_ASSOCIATION,childkey:action.childkey,parentkey:action.parentkey})
+	return newState
 }
 
 export const ADD_CHILD_LINK = (state,action,reducer) => {

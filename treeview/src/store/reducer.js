@@ -11,6 +11,7 @@ let initialState = {
 
 function reducer(state=initialState,action) {
 	let newState = state
+
 	switch(action.type) {
 		case actionTypes.LOAD_FROM_CONFIG: { newState = DataManagement.LOAD_FROM_CONFIG(state,action,reducer); break; }
 		case actionTypes.LOAD_DATA_DEVELOPMENT: { newState = DataManagement.LOAD_DATA_DEVELOPMENT(state,action,reducer); break; }		
@@ -18,9 +19,8 @@ function reducer(state=initialState,action) {
 		case actionTypes.ADD_ROW: { newState = Interactions.ADD_ROW(state,action,reducer); break; }
 		case actionTypes.DELETE_SINGLE: { newState = Interactions.DELETE_SINGLE(state,action,reducer); break; }
 		case actionTypes.DELETE_BUBBLE: { newState = Interactions.DELETE_BUBBLE(state,action,reducer); break; }
-		case actionTypes.SAVE_TABLE: { newState = Interactions.SAVE_TABLE(state,action,reducer); break; }
 		case actionTypes.TOGGLE_NODE: { newState = Interactions.TOGGLE_NODE(state,action,reducer); break; }	
-		case actionTypes.BUBBLE_TRANSFORM: { newState = Interactions.BUBBLE_TRANSFORM(state,action,reducer); break; }
+		case actionTypes.MOVE_BUBBLES: { newState = Interactions.MOVE_BUBBLES(state,action,reducer); break; }
 
 		case actionTypes.SET_ORIGINAL_COLOUR: { newState = ColourChanges.SET_ORIGINAL_COLOUR(state,action,reducer); break; }
 		case actionTypes.SET_BUBBLE_SIDE_COLOUR: { newState = ColourChanges.SET_BUBBLE_SIDE_COLOUR(state,action,reducer); break; }
