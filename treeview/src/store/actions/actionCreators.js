@@ -2,8 +2,8 @@ import * as actionTypes from './actionTypes';
 import { objectCopierWithStringToDate, recursiveDeepDiffs, recursiveDeepCopy } from '@execview/reusable';
 import tryReturnValidTransformState from '../stateValidator';
 
-export const saveTable = (action) => (dispatch, getState) => {
-	const state = getState()
+export const saveTable = (action, slice) => (dispatch, getState) => {
+	const state = getStateSlice(getState(),slice) 
     const tableRowValues = Object.keys(state._data[action.rowId]).reduce((total,col)=>{return {...total,[col]:action.rowValues[col]}},{})
     let newRowValues = objectCopierWithStringToDate(tableRowValues)
     let newState = {...state,
@@ -20,8 +20,8 @@ export const saveTable = (action) => (dispatch, getState) => {
 
 
 
-export const bubbleTransform = (action) => (dispatch, getState) => {
-    const state = getState();
+export const bubbleTransform = (action, slice) => (dispatch, getState) => {
+	const state = getStateSlice(getState(),slice)
     let newState = {...state}
     //apply transformation to a copy of bubble states. If valid, replace the main state.
     const oldBubbles = {}
@@ -39,8 +39,8 @@ export const bubbleTransform = (action) => (dispatch, getState) => {
 }
 
 
-export const tryPerformLink = (action) => (dispatch,getState) => {
-    const state = getState() 
+export const tryPerformLink = (action, slice) => (dispatch, getState) => {
+	const state = getStateSlice(getState(),slice)
     if ((action.parentside === 'left' || action.parentside === 'right') && action.childkey!==action.parentkey) {
         // if child doesnt have parent AND parent hasnt already linked child
         if((state._data[action.childkey]["ParentBubble"]==='')&&(state._data[action.parentkey]["ChildBubbles"][action.childkey]==null)){
@@ -49,9 +49,14 @@ export const tryPerformLink = (action) => (dispatch,getState) => {
     }	
 }
 
-export const tryPerformAssociation = (action) => (dispatch,getState) => {
-    const state = getState()
+export const tryPerformAssociation = (action, slice) => (dispatch, getState) => {
+	const state = getStateSlice(getState(),slice)
 	if(action.childkey && (action.childkey!==action.parentkey) && !state._data[action.parentkey]["ChildAssociatedBubbles"].includes(action.childkey) && !(state._data[action.childkey]["ParentAssociatedBubble"]===action.parentkey)){
         dispatch(action) 
 	}
+}
+
+const getStateSlice = (state, slice) => {
+	const sliceArray = slice || []
+	return sliceArray.reduce((t,s)=>t[s],state)
 }
