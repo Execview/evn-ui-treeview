@@ -15,7 +15,7 @@ export const saveTable = (action, slice) => (dispatch, getState) => {
     let changeObject = recursiveDeepDiffs(state._data[action.rowId],newRowValues)
 
     // return reducer(newState,{type:actionTypes.BUBBLE_TRANSFORM, key: action.rowId, changes: changeObject})
-    dispatch(bubbleTransform({key: action.rowId, changes: changeObject}))
+    dispatch(bubbleTransform({key: action.rowId, changes: changeObject}, slice))
 }
 
 
