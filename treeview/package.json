@@ -1,6 +1,6 @@
 {
   "name": "@execview/treeview",
-  "version": "0.1.32",
+  "version": "0.1.33",
   "main": "./transpiled/exports.js",
   "private": false,
   "dependencies": {
@@ -16,6 +16,7 @@
     "react-redux": "^6.0.0",
     "react-scripts": "3.0.1",
     "redux": "^4.0.1",
+    "redux-observable": "^1.1.0",
     "redux-thunk": "^2.3.0",
     "rxjs-compat": "^6.4.0"
   },

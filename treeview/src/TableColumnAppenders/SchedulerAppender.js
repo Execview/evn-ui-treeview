@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import SchedulerCell from '../schedulerCell/SchedulerCell'
 import SchedulerHeader from '../schedulerCell/SchedulerHeader';
-import { recursiveDeepDiffs } from '@execview/reusable';
+import { recursiveDeepDiffs, objectCopierWithStringToDate } from '@execview/reusable';
+
 
 var Rx = require('rxjs/Rx')
 var moment = require('moment')
@@ -191,13 +192,13 @@ export default class SchedulerAppender extends Component {
 		const key = this.mouseDownOnBubble.key
 		const nearestDateToX = this.getNearestDateToX(mouse[0]-this.mouseDownOnBubble.dragDiffs[0])
 		if(this.mouseDownOnBubble.location==='left' && !event.shiftKey && nearestDateToX.getTime()!==this.props.data[key].startdate.getTime()){
-			this.props.bubbleTransform(	key,
+			this.bubbleTransform(	key,
 										{startdate: nearestDateToX})}
 		if(this.mouseDownOnBubble.location==='right' && !event.shiftKey && nearestDateToX.getTime()!==this.props.data[key].enddate.getTime()){
-			this.props.bubbleTransform(	key,
+			this.bubbleTransform(	key,
 										{enddate: nearestDateToX})}
 		if(this.mouseDownOnBubble.location==='middle' && !event.shiftKey && nearestDateToX.getTime()!==this.props.data[key].startdate.getTime()){
-			this.props.bubbleTransform(	key,
+			this.bubbleTransform(	key,
 										{startdate: nearestDateToX,
 										enddate: moment(nearestDateToX).add(bubble.enddate-bubble.startdate).toDate()})
 		}
@@ -271,6 +272,18 @@ export default class SchedulerAppender extends Component {
 		if(JSON.stringify(this.state.rowHeights)!==JSON.stringify(newRowHeights)){
 			this.setState({rowHeights: newRowHeights})
 		}
+	}
+
+	onSaveScheduler = (rowId, rowValues, editableValues) => {
+		const row = this.props.data[rowId]
+		const tableRowValues = Object.keys(row).reduce((total,col)=>{return {...total,[col]:rowValues[col]}},{})
+		let newRowValues = objectCopierWithStringToDate(tableRowValues)
+		const changes = recursiveDeepDiffs(row,newRowValues)
+		this.bubbleTransform(rowId,changes,editableValues)
+	}
+
+	bubbleTransform = (key,changes,editableValues) => {
+		this.props.tryBubbleTransform(key,changes,editableValues)
 	}
 
 	addSchedulerColumn = ()=>{
@@ -369,7 +382,7 @@ export default class SchedulerAppender extends Component {
 	}
 
   	render() {
-		const {bubbleTransform,setBubbleSideColour,setOriginalColour,tryPerformLink,tryPerformAssociation,onRemoveLink,deleteBubble,...newProps} = this.props
+		const {tryBubbleTransform,setBubbleSideColour,setOriginalColour,tryPerformLink,tryPerformAssociation,onRemoveLink,deleteBubble,...newProps} = this.props
     	return (
 			React.cloneElement(newProps.children,
 				{...newProps,
@@ -378,7 +391,8 @@ export default class SchedulerAppender extends Component {
 					columnsInfo: this.addSchedulerColumn(),
 					cellTypes: {...newProps.cellTypes, schedulerHeader: {display: <SchedulerHeader/>}, scheduler: {display: <SchedulerCell/>}},
 					tableRef: this.tableRef,
-					onRender: ((x)=>{(newProps.onRender && newProps.onRender(x));this.onTableRender()})
+					onRender: ((x)=>{(newProps.onRender && newProps.onRender(x));this.onTableRender()}),
+					onSave: ((rowId, rowValues, editableValues)=>{( this.props.onSave && this.props.onSave(rowId, rowValues, editableValues)); this.onSaveScheduler(rowId, rowValues, editableValues); })
 				}
 			)
 		);

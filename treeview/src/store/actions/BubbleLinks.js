@@ -114,3 +114,13 @@ export const UNLINK_PARENT_ASSOCIATED_BUBBLE = (state,action,reducer) => {
 	}
 	return newState
 }
+
+export const TRY_PERFORM_LINK = (state,action,reducer) => {
+	//Is dealt with in an epic
+	return state
+}
+
+export const TRY_PERFORM_ASSOCIATION = (state,action,reducer) => {
+	//Is dealt with in an epic
+	return state
+}
