@@ -7,7 +7,7 @@ import tryReturnValidTransformState from './stateValidator';
 
 const voidAction = {type: 'dont care'}
 
-const tryMyBubbleTransformEpic = (action$,state$) => tryBubbleTransformEpic(action$,state$)
+export const tryMyBubbleTransformEpic = (action$,state$) => tryBubbleTransformEpic(action$,state$)
 export const tryBubbleTransformEpic = (action$,state$) => action$.pipe(
     ofType(actionTypes.TRY_BUBBLE_TRANSFORM),
 	map((action)=>{
@@ -28,7 +28,7 @@ export const tryBubbleTransformEpic = (action$,state$) => action$.pipe(
 	})
 )
 
-const tryMyPerformLinkEpic = (action$,state$) => tryPerformLinkEpic(action$,state$)
+export const tryMyPerformLinkEpic = (action$,state$) => tryPerformLinkEpic(action$,state$)
 export const tryPerformLinkEpic = (action$,state$) => action$.pipe(
     ofType(actionTypes.TRY_PERFORM_LINK),
 	map((action)=>{
@@ -43,7 +43,7 @@ export const tryPerformLinkEpic = (action$,state$) => action$.pipe(
 	})
 )
 
-const tryMyPerformAssociationEpic = (action$,state$) => tryPerformAssociationEpic(action$,state$)
+export const tryMyPerformAssociationEpic = (action$,state$) => tryPerformAssociationEpic(action$,state$)
 export const tryPerformAssociationEpic = (action$,state$) => action$.pipe(
     ofType(actionTypes.TRY_PERFORM_ASSOCIATION),
 	map((action)=>{
