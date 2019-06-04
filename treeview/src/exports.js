@@ -11,7 +11,7 @@ module.exports = {
 	reducer,
 	EventStoreSynchroniser,
 	actionTypes,
-	tryBubbleTransformEpic,
-	tryPerformLinkEpic,
-	tryPerformAssociationEpic
+	tryMyBubbleTransformEpic,
+	tryMyPerformLinkEpic,
+	tryMyPerformAssociationEpic
 };
