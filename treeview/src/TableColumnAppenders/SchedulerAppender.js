@@ -149,13 +149,20 @@ export default class SchedulerAppender extends Component {
 		this.setState({bubbleContextMenu:{key:key,position:mousedownpos}})
 	}
 	leftclickup = (key,event)=>{
-		this.props.tryPerformLink(key,this.mouseDownOnBubble.key,'left',this.mouseDownOnBubble.location);
-		this.props.setOriginalColour(key,'left')}
-	rightclickup = (key,event)=>{		
-		this.props.tryPerformLink(key,this.mouseDownOnBubble.key,'right',this.mouseDownOnBubble.location);
-		this.props.setOriginalColour(key,'right')}
+		if(key!==this.mouseDownOnBubble.key){
+			this.props.tryPerformLink(key,this.mouseDownOnBubble.key,'left',this.mouseDownOnBubble.location);
+		}
+		this.props.setOriginalColour(key,'left')
+		
+	}
+	rightclickup = (key,event)=>{	
+		if(key!==this.mouseDownOnBubble.key){	
+			this.props.tryPerformLink(key,this.mouseDownOnBubble.key,'right',this.mouseDownOnBubble.location);
+		}
+		this.props.setOriginalColour(key,'right')
+	}
 	middleclickup = (key,event)=>{
-		if(!['left','right'].includes(this.mouseDownOnBubble.location)){
+		if(!['left','right'].includes(this.mouseDownOnBubble.location) && key!==this.mouseDownOnBubble.key){
 			this.props.tryPerformAssociation(key,this.mouseDownOnBubble.key);
 		}
 		this.props.setOriginalColour(key,'left')
@@ -297,6 +304,7 @@ export default class SchedulerAppender extends Component {
 			const rowId = displayedRows[i]
 			let childlinks = this.props.data[rowId].ChildBubbles
 			for(const childId in childlinks){
+				if(!(this.props.data[rowId] && this.props.data[childId])) {continue;}
 				const parentdate = this.props.data[rowId]['right'=== childlinks[childId].parentside ? "enddate" : "startdate"]
 				const childdate = this.props.data[childId]['right'=== childlinks[childId].childside ? "enddate" : "startdate"]
 

@@ -3,7 +3,7 @@ import TreeConnector from './TableColumnAppenders/TreeConnector';
 import reducer from './store/reducer'
 import EventStoreSynchroniser from './store/ess'
 import * as actionTypes from './store/actions/actionTypes'
-import { tryBubbleTransformEpic, tryPerformLinkEpic, tryPerformAssociationEpic } from './store/epic'
+import { tryBubbleTransformEpicMap, tryPerformLinkEpicMap, tryPerformAssociationEpicMap } from './store/epic'
 
 module.exports = {
 	SchedulerConnector,
@@ -11,7 +11,7 @@ module.exports = {
 	reducer,
 	EventStoreSynchroniser,
 	actionTypes,
-	tryBubbleTransformEpic,
-	tryPerformLinkEpic,
-	tryPerformAssociationEpic
+	tryBubbleTransformEpicMap,
+	tryPerformLinkEpicMap,
+	tryPerformAssociationEpicMap
 };
