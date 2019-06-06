@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import './NumberCell.css';
+import './TextCell.css';
 
-export default class NumberCellEditor extends Component {
+export default class TextCellEditor extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -22,7 +22,7 @@ export default class NumberCellEditor extends Component {
   render() {
     return (
       <div className="text-container" style={this.props.style}>
-        <input className="text-input" autoFocus type="text" onBlur={() => this.props.onValidateSave(this.state.text)} value={this.state.text} onChange={e => this.onChange(e.target.value)} onKeyPress={e => this.onKeyPress(e)} />
+        <input className="number-input" autoFocus type="text" onBlur={() => this.props.onValidateSave(this.state.text)} value={this.state.text} onChange={e => this.onChange(e.target.value)} onKeyPress={e => this.onKeyPress(e)} />
       </div>
     );
   }

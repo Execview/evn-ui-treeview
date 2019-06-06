@@ -83,23 +83,26 @@
   height:100%;
   width:100%;
   box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 }
 
 .text-input{
   font-size: 16px;
   color:white;
-  padding-left:5px;
   border: none;
   background-color: inherit;
-  width:98%;
-  font-family: Arial, Helvetica, sans-serif;
-  margin-top:7px;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
+  font-family: inherit;
   box-sizing: border-box;
   position: relative;
   z-index: 1;
   resize: both;
+	margin: 0;
+	padding: 0;
+  line-height: 20px;
+	padding-left:4px;
+	height:20px;
 }
 
 .text-input:focus { outline: none; }

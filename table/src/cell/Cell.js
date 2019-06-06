@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import InputCellDisplay from '../inputCell/InputCellDisplay';
-import InputCellEditor from '../inputCell/InputCellEditor';
+import TextareaCellDisplay from '../TextareaCell/TextareaCellDisplay';
+import TextCellEditor from '../textCell/TextCellEditor';
 import { recursiveDeepDiffs } from '@execview/reusable';
 
 
@@ -33,8 +33,8 @@ export default class Cell extends Component {
     const errorText = this.props.errorText || this.props.errorText === '' ? this.props.errorText : null;
     const style = this.props.style || {};
     const type = {};
-    type.display = (this.props.type && this.props.type.display) || <InputCellDisplay />;
-    type.editor = (this.props.type && this.props.type.editor) || <InputCellEditor />;
+    type.display = (this.props.type && this.props.type.display) || <TextareaCellDisplay />;
+    type.editor = (this.props.type && this.props.type.editor) || <TextCellEditor />;
     const onValidateSave = this.props.onValidateSave || (() => { console.log('cell needs onValidateSave brah'); });
     if (this.props.isActive) {
       return (

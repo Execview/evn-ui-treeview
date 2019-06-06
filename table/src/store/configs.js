@@ -1,38 +1,38 @@
 import React from 'react';
-import InputCellEditor from '../inputCell/InputCellEditor';
+import TextareaCellEditor from '../TextareaCell/TextareaCellEditor';
 import DropdownCellEditor from '../dropdownCell/DropdownCellEditor';
-import NumberCellEditor from '../numberCell/NumberCellEditor';
+import TextCellEditor from '../textCell/TextCellEditor';
 import ColorCellEditor from '../colorCell/ColorCellEditor';
 import ColorCellDisplay from '../colorCell/ColorCellDisplay';
 import DateCellEditor from '../dateCell/DateCellEditor';
 import DateCellDisplay from '../dateCell/DateCellDisplay';
-import InputCellDisplay from '../inputCell/InputCellDisplay';
+import TextareaCellDisplay from '../TextareaCell/TextareaCellDisplay';
 import CircleUserDisplay from '../CircleUser/CircleUserDisplay';
 import UserHeaderDisplay from '../headers/UserHeaderDisplay';
 import { countries, priority } from './constants';
 
 
 export const columnsInfo1 = {
-  company: { cellType: 'text', headerData: 'CompanyCompanyCompanyCompanyCompany', rule: 'textSize' },
-  contact: { cellType: 'text', headerData: 'Contact', rule: 'textSize' },
+  company: { cellType: 'textarea', headerData: 'CompanyCompanyCompanyCompanyCompany', rule: 'textSize' },
+  contact: { cellType: 'textarea', headerData: 'Contact', rule: 'textSize' },
   country: { cellType: 'dropdown', headerData: 'Country' },
   dueDate: { cellType: 'date', headerData: 'Due Date' },
   value: { cellType: 'number', headerData: 'Value (in $M)', rule: 'numberHigher' },
   progress: { cellType: 'color', headerData: 'Progress' } };
 
 export const columnsInfo2 = {
-  activityId: { cellType: 'text', headerData: 'Activity ID', width: 5, minWidth: 25 },
+  activityId: { cellType: 'textarea', headerData: 'Activity ID', width: 5, minWidth: 25 },
   startDate: { cellType: 'date', headerData: 'Start Date', width: 10 },
   dueDate: { cellType: 'date', headerData: 'Due Date', width: 10 },
   assignedUsers: { cellType: 'users', headerData: 'Assigned Users', width: 10, headerType: 'userHeader' },
   progress: { cellType: 'color', headerData: 'RAG', width: 10, minWidth: 25 },
-  latestProgress: { cellType: 'text', headerData: 'Latest Progress' }
+  latestProgress: { cellType: 'textarea', headerData: 'Latest Progress' }
   // employeeName: { cellType: 'dropdown', headerData: 'Employee Name', width: 400 },
 };
 
 export const columnsInfo3 = {
-  activityId: { cellType: 'text', headerData: 'Activity ID' },
-  activityTitle: { cellType: 'text', headerData: 'Activity Title', rule: 'textSize' },
+  activityId: { cellType: 'textarea', headerData: 'Activity ID' },
+  activityTitle: { cellType: 'textarea', headerData: 'Activity Title', rule: 'textSize' },
   employeeName: { cellType: 'dropdown', headerData: 'Employee Name' },
   progress: { cellType: 'color', headerData: 'RAG' } };
 
@@ -114,20 +114,24 @@ const users = {
 };
 
 export const cellTypes = {
-  text: {
-    display: <InputCellDisplay />,
-    editor: <InputCellEditor />
+  textarea: {
+    display: <TextareaCellDisplay />,
+    editor: <TextareaCellEditor />
   },
   dropdown: {
-    display: <InputCellDisplay />,
+    display: <TextareaCellDisplay />,
     editor: <DropdownCellEditor dropdownList={countries} />
   },
   users: {
     display: <CircleUserDisplay userProfiles={users} />,
   },
+  text: {
+    display: <TextareaCellDisplay />,
+    editor: <TextCellEditor />
+  },
   number: {
-    display: <InputCellDisplay />,
-    editor: <NumberCellEditor />
+    display: <TextareaCellDisplay />,
+    editor: <TextCellEditor />
   },
   color: {
     display: <ColorCellDisplay />,
@@ -170,6 +174,7 @@ const defaultSort = (a, b) => {
 };
 
 export const dataSort = {
+  textarea: defaultSort,
   text: defaultSort,
   dropdown: defaultSort,
   date: defaultSort,

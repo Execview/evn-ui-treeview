@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import errorIcon from '../resources/icons-info.svg';
-import './InputCell.css';
+import './TextareaCell.css';
 
-class InputCellDisplay extends Component {
+class TextareaCellDisplay extends Component {
   constructor(props) {
     super(props);
     this.state = { showText: false };
@@ -32,4 +32,4 @@ class InputCellDisplay extends Component {
   }
 }
 
-export default InputCellDisplay;
+export default TextareaCellDisplay;

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import './InputCell.css';
+import './TextareaCell.css';
 
-export default class InputCellEditor extends Component {
+export default class TextareaCellEditor extends Component {
   constructor(props) {
     super(props);
     this.state = {

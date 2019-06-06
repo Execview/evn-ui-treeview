@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Cell from '../cell/Cell';
-import InputCellDisplay from '../inputCell/InputCellDisplay';
-import InputCellEditor from '../inputCell/InputCellEditor';
+import TextareaCellDisplay from '../TextareaCell/TextareaCellDisplay';
+import TextareaCellEditor from '../TextareaCell/TextareaCellEditor';
 import { recursiveDeepDiffs } from '@execview/reusable';
 import './Row.css';
 
@@ -36,7 +36,7 @@ export default class Row extends Component {
     const invalidCells = this.props.invalidCells || [];
     const widths = this.props.widths || Object.keys(columnsInfo).reduce((total, objKey) => { return { ...total, [objKey]: 200 }; }, {});
     const onSetActive = this.props.onSetActive || (() => { console.log('row needs onSetActive brah, which sets a cell active'); });
-    const cellTypes = this.props.cellTypes || { text: { display: <InputCellDisplay />, editor: <InputCellEditor /> } };
+    const cellTypes = this.props.cellTypes || { text: { display: <TextareaCellDisplay />, editor: <TextareaCellEditor /> } };
     const rules = this.props.rules || {};
     const onMouseDown = this.props.onMouseDown || (() => false);
     const cellStyleClass = this.props.style || {};
