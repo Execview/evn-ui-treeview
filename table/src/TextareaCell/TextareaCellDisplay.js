@@ -19,16 +19,17 @@ class TextareaCellDisplay extends Component {
 
   render() {
     const style = this.props.style || {};
+		const classes = this.props.classes || {};
     if (this.props.errorText !== null) {
       return (
-        <div className="cell-container no-select cell-error" style={this.props.style}>
-          <p className="cell-text-error" style={{ overflow: style.overflow, textOverflow: style.textOverflow, whiteSpace: style.whiteSpace }}>{this.props.data}</p>
+        <div className={'textarea-cell-container no-select cell-error ' + (classes.container || '')} style={this.props.style}>
+          <p className={'cell-text-error ' + (classes.textError || '')} style={{ overflow: style.overflow, textOverflow: style.textOverflow, whiteSpace: style.whiteSpace }}>{this.props.data}</p>
           {this.props.errorText !== '' && <img className="error-icon" src={errorIcon} alt="info" onClick={e => this.showError(e)} />}
           <div className={'error-info ' + (this.state.showText ? 'error-shown' : 'error-hidden')}><p className="error-text">{this.props.errorText}</p></div>
         </div>
       );
     }
-    return <div className="cell-container no-select" style={this.props.style}><p className="cell-text" style={{ overflow: style.overflow, textOverflow: style.textOverflow, whiteSpace: style.whiteSpace }}>{this.props.data}</p></div>;
+    return <div className={'textarea-cell-container no-select ' + (classes.container || '')} style={this.props.style}><p className={'textarea-cell-text ' + (classes.text || '')} style={{ overflow: style.overflow, textOverflow: style.textOverflow, whiteSpace: style.whiteSpace }}>{this.props.data}</p></div>;
   }
 }
 

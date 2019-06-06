@@ -21,9 +21,10 @@ export default class TextareaCellEditor extends Component {
   // onBlur={() => this.props.onValidateSave(this.state.text)}
 
   render() {
+		const classes = this.props.classes || {};
     return (
-      <div className="text-container" style={this.props.style}>
-        <textarea rows="1" autoFocus onBlur={() => this.props.onValidateSave(this.state.text)} className="text-input" type="text" value={this.state.text} onChange={e => this.onChange(e.target.value)} onKeyPress={e => this.onKeyPress(e)} />
+      <div className={'text-container ' + (classes.container || '')} style={this.props.style}>
+        <textarea rows="1" autoFocus onBlur={() => this.props.onValidateSave(this.state.text)} className={'text-input ' + (classes.text || '')} type="text" value={this.state.text} onChange={e => this.onChange(e.target.value)} onKeyPress={e => this.onKeyPress(e)} />
 
       </div>
     );
