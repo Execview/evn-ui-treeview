@@ -9,8 +9,9 @@ import ColorCellEditor from './colorCell/ColorCellEditor';
 import DateCellDisplay from './dateCell/DateCellDisplay';
 import DateCellEditor from './dateCell/DateCellEditor';
 import TextCellEditor from './textCell/TextCellEditor';
-import CircleUserDisplay from './CircleUser/CircleUserDisplay';
+import UserRoleDisplay from './UserRoleDisplay/UserRoleDisplay';
 import UserHeaderDisplay from './headers/UserHeaderDisplay';
+import ImageDisplay from './imageDisplay/ImageDisplay';
 
 module.exports = { 
   Table,
@@ -24,6 +25,7 @@ module.exports = {
   DateCellDisplay,
   DateCellEditor,
   TextCellEditor,
-  CircleUserDisplay,
-  UserHeaderDisplay
+  UserRoleDisplay,
+  UserHeaderDisplay,
+  ImageDisplay
 };

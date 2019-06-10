@@ -7,18 +7,21 @@ import ColorCellDisplay from '../colorCell/ColorCellDisplay';
 import DateCellEditor from '../dateCell/DateCellEditor';
 import DateCellDisplay from '../dateCell/DateCellDisplay';
 import TextareaCellDisplay from '../TextareaCell/TextareaCellDisplay';
-import CircleUserDisplay from '../CircleUser/CircleUserDisplay';
+import UserRoleDisplay from '../UserRoleDisplay/UserRoleDisplay';
 import UserHeaderDisplay from '../headers/UserHeaderDisplay';
 import { countries, priority } from './constants';
+import ImageDisplay from '../imageDisplay/ImageDisplay';
 
 
 export const columnsInfo1 = {
+  images: { cellType: 'images', headerData: 'Images', width: 4 },
   company: { cellType: 'textarea', headerData: 'CompanyCompanyCompanyCompanyCompany', rule: 'textSize' },
   contact: { cellType: 'textarea', headerData: 'Contact', rule: 'textSize' },
   country: { cellType: 'dropdown', headerData: 'Country' },
   dueDate: { cellType: 'date', headerData: 'Due Date' },
   value: { cellType: 'number', headerData: 'Value (in $M)', rule: 'numberHigher' },
-  progress: { cellType: 'color', headerData: 'Progress' } };
+  progress: { cellType: 'color', headerData: 'Progress' }
+};
 
 export const columnsInfo2 = {
   activityId: { cellType: 'textarea', headerData: 'Activity ID', width: 5, minWidth: 25 },
@@ -55,13 +58,13 @@ export const editableCells2 = {
   _7: ['activityId', 'activityTitle', 'startDate', 'latestProgress', 'progress', 'dueDate', 'employeeName'] };
 
 
-export const newData1 = { _w1232: { company: 'McLaren', contact: 'WL', country: 'United Kingdom', value: 26, progress: 'red', dueDate: '2018-03-17T10:39:57.362Z' },
-  _1235d: { company: 'Koenigsegg', contact: 'JJ', country: 'Sweden', value: 54, progress: 'amber', dueDate: '2017-08-17T10:39:57.362Z' },
-  _m7ad1: { company: 'Porche', contact: 'ZG', country: 'Germany', value: 78, progress: 'green' },
-  _917gb: { company: 'Aston Martin', contact: 'JD', country: 'United Kingdom', value: 132, progress: 'amber', dueDate: '1996-09-13T10:39:57.362Z' },
-  _1236d: { company: 'Lamborghini', contact: 'BB', country: 'Italy', value: 64 },
-  _k8450: { company: 'Bugatti', contact: 'DT', country: 'France', progress: 'red', dueDate: '2019-01-17T10:39:57.362Z' },
-  _u184b: { company: 'Mercedes-Benz', contact: 'WL', country: 'Germany', progress: 'green' } };
+export const newData1 = { _w1232: { company: 'McLaren', contact: 'WL', country: 'United Kingdom', value: 26, progress: 'red', dueDate: '2018-03-17T10:39:57.362Z', images: ['https://upload.wikimedia.org/wikipedia/commons/c/c1/Mclaren_logo.jpg', 'https://www.supercars.net/blog/wp-content/uploads/2016/03/Screenshot-2016-03-24-12.48.38.png'] },
+  _1235d: { company: 'Koenigsegg', contact: 'JJ', country: 'Sweden', value: 54, progress: 'amber', dueDate: '2017-08-17T10:39:57.362Z',images:['https://fsa.zobj.net/crop.php?r=NLYiH-gLk0ZjeMxIBRcaC1knnxFlUJeM5ibM_-HgZVY0zWN3_50DxVgAS7-Zlfbwsd3Aw5han1TZbQEki6F_FzTTopRZsUDyTMsynwkA36kIMiyVnBNkyt2spNAOg5gUVP4TjHNTbzqzjY4A_OZ3mSl-D7s5hgAYfYu1Pb9PGhjAb6AtIwrzR8MtVQQ'] },
+  _m7ad1: { company: 'Porche', contact: 'ZG', country: 'Germany', value: 78, progress: 'green', images: ['https://render.fineartamerica.com/images/rendered/default/poster/8/10/break/images/artworkimages/medium/1/19-porsche-logo-porsche-logo.jpg'] },
+  _917gb: { company: 'Aston Martin', contact: 'JD', country: 'United Kingdom', value: 132, progress: 'amber', dueDate: '1996-09-13T10:39:57.362Z', images: ['https://upload.wikimedia.org/wikipedia/en/2/2c/Aston_Martin_Logo_2018.png'] },
+  _1236d: { company: 'Lamborghini', contact: 'BB', country: 'Italy', value: 64, images: ['https://upload.wikimedia.org/wikipedia/en/d/df/Lamborghini_Logo.svg','https://www.lamborghini.com/sites/it-en/files/DAM/lamborghini/model/huracan/evo-slider/model/Huracan%20Spyder_scontorno.png'] },
+  _k8450: { company: 'Bugatti', contact: 'DT', country: 'France', progress: 'red', dueDate: '2019-01-17T10:39:57.362Z', images: ['https://3dexport.com/items/2011/07/05/74832/37701/bugatti_logo_3d_model_c4d_max_obj_fbx_ma_lwo_3ds_3dm_stl_247998.jpg'] },
+  _u184b: { company: 'Mercedes-Benz', contact: 'WL', country: 'Germany', progress: 'green', images:['https://i.ebayimg.com/images/g/J9sAAOSwol5Y17RS/s-l300.jpg'] } };
 
 export const newData2 = { _1: { activityId: '12425', activityTitle: 'Fix PDF', startDate: '2017-08-17T10:39:57.362Z', latestProgress: 'Fix Chromium', progress: 'green', dueDate: '2018-03-17T10:39:57.362Z', employeeName: '', assignedUsers: [{ user: 'abd4', role: 'Project Manager', department: 'Kitten Petter' }, { user: 'gte3', role: 'Project Manager' }, { user: 'plo4', role: 'Pleb' }] },
   _2: { activityId: '1251251', activityTitle: 'Mobile Shipment', startDate: '2017-08-17T10:39:57.362Z', latestProgress: 'The current task is in progress and about to be evaluated', progress: 'amber', dueDate: '2017-08-17T10:39:57.362Z', employeeName: 'Mark', assignedUsers: [{ user: 'abd4', role: 'Legendary Consumer' }] },
@@ -123,7 +126,7 @@ export const cellTypes = {
     editor: <DropdownCellEditor dropdownList={countries} />
   },
   users: {
-    display: <CircleUserDisplay userProfiles={users} />,
+    display: <UserRoleDisplay userProfiles={users} />,
   },
   text: {
     display: <TextareaCellDisplay />,
@@ -143,6 +146,9 @@ export const cellTypes = {
   },
   userHeader: {
     display: <UserHeaderDisplay />
+  },
+  images: {
+    display: <ImageDisplay/>
   }
 };
 

@@ -3,7 +3,7 @@ import './CircleUser.css';
 import { CircleUser } from '@execview/reusable';
 import AssignUsers from './AssignUsers';
 
-export default class CircleUserDisplay extends Component {
+export default class UserRoleDisplay extends Component {
   state = { open: false };
 
   getUserProfile = (user) => {

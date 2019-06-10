@@ -1,0 +1,25 @@
+.user-profile{
+    position:absolute;
+    display:inline-block;
+}
+
+.user-cell {
+height:100%;
+user-select: none;
+}
+
+.users-container {
+position: relative;
+height:100%;
+margin-left: 5px;
+cursor: pointer;
+}
+
+.add-container {
+position: absolute;
+right:5px;
+top:23px;
+color:lightgray;
+font-size: 15px;
+font-weight: bold;
+}

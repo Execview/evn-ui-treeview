@@ -21,8 +21,8 @@ export default class UserDetails extends Component {
             style={{ height: '22px', cursor: 'pointer' }}
             center={<p className="user-toggle-detail"><b>Department:</b> {user.department}</p>}
           />
-        )
-		}
-      </div>);
+        )}
+      </div>
+    );
   }
 }

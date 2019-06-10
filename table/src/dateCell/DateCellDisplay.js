@@ -1,12 +1,18 @@
-import React, { Component } from 'react';
-import { days, months } from '../store/constants';
+import React from 'react';
 import './DateCell.css';
+import moment from 'moment';
 
-export default class DateCellDisplay extends Component {
-  render() {
-    const style = this.props.style || {};
-    const myDate = new Date(this.props.data);
-    const toReturn = this.props.data !== '' ? days[myDate.getDay()] + ' ' + myDate.getDate() + '/' + months[myDate.getMonth()] + '/' + myDate.getFullYear() : 'Date Unknown';
-    return (<div className="cell-container no-select" style={this.props.style}><p className="cell-text" style={{ overflow: style.overflow, textOverflow: style.textOverflow, whiteSpace: style.whiteSpace }}>{toReturn}</p></div>);
-  }
-}
+const DateCellDisplay = (props) => {
+    const formatString = props.format || 'ddd DD/MMM/YYYY';
+    const style = props.style || {};
+    const dateString = props.data !== '' ? moment(props.data).format(formatString) : 'Date Unknown';
+
+    return (
+      <div className="cell-container no-select" style={props.style}>
+        <p className="cell-text" style={{ overflow: style.overflow, textOverflow: style.textOverflow, whiteSpace: style.whiteSpace }}> 		{dateString}
+        </p>
+      </div>
+    );
+};
+
+export default DateCellDisplay;
