@@ -1,20 +1,29 @@
 .default-button {
-    background-color: #434956;
-    color: white;
-    border: 1px solid white;
+    border: 1px solid inherit;
     border-radius: 4px;
     padding:10px 20px;
     font-size: 14px;
     font-weight: bold;
-    -webkit-transition-duration: 0.4s; /* Safari */
-    transition-duration: 0.4s;
+    -webkit-transition-duration: 0.3s; /* Safari */
+    transition-duration: 0.3s;
     cursor: pointer;
     margin:auto;
   }
+
+  .default-button-colours{
+	 border: 1px solid white;
+ 	background-color: #434956;
+    color: white;
+  }
   
-  .default-button:hover {
-      background-color: white;
+  .default-button-colours:hover {
+      background-color:white;
       color: black;
   }
   
+  .default-button-colours:active {
+	   border: 1px solid rgb(133, 133, 133);
+		color: black;
+  }
+
   .default-button:focus { outline: none; }
