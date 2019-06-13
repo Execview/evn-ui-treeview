@@ -177,11 +177,11 @@ export default class Table extends Component {
     document.removeEventListener('pointerup', this.removeListener);
   }
 
-  validateSave = (cellText) => {
+  validateSave = (rowId,colId,cellText) => {
     let newInvalidCells = this.state.invalidCells;
-    const editableRow = [...this.state.editableCells[this.state.activeCell[0]]];
-    const updatedRow = { ...this.state.data[this.state.activeCell[0]] };
-    updatedRow[this.state.activeCell[1]] = cellText;
+    const editableRow = [...this.state.editableCells[rowId]];
+    const updatedRow = { ...this.state.data[rowId] };
+    updatedRow[colId] = cellText;
 
     let objReturned = { updatedRow, editableRow };
     if (this.props.rowValidation) {
@@ -194,8 +194,8 @@ export default class Table extends Component {
       if (this.state.columnsInfo[column].rule) {
         if (!this.props.rules[this.state.columnsInfo[column].rule].validator(updatedRow[column])) {
           hasErrors = true;
-          if (newInvalidCells.filter(el => el.id === this.state.activeCell[0] && el.col === column).length === 0) {
-            newInvalidCells.push({ id: this.state.activeCell[0], col: column });
+          if (newInvalidCells.filter(el => el.id === rowId && el.col === column).length === 0) {
+            newInvalidCells.push({ id: rowId, col: column });
           }
         }
       }
@@ -205,18 +205,18 @@ export default class Table extends Component {
       this.setState({
         data: {
           ...this.state.data,
-          [this.state.activeCell[0]]: objReturned.updatedRow
+          [rowId]: objReturned.updatedRow
         },
         editableCells: {
           ...this.state.editableCells,
-          [this.state.activeCell[0]]: objReturned.editableRow
+          [rowId]: objReturned.editableRow
         },
         invalidCells: newInvalidCells,
         activeCell: [null, null]
       });
     } else {
-      newInvalidCells = newInvalidCells.filter(obj => !(obj.id === this.state.activeCell[0] && obj.col === this.state.activeCell[1]));
-      const activeRow = this.state.activeCell[0];
+      newInvalidCells = newInvalidCells.filter(obj => !(obj.id === rowId && obj.col === colId));
+      const activeRow = rowId;
       this.setState({ invalidCells: newInvalidCells, activeCell: [null, null] }, (() => this.onSave(activeRow, objReturned.updatedRow, objReturned.editableRow)));
     }
   }
@@ -314,7 +314,6 @@ export default class Table extends Component {
             return (
               <tr className={'table-row ' + (style.tableRow || 'table-row-visuals')} key={`tr${entry}`}>
                 <Row
-                  rowId={entry}
                   columnsInfo={this.props.columnsInfo}
                   activeColumn={column}
                   editableCells={this.state.editableCells[entry]}
@@ -322,9 +321,9 @@ export default class Table extends Component {
                   rowData={this.state.data[entry]}
                   widths={this.state.widths}
                   wrap={this.props.wrap}
-                  onSetActive={this.setActive}
+                  onSetActive={(col)=>this.setActive(entry,col)}
                   cellTypes={this.props.cellTypes}
-                  onValidateSave={this.validateSave}
+                  onValidateSave={(col,data)=>this.validateSave(entry,col,data)}
                   rules={this.props.rules}
                   onMouseDown={this.onMouseDown}
                   style={style}

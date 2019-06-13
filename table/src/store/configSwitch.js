@@ -1,9 +1,11 @@
 import * as config from './configs'
 
-//Change these to change displayed data!
-export const columnsInfo = config.columnsInfo1;
-export const editableCells = config.editableCells1;
-export const data = config.newData1;
+//Change this number to change displayed data!
+const configNumber = 2
+
+export const columnsInfo = config['columnsInfo'+configNumber];
+export const editableCells = config['editableCells'+configNumber];
+export const data = config['newData'+configNumber];
 
 export const cellTypes = config.cellTypes
 export const dataSort = config.dataSort

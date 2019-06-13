@@ -47,7 +47,7 @@ export default class Row extends Component {
 
         const isActive = (col === this.props.activeColumn && editRights);
 
-        const onClickAction = isActive ? null : (() => onSetActive(this.props.rowId, col));
+        const onClickAction = isActive ? null : (() => onSetActive(col));
         const lastOne = index === Object.keys(columnsInfo).length - 1;
         let style = { width: Math.round(widths[col]) };
         if (!this.props.wrap) {
@@ -55,7 +55,7 @@ export default class Row extends Component {
         }
         const errorText = rules[columnsInfo[col].rule] ? rules[columnsInfo[col].rule].errorMessage : null;
         return (
-          <td className={'table-datum ' + (cellStyleClass.tableDatum || 'table-datum-visuals')} key={col + this.props.rowId}>
+          <td className={'table-datum ' + (cellStyleClass.tableDatum || 'table-datum-visuals')} key={col}>
             {!lastOne && this.props.onMouseDown && <div style={{ touchAction: 'none', position: 'absolute', zIndex: 1, transform: 'translateX(7px)', top: 0, right: 0, height: '100%', width: '15px', cursor: 'w-resize' }} onPointerDown={e => onMouseDown(e, col)} /> }
             <div
               title={columnsInfo[col].colTitle}
@@ -67,7 +67,7 @@ export default class Row extends Component {
                 data={this.props.rowData[col]}
                 type={cellTypes[columnsInfo[col].cellType]}
                 isActive={isActive}
-                onValidateSave={this.props.onValidateSave}
+                onValidateSave={(data)=>this.props.onValidateSave(col, data)}
                 errorText={red ? errorText : null}
               />
             </div>
