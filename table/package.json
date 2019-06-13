@@ -1,61 +1,61 @@
 {
-  "name": "@execview/table",
-  "version": "0.1.37",
-  "main": "./transpiled/exports.js",
-  "private": false,
-  "dependencies": {
-    "@execview/reusable": "^0.1.11",
-    "@fortawesome/fontawesome-svg-core": "^1.2.18",
-    "@fortawesome/free-solid-svg-icons": "^5.8.2",
-    "@fortawesome/react-fontawesome": "^0.1.4",
-    "moment": "^2.24.0",
-    "react": "^16.8.6",
-    "react-datepicker": "^2.5.0",
-    "react-device-detect": "^1.6.2",
-    "react-dom": "^16.7.0",
-    "react-onclickoutside": "^6.8.0",
-    "react-redux": "^6.0.0",
-    "react-scripts": "^3.0.1",
-    "redux": "^4.0.1"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "prepublish": "babel src -d transpiled --copy-files",
-    "postpublish": "rmdir /S /Q transpiled"
-  },
-  "keywords": [],
-  "author": "teodor-andrei.jalba@execview.com",
-  "license": "ISC",
-  "readme": "README.md",
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ],
-  "devDependencies": {
-    "@babel/cli": "^7.4.4",
-    "@babel/core": "^7.4.4",
-    "@babel/plugin-proposal-class-properties": "^7.4.4",
-    "@babel/preset-react": "^7.0.0",
-    "eslint-config-airbnb": "^17.1.0"
-  },
-  "babel": {
-    "presets": [
-      "@babel/preset-env",
-      "@babel/preset-react"
-    ],
-    "plugins": [
-      "@babel/plugin-proposal-class-properties"
-    ]
-  }
+	"name": "@execview/table",
+	"version": "0.1.38",
+	"main": "./transpiled/exports.js",
+	"private": false,
+	"dependencies": {
+		"@execview/reusable": "^0.1.11",
+		"@fortawesome/fontawesome-svg-core": "^1.2.18",
+		"@fortawesome/free-solid-svg-icons": "^5.8.2",
+		"@fortawesome/react-fontawesome": "^0.1.4",
+		"moment": "^2.24.0",
+		"react": "^16.8.6",
+		"react-datepicker": "^2.5.0",
+		"react-device-detect": "^1.6.2",
+		"react-dom": "^16.7.0",
+		"react-onclickoutside": "^6.8.0",
+		"react-redux": "^6.0.0",
+		"react-scripts": "^3.0.1",
+		"redux": "^4.0.1"
+	},
+	"scripts": {
+		"start": "react-scripts start",
+		"build": "react-scripts build",
+		"test": "react-scripts test",
+		"eject": "react-scripts eject",
+		"prepublish": "babel src -d transpiled --copy-files",
+		"postpublish": "rmdir /S /Q transpiled"
+	},
+	"keywords": [],
+	"author": "teodor-andrei.jalba@execview.com",
+	"license": "ISC",
+	"readme": "README.md",
+	"publishConfig": {
+		"registry": "https://registry.npmjs.org"
+	},
+	"eslintConfig": {
+		"extends": "react-app"
+	},
+	"browserslist": [
+		">0.2%",
+		"not dead",
+		"not ie <= 11",
+		"not op_mini all"
+	],
+	"devDependencies": {
+		"@babel/cli": "^7.4.4",
+		"@babel/core": "^7.4.4",
+		"@babel/plugin-proposal-class-properties": "^7.4.4",
+		"@babel/preset-react": "^7.0.0",
+		"eslint-config-airbnb": "^17.1.0"
+	},
+	"babel": {
+		"presets": [
+			"@babel/preset-env",
+			"@babel/preset-react"
+		],
+		"plugins": [
+			"@babel/plugin-proposal-class-properties"
+		]
+	}
 }
