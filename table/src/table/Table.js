@@ -49,6 +49,7 @@ export default class Table extends Component {
       invalidCells: [],
       data: this.props.data,
       editableCells: defaults.editableCells,
+	  onSave: defaults.onSave
     };
     this.resizeTable = this.resizeTable.bind(this);
   }
@@ -100,6 +101,7 @@ export default class Table extends Component {
       orderedData: newOrderedData,
       data: newData,
       editableCells: defaults.editableCells,
+	  onSave: defaults.onSave
     }, this.resizeTable);
   }
 
@@ -111,7 +113,7 @@ export default class Table extends Component {
     window.removeEventListener('resize', this.resizeTable);
   }
 
-  onSave = this.props.onSave || ((rowId, rowData, editableData) => {
+  defaultOnSave = ((rowId, rowData, editableData) => {
     this.setState({
       data: {
         ...this.state.data,
@@ -125,9 +127,11 @@ export default class Table extends Component {
   });
 
   getDefaults(props) {
+	const onSave = props.onSave || this.defaultOnSave
     const toReturn = {
       columnsInfo: props.columnsInfo,
       editableCells: props.editableCells,
+	  onSave: onSave
     };
     const data = props.data || {};
     const dataKeys = Object.keys(data);
@@ -217,7 +221,7 @@ export default class Table extends Component {
     } else {
       newInvalidCells = newInvalidCells.filter(obj => !(obj.id === rowId && obj.col === colId));
       const activeRow = rowId;
-      this.setState({ invalidCells: newInvalidCells, activeCell: [null, null] }, (() => this.onSave(activeRow, objReturned.updatedRow, objReturned.editableRow)));
+      this.setState({ invalidCells: newInvalidCells, activeCell: [null, null] }, (() => this.state.onSave(activeRow, objReturned.updatedRow, objReturned.editableRow)));
     }
   }
 
