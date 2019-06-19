@@ -32,14 +32,14 @@ export default class UserMenu extends PureComponent {
               center={<p className="user-name">{this.props.getUserProfile(assigneduser.user).name}</p>}
               right={(
                 <div style={{ lineHeight: '40px' }}>
-                  <span className="arrow-more-info">
+                  {this.props.type==='activity' && <span className="arrow-more-info">
                     {arrowType}
-                  </span>
+                  </span>}
                   <span className="close-container" onClick={() => this.props.unassignUser(assigneduser.user)}><FontAwesomeIcon icon={faTrash} className="close-icon" /></span>
                 </div>
               )}
             />
-            {assigneduser.user === this.state.userOpen && (
+            {assigneduser.user === this.state.userOpen && this.props.type==='activity' && (
               <div className="user-toggle-details">
                 <UserDetails user={assigneduser} editExistingRole={this.props.editExistingRole} />
               </div>

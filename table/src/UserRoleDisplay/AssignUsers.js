@@ -72,6 +72,7 @@ class AssignUsers extends PureComponent {
         {this.state.visiblePanel === 'UserMenu'
       && (
       <UserMenu
+	  	type={this.props.type}
         assignedUsers={this.assignedUsers}
         getUserProfile={this.props.getUserProfile}
         editExistingRole={this.editExistingRole}
@@ -90,6 +91,7 @@ class AssignUsers extends PureComponent {
         {this.state.visiblePanel === 'UserAddedConfirmation'
       && (
       <UserAddedConfirmation
+	    type={this.props.type}
         assignedUsers={this.state.assignUsers}
         getUserProfile={this.props.getUserProfile}
         addRoleTo={(user) => { this.setState({ addRoleTo: user }); this.nextScreen(); }}

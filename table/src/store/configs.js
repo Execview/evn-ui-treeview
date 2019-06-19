@@ -126,7 +126,7 @@ export const cellTypes = {
     editor: <DropdownCellEditor dropdownList={countries} />
   },
   users: {
-    display: <UserRoleDisplay userProfiles={users} />,
+    display: <UserRoleDisplay userProfiles={users}/>,
   },
   text: {
     display: <TextareaCellDisplay />,

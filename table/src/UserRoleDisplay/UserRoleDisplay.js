@@ -20,6 +20,7 @@ const UserRoleDisplay = (props) => {
 			<ImageDisplay data={userImages} style={props.style} />
 			{open && (
 				<AssignUsers
+					type={props.type || 'activity'}
 					assignedUsers={data}
 					getUserProfile={getUserProfile}
 					getAllUserProfileKeys={getAllUserProfileKeys}

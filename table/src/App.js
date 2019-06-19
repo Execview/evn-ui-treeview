@@ -11,7 +11,7 @@ class App extends Component {
     super(props);
     this.state = {
       data: this.props.data,
-      display: false
+      display: true
     };
   }
 
@@ -20,7 +20,7 @@ class App extends Component {
   }
 
   onGetData() {
-    this.setState({ display: true });
+    this.setState({ display: !this.state.display });
   }
 
   render() {
@@ -36,7 +36,7 @@ class App extends Component {
     const randomNumber = Math.floor((Math.random() * cats.length));
     return (
       <div className="App">
-        <button className="get-data" type="button" onClick={() => this.onGetData()}>Get Data!</button>
+        <button className="get-data" type="button" onClick={() => this.onGetData()}>Toggle table!</button>
         {this.state.display && (
           <div>
             <TableWrapper
