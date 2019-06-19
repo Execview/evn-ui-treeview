@@ -9,20 +9,51 @@
 
 }
 
-.progress-red {
-  background-color: #ff3d57;
+.progress{
   height: 100%;
   min-height: 100%;
   border-radius: 4px;
   transition: background-color 0.7s;
 }
 
-.progress-amber {
+.background-red {
+  background-color: #ff3d57;
+}
+
+.background-amber {
   background-color: #ffbf00;
-  height: 100%;
-  min-height: 100%;
-  border-radius: 4px;
-  transition: background-color 0.7s;
+}
+
+.background-green {
+  background-color: #00CC6F;
+}
+
+.background-grey {
+  background-color: grey;
+}
+
+.background-blue {
+  background-color: #74dcee;
+}
+
+.hover-red:hover{
+  background-color: #ff3d57;
+}
+
+.hover-green:hover{
+  background-color: #00CC6F;
+}
+
+.hover-amber:hover{
+  background-color: #ffbf00;
+}
+
+.hover-grey:hover{
+  background-color: grey;
+}
+
+.hover-blue:hover{
+  background-color: #74dcee;
 }
 
 .no-select {
@@ -30,22 +61,6 @@
   -webkit-user-select: none;
   -ms-user-select: none;
   user-select: none;
-}
-
-.progress-green {
-  background-color: #00CC6F;
-  height: 100%;
-  min-height: 100%;
-  border-radius: 4px;
-  transition: background-color 0.7s;
-}
-
-.progress-grey {
-  background-color: grey;
-  height: 100%;
-  min-height: 100%;
-  border-radius: 4px;
-  transition: background-color 0.7s;
 }
 
 .color-circle-container {
@@ -63,21 +78,7 @@
   transition: background-color 0.7s;
 }
 
-.circle-green {
-  background-color: #02d62b;
-}
 
-.circle-amber {
-  background-color: #f9e616;
-}
-
-.circle-red {
-  background-color: #f20e0e;
-}
-
-.circle-grey {
-  background-color: grey;
-}
 
 .color-dropdown {
   position:absolute;
@@ -99,20 +100,6 @@
   padding: 5px 0;
 }
 
-.color-green:hover{
-  background-color: #00CC6F;
-}
 
-.color-amber:hover{
-  background-color: #ffbf00;
-}
-
-.color-red:hover{
-  background-color: #ff3d57;
-}
-
-.color-grey:hover{
-  background-color: grey;
-}
 
 

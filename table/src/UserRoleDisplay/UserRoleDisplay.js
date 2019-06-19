@@ -14,7 +14,6 @@ const UserRoleDisplay = (props) => {
 		return Object.keys(props.userProfiles);
 	}
 	const data = props.data || []
-	console.log(data)
 	const userImages = data.map(d => getUserProfile(d.user).image)
 	return (
 		<div className="user-cell" onClick={() => setOpen(true)}>

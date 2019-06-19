@@ -13,7 +13,7 @@ class ColorCellEditor extends Component {
     return (
       <div className="color-dropdown" style={{ width }}>
         <ul className="color-dropdown-menu">
-          {Object.keys(colors).map(objKey => <li className={'color-dropdown-item color-' + objKey} key={objKey} onClick={(e) => { e.stopPropagation(); e.preventDefault(); this.props.onValidateSave(objKey); }}>{colors[objKey]}</li>)}
+          {Object.keys(colors).map(objKey => <li className={'color-dropdown-item hover-' + objKey} key={objKey} onClick={(e) => { e.stopPropagation(); e.preventDefault(); this.props.onValidateSave(objKey); }}>{colors[objKey]}</li>)}
         </ul>
       </div>
     );
