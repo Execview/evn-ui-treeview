@@ -29,7 +29,7 @@ export default class Cell extends Component {
   // dd && (!o || Object.keys(dd).length !== 0)
 
   render() {
-    const data = this.props.data || '';
+    const data = this.props.data;
     const errorText = this.props.errorText || this.props.errorText === '' ? this.props.errorText : null;
     const style = this.props.style || {};
     const type = {};

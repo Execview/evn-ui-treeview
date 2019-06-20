@@ -1,30 +1,27 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import './TextCell.css';
 
-export default class TextCellEditor extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      text: this.props.data
-    };
+ const TextCellEditor = (props) => {
+
+	const [text, setText] = useState(props.data)
+
+ 	const onChange = (value) => {
+    setText(value);
   }
 
-  onChange(value) {
-    this.setState({ text: value });
-  }
-
-  onKeyPress(e) {
+  	const onKeyPress = (e) => {
     if (e.key === 'Enter') {
-      this.props.onValidateSave(this.state.text);
+      props.onValidateSave(text);
     }
   }
 
-  render() {
-		const classes = this.props.classes || {};
+
+	const classes = props.classes || {};
     return (
-      <div className={'text-container ' + (classes.container || '')} style={this.props.style}>
-        <input className={'number-input ' + (classes.text || '')} onBlur={() => this.props.onValidateSave(this.state.text)} autoFocus type="text" value={this.state.text} onChange={e => this.onChange(e.target.value)} onKeyPress={e => this.onKeyPress(e)} />
+      <div className={'text-container ' + (classes.container || '')} style={props.style}>
+        <input className={'number-input ' + (classes.text || '')} onBlur={() => props.onValidateSave(text)} autoFocus type="text" value={text} onChange={e => onChange(e.target.value)} onKeyPress={e => onKeyPress(e)} />
       </div>
     );
-  }
 }
+
+export default TextCellEditor
