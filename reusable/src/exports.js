@@ -3,7 +3,7 @@ import GenericDropdown from './Components/GenericDropdown/GenericDropdown';
 import PropInspector from './Components/PropInspector/PropInspector'
 import TripleFill from './Components/TripleFill/TripleFill'
 import CircleUser from './Components/CircleUser/CircleUser';
-import OCO from './Components/OCO'
+import OCO from './Components/OCO/OCO'
 
 import injectObjectInObject from './Functions/injectObjectInObject'
 import objectCopierWithStringToDate from './Functions/objectCopierWithStringToDate'
