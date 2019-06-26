@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import './GenericAssignDisplay.css';
-import AssignGeneric from './AssignGeneric';
-// import ImageDisplay from '../imageDisplay/ImageDisplay';
-
+import GenericAssign from './GenericAssign';
 
 const GenericAssignDisplay = (props) => {
 	const [open, setOpen] = useState(false);
@@ -13,16 +11,7 @@ const GenericAssignDisplay = (props) => {
 		<div className="generic-cell" onClick={() => setOpen(true)}>
 			{React.createElement(props.display.type, { ...props.display.props, allItems, items: data, style: props.style })}
 			{open && (
-				<AssignGeneric
-					allItems={allItems}
-					items={data}
-					page1={props.page1}
-					page2={props.page2}
-					page3={props.page3}
-					page4={props.page4}
-					closeMenu={() => setOpen(false)}
-					onValidateSave={props.onValidateSave}
-				/>
+				<GenericAssign allItems={props.items} items={props.data} getOption={props.getOption} getSearchField={props.getSearchField} style={props.style} closeMenu={() => setOpen(false)} onValidateSave={props.onValidateSave} leftTitle={props.leftTitle} rightTitle={props.rightTitle} />
 			)}
 		</div>
 	);

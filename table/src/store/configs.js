@@ -1,4 +1,5 @@
 import React from 'react';
+import { TripleFill, CircleUser } from '@execview/reusable';
 import TextareaCellEditor from '../TextareaCell/TextareaCellEditor';
 import DropdownCellEditor from '../dropdownCell/DropdownCellEditor';
 import TextCellEditor from '../textCell/TextCellEditor';
@@ -12,11 +13,6 @@ import GenericAssignDisplay from '../genericAssignCell/GenericAssignDisplay';
 import UserHeaderDisplay from '../headers/UserHeaderDisplay';
 import { countries, priority } from './constants';
 import ImageDisplay from '../imageDisplay/ImageDisplay';
-import GenericMenu from '../genericAssignCell/GenericMenu';
-import AddGenericDropdown from '../genericAssignCell/AddGenericDropDown';
-import GenericAddedConfirmation from '../genericAssignCell/GenericAddedConfirmation';
-import AddExtra from '../genericAssignCell/AddExtraGeneric';
-
 
 export const columnsInfo1 = {
 	images: { cellType: 'images', headerData: 'Images', width: 4 },
@@ -157,19 +153,31 @@ const users = {
 	}
 };
 
-//GenericAssignDisplay props
-const ImageDisplayWrapperForAssign = (props) => {
+// GenericAssignDisplay props
+const allItems = users;
+const Display = (props) => {
 	const items = props.items || [];
-	const imageDisplayData = props.allItems && (items.map(u =>props.allItems[u].image) || []);
+	const imageDisplayData = props.allItems && (items.map(u => props.allItems[u].image) || []);
 	return <ImageDisplay data={imageDisplayData} style={props.style} />;
 };
+const getSearchField = (id) => {
+	return allItems[id].name;
+};
 
-const display = <ImageDisplayWrapperForAssign />;
-const page1 = <GenericMenu />;
-const page2 = <AddGenericDropdown />;
-const page3 = <GenericAddedConfirmation />;
-const page4 = <AddExtra />;
+const getOption = (id) => {
+	return (
+		<div className="user-row">
+			<TripleFill
+				style={{ height: '40px', cursor: 'pointer' }}
+				left={<CircleUser url={allItems[id].image} />}
+				center={<p className="user-name">{allItems[id].name}</p>}
+			/>
+		</div>
+	);
+};
 
+const leftTitle = 'Assigned Users';
+const rightTitle = 'Available Users';
 
 export const cellTypes = {
 	textarea: {
@@ -184,7 +192,7 @@ export const cellTypes = {
 		display: <UserRoleDisplay userProfiles={users} />,
 	},
 	genericAdder: {
-		display: <GenericAssignDisplay display={display} page1={page1} page2={page2} page3={page3} page4={page4} items={users} />,
+		display: <GenericAssignDisplay display={<Display />} getOption={getOption} getSearchField={getSearchField} items={users} leftTitle={leftTitle} rightTitle={rightTitle}/>,
 	},
 	text: {
 		display: <TextareaCellDisplay />,
