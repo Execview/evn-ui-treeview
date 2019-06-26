@@ -1,32 +1,26 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import './TextareaCell.css';
 
-export default class TextareaCellEditor extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      text: this.props.data
-    };
-  }
+const TextareaCellEditor = (props) => {
+  const [text, setText] = useState(props.data || '');
 
-  onChange(value) {
-    this.setState({ text: value });
-  }
+  const onChange = (value) => {
+    setText(value);
+  };
 
-  onKeyPress(e) {
+  const onKeyPress = (e) => {
     if (e.key === 'Enter' && !(e.shiftKey)) {
-      this.props.onValidateSave(this.state.text);
+      props.onValidateSave(text);
     }
-  }
-  // onBlur={() => this.props.onValidateSave(this.state.text)}
+  };
 
-  render() {
-		const classes = this.props.classes || {};
-    return (
-      <div className={'text-container ' + (classes.container || '')} style={this.props.style}>
-        <textarea rows="1" autoFocus onBlur={() => this.props.onValidateSave(this.state.text)} className={'text-input ' + (classes.text || '')} type="text" value={this.state.text} onChange={e => this.onChange(e.target.value)} onKeyPress={e => this.onKeyPress(e)} />
+  const classes = props.classes || {};
+  return (
+    <div className={'text-container ' + (classes.container || '')} style={props.style}>
+      <textarea rows="1" autoFocus onBlur={() => props.onValidateSave(text)} className={'text-input ' + (classes.text || '')} type="text" value={text} onChange={e => onChange(e.target.value)} onKeyPress={e => onKeyPress(e)} />
 
-      </div>
-    );
-  }
-}
+    </div>
+  );
+};
+
+export default TextareaCellEditor;

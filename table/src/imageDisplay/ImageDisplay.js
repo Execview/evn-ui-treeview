@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { CircleUser } from '@execview/reusable';
 import classes from './ImageDisplay.module.css';
 
