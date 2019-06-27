@@ -1,6 +1,6 @@
 {
 	"name": "@execview/table",
-	"version": "0.1.44",
+	"version": "0.1.46",
 	"main": "./transpiled/exports.js",
 	"private": false,
 	"dependencies": {

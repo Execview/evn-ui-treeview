@@ -45,7 +45,7 @@ const GenericAssign = (props) => {
 			<div className="generic-menu">
 				<div className="absolute-caret" />
 				<div>
-					<p className="dropdown-title">{props.leftTitle}</p>
+					{props.leftTitle}
 					<GenericDropdown
 						submit={(key) => { unassignGeneric(key); }}
 						canSearch={true}
@@ -57,7 +57,7 @@ const GenericAssign = (props) => {
 					/>
 				</div>
 				<div>
-					<p className="dropdown-title">{props.rightTitle}</p>
+					{props.rightTitle}
 					<GenericDropdown
 						submit={(key) => { assignGeneric(key); }}
 						canSearch={true}

@@ -38,11 +38,11 @@
   transition: all 0.5s;
 }
 
-.user-name{
+.tripleFill-user-name{
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  vertical-align: middle;
-  margin: 10px;
-  margin-right:1px;
+  margin:0;
+  margin-left:10px;
+  line-height:40px;
 }

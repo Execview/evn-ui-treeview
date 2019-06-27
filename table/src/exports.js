@@ -12,20 +12,22 @@ import TextCellEditor from './textCell/TextCellEditor';
 import UserRoleDisplay from './UserRoleDisplay/UserRoleDisplay';
 import UserHeaderDisplay from './headers/UserHeaderDisplay';
 import ImageDisplay from './imageDisplay/ImageDisplay';
+import GenericAssignDisplay from './genericAssignCell/GenericAssignDisplay';
 
-module.exports = { 
-  Table,
-  Cell,
-  cats,
-  DropdownCellEditor,
-  TextareaCellDisplay, 
-  TextareaCellEditor,
-  ColorCellDisplay,
-  ColorCellEditor,
-  DateCellDisplay,
-  DateCellEditor,
-  TextCellEditor,
-  UserRoleDisplay,
-  UserHeaderDisplay,
-  ImageDisplay
+module.exports = {
+	Table,
+	Cell,
+	cats,
+	DropdownCellEditor,
+	TextareaCellDisplay,
+	TextareaCellEditor,
+	ColorCellDisplay,
+	ColorCellEditor,
+	DateCellDisplay,
+	DateCellEditor,
+	TextCellEditor,
+	UserRoleDisplay,
+	UserHeaderDisplay,
+	ImageDisplay,
+	GenericAssignDisplay
 };

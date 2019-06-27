@@ -140,7 +140,7 @@ const users = {
 		image: 'https://i.imgur.com/upG3jXQ.jpg'
 	},
 	jio9: {
-		name: 'Sylvester SylvesterSylvester',
+		name: 'Sylvester SylvesterSylvesterSylvesterSylvester',
 		image: 'https://i.imgur.com/hGiJyW0.jpg'
 	},
 	ahwyd: {
@@ -170,14 +170,14 @@ const getOption = (id) => {
 			<TripleFill
 				style={{ height: '40px', cursor: 'pointer' }}
 				left={<CircleUser url={allItems[id].image} />}
-				center={<p className="user-name">{allItems[id].name}</p>}
+				center={<p className="tripleFill-user-name">{allItems[id].name}</p>}
 			/>
 		</div>
 	);
 };
 
-const leftTitle = 'Assigned Users';
-const rightTitle = 'Available Users';
+const leftTitle = <p className="dropdown-title">Assigned Users</p>;
+const rightTitle = <p className="dropdown-title">Available Users</p>;
 
 export const cellTypes = {
 	textarea: {
