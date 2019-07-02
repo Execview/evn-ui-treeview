@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import errorIcon from '../resources/icons-info.svg';
+import errorIcon from '../Resources/icons-info.svg';
 import './TextareaCell.css';
 
 const TextareaCellDisplay = (props) => {
