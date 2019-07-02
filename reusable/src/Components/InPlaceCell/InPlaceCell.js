@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react'
 import { Cell } from '@execview/table'
-import classes from './Profile.module.css';
 
 const InPlaceCell = (props) => {
 	useEffect(()=>{
