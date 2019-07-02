@@ -6,6 +6,9 @@ import CircleUser from './Components/CircleUser/CircleUser';
 import OCO from './Components/OCO/OCO'
 import InPlaceCell from './Components/InPlaceCell/InPlaceCell'
 import Cell from './Components/Cell/Cell'
+import TextareaCellDisplay from './Components/Cell/CellTypes/TextAreaCells/TextareaCellDisplay'
+import TextareaCellEditor from './Components/Cell/CellTypes/TextAreaCells/TextareaCellEditor'
+import TextCellEditor from './Components/Cell/CellTypes/TextCells/TextCellEditor'
 
 import injectObjectInObject from './Functions/injectObjectInObject'
 import objectCopierWithStringToDate from './Functions/objectCopierWithStringToDate'
@@ -30,5 +33,8 @@ module.exports = {
 	sendEvent,
 	OCO,
 	InPlaceCell,
-	Cell
+	Cell,
+	TextareaCellDisplay,
+	TextareaCellEditor,
+	TextCellEditor
 };

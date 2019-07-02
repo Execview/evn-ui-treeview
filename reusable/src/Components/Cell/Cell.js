@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import TextareaCellDisplay from '../TextareaCell/TextareaCellDisplay';
-import TextCellEditor from '../textCell/TextCellEditor';
-import { recursiveDeepDiffs } from '@execview/reusable';
+import TextareaCellDisplay from './CellTypes/TextAreaCells/TextareaCellDisplay'
+import TextCellEditor from './CellTypes/TextCells/TextCellEditor';
+import recursiveDeepDiffs from '../../Functions/recursiveDeepDiffs'
 
 
 export default class Cell extends Component {
