@@ -4,6 +4,8 @@ import PropInspector from './Components/PropInspector/PropInspector'
 import TripleFill from './Components/TripleFill/TripleFill'
 import CircleUser from './Components/CircleUser/CircleUser';
 import OCO from './Components/OCO/OCO'
+import InPlaceCell from './Components/InPlaceCell/InPlaceCell'
+import Cell from './Components/Cell/Cell'
 
 import injectObjectInObject from './Functions/injectObjectInObject'
 import objectCopierWithStringToDate from './Functions/objectCopierWithStringToDate'
@@ -26,5 +28,7 @@ module.exports = {
 	recursiveDeepCopy,
 	recursiveDeepDiffs,
 	sendEvent,
-	OCO
+	OCO,
+	InPlaceCell,
+	Cell
 };
