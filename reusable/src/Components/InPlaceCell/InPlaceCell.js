@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { Cell } from '../Cell/Cell'
+import Cell from '../Cell/Cell'
 
 const InPlaceCell = (props) => {
 	useEffect(()=>{
