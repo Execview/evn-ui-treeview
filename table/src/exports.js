@@ -12,16 +12,12 @@ import GenericAssignDisplay from './genericAssignCell/GenericAssignDisplay';
 
 module.exports = {
 	Table,
-	Cell,
 	cats,
 	DropdownCellEditor,
-	TextareaCellDisplay,
-	TextareaCellEditor,
 	ColorCellDisplay,
 	ColorCellEditor,
 	DateCellDisplay,
 	DateCellEditor,
-	TextCellEditor,
 	UserRoleDisplay,
 	UserHeaderDisplay,
 	ImageDisplay,
