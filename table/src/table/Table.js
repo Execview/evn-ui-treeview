@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Row from '../row/Row';
-import Cell from '../cell/Cell';
+import { Cell } from '@execview/reusable';
 import HeaderCellDisplay from './HeaderCellDisplay';
 import './Table.css';
 

@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
-import Cell from '../cell/Cell';
-import TextareaCellDisplay from '../TextareaCell/TextareaCellDisplay';
-import TextareaCellEditor from '../TextareaCell/TextareaCellEditor';
-import { recursiveDeepDiffs } from '@execview/reusable';
+import { Cell, TextareaCellDisplay, TextareaCellEditor, recursiveDeepDiffs } from '@execview/reusable';
 import './Row.css';
 
 

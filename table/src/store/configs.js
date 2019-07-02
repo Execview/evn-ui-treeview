@@ -1,13 +1,10 @@
 import React from 'react';
-import { TripleFill, CircleUser } from '@execview/reusable';
-import TextareaCellEditor from '../TextareaCell/TextareaCellEditor';
+import { TripleFill, CircleUser, TextareaCellEditor, TextareaCellDisplay, TextCellEditor } from '@execview/reusable';
 import DropdownCellEditor from '../dropdownCell/DropdownCellEditor';
-import TextCellEditor from '../textCell/TextCellEditor';
 import ColorCellEditor from '../colorCell/ColorCellEditor';
 import ColorCellDisplay from '../colorCell/ColorCellDisplay';
 import DateCellEditor from '../dateCell/DateCellEditor';
 import DateCellDisplay from '../dateCell/DateCellDisplay';
-import TextareaCellDisplay from '../TextareaCell/TextareaCellDisplay';
 import UserRoleDisplay from '../UserRoleDisplay/UserRoleDisplay';
 import GenericAssignDisplay from '../genericAssignCell/GenericAssignDisplay';
 import UserHeaderDisplay from '../headers/UserHeaderDisplay';
