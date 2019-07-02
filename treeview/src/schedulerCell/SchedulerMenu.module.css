@@ -1,0 +1,30 @@
+.scheduler-menu{
+	position: absolute;
+	right: 0;
+	top:100%;
+	background-color: #383d47;
+	border: 1px solid white;
+	border-radius: 5px;
+	padding: 10px;
+	z-index: 5;
+	width:250px;
+	cursor: default;
+}
+
+.items-list {
+	padding:0;
+	margin:0;
+	list-style: none;
+}
+
+.item {
+	padding:3px;
+	display:inline-block;
+	border:1px solid white;
+	border-collapse: collapse;
+	cursor:pointer;
+}
+
+.green {
+	background-color: green;
+}

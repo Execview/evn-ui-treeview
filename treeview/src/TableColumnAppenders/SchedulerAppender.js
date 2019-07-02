@@ -15,7 +15,7 @@ export default class SchedulerAppender extends Component {
 		mousepositionstream.subscribe((event)=>this.mouseEvent(event))
 		this.tableRef= React.createRef();
 
-		this.bubbleHeight = 40;
+		this.bubbleHeight = 30;
 
 		this.state = {startdate: null, enddate: null, snaps: [], dayWidth: 80, rowHeights: [], bubbleContextMenu: {key:null,position:null}}
 		this.extrasnaps = 2
@@ -225,8 +225,10 @@ export default class SchedulerAppender extends Component {
 	clickedOnScheduler = (event) => {
 		if(this.mouseDownOnBubble.key==="")
 		{
+			const closestSVG = event.target.closest('svg')
+			if(!closestSVG){return}
 			this.isOnScheduler=true
-			this.schedulerCTM = event.target.closest('svg').getScreenCTM()
+			this.schedulerCTM = closestSVG.getScreenCTM()
 			var mouse = this.getInternalMousePosition(event, this.schedulerCTM)
 			// this.removeContextMenu()
 			var schedulerWidth = moment(this.state.enddate).diff(this.state.startdate,'d')

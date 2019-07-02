@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faCaretRight } from '@fortawesome/free-solid-svg-icons';
-import './TreeCell.css';
+import classes from './TreeCell.module.css';
 
 class TreeCell extends Component {	
   	render() {
@@ -17,9 +17,9 @@ class TreeCell extends Component {
 			showPointerStyle = {cursor: 'pointer'};
 		}
     	return (
-			<div className="cell-container" onClick={this.props.data.toggleNode} style={showPointerStyle}>
-				<div style={{...this.props.style,width:this.props.style.width - 10}} className="cell-text">										
-					<p className="tree-text" style={{marginLeft: 5 + 20 * this.props.data.depth}}>{arrow} {this.props.data.text}</p>					
+			<div className={classes["cell-container"]} onClick={this.props.data.toggleNode} style={showPointerStyle}>
+				<div style={{...this.props.style,width:this.props.style.width - 10}} className={classes["cell-text"]}>										
+					<p className={classes["tree-text"]} style={{marginLeft: 5 + 20 * this.props.data.depth}}>{arrow} {this.props.data.text}</p>					
 				</div>
 			</div>
 		);

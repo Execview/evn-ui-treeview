@@ -6,7 +6,7 @@ import TreeConnector from './TableColumnAppenders/TreeConnector';
 import { Table, cats } from '@execview/table';
 import { columnsInfo, cellTypes, rules } from './store/config';
 import { PropInspector, Button } from '@execview/reusable'
-import './App.css'
+import classes from './App.module.css';
 
 class App extends Component {
 	componentDidMount() {
@@ -16,8 +16,8 @@ class App extends Component {
   	render() {
 			const randomNumber = Math.floor((Math.random() * cats.length));
     	return (
-			<div className="App">
-				<div className="button-container">
+			<div className={classes["App"]}>
+				<div className={classes["button-container"]}>
 					<Button onClick={()=>this.props.onAddRow(Object.keys(columnsInfo))}>Add Row</Button>
 				</div>
 				{Object.keys(this.props.data).length !== 0 && <TreeConnector

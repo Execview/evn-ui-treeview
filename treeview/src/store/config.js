@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { InputCellDisplay, InputCellEditor, ColorCellDisplay, ColorCellEditor, DateCellDisplay, DateCellEditor } from '@execview/table'
+import { ColorCellDisplay, ColorCellEditor, DateCellDisplay, DateCellEditor } from '@execview/table'
+import { TextCellEditor, TextareaCellDisplay } from '@execview/reusable'
 
 import Data from './configData.json'
 
@@ -43,8 +44,8 @@ export const editableCells = {
 
 export const cellTypes = {
 	text: {
-		display: <InputCellDisplay />,
-		editor: <InputCellEditor />
+		display: <TextareaCellDisplay />,
+		editor: <TextCellEditor />
 	},
 	color: {
 		display: <ColorCellDisplay />,
