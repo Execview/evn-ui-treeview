@@ -1,19 +1,27 @@
 import React, { useState } from 'react';
 import classes from './SchedulerMenu.module.css';
+import { InPlaceCell } from '@execview/reusable'
+import { DateCellDisplay, DateCellEditor } from '@execview/table'
 
 const SchedulerMenu = (props) => {
-	const options = ['1 Week', '2 Weeks', 'Month', 'Quarter'];
-	const [selected,setSelected] = useState(0); 
+	const options = ['Day', 'Week', 'Month', 'Quarter'];
+	const [selected,setSelected] = props.mode
+	const [start, setStart] = props.start
+	console.log(props)
 	return (
 		<div className={classes["scheduler-menu"]}>
-			Test
+			<InPlaceCell 
+				type={{display:<DateCellDisplay/>, editor:<DateCellEditor/>}}
+				data={start}
+				onValidateSave={(d)=>{console.log(d);props.setStart(d)}}
+			/>
 			<div>
 				<ul className={classes['items-list']}>
-					{options.map((item,key) => 
+					{options.map((item,index) => 
 						<li 
 							key={item} 
-							className={classes['item']+' '+(selected === key ? classes['green'] : '')}
-							onClick={() => setSelected(key)}
+							className={classes['item']+' '+(selected === index ? classes['selected'] : '')}
+							onClick={() => setSelected(index)}
 						>{item}</li>
 					)}
 				</ul>

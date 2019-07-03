@@ -25,6 +25,6 @@
 	cursor:pointer;
 }
 
-.green {
+.selected {
 	background-color: green;
 }

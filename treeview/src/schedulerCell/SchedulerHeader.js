@@ -8,7 +8,7 @@ import { faFilter } from '@fortawesome/free-solid-svg-icons';
  
  
 const SchedulerHeader = (props) => {
-	const [open, setOpen] = useState(false) 
+	const [open, setOpen] = useState(true) 
 	useEffect(()=>{
 		props.data.getWidth && props.data.getWidth(props.style.width)
 	})
@@ -19,9 +19,11 @@ const SchedulerHeader = (props) => {
 			<svg height='100%' width='100%'>
 				<text style={{fill:'white'}} >{days}</text>
 			</svg>
-			<OCO OCO={()=>setOpen(true)}>
-				<Button onClick={()=>setOpen(!open)} style={{height:'36px'}}><FontAwesomeIcon icon={faFilter}/></Button>
-				{open && <SchedulerMenu/>}
+			<OCO OCO={()=>setOpen(false)}>
+				<div>
+					<Button onClick={()=>setOpen(!open)} style={{height:'40px'}}><FontAwesomeIcon icon={faFilter}/></Button>
+					{open && <SchedulerMenu {...props.data.schedulerOptions}/>}
+				</div>
 			</OCO>			
 			<SchedulerOverlay contextMenu={props.data.contextMenu} tableHeight={props.data.tableHeight} links={props.data.links}/>
 			
