@@ -18,6 +18,7 @@ export default class SchedulerAppender extends Component {
 		this.bubbleHeight = 30;
 
 		this.state = {startdate: null, enddate: null, snaps: [], dayWidth: 80, rowHeights: [], bubbleContextMenu: {key:null,position:null}}
+		this.viewingPeriod = 1
 		this.extrasnaps = 2
 
 		//this.InitialStartDate = new Date("2018-12-15")
@@ -64,7 +65,7 @@ export default class SchedulerAppender extends Component {
 	}
 	componentDidMount(){
 		let earliestBubble = new Date(Math.min(...Object.keys(this.props.data).map(key=>this.props.data[key].startdate)))
-		this.setStartAndEndDate(earliestBubble);
+		this.setStartDate(earliestBubble);
 	}
     shouldComponentUpdate(nextProps,nextState) {
 	if(nextState!==this.state){return true}
@@ -85,8 +86,12 @@ export default class SchedulerAppender extends Component {
 	return diffs;
 	}
 
-	setStartAndEndDate = (start)=>{
+	setStartDate = (start)=>{
 		let end = moment(start).add(this.schedulerWidth/this.state.dayWidth,'d').toDate()
+		this.setStartAndEndDate(start,end)
+	}
+
+	setStartAndEndDate = (start,end) =>{
 		if(end-start<0){return}
 		const getDateRange = (start, end)=>{
 			var daterange = []
@@ -105,6 +110,13 @@ export default class SchedulerAppender extends Component {
 			startdate: start,
 			enddate: end,
 			snaps: newXsnaps})
+	}
+
+	setMode = (m) => {
+		console.log("selected: "+m)
+		const modeToDays = [1,7,30,90]
+		this.viewingPeriod = m
+		this.setStartAndEndDate(this.state.startdate,moment(this.state.startdate).add(modeToDays[m],'d').toDate())
 	}
 
 	getInternalMousePosition = (event,CTM)=>{
@@ -217,7 +229,7 @@ export default class SchedulerAppender extends Component {
 			var datediff = (mousedate-this.DownDateandSchedulerWidth[0])
 			if(datediff!==0){
 				const newstart = moment(this.state.startdate.getTime()-datediff).toDate()
-				this.setStartAndEndDate(newstart)
+				this.setStartDate(newstart)
 			}
 		}
 	}
@@ -272,7 +284,7 @@ export default class SchedulerAppender extends Component {
 			// this.setState({ schedulerWidth: width });
 			this.schedulerWidth=width;
 			
-			if(this.state.startdate){this.setStartAndEndDate(this.state.startdate)}
+			if(this.state.startdate){this.setStartDate(this.state.startdate)}
 		}
 	}
 	
@@ -349,6 +361,10 @@ export default class SchedulerAppender extends Component {
 						removeLink: <div onClick={() => this.props.onRemoveLink(this.state.bubbleContextMenu.key)}>Remove Link</div>, 
 						deleteSingle: <div onClick={()=>this.props.deleteSingle(this.state.bubbleContextMenu.key)}>Delete Single</div>,
 						deleteBubble: <div onClick={()=>this.props.deleteBubble(this.state.bubbleContextMenu.key)}>Delete Bubble</div> }
+				},
+				schedulerOptions: {
+					mode: [this.viewingPeriod,((m)=>this.setMode(m))],
+					start: [this.state.startdate, ((date)=>this.setStartDate(date))]
 				}
 			}
 			newColumnsInfo = {...this.props.columnsInfo, scheduler: {cellType: 'scheduler', width: 65, headerType: 'schedulerHeader', headerData: schedulerheaderdata}}
