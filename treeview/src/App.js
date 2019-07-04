@@ -15,10 +15,11 @@ class App extends Component {
 
   	render() {
 			const randomNumber = Math.floor((Math.random() * cats.length));
+			const newRowParent = Object.keys(this.props.data).find(id=>this.props.data[id].ParentAssociatedBubble==='')
     	return (
 			<div className={classes["App"]}>
 				<div className={classes["button-container"]}>
-					<Button onClick={()=>this.props.onAddRow(Object.keys(columnsInfo))}>Add Row</Button>
+					<Button onClick={()=>this.props.onAddRow(Object.keys(columnsInfo),newRowParent)}>Add Row</Button>
 				</div>
 				{Object.keys(this.props.data).length !== 0 && <TreeConnector
 					data={this.props.data}
@@ -52,7 +53,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		onGetLocalData: ()=>dispatch({type: actionTypes.LOAD_FROM_CONFIG}),
-		onAddRow: (columns) => dispatch({type: actionTypes.ADD_ROW, parent:'_1235d', shape:'square', columns})
+		onAddRow: (columns,parent) => dispatch({type: actionTypes.ADD_ROW, parent: parent, shape:'square', columns})
 	};
 };
 

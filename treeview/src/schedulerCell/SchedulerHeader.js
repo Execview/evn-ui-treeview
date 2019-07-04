@@ -8,7 +8,7 @@ import { faFilter } from '@fortawesome/free-solid-svg-icons';
  
  
 const SchedulerHeader = (props) => {
-	const [open, setOpen] = useState(true) 
+	const [open, setOpen] = useState(false) 
 	useEffect(()=>{
 		props.data.getWidth && props.data.getWidth(props.style.width)
 	})

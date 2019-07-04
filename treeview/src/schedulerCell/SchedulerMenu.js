@@ -4,25 +4,24 @@ import { InPlaceCell } from '@execview/reusable'
 import { DateCellDisplay, DateCellEditor } from '@execview/table'
 
 const SchedulerMenu = (props) => {
-	const options = ['Day', 'Week', 'Month', 'Quarter'];
+	const options = {hour:'Hour', day:'Day', week:'Week', month:'Month'};
 	const [selected,setSelected] = props.mode
 	const [start, setStart] = props.start
-	console.log(props)
 	return (
 		<div className={classes["scheduler-menu"]}>
 			<InPlaceCell 
 				type={{display:<DateCellDisplay/>, editor:<DateCellEditor/>}}
 				data={start}
-				onValidateSave={(d)=>{console.log(d);props.setStart(d)}}
+				onValidateSave={(d)=>setStart(d)}
 			/>
 			<div>
 				<ul className={classes['items-list']}>
-					{options.map((item,index) => 
+					{Object.keys(options).map((key) => 
 						<li 
-							key={item} 
-							className={classes['item']+' '+(selected === index ? classes['selected'] : '')}
-							onClick={() => setSelected(index)}
-						>{item}</li>
+							key={key} 
+							className={classes['item']+' '+(selected === key ? classes['selected'] : '')}
+							onClick={() => setSelected(key)}
+						>{options[key]}</li>
 					)}
 				</ul>
 			</div>
