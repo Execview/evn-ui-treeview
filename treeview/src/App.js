@@ -40,7 +40,6 @@ class App extends Component {
 					<img draggable='false' style={{ marginTop: '30px', maxWidth: '100%' }} src={cats[randomNumber]} alt="xd" />
 				</div>
 			</div>
-
 		);
   	}
 }

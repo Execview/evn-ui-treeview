@@ -4,7 +4,7 @@ import SchedulerMenu from './SchedulerMenu'
 import classes from './SchedulerCell.module.css';
 import { Button, OCO } from '@execview/reusable'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFilter } from '@fortawesome/free-solid-svg-icons';
+import { faFilter, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment'
  
  
@@ -33,7 +33,7 @@ const SchedulerHeader = (props) => {
 			</svg>
 			<OCO OCO={()=>setOpen(false)}>
 				<div className={classes['menu-container']}>
-					<Button onClick={()=>setOpen(!open)} style={{height:'40px'}}><FontAwesomeIcon icon={faFilter}/></Button>
+					<Button onClick={()=>setOpen(!open)} style={{height:'40px'}}><FontAwesomeIcon icon={faChevronDown}/></Button>
 					{open && <SchedulerMenu {...props.data.schedulerOptions}/>}
 				</div>
 			</OCO>			

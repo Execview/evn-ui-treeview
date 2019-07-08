@@ -35,7 +35,8 @@ const SchedulerAppender = (props) => {
 	const [mouseDownOnBubble, setMouseDownOnBubble] = useState({key:'',location:'',dragDiffs:[0,0]})
 	const [mouseDownOnScheduler, setMouseDownOnScheduler] = useState(null)
 
-	const [schedulerStart, actuallySetSchedulerStart] = useState(new Date('12/12/2018'))
+	const initialStartDate = new Date(Math.min(...Object.keys(props.data).map(key=>props.data[key].startdate)))
+	const [schedulerStart, actuallySetSchedulerStart] = useState(initialStartDate)
 	const [schedulerResolution, actuallySetSchedulerResolution] = useState('day')
 
 	const getShiftedStart = (d,r) => {
