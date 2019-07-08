@@ -18,8 +18,8 @@ class TreeCell extends Component {
 		}
     	return (
 			<div className={classes["cell-container"]} onClick={this.props.data.toggleNode} style={showPointerStyle}>
-				<div style={{...this.props.style,width:this.props.style.width - 10}} className={classes["cell-text"]}>										
-					<p className={classes["tree-text"]} style={{marginLeft: 5 + 20 * this.props.data.depth}}>{arrow} {this.props.data.text}</p>					
+				<div style={{...this.props.style,width:this.props.style.width - 10, minHeight: this.props.style.minHeight - 10}} className={classes["cell-text"]}>										
+					<p className={classes["tree-text"]} style={{marginLeft: 20 * this.props.data.depth}}>{arrow} {this.props.data.text}</p>					
 				</div>
 			</div>
 		);

@@ -4,14 +4,14 @@
     flex-direction: column;
     justify-content: center;
     height: 100%;
-    min-height: 40px;
 }
 
 .cell-text{
     margin:0;
-    line-height:20px;
     padding: 5px;
     word-wrap: break-word;
+    display:flex;
+    align-items:center;
 }
 
 .tree-text {
@@ -19,7 +19,6 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     margin: 0;
-    margin-left:10px;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;

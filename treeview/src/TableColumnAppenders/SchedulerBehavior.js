@@ -42,7 +42,7 @@ export const getDrawnLinksFromData = (data,getBubbleY,snaps) => {
 }
 
 export const getSnaps = (start, schedulerResolution, schedulerWidth, timeWidth, extrasnaps) =>{
-	const resolutionMap = {hour:'h', day:'d', month:'m'}
+	const resolutionMap = {hour:'h', day:'d', week:'w', month:'M'}
 	const timeIncrement = resolutionMap[schedulerResolution]
 
 	const getDateRange = (start, end)=>{
@@ -61,4 +61,83 @@ export const getSnaps = (start, schedulerResolution, schedulerWidth, timeWidth, 
 		newXsnaps.push([daterange[i],(i-extrasnaps)*timeWidth])
 	}
 	return newXsnaps
+}
+
+export const getTimeFormatString = (resolution) => {
+	let formatString;
+	switch(resolution){
+		case 'hour': {
+			formatString = 'ha'
+			break;
+		}
+		case 'day': {
+			formatString = 'Do'
+			break;
+		}
+		case 'week': {
+			formatString = 'DD/MM'
+			break;
+		}
+		case 'month': {
+			formatString = 'MMM'
+			break;
+		}
+		default: {
+			formatString = 'DD/MM'
+			break;
+		}
+	}
+	return formatString
+}
+
+export const getMajorStartOf = (mode) => {
+	let majorStartOf = ''
+		switch(mode){
+			case 'hour': {
+				majorStartOf='day'
+				break;
+			}
+			case 'day': {
+				majorStartOf='week'
+				break;
+			}
+			case 'week': {
+				majorStartOf='month'
+				break;
+			}
+			case 'month': {
+				majorStartOf='year'
+				break;
+			}
+			default: {
+				majorStartOf='day'
+			}
+		}
+	return majorStartOf
+}
+
+export const getMajorLegend = (date, mode) => {
+	let legend = ''
+		switch(mode){
+			case 'hour': {
+				legend=moment(date).format('Do MMM')
+				break;
+			}
+			case 'day': {
+				legend = moment(date).format('MMMM')
+				break;
+			}
+			case 'week': {
+				legend=moment(date).format('MMMM')
+				break;
+			}
+			case 'month': {
+				legend=moment(date).format('YYYY')
+				break;
+			}
+			default: {
+				legend=''
+			}
+		}
+	return legend
 }

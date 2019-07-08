@@ -14,6 +14,7 @@ class App extends Component {
 	}
 
   	render() {
+		  	const rowheight = 30
 			const randomNumber = Math.floor((Math.random() * cats.length));
 			const newRowParent = Object.keys(this.props.data).find(id=>this.props.data[id].ParentAssociatedBubble==='')
     	return (
@@ -29,6 +30,7 @@ class App extends Component {
 					dontPreserveOrder={true}
 					wrap={false}
 					rules={rules}
+					height={rowheight}
 				>
 					<SchedulerConnector>
 						<Table />

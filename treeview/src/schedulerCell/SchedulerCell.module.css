@@ -4,7 +4,8 @@
     flex-direction: column;
     justify-content: center;
     height: 100%;
-    min-height: 40px;
+    position: relative;
+    z-index: 2;
 }
 
 .no-select {
@@ -21,5 +22,6 @@
 }
 
 .menu-container {
-   position: relative;
+   z-index:4;
 }
+

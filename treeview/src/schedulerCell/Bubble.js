@@ -29,6 +29,8 @@ const Bubble = React.memo((props) => {
 	var leftend = null
 	var middle = null
 	var rightend = null
+
+	const defaultMiddle = 'M '+(props.startpoint[0])+" "+props.startpoint[1]+" h "+(props.endpoint[0]-props.startpoint[0])+" v "+(props.endpoint[1]-props.startpoint[1])+" h "+-1*(props.endpoint[0]-props.startpoint[0])+" z"
 	switch(shape){
 		case 'bubble': {
 			let radius = (props.endpoint[1]-props.startpoint[1])/2
@@ -36,6 +38,8 @@ const Bubble = React.memo((props) => {
 			leftend = 'M '+(props.startpoint[0]+radius)+" "+props.startpoint[1]+" a 2 2 1 1 0 0 "+(2*radius)
 			middle = 'M '+(props.startpoint[0]+radius)+" "+props.startpoint[1]+" h "+(width-2*radius)+" v "+(2*radius)+" h "+-1*(width-2*radius)+" z"
 			rightend ='M '+(props.endpoint[0]-radius)+" "+props.endpoint[1]+" a 2 2 1 1 0 0 "+(-2*radius)
+
+			if((props.endpoint[0]-props.startpoint[0])<=radius*2){leftend=null; rightend=null; middle=defaultMiddle}
 			break;
 		}
 		case 'square': {
@@ -46,6 +50,8 @@ const Bubble = React.memo((props) => {
 			middle = 'M '+(props.startpoint[0]+thickness/2)+" "+props.startpoint[1]+" h "+(width-thickness)+" v "+thickness+" h "+(-1*(width-thickness))+" z"
 			//rightend ='M '+(props.endpoint[0]-thickness/2)+" "+(props.endpoint[1]-thickness)+" h "+thickness/2+" v "+thickness+" h "+(-1*thickness/2)+" z"
 			rightend =`M ${props.endpoint[0]} ${props.endpoint[1]-(thickness)/2} L ${(props.endpoint[0]-thickness/2)} ${props.endpoint[1]-thickness} L ${props.endpoint[0]-thickness/2} ${props.endpoint[1]} z`
+
+			if((props.endpoint[0]-props.startpoint[0])<=thickness){leftend=null; rightend=null; middle=defaultMiddle}
 			break;
 		}
 			
@@ -85,7 +91,9 @@ const Bubble = React.memo((props) => {
 			{shape!=='triangle' && <text style={{filter:filterStyle, fill: 'white', MozUserSelect:"none", WebkitUserSelect:"none", msUserSelect:"none", pointerEvents: "none"}}
 				x={(props.startpoint[0]+props.endpoint[0])/2}
 				y={(props.startpoint[1]+props.endpoint[1])/2}
-				textAnchor='middle'>{text}</text>}
+				textAnchor='middle'
+				alignmentBaseline='middle'>{text}
+				</text>}
 		</g>
 	);
 })

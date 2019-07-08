@@ -68,7 +68,7 @@ export default class TreeAppender extends Component {
 	}
 
 	addTreeColumn = ()=>{
-		return {treeExpander: {cellType: 'tree', headerData: 'Tree'}, ...this.props.columnsInfo}
+		return {treeExpander: {cellType: 'tree', height: (this.props.height || 0), headerData: 'Tree'}, ...this.props.columnsInfo}
 	}
 
   	render() {//TODO: Remove extra props before spreading!

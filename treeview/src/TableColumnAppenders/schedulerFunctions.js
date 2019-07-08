@@ -1,11 +1,26 @@
+import {useState} from 'react'
+
 export const getYPositionFromRowNumber = (i,rowHeights) => {
 		return [...rowHeights].splice(0,i).reduce((total,rh)=>total+rh,0)
 }
 
+class SVGHolder {
+	SVG = null
+	getSVG = (svg) => {
+		if(svg) { 
+			this.SVG = svg; 
+		}
+		return this.SVG
+	}
+}
+const SVGH = new SVGHolder()
+
 export const getInternalMousePosition = (event) =>{
-	const svg = event && event.target && event.target.closest('svg');
+	const currentSVG = event && event.target && event.target.closest('svg');
+	const svg = SVGH.getSVG(currentSVG)
 	if(!svg){return [0,0]}
-	const CTM = svg.getScreenCTM()	
+	
+	const CTM = svg.getScreenCTM()
 	const mouse = svg.createSVGPoint();
 	mouse.x =event.clientX
 	mouse.y = event.clientY
@@ -14,11 +29,14 @@ export const getInternalMousePosition = (event) =>{
 }
 
 export const getNearestSnapXToDate = (date,snaps)=>{
+	const val = date.valueOf()
     const daterangems = snaps.map(dateX=>dateX[0].valueOf())
-    const nearestms = getNearestValueInArray(daterangems,date.valueOf())
-    const nearestmsindex = daterangems.indexOf(nearestms)
-    const nearestXsnap = nearestmsindex !==-1 ? snaps[nearestmsindex][1] : 0
-    return nearestXsnap
+    const nearestTwoVals = getNearestValuesInArray(daterangems,val).slice(0,2)
+	const nearestTwoXs = nearestTwoVals.map(nt=>snaps[daterangems.indexOf(nt)][1])
+	const percentBetween = (val-nearestTwoVals[1])/(nearestTwoVals[0]-nearestTwoVals[1])
+	
+	const valX = nearestTwoXs[1] + (nearestTwoXs[0]-nearestTwoXs[1])*percentBetween
+    return valX
 }
 
 export const getNearestDateToX = (X,snaps)=>{
@@ -27,8 +45,26 @@ export const getNearestDateToX = (X,snaps)=>{
 		return snaps[nearestsnapindex][0]
 	}
 
-export const getNearestValueInArray = (snaps,value)=>{ 
-    if(snaps===[]){return value}
-    const distancefromsnaps = snaps.slice().map((i)=>Math.abs(i-value))
-    return snaps[distancefromsnaps.indexOf(Math.min(...distancefromsnaps))]
+export const getNearestValueInArray = (snaps,value)=>{
+    return getNearestValuesInArray(snaps,value)[0]
 }
+
+export const getNearestValuesInArray = (snaps,value)=>{ 
+    if(snaps===[]){return [value]}
+	return [...snaps].sort((a,b)=>{
+		const aDistance = Math.abs(a-value)
+		const bDistance = Math.abs(b-value)
+		return aDistance-bDistance > 0 ? 1 : -1
+	})
+}
+
+
+// const test = [5,6,2,8,9,20]
+// const result = getNearestValueInArray(test,7)
+// //console.log(result)
+
+// const test2 = [[new Date('4-7-20'),0],[new Date('4-8-20'),10],[new Date('4-9-20'),20],[new Date('4-10-20'),30]]
+// console.log('start test')
+// const result2 = getNearestSnapXToDate(new Date('4-9-20'),test2)
+// console.log(result2)
+// console.log('end test')

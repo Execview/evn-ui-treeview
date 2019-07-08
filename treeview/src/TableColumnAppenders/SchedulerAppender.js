@@ -3,7 +3,7 @@ import SchedulerCell from '../schedulerCell/SchedulerCell'
 import SchedulerHeader from '../schedulerCell/SchedulerHeader';
 import { recursiveDeepDiffs, objectCopierWithStringToDate } from '@execview/reusable';
 
-import { getDrawnLinksFromData, getSnaps } from './SchedulerBehavior'
+import { getDrawnLinksFromData, getSnaps, getTimeFormatString, getMajorStartOf } from './SchedulerBehavior'
 import { getColourFromMap } from './BubbleBehavior'
 import {getNearestSnapXToDate, getInternalMousePosition, getNearestDateToX, getYPositionFromRowNumber} from './schedulerFunctions'
 import { UNSATColours } from './colourOptions'
@@ -20,9 +20,10 @@ const SchedulerAppender = (props) => {
 		const mouseSubscription = mousepositionstream.subscribe((event)=>mouseEvent(event))
 		return ()=>{mouseSubscription.unsubscribe()}
 	})
-	
-	const colours = UNSATColours
-	const bubbleHeight = props.bubbleHeight || 40
+
+	const colours = UNSATColours	
+	const rowHeight = props.height || 25	
+	const bubbleHeight = rowHeight*0.9
 	const timeWidth = props.timeWidth || 80
 	const extrasnaps = props.extrasnaps || 2
 	const highlightcolour = 'Grey'
@@ -34,17 +35,30 @@ const SchedulerAppender = (props) => {
 	const [mouseDownOnBubble, setMouseDownOnBubble] = useState({key:'',location:'',dragDiffs:[0,0]})
 	const [mouseDownOnScheduler, setMouseDownOnScheduler] = useState(null)
 
-	const [schedulerStart, setSchedulerStart] = useState(new Date('12/12/2018'))
-	const [schedulerResolution, setSchedulerResolution] = useState('day')
+	const [schedulerStart, actuallySetSchedulerStart] = useState(new Date('12/12/2018'))
+	const [schedulerResolution, actuallySetSchedulerResolution] = useState('day')
 
+	const getShiftedStart = (d,r) => {
+		return moment(d).startOf(r).toDate()
+	}
+
+	const setSchedulerStart = (date) => {
+		const d = getShiftedStart(date,schedulerResolution)
+		actuallySetSchedulerStart(d)
+	}
+	
+	const setSchedulerResolution = (res) => {
+		actuallySetSchedulerResolution(res)
+		actuallySetSchedulerStart(getShiftedStart(schedulerStart,res))
+	}
 
 	const tableRef= React.createRef();
 
 	const snaps = getSnaps(schedulerStart, schedulerResolution, schedulerWidth, timeWidth, extrasnaps)
+
 	
 	//#region Mouse Interactions
 	const bubbleclickdown = (key,event,side)=>{
-		console.log('here ' + key + ' ' + side)
 		setMouseDownOnBubble({key:key, location:side, dragDiffs:[0,0]})
 		props.setBubbleSideColour(key,highlightcolour,side)
 	}
@@ -103,6 +117,7 @@ const SchedulerAppender = (props) => {
 			}
 		}
 		const nearestDateToX = getNearestDateToX(mouse[0] - mouseDownOnBubble.dragDiffs[0],snaps)
+		
 		if(mouseDownOnBubble.location==='left' && !event.shiftKey && nearestDateToX.getTime()!==props.data[key].startdate.getTime()){
 			props.tryBubbleTransform(key, {startdate: nearestDateToX})}
 		if(mouseDownOnBubble.location==='right' && !event.shiftKey && nearestDateToX.getTime()!==props.data[key].enddate.getTime()){
@@ -139,6 +154,7 @@ const SchedulerAppender = (props) => {
 			links: getDrawnLinksFromData(props.data,((i)=>getYPositionFromRowNumber(i,rowHeights)+bubbleHeight/2),snaps),
 			getWidth: ((w)=>{if(w!==schedulerWidth){setSchedulerWidth(w)}}),
 			mouseOnScheduler: clickedOnScheduler,
+			timeFormatString: getTimeFormatString(schedulerResolution),
 			contextMenu: {
 				position: contextMenuPosition,
 				closeMenu: ()=>{setBubbleContextMenuKeyAndPosition({key:null,position:null})},
@@ -152,7 +168,7 @@ const SchedulerAppender = (props) => {
 				start: [schedulerStart, ((date)=>setSchedulerStart(date))]
 			}
 		}
-		const newColumnsInfo = {...props.columnsInfo, scheduler: {cellType: 'scheduler', width: 65, headerType: 'schedulerHeader', headerData: schedulerheaderdata}}
+		const newColumnsInfo = {...props.columnsInfo, scheduler: {cellType: 'scheduler', width: 65, height: rowHeight, headerType: 'schedulerHeader', headerData: schedulerheaderdata}}
 		return newColumnsInfo
 	}
 

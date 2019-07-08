@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { GenericDropdown } from '@execview/reusable'
+import classes from './SchedulerRightClickMenu.module.css' 
 
 class SchedulerRightClickMenu extends Component {
 	onSubmit = () => {
@@ -9,7 +10,7 @@ class SchedulerRightClickMenu extends Component {
   render() {
     return (
       <foreignObject x={this.props.position[0]} y={this.props.position[1]} width="200" height="100%" style={{MozUserSelect:"none", WebkitUserSelect:"none",msUserSelect:"none"}}>
-			<div >
+			<div className={classes["menu"]}>
 				<GenericDropdown
 					onBlur={this.props.closeMenu}
 					submit={option => this.onSubmit(option)}
