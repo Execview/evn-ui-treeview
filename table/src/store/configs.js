@@ -35,7 +35,7 @@ export const columnsInfo3 = {
 	activityId: { cellType: 'textarea', headerData: 'Activity ID', width: 5, minWidth: 25 },
 	startDate: { cellType: 'date', headerData: 'Start Date', width: 10 },
 	dueDate: { cellType: 'date', headerData: 'Due Date', width: 10 },
-	assignedGeneric: { cellType: 'genericAdder', headerData: 'Assigned Generic', width: 10, headerType: 'userHeader' },
+	assignedGeneric: { cellType: 'genericAdder', headerData: 'Assigned Generic', width: 10, headerType: 'userHeader', height: 40 },
 	progress: { cellType: 'color', headerData: 'RAG', width: 10, minWidth: 25 },
 	latestProgress: { cellType: 'textarea', headerData: 'Latest Progress' }
 	// employeeName: { cellType: 'dropdown', headerData: 'Employee Name', width: 400 },

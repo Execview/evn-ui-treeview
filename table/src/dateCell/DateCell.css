@@ -4,12 +4,11 @@
   flex-direction: column;
   justify-content: center;
   height: 100%;
-  min-height: 40px;
+  min-height: 20px;
 }
 
 .cell-text{
   margin:0;
-  line-height:20px;
   padding: 5px;
   word-wrap: break-word;
 }
@@ -43,8 +42,11 @@
   background-color: inherit;
   width: 98%;
   font-family: Arial, Helvetica, sans-serif;
-  margin-top: 7px;
   box-sizing: border-box;
   position: relative;
   outline: none;
+}
+
+.react-datepicker-popper {
+  z-index:100 !important;
 }

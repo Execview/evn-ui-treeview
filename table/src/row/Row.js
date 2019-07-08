@@ -30,23 +30,25 @@ export default class Row extends Component {
 	render() {
 		const editableCells = this.props.editableCells || [];
 		const columnsInfo = this.props.columnsInfo || Object.keys(this.props.rowData).reduce((total, objKey) => { return { ...total, [objKey]: { cellType: 'text', colTitle: objKey } }; }, {});
+		const keys = Object.keys(columnsInfo);
 		const invalidCells = this.props.invalidCells || [];
-		const widths = this.props.widths || Object.keys(columnsInfo).reduce((total, objKey) => { return { ...total, [objKey]: 200 }; }, {});
+		const widths = this.props.widths || keys.reduce((total, objKey) => { return { ...total, [objKey]: 200 }; }, {});
+		const heights = this.props.heights || keys.reduce((total, objKey) => { return { ...total, [objKey]: 0 }; }, {});
 		const onSetActive = this.props.onSetActive || (() => { console.log('row needs onSetActive brah, which sets a cell active'); });
 		const cellTypes = this.props.cellTypes || { text: { display: <TextareaCellDisplay />, editor: <TextareaCellEditor /> } };
 		const rules = this.props.rules || {};
 		const onMouseDown = this.props.onMouseDown || (() => false);
 		const cellStyleClass = this.props.style || {};
 		return (
-			Object.keys(columnsInfo).map((col, index) => {
+			keys.map((col, index) => {
 				let editRights = editableCells.includes(col);
 				const red = invalidCells.includes(col);
 
 				const isActive = (col === this.props.activeColumn && editRights);
 
 				const onClickAction = isActive ? null : (() => onSetActive(col));
-				const lastOne = index === Object.keys(columnsInfo).length - 1;
-				let style = { width: Math.round(widths[col]) };
+				const lastOne = index === keys.length - 1;
+				let style = { width: Math.round(widths[col]), minHeight: heights[col] };
 				if (!this.props.wrap) {
 					style = { ...style, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' };
 				}

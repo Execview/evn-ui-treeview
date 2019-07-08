@@ -30,14 +30,17 @@ export default class Table extends Component {
 				initialWidths[keysLeft[i]] = defaultWidth;
 			}
 		}
-		const minWidths = Object.keys(defaults.columnsInfo).reduce((total, key) => { return { ...total, [key]: defaults.columnsInfo[key].minWidth || 70 }; }, {});
+		const minWidths = keys.reduce((total, key) => { return { ...total, [key]: defaults.columnsInfo[key].minWidth || 70 }; }, {});
 		const data = this.props.data || {};
+
+		const minHeights = keys.reduce((total, key) => { return { ...total, [key]: defaults.columnsInfo[key].height || 0 }; }, {});
 
 		this.state = {
 			columnsInfo: defaults.columnsInfo,
 			widths: { ...initialWidths },
 			minWidths: { ...minWidths },
 			tableWidth: 100,
+			heights: minHeights,
 			columnClicked: null,
 			positionClicked: null,
 			initialWidth: null,
@@ -97,7 +100,6 @@ export default class Table extends Component {
 
 		this.setState({
 			columnsInfo: defaults.columnsInfo,
-
 			orderedData: newOrderedData,
 			data: newData,
 			editableCells: defaults.editableCells,
@@ -324,6 +326,7 @@ export default class Table extends Component {
 										invalidCells={this.state.invalidCells.filter(obj => obj.id === entry).map(el => el.col)}
 										rowData={this.state.data[entry]}
 										widths={this.state.widths}
+										heights={this.state.heights}
 										wrap={this.props.wrap}
 										onSetActive={(col) => this.setActive(entry, col)}
 										cellTypes={this.props.cellTypes}

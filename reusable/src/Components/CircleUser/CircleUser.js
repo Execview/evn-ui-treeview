@@ -1,12 +1,13 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import './CircleUser.css';
 
-export default class CircleUser extends PureComponent {
-  render() {
-    return (
-      <div className={"user-circle " + this.props.className}>
-        <img className="user-image" src={this.props.url} alt="xd" />
-      </div>
-    );
-  }
+const CircleUser = (props) => {
+  const minHeight = props.size || 40
+  return (
+    <div className={"user-circle " + props.className} style={{height: minHeight-4, width: minHeight-4}}>
+      <img className="user-image" src={props.url} alt="xd" />
+    </div>
+  );
 }
+
+export default CircleUser

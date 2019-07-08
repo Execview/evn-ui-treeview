@@ -9,13 +9,14 @@ const ImageDisplay = (props) => {
 		circlesLimit = parseInt((props.style.width - 50) / 20, 10);
 		addAmount = <div className={classes['add-container']} style={{ left: ((circlesLimit + 1) * 20) + 1 }}>{'+' + (props.data.length - circlesLimit)}</div>;
 	}
+	const minHeight = props.style.minHeight || 40;
 	return (
-		<div className={classes['user-cell']}>
+		<div className={classes['user-cell']} style={{ minHeight }}>
 			<div className={classes['users-container']}>
 				{props.data && props.data.slice(0, circlesLimit).reverse().map((image, index) => {
 					return (
 						<div className={classes['user-profile']} key={'circle' + (index + 1)} style={{ left: 20 * (circlesLimit - (index + 1)) }}>
-							<CircleUser url={image} />
+							<CircleUser url={image} size={minHeight} />
 						</div>
 					);
 				})}
