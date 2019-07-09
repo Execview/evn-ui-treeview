@@ -1,15 +1,8 @@
 import React from 'react';
-import { TripleFill, CircleUser, TextareaCellEditor, TextareaCellDisplay, TextCellEditor } from '@execview/reusable';
-import DropdownCellEditor from '../dropdownCell/DropdownCellEditor';
-import ColorCellEditor from '../colorCell/ColorCellEditor';
-import ColorCellDisplay from '../colorCell/ColorCellDisplay';
-import DateCellEditor from '../dateCell/DateCellEditor';
-import DateCellDisplay from '../dateCell/DateCellDisplay';
+import { TripleFill, CircleUser, TextareaCellEditor, TextareaCellDisplay, TextCellEditor, DropdownCellEditor, ImageDisplay, GenericAssignDisplay, ColorCellEditor, ColorCellDisplay, DateCellEditor, DateCellDisplay } from '@execview/reusable';
 import UserRoleDisplay from '../UserRoleDisplay/UserRoleDisplay';
-import GenericAssignDisplay from '../genericAssignCell/GenericAssignDisplay';
 import UserHeaderDisplay from '../headers/UserHeaderDisplay';
 import { countries, priority } from './constants';
-import ImageDisplay from '../imageDisplay/ImageDisplay';
 
 export const columnsInfo1 = {
 	images: { cellType: 'images', headerData: 'Images', width: 4 },

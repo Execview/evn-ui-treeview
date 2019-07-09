@@ -1,5 +1,5 @@
 import React from 'react';
-import { CircleUser } from '@execview/reusable';
+import CircleUser from '../CircleUser/CircleUser';
 import classes from './ImageDisplay.module.css';
 
 const ImageDisplay = (props) => {
@@ -10,6 +10,7 @@ const ImageDisplay = (props) => {
 		addAmount = <div className={classes['add-container']} style={{ left: ((circlesLimit + 1) * 20) + 1 }}>{'+' + (props.data.length - circlesLimit)}</div>;
 	}
 	const minHeight = props.style.minHeight || 40;
+
 	return (
 		<div className={classes['user-cell']} style={{ minHeight }}>
 			<div className={classes['users-container']}>

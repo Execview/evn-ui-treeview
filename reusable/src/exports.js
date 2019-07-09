@@ -9,6 +9,14 @@ import Cell from './Components/Cell/Cell'
 import TextareaCellDisplay from './Components/Cell/CellTypes/TextAreaCells/TextareaCellDisplay'
 import TextareaCellEditor from './Components/Cell/CellTypes/TextAreaCells/TextareaCellEditor'
 import TextCellEditor from './Components/Cell/CellTypes/TextCells/TextCellEditor'
+import ColorCellDisplay from './Components/colorCell/ColorCellDisplay';
+import ColorCellEditor from './Components/colorCell/ColorCellEditor';
+import DateCellDisplay from './Components/dateCell/DateCellDisplay';
+import DateCellEditor from './Components/dateCell/DateCellEditor';
+import DropdownCellEditor from './Components/dropdownCell/DropdownCellEditor';
+import GenericAssignDisplay from './Components/genericAssignCell/GenericAssignDisplay';
+import ImageDisplay from './Components/imageDisplay/ImageDisplay';
+
 
 import injectObjectInObject from './Functions/injectObjectInObject'
 import objectCopierWithStringToDate from './Functions/objectCopierWithStringToDate'
@@ -36,5 +44,12 @@ module.exports = {
 	Cell,
 	TextareaCellDisplay,
 	TextareaCellEditor,
-	TextCellEditor
+	TextCellEditor,
+	ColorCellDisplay,
+	ColorCellEditor,
+	DateCellDisplay,
+	DateCellEditor,
+	DropdownCellEditor,
+	GenericAssignDisplay,
+	ImageDisplay
 };

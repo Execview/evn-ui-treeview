@@ -17,6 +17,12 @@ const DateCellEditor = (props) => {
 		onClickOutside: (() => submit()),
 		selected: selectedDate,
 		onSelect: (date => submit(date)),
+		popperModifiers: {
+			preventOverflow: {
+				enabled: true,
+				boundariesElement: 'viewport'
+			}
+		}
 	};
 
 	return (

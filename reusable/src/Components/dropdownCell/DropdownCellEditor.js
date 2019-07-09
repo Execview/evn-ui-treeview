@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { GenericDropdown } from '@execview/reusable';
+import { GenericDropdown } from '../GenericDropdown/GenericDropdown';
 import './DropdownCell.css';
 
 export default class DropdownCellEditor extends Component {

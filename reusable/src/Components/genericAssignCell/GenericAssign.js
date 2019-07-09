@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { OCO, GenericDropdown } from '@execview/reusable';
+import OCO from '../OCO/OCO';
+import GenericDropdown from '../GenericDropdown/GenericDropdown';
 
 const GenericAssign = (props) => {
 	const data = props.items || [];
