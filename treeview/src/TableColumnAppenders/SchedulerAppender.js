@@ -5,7 +5,7 @@ import { recursiveDeepDiffs, objectCopierWithStringToDate } from '@execview/reus
 
 import { getDrawnLinksFromData, getSnaps, getTimeFormatString, getMajorStartOf } from './SchedulerBehavior'
 import { getColourFromMap } from './BubbleBehavior'
-import {getNearestSnapXToDate, getInternalMousePosition, getNearestDateToX, getYPositionFromRowNumber} from './schedulerFunctions'
+import {getNearestSnapXToDate, getInternalMousePosition, getNearestSnapDateToX, getYPositionFromRowNumber} from './schedulerFunctions'
 import { UNSATColours } from './colourOptions'
 
 
@@ -25,7 +25,7 @@ const SchedulerAppender = (props) => {
 	const rowHeight = props.height || 25	
 	const bubbleHeight = rowHeight*0.9
 	const timeWidth = props.timeWidth || 80
-	const extrasnaps = props.extrasnaps || 2
+	
 	const highlightcolour = 'Grey'
 
 	const [rowHeights, setRowHeights] = useState([])
@@ -38,6 +38,8 @@ const SchedulerAppender = (props) => {
 	const initialStartDate = new Date(Math.min(...Object.keys(props.data).map(key=>props.data[key].startdate)))
 	const [schedulerStart, actuallySetSchedulerStart] = useState(initialStartDate)
 	const [schedulerResolution, actuallySetSchedulerResolution] = useState('day')
+
+	const extrasnaps = 2 //Math.ceil(schedulerWidth/timeWidth)
 
 	const getShiftedStart = (d,r) => {
 		return moment(d).startOf(r).toDate()
@@ -117,19 +119,43 @@ const SchedulerAppender = (props) => {
 				setMouseDownOnBubble({key:'',location:'',dragDiffs:[0,0]})
 			}
 		}
-		const nearestDateToX = getNearestDateToX(mouse[0] - mouseDownOnBubble.dragDiffs[0],snaps)
-		
-		if(mouseDownOnBubble.location==='left' && !event.shiftKey && nearestDateToX.getTime()!==props.data[key].startdate.getTime()){
-			props.tryBubbleTransform(key, {startdate: nearestDateToX})}
-		if(mouseDownOnBubble.location==='right' && !event.shiftKey && nearestDateToX.getTime()!==props.data[key].enddate.getTime()){
-			props.tryBubbleTransform(key, {enddate: nearestDateToX})}
-		if(mouseDownOnBubble.location==='middle' && !event.shiftKey && nearestDateToX.getTime()!==props.data[key].startdate.getTime()){
-			props.tryBubbleTransform(key, {startdate: nearestDateToX, enddate: moment(nearestDateToX).add(bubble.enddate-bubble.startdate).toDate()})
+		if(['left','right','middle'].includes(mouseDownOnBubble.location)){
+			const nearestDateToX = getNearestSnapDateToX(mouse[0] - mouseDownOnBubble.dragDiffs[0],snaps)
+			const potentialStart = nearestDateToX
+			const potentialEnd = nearestDateToX
+
+			const startChanged = Math.abs(potentialStart.getTime()-props.data[key].startdate.getTime())!==0
+			const endChanged = Math.abs(potentialEnd.getTime()-props.data[key].enddate.getTime())!==0
+
+			switch(mouseDownOnBubble.location){
+				case 'left': {
+					if(mouseDownOnBubble.location==='left' && !event.shiftKey && startChanged){
+						props.tryBubbleTransform(key, {startdate: potentialStart})
+					}
+					break;
+				}
+				case 'right': {
+					if(mouseDownOnBubble.location==='right' && !event.shiftKey && endChanged){
+						props.tryBubbleTransform(key, {enddate: potentialEnd })
+					}
+					break;
+				}
+				case 'middle': {
+					if(mouseDownOnBubble.location==='middle' && !event.shiftKey && startChanged){
+						props.tryBubbleTransform(key, {
+							startdate: potentialStart,
+							enddate: moment(nearestDateToX).add(bubble.enddate-bubble.startdate).toDate()
+						})
+					}
+					break;
+				}
+				default: break;
+			}	
 		}
 		//check column interaction.
 		if((event.buttons===0 && mouseDownOnScheduler) || key){setMouseDownOnScheduler(null)}
 		if(event.buttons===1 && !key && mouseDownOnScheduler){
-			const mousedate = getNearestDateToX(mouse[0],snaps)
+			const mousedate = getNearestSnapDateToX(mouse[0],snaps)
 			const datediff = (mousedate-mouseDownOnScheduler)
 			if(datediff !== 0) {
 				const newstart = moment(schedulerStart.getTime() - datediff).toDate()
@@ -141,7 +167,7 @@ const SchedulerAppender = (props) => {
 	const clickedOnScheduler = (event) => {
 		if(mouseDownOnBubble.key==="") {
 			const mouse = getInternalMousePosition(event)
-			const XDownDate = getNearestDateToX(mouse[0],snaps)
+			const XDownDate = getNearestSnapDateToX(mouse[0],snaps)
 			setMouseDownOnScheduler(XDownDate)
 		}
 	}

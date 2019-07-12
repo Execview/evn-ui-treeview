@@ -11,8 +11,8 @@ export const LOAD_FROM_CONFIG = (state,action,reducer) => {
 			return {
 				...total,
 				[elkey]: {
-					startdate:(new Date(startdate.getFullYear(),startdate.getMonth(),startdate.getDate())),
-					enddate:(new Date(enddate.getFullYear(),enddate.getMonth(),enddate.getDate())),
+					startdate: new Date(el.startdate),
+					enddate: new Date(el.enddate),
 					colours: {left: el.colour, right: el.colour, middle: el.colour, original: el.colour},
 					ChildAssociatedBubbles: el.ChildAssociatedBubbles,
 					ParentAssociatedBubble: el.ParentAssociatedBubble,

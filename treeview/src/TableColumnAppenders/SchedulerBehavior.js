@@ -98,7 +98,7 @@ export const getMajorStartOf = (mode) => {
 				break;
 			}
 			case 'day': {
-				majorStartOf='week'
+				majorStartOf='isoWeek'
 				break;
 			}
 			case 'week': {

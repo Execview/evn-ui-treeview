@@ -8,8 +8,24 @@ const hash = crypto.createHash('sha256');
 
 export const ADD_ROW = (state,action,reducer) => {
     const newId = '_' + hash.update(Date.now() + Math.random().toString()).digest('hex').substring(0, 5);
-    const tempTitle = 'Untitled Activity';
-	const shape = action.shape || 'bubble'
+    const shape = action.shape || 'bubble'
+    let tempTitle = 'Untitled Activity';
+    switch (shape) {
+        case 'bubble':{
+            tempTitle = 'Untitled Activity';
+            break;
+        }
+        case 'square': {
+            tempTitle = 'Untitled Task';
+            break;
+        }
+        case 'triangle': {
+            tempTitle = 'Untitled Milestone';
+            break; 
+        }
+        default:
+            break;
+    }
 	const parent = action.parent || '';
     const colors = ['Blue','Red', 'Green', 'Yellow', 'Purple'];
     const colorIndex = Math.floor((Math.random() * 5));

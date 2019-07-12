@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
+import React, { Component, useState } from 'react';
 import classes from './SchedulerMenu.module.css';
 import { InPlaceCell } from '@execview/reusable'
 import { DateCellDisplay, DateCellEditor } from '@execview/table'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
+import DatePicker from 'react-datepicker';
+import moment from 'moment';
 
 const SchedulerMenu = (props) => {
 	const options = {hour:'Hour', day:'Day', week:'Week', month:'Month'};
@@ -9,26 +13,32 @@ const SchedulerMenu = (props) => {
 	const [start, setStart] = props.start
 
 	const datepickerExtraProps = {
-		popperModifiers:{
-			offset: {
-				enabled: true,
-				offset: '-50px, 0px' 
-			},
-			preventOverflow: {
-				enabled: true,
-				boundariesElement: 'viewport'
-			}
+		offset: {
+			enabled: true,
+			offset: '-50px, 0px' 
+		},
+		preventOverflow: {
+			enabled: true,
+			boundariesElement: 'viewport'
 		}
 	};
+
+	class IconAdd extends Component {
+		render() {
+			return <div onClick={this.props.onClick} style={{display:'flex',cursor:'pointer'}}><p className={classes['selected-date']}>{moment(start).format('ddd D/MMM/YY')}</p><FontAwesomeIcon icon={faCalendarAlt}/></div>
+
+		}
+	}
+
 	return (
 		<div className={classes["scheduler-menu"]}>
-			<div className={classes['datepicker-container']}>
-				<InPlaceCell 
-					type={{display:<DateCellDisplay/>, editor:<DateCellEditor datepickerProps={datepickerExtraProps}/>}}
-					data={start}
-					onValidateSave={(d)=>setStart(d)}
-				/>
-			</div>
+			
+			<DatePicker 
+				customInput={<IconAdd />}
+				selected={new Date(start)}
+				onChange={(d)=>setStart(d)}
+				popperModifiers={datepickerExtraProps}
+			/>
 			<div>
 				<ul className={classes['items-list']}>
 					{Object.keys(options).map((key) => 

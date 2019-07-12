@@ -15,6 +15,7 @@
 .header-cell {
    height: 40px;
    overflow: hidden;
+   font-weight: normal;
 }
 
 .scheduler-header{
