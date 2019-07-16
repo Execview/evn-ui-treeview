@@ -121,7 +121,7 @@ const tryReturnValidTransformState = (bubbles,action) =>{
 	} else if(!changes.startdate && changes.enddate){
 		part = 'end'
 	}		
-	console.log(changes)
+	// console.log(changes)
 
 	TransformBubble(key,part,changes) 
 	//Main bubble has already been shifted in bubbles
@@ -138,7 +138,6 @@ const tryReturnValidTransformState = (bubbles,action) =>{
 	
 	//Dont allow bubbles to collide
 	//if(!Object.keys(bubbles).every(bubblekey => {var bubble = bubbles[bubblekey];return checkForNoBubbleCollisions(bubble,bubbles)})){/*console.log('collision!')*/;return false}
-	console.log('returned')
 	return bubbles
 }
 /*

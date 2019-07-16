@@ -55,7 +55,6 @@ export const getSnaps = (start, schedulerResolution, schedulerWidth, timeWidth, 
 
 			//EXPERIMENTAL -- deals with months that start with saturday/sunday/monday. pls remove
 			if (schedulerResolution === 'month') {
-				console.log('here')
 				while (!moment(currentdate).isWorkingTime()) {
 					currentdate = moment(currentdate).add(1,'d').toDate();
 				}
