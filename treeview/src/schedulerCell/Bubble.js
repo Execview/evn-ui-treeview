@@ -72,23 +72,23 @@ const Bubble = React.memo((props) => {
 					<feDropShadow dx="0" dy="0" floodColor={"black"} stdDeviation="1"/>
 				</filter>
 			</defs>
-			{leftend && <path d={leftend} fill={leftcolour} strokeWidth='0'
-				onPointerDown  =	{(event)=>leftclickdown(key,event)}
-				onPointerUp    =	{(event)=>leftclickup(key,event)}
-				onPointerEnter =	{(event)=>leftmousein(key,event)}
-				onPointerLeave   =	{(event)=>leftmouseout(key,event)}/>}
-			{middle && <path d={middle} fill={colour} strokeWidth='0'
-				onPointerDown  =	{(event)=>middleclickdown(key,event)}
-				onPointerUp  =	{(event)=>middleclickup(key,event)}
-				onPointerEnter =	{(event)=>middlemousein(key,event)}
-				onPointerLeave   =	{(event)=>middlemouseout(key,event)}/>}
-			{rightend && <path d={rightend} fill={rightcolour} strokeWidth='0'
-				onPointerDown  =	{(event)=>rightclickdown(key,event)}
-				onPointerUp    =	{(event)=>rightclickup(key,event)}
-				onPointerEnter =	{(event)=>rightmousein(key,event)}
-				onPointerLeave   =	{(event)=>rightmouseout(key,event)}/>}
+			{leftend && !isNaN(props.startpoint[0]) && <path d={leftend} fill={leftcolour} strokeWidth='0'
+				onPointerDown   =	{(event)=>leftclickdown(key,event)}
+				onPointerUp     =	{(event)=>leftclickup(key,event)}
+				onPointerEnter  =	{(event)=>leftmousein(key,event)}
+				onPointerLeave  =	{(event)=>leftmouseout(key,event)}/>}
+			{middle && !isNaN(props.startpoint[0]) && <path d={middle} fill={colour} strokeWidth='0'
+				onPointerDown   =	{(event)=>middleclickdown(key,event)}
+				onPointerUp     =   {(event)=>middleclickup(key,event)}
+				onPointerEnter  =	{(event)=>middlemousein(key,event)}
+				onPointerLeave  =	{(event)=>middlemouseout(key,event)}/>}
+			{rightend && !isNaN(props.startpoint[0]) && <path d={rightend} fill={rightcolour} strokeWidth='0'
+				onPointerDown   =	{(event)=>rightclickdown(key,event)}
+				onPointerUp     =	{(event)=>rightclickup(key,event)}
+				onPointerEnter  =	{(event)=>rightmousein(key,event)}
+				onPointerLeave  =	{(event)=>rightmouseout(key,event)}/>}
 
-			{shape!=='triangle' && <text style={{filter:filterStyle, fill: 'white', MozUserSelect:"none", WebkitUserSelect:"none", msUserSelect:"none", pointerEvents: "none"}}
+			{shape!=='triangle' && !isNaN(props.startpoint[0]) && <text style={{filter:filterStyle, fill: 'white', MozUserSelect:"none", WebkitUserSelect:"none", msUserSelect:"none", pointerEvents: "none"}}
 				x={(props.startpoint[0]+props.endpoint[0])/2}
 				y={(props.startpoint[1]+props.endpoint[1])/2}
 				textAnchor='middle'
