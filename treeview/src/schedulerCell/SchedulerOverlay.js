@@ -27,11 +27,11 @@ const SchedulerOverlay = (props) => {
 	const majorLines = majorLineDates.map(d=>getNearestSnapXToDate(d,snaps))
 	const legendDates = (props.mode !== 'day'  
 		?	majorLineDates  
-		:	majorLineDates.filter(d => moment(d).date() <= 7).map(d => moment(d).startOf('month').toDate())
+		:	snaps.map(snap=>snap[0]).filter(d => moment(d).isSame(moment(d).startOf('month')))
 	)
 
-	const majorLegends = legendDates.map(md => [getNearestSnapXToDate(md, snaps), getMajorLegend(md, props.mode)])
 
+	const majorLegends = legendDates.map(md => [getNearestSnapXToDate(md, snaps), getMajorLegend(md, props.mode)])
 	const links = props.links || []
 	const tableHeight = props.tableHeight || 100
 
@@ -46,7 +46,6 @@ const SchedulerOverlay = (props) => {
 		//path = `M ${fx} ${fy} C ${tx} ${fy} ${fx} ${ty} ${tx} ${ty}`
 		path = `M ${fx} ${fy} C ${fvx} ${fvy} ${tvx} ${tvy} ${tx} ${ty}`
 		//path = `M ${fx} ${fy} L ${fvx} ${fvy} L ${tvx} ${tvy} L ${tx} ${ty}`
-
 		let pathColour ='rgb(255,255,255)'
 		const drawLink = (
 			<g key={index} style={{pointerEvents: 'none'}}>
@@ -71,13 +70,12 @@ const SchedulerOverlay = (props) => {
 	}
 
 	const showMenu = props.contextMenu && props.contextMenu.position
-
 	return (
 		<div>
 			{/* OVERLAY! */}
 			<svg height={tableHeight + (showMenu?500:0)} width='100%' style={{top:'0px', left: '0px', position: "absolute",pointerEvents: 'none', zIndex:'3'}}>
 				<g style={{pointerEvents: 'auto'}}>
-					{links.map((l, i)=>drawLink(l,i))}
+					{!isNaN(links[0].parent[0]) && links.map((l, i)=>drawLink(l,i))}
 				</g>
 				{showMenu && <g style={{pointerEvents: 'auto'}}>
 					<SchedulerRightClickMenu {...props.contextMenu}/>  
@@ -87,8 +85,8 @@ const SchedulerOverlay = (props) => {
 			<svg height={tableHeight + (showMenu?500:0)} width='100%' style={{top:'0px', left: '0px', position: "absolute",pointerEvents: 'none', zIndex:'1'}}>
 				<g style={{pointerEvents: 'auto'}}> 
 					{lines.map((x)=>drawLine(x,0,{stroke:'rgba(255,255,255,0.1)',strokeWidth:1}))}
-					{majorLines.map((x)=>drawLine(x,40,{stroke:'rgba(255,255,255,0.5)',strokeWidth:2}))}
-					{majorLegends.map((ll)=>drawLegend(ll[0],ll[1],tableHeight,{fontSize:30,fontWeight:300,fill:'rgba(255,255,255,0.5)'}))}
+					{(majorLines.length > 0) && majorLines.map((x)=>drawLine(x,40,{stroke:'rgba(255,255,255,0.5)',strokeWidth:2}))}
+					{(majorLegends.length > 0) && majorLegends.map((ll)=>drawLegend(ll[0],ll[1],tableHeight,{fontSize:30,fontWeight:300,fill:'rgba(255,255,255,0.5)'}))}
 				</g>
 			</svg>
 		</div>

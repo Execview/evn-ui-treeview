@@ -42,7 +42,7 @@ export const getNearestValuesInArray = (snaps,value)=>{
 export const getNearestSnapXToDate = (date,snaps)=>{
 	const val = date.valueOf()
     const daterangems = snaps.map(dateX=>dateX[0].valueOf())
-    const nearestTwoVals = getNearestValuesInArray(daterangems,val).slice(0,2)
+	const nearestTwoVals = getNearestValuesInArray(daterangems,val).slice(0,2)
 	const nearestTwoXs = nearestTwoVals.map(nt=>snaps[daterangems.indexOf(nt)][1])
 	const percentBetween = (val-nearestTwoVals[1])/(nearestTwoVals[0]-nearestTwoVals[1])
 	
@@ -60,6 +60,15 @@ export const getExactNearestSnapDateToX = (X,snaps)=>{
 }
 
 export const getNearestSnapDateToX = (X,snaps)=>{
+	const nearestTwoXs = getNearestValuesInArray(snaps.map(i=>i[1]),X).slice(0,2)
+	const nearestTwoDates = nearestTwoXs.map(nx=>snaps[snaps.map(i=>i[1]).indexOf(nx)][0])
+	const percentBetween = Math.round((X-nearestTwoXs[1])/(nearestTwoXs[0]-nearestTwoXs[1]))
+	const Xdate = nearestTwoDates[1].getTime() + (nearestTwoDates[0]-nearestTwoDates[1])*percentBetween
+
+	return new Date(Xdate)
+}
+
+export const getOldNearestSnapDateToX = (X,snaps)=>{
 	var nearestsnap = getNearestValueInArray(snaps.map(i=>i[1]),X)
 	var nearestsnapindex = snaps.map(i=>i[1]).indexOf(nearestsnap)
 	return snaps[nearestsnapindex][0]
@@ -76,7 +85,7 @@ export const getNearestSnapDateToX = (X,snaps)=>{
 
 // const test2 = [[new Date('4-7-20'),0],[new Date('4-8-20'),10],[new Date('4-9-20'),20],[new Date('4-10-20'),30]]
 // console.log('start test')
-// const result2 = getNearestSnapXToDate(new Date('4-9-20'),test2)
+// const result2 = getNearestSnapXToDate(new Date('4-3-20'),test2)
 // console.log(result2)
 // console.log('end test')
 

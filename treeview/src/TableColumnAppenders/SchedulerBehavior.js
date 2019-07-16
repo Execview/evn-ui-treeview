@@ -44,22 +44,37 @@ export const getDrawnLinksFromData = (data,getBubbleY,snaps) => {
 export const getSnaps = (start, schedulerResolution, schedulerWidth, timeWidth, extrasnaps) =>{
 	const resolutionMap = {hour:'h', day:'d', week:'w', month:'M'}
 	const timeIncrement = resolutionMap[schedulerResolution]
+	// console.log(timeIncrement)
+	// console.log(start)
 
-	const getDateRange = (start, end)=>{
+	const getDateRange = (start, number)=>{
 		var daterange = []
-		for(let currentdate=moment(start); currentdate.isSameOrBefore(end); currentdate.add(1,timeIncrement)){
-			daterange.push(moment(currentdate).toDate())
+		for(let i=0; i<number; i++){
+			let currentdate = moment(start).add(i, schedulerResolution).toDate()
+			// if([0,6].includes(moment(currentdate).day())){number++;continue;}
+
+			//EXPERIMENTAL -- deals with months that start with saturday/sunday/monday. pls remove
+			if (schedulerResolution === 'month') {
+				console.log('here')
+				while (!moment(currentdate).isWorkingTime()) {
+					currentdate = moment(currentdate).add(1,'d').toDate();
+				}
+				if (moment(currentdate).day() === 1) {
+					currentdate = moment(currentdate).add(1,'d').toDate()
+				}
+			}
+			daterange.push(currentdate)
 		}
 		return daterange
 	}
 
-	const end = moment(start).add(schedulerWidth/timeWidth, timeIncrement).toDate()
-	if(end-start<0){return}
-	var daterange = getDateRange(moment(start).subtract(extrasnaps,timeIncrement).toDate(),moment(end).add(extrasnaps,timeIncrement).toDate());
+	const numberOfTimeIncrements = schedulerWidth/timeWidth
+	var daterange = getDateRange(moment(start).subtract(extrasnaps,timeIncrement).toDate(),numberOfTimeIncrements+2*extrasnaps);
 	let newXsnaps = []
 	for(let i=0;i<daterange.length;i++){
 		newXsnaps.push([daterange[i],(i-extrasnaps)*timeWidth])
 	}
+
 	return newXsnaps
 }
 
@@ -71,11 +86,11 @@ export const getTimeFormatString = (resolution) => {
 			break;
 		}
 		case 'day': {
-			formatString = 'Do'
+			formatString = 'ddd Do'
 			break;
 		}
 		case 'week': {
-			formatString = 'DD/MM'
+			formatString = 'MMM Do'
 			break;
 		}
 		case 'month': {

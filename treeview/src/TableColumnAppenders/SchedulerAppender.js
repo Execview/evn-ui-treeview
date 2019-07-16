@@ -5,7 +5,7 @@ import { recursiveDeepDiffs, objectCopierWithStringToDate } from '@execview/reus
 
 import { getDrawnLinksFromData, getSnaps, getTimeFormatString, getMajorStartOf } from './SchedulerBehavior'
 import { getColourFromMap } from './BubbleBehavior'
-import {getNearestSnapXToDate, getInternalMousePosition, getNearestSnapDateToX, getYPositionFromRowNumber} from './schedulerFunctions'
+import {getNearestSnapXToDate, getInternalMousePosition, getNearestSnapDateToX, getExactNearestSnapDateToX, getYPositionFromRowNumber} from './schedulerFunctions'
 import { UNSATColours } from './colourOptions'
 
 
@@ -39,9 +39,13 @@ const SchedulerAppender = (props) => {
 	const [schedulerStart, actuallySetSchedulerStart] = useState(initialStartDate)
 	const [schedulerResolution, actuallySetSchedulerResolution] = useState('day')
 
-	const extrasnaps = 2 //Math.ceil(schedulerWidth/timeWidth)
+	const extrasnaps = 0 //Math.ceil(schedulerWidth/timeWidth)
 
 	const getShiftedStart = (d,r) => {
+		// EXPERIMENTAL -- deals with all the snaps being on sunday. REMOVE WHEN STUFF WORKS PROPERLY
+		if (r === 'week') {
+			return moment(d).startOf(r).day(5).toDate()
+		}
 		return moment(d).startOf(r).toDate()
 	}
 
@@ -110,6 +114,7 @@ const SchedulerAppender = (props) => {
 
 	const mouseEvent = (event) => {
 		const key = mouseDownOnBubble.key
+		if(key && !props.data[key]){return}
 		if(mouseDownOnScheduler){event.preventDefault()}
 		var mouse = getInternalMousePosition(event)
 		var bubble=props.data[key];
@@ -121,11 +126,15 @@ const SchedulerAppender = (props) => {
 		}
 		if(['left','right','middle'].includes(mouseDownOnBubble.location)){
 			const nearestDateToX = getNearestSnapDateToX(mouse[0] - mouseDownOnBubble.dragDiffs[0],snaps)
-			const potentialStart = nearestDateToX
-			const potentialEnd = nearestDateToX
+			let potentialStart = nearestDateToX
+			let potentialEnd = nearestDateToX
 
 			const startChanged = Math.abs(potentialStart.getTime()-props.data[key].startdate.getTime())!==0
 			const endChanged = Math.abs(potentialEnd.getTime()-props.data[key].enddate.getTime())!==0
+
+			//EXPERIMENTAL -- use when using the move that doesn't snap
+			// potentialStart = new Date(potentialStart.getFullYear(),potentialStart.getMonth(),potentialStart.getDate(),potentialStart.getHours())
+			// potentialEnd = new Date(potentialEnd.getFullYear(),potentialEnd.getMonth(),potentialEnd.getDate(),potentialEnd.getHours())
 
 			switch(mouseDownOnBubble.location){
 				case 'left': {
