@@ -73,11 +73,12 @@
 
 .table-row{
   height: 100%;
+  font-size: 14px;
+  color: rgba(255,255,255,0.8);
 }
 
 .table-row-visuals:nth-child(even) {
   background-color: #4f5564;
-  color:white;
 }
 
 .table-row-visuals:hover,.table-header-visuals:hover {

@@ -47,6 +47,7 @@ export default class TableWrapper extends Component {
 					rules={this.props.rules}
 					dataSort={this.props.dataSort}
 					tableWidth={this.tableWidth}
+					selectedRow={'_2'}
 				/>
 			</div>
 		);

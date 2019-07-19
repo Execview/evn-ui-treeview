@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { ColorCellDisplay, ColorCellEditor, DateCellDisplay, DateCellEditor } from '@execview/table'
-import { TextCellEditor, TextareaCellDisplay } from '@execview/reusable'
+import { TextCellEditor, TextareaCellDisplay,ColorCellDisplay, ColorCellEditor, DateCellDisplay, DateCellEditor } from '@execview/reusable'
 
 import Data from './configData.json'
 

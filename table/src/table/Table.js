@@ -317,8 +317,14 @@ export default class Table extends Component {
 							if (entry === this.state.activeCell[0]) {
 								column = this.state.activeCell[1];
 							}
+							let selectedRowStyle = {};
+							if (this.props.selectedRow === entry) {
+								// selectedRowStyle = {border:'1px solid rgba(255,255,255,0.3)'};
+								selectedRowStyle = {backgroundColor:'#3a414f'};
+							}
+							
 							return (
-								<tr className={'table-row ' + (style.tableRow || 'table-row-visuals')} key={`tr${entry}`}>
+								<tr className={'table-row ' + (style.tableRow || 'table-row-visuals')} key={`tr${entry}`} style={selectedRowStyle}>
 									<Row
 										columnsInfo={this.props.columnsInfo}
 										activeColumn={column}

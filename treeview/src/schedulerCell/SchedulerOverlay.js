@@ -65,7 +65,7 @@ const SchedulerOverlay = (props) => {
 	}
 	const drawLegend = (x,text,pos,style) => {
 		return (
-			<text key={x+text} x={x+5} y={pos-10} style={{zIndex:-1, pointerEvents: 'none',...style}}>{text}</text>
+			<text key={x+text} x={x+5} y={pos-9} style={{zIndex:-1, pointerEvents: 'none',...style}}>{text}</text>
 		)
 	}
 
@@ -75,7 +75,7 @@ const SchedulerOverlay = (props) => {
 			{/* OVERLAY! */}
 			<svg height={tableHeight + (showMenu?500:0)} width='100%' style={{top:'0px', left: '0px', position: "absolute",pointerEvents: 'none', zIndex:'3'}}>
 				<g style={{pointerEvents: 'auto'}}>
-					{!isNaN(links[0].parent[0]) && links.map((l, i)=>drawLink(l,i))}
+					{links[0] && !isNaN(links[0].parent[0]) && links.map((l, i)=>drawLink(l,i))}
 				</g>
 				{showMenu && <g style={{pointerEvents: 'auto'}}>
 					<SchedulerRightClickMenu {...props.contextMenu}/>  

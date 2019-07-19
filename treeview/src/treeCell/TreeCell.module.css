@@ -1,17 +1,27 @@
 .cell-container {
     line-height: 100%;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
     height: 100%;
+    align-items: center;
 }
 
 .cell-text{
     margin:0;
-    padding: 5px;
+    padding-left:2px;
+    /* padding: 5px; */
     word-wrap: break-word;
     display:flex;
     align-items:center;
+}
+
+.row-selection{
+    display:flex;
+    width:10px;
+    height:100%;
+    align-items: center;
+    cursor: pointer;
+    justify-content: center;
+    padding: 0 2px;
 }
 
 .tree-text {
@@ -19,8 +29,5 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     margin: 0;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
 }

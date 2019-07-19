@@ -56,11 +56,14 @@ export default class TreeAppender extends Component {
 		let newTableData = {}
 		for(let i=0; i<displayedRows.length; i++){
 			const rowId = displayedRows[i].key
+			const select = this.props.setSelected ? 
+				{isSelected: rowId === this.props.selectedRow, setSelected: (() => this.props.setSelected(rowId))} : {}
 			newTableData[rowId] = {...this.props.data[rowId],
 									treeExpander:{
 										...displayedRows[i],
 										text: this.props.data[rowId].activityTitle,
-										toggleNode: (()=>this.props.onToggleNode(rowId))
+										toggleNode: (()=>this.props.onToggleNode(rowId)),
+										...select
 									}
 								}
 		}
@@ -68,13 +71,13 @@ export default class TreeAppender extends Component {
 	}
 
 	addTreeColumn = ()=>{
-		return {treeExpander: {cellType: 'tree', height: (this.props.height || 0), headerData: 'Tree'}, ...this.props.columnsInfo}
+		return {treeExpander: {cellType: 'tree', height: (this.props.height || 0), headerData: 'Tree', width:10}, ...this.props.columnsInfo}
 	}
 
   	render() {//TODO: Remove extra props before spreading!
 		const columnsInfo = this.addTreeColumn()
 		const tableData = this.addTreeData()
-		const {onToggleNode, ...newProps} = this.props
+		const {onToggleNode, setSelected, ...newProps} = this.props
     	return (
 			React.cloneElement(newProps.children,
 			{...newProps,
