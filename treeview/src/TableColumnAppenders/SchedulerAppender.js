@@ -24,7 +24,7 @@ const SchedulerAppender = (props) => {
 	const colours = UNSATColours	
 	const rowHeight = props.height || 25	
 	const bubbleHeight = rowHeight*0.9
-	const timeWidth = props.timeWidth || 80
+	const timeWidth = props.timeWidth || 70
 	
 	const highlightcolour = 'Grey'
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown, faAngleRight, faCircle } from '@fortawesome/free-solid-svg-icons';
+import { faCircle as emptyCircle } from '@fortawesome/free-regular-svg-icons';
 import classes from './TreeCell.module.css';
 
 const TreeCell = (props) => {	
@@ -20,12 +21,8 @@ const TreeCell = (props) => {
 
 	let rowSelection = '';
 	if (props.data.setSelected) {
-		let style={fontSize: '5px'}
-		if (props.data.isSelected) {
-			style = {fontSize:'10px', color:'orange'}
-		}
-		
-		rowSelection = <div className={classes['row-selection']} onClick={props.data.setSelected}><FontAwesomeIcon icon={faCircle} style={style}/></div>;
+		let icon= (props.data.isSelected && <FontAwesomeIcon icon={faCircle} style={{fontSize:'10px', color:'#00CC6F'}}/>) || <FontAwesomeIcon icon={emptyCircle} style={{fontSize:'10px',color:'rgba(255,255,255,0.4)'}}/>;
+		rowSelection = <div className={classes['row-selection']} onClick={props.data.setSelected}>{icon}</div>;
 	}
 
 	return (

@@ -56,8 +56,7 @@ export default class TreeAppender extends Component {
 		let newTableData = {}
 		for(let i=0; i<displayedRows.length; i++){
 			const rowId = displayedRows[i].key
-			const select = this.props.setSelected ? 
-				{isSelected: rowId === this.props.selectedRow, setSelected: (() => this.props.setSelected(rowId))} : {}
+			const select = this.props.setSelected ? {isSelected: rowId === this.props.selectedRow,setSelected: (() => this.props.setSelected(rowId))} : {}
 			newTableData[rowId] = {...this.props.data[rowId],
 									treeExpander:{
 										...displayedRows[i],

@@ -26,7 +26,7 @@ const App = (props) => {
 				<Button onClick={()=>props.onAddRow(Object.keys(columnsInfo),selectedRow)}>Add Row</Button>
 			</div>
 			{Object.keys(props.data).length !== 0 && <TreeConnector
-				setSelected={(itemId) =>setSelectedRow(itemId)}
+				setSelected={(itemId) =>{selectedRow === itemId ? setSelectedRow(null): setSelectedRow(itemId)}}
 				selectedRow={selectedRow}
 				data={props.data}
 				columnsInfo={columnsInfo}

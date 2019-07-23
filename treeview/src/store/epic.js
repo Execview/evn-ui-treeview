@@ -19,12 +19,12 @@ export const tryBubbleTransformEpicMap = (action, state)=>{
 		const bubble = newState._data[bubblekey]
 		oldBubbles[bubblekey]=recursiveDeepCopy(bubble)
 	}
-	
-	const newStateBubbles = tryReturnValidTransformState(oldBubbles,action);
-	if(newStateBubbles!==false){
-		return {type:actionTypes.MOVE_BUBBLES, originalAction: action, _data: newStateBubbles, editableValues: action.editableValues}
+	if (action.changes){
+		const newStateBubbles = tryReturnValidTransformState(oldBubbles,action);
+		if(newStateBubbles!==false){
+			return {type:actionTypes.MOVE_BUBBLES, originalAction: action, _data: newStateBubbles, editableValues: action.editableValues}
+		}
 	}
-
 	return voidAction;
 }
 

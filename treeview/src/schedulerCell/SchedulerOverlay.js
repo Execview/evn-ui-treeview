@@ -68,6 +68,11 @@ const SchedulerOverlay = (props) => {
 			<text key={x+text} x={x+5} y={pos-9} style={{zIndex:-1, pointerEvents: 'none',...style}}>{text}</text>
 		)
 	}
+	const weekends = snaps.filter(snap => moment(snap[0]).day() === 0 || moment(snap[0]).day() === 6)
+	const testGrey = weekends.map(snap => {
+		return ( <rect x={snap[1]} y="40" width="70" height={tableHeight}
+		style={{fill:'#383d47',fillOpacity:0.4}} />)
+	})
 
 	const showMenu = props.contextMenu && props.contextMenu.position
 	return (
@@ -76,6 +81,7 @@ const SchedulerOverlay = (props) => {
 			<svg height={tableHeight + (showMenu?500:0)} width='100%' style={{top:'0px', left: '0px', position: "absolute",pointerEvents: 'none', zIndex:'3'}}>
 				<g style={{pointerEvents: 'auto'}}>
 					{links[0] && !isNaN(links[0].parent[0]) && links.map((l, i)=>drawLink(l,i))}
+					
 				</g>
 				{showMenu && <g style={{pointerEvents: 'auto'}}>
 					<SchedulerRightClickMenu {...props.contextMenu}/>  
@@ -87,6 +93,7 @@ const SchedulerOverlay = (props) => {
 					{lines.length > 0 &&  lines.map((x)=>drawLine(x,0,{stroke:'rgba(255,255,255,0.1)',strokeWidth:1}))}
 					{(majorLines.length > 0) && !isNaN(majorLines[0]) && majorLines.map((x)=>drawLine(x,40,{stroke:'rgba(255,255,255,0.5)',strokeWidth:2}))}
 					{majorLegends.map((ll)=>drawLegend(ll[0],ll[1],tableHeight,{fontSize:30,fontWeight:300,fill:'rgba(255,255,255,0.5)'}))}
+					{testGrey}
 				</g>
 			</svg>
 		</div>
