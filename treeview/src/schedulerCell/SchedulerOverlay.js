@@ -70,8 +70,8 @@ const SchedulerOverlay = (props) => {
 	}
 	const weekends = snaps.filter(snap => moment(snap[0]).day() === 0 || moment(snap[0]).day() === 6)
 	const testGrey = weekends.map(snap => {
-		return ( <rect x={snap[1]} y="40" width="70" height={tableHeight}
-		style={{fill:'#383d47',fillOpacity:0.4}} />)
+		return ( <rect key={snap[1]} x={snap[1]} y="40" width="70" height={tableHeight}
+		style={{fill:'#383d47',pointerEvents: 'none',fillOpacity:0.4}} />)
 	})
 
 	const showMenu = props.contextMenu && props.contextMenu.position

@@ -68,6 +68,7 @@ const SchedulerAppender = (props) => {
 	const bubbleclickdown = (key,event,side)=>{
 		setMouseDownOnBubble({key:key, location:side, dragDiffs:[0,0]})
 		props.setBubbleSideColour(key,highlightcolour,side)
+		props.clearChanges();
 	}
 
 	const bubblemiddleclickdown = (key,event,side)=>{		
@@ -77,6 +78,7 @@ const SchedulerAppender = (props) => {
 			mousedownpos[0]-getNearestSnapXToDate(props.data[key].enddate,snaps)
 		]
 		setMouseDownOnBubble({key, location:side, dragDiffs})
+		props.clearChanges();
 	}
 
 	const bubbleclickup = (key,event,side)=>{
@@ -120,6 +122,9 @@ const SchedulerAppender = (props) => {
 		var bubble=props.data[key];
 		if(event.buttons===0) {
 			if(key){
+				if(props.itemChanges) {
+					props.sendChanges(props.itemChanges);
+				}
 				props.setOriginalColour(key,'left'); props.setOriginalColour(key,'right'); props.setOriginalColour(key,'middle')
 				setMouseDownOnBubble({key:'',location:'',dragDiffs:[0,0]})
 			}
@@ -132,6 +137,7 @@ const SchedulerAppender = (props) => {
 			const startChanged = Math.abs(potentialStart.getTime()-props.data[key].startdate.getTime())!==0
 			const endChanged = Math.abs(potentialEnd.getTime()-props.data[key].enddate.getTime())!==0
 
+			
 			//EXPERIMENTAL -- use when using the move that doesn't snap
 			// potentialStart = new Date(potentialStart.getFullYear(),potentialStart.getMonth(),potentialStart.getDate(),potentialStart.getHours())
 			// potentialEnd = new Date(potentialEnd.getFullYear(),potentialEnd.getMonth(),potentialEnd.getDate(),potentialEnd.getHours())
@@ -249,7 +255,7 @@ const SchedulerAppender = (props) => {
 		const tableRowValues = Object.keys(row).reduce((total,col)=>{return {...total,[col]:rowValues[col]}},{})
 		const newRowValues = objectCopierWithStringToDate(tableRowValues)
 		const changes = recursiveDeepDiffs(row,newRowValues)
-		props.tryBubbleTransform(rowId,changes,editableValues)
+		props.tryBubbleTransform(rowId,changes,editableValues,props.sendChanges)
 	}
 
 	const onTableRender = ()=>{

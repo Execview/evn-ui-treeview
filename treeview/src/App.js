@@ -26,6 +26,7 @@ const App = (props) => {
 				<Button onClick={()=>props.onAddRow(Object.keys(columnsInfo),selectedRow)}>Add Row</Button>
 			</div>
 			{Object.keys(props.data).length !== 0 && <TreeConnector
+				itemChanges={props.itemChanges}
 				setSelected={(itemId) =>{selectedRow === itemId ? setSelectedRow(null): setSelectedRow(itemId)}}
 				selectedRow={selectedRow}
 				data={props.data}
@@ -51,7 +52,8 @@ const App = (props) => {
 const mapStateToProps = state => {
 	return {
 		data: state._data,
-		editableCells: state.editableCells
+		editableCells: state.editableCells,
+		itemChanges: state.itemChanges
 	}
 }
 

@@ -30,16 +30,16 @@ const tryReturnValidTransformState = (bubbles,action) =>{
 		for(var childkey in bubbles[parentbubblekey]["ChildBubbles"]){
 			var parentside = 'right'=== bubbles[parentbubblekey]["ChildBubbles"][childkey].parentside ? 'end' : 'start'
 			
-			let bubbleChanges = {};
-			if (amount > 0) {
-				bubbleChanges.startdate = moment(bubbles[childkey].startdate).addWorkingTime(amount, 'ms').add(1000).toDate();
-				bubbleChanges.enddate = moment(bubbles[childkey].enddate).addWorkingTime(amount, 'ms').add(1000).toDate();
-			} else {
-				bubbleChanges.startdate = moment(bubbles[childkey].startdate).addWorkingTime(amount, 'ms').toDate();
-				bubbleChanges.enddate = moment(bubbles[childkey].enddate).addWorkingTime(amount, 'ms').toDate();
-			}
-
-			if(side === parentside || side === 'middle'){			
+			
+			if(side === parentside || side === 'middle'){
+				let bubbleChanges = {};
+				if (amount > 0) {
+					bubbleChanges.startdate = moment(bubbles[childkey].startdate).addWorkingTime(amount, 'ms').add(1000).toDate();
+					bubbleChanges.enddate = moment(bubbles[childkey].enddate).addWorkingTime(amount, 'ms').add(1000).toDate();
+				} else {
+					bubbleChanges.startdate = moment(bubbles[childkey].startdate).addWorkingTime(amount, 'ms').toDate();
+					bubbleChanges.enddate = moment(bubbles[childkey].enddate).addWorkingTime(amount, 'ms').toDate();
+				}	
 				TransformBubble(childkey,'middle_ignore_rules',bubbleChanges)
 			}
 		}
@@ -74,14 +74,15 @@ const tryReturnValidTransformState = (bubbles,action) =>{
 				if(cantMoveSide(bubblekey,'right')){InvalidMovement=true;return;}
 				bubbleChanges.enddate = new Date(bubbleChanges.enddate.getTime()-1000);
 				if(!moment(bubbleChanges.enddate).isWorkingTime()){InvalidMovement=true;return;}
-
+				
 				amount = moment(bubbleChanges.enddate).workingDiff(bubbles[key].enddate)
+
 				if (amount > 0) {
 					bubbles[bubblekey].enddate = moment(bubbles[bubblekey].enddate).addWorkingTime(amount,'ms').add(1000).toDate()
 				} else if (amount < 0) {
 					bubbles[bubblekey].enddate = moment(bubbles[bubblekey].enddate).addWorkingTime(amount-1000,'ms').add(2000).toDate()
 				}
-
+				
 				LinkForcingAlgorithm(bubblekey,amount,'end')
 				break;
 			case 'middle':
@@ -94,13 +95,15 @@ const tryReturnValidTransformState = (bubbles,action) =>{
 				bubbleChanges.enddate = new Date(bubbleChanges.enddate.getTime()-1000);
 
 				let amount = moment(bubbleChanges.startdate).workingDiff(bubbles[bubblekey].startdate);
+
 				if (amount > 0) {
-					bubbles[bubblekey].startdate = moment(bubbles[bubblekey].startdate).addWorkingTime(amount,'ms').add(1000).toDate()//getNewWorkingDate(bubbles[bubblekey].startdate,amount);
+					bubbles[bubblekey].startdate = moment(bubbles[bubblekey].startdate).addWorkingTime(amount + 1000,'ms').subtract(1000).toDate()//getNewWorkingDate(bubbles[bubblekey].startdate,amount);
 					bubbles[bubblekey].enddate = moment(bubbles[bubblekey].enddate).addWorkingTime(amount,'ms').add(1000).toDate()
 				} else {
 					bubbles[bubblekey].startdate = moment(bubbles[bubblekey].startdate).addWorkingTime(amount,'ms').toDate()
 					bubbles[bubblekey].enddate = moment(bubbles[bubblekey].enddate).addWorkingTime(amount-1000,'ms').add(2000).toDate()
 				}
+
 
 				LinkForcingAlgorithm(bubblekey,amount, 'middle')
 				break;
@@ -110,6 +113,7 @@ const tryReturnValidTransformState = (bubbles,action) =>{
 		}
 	}
 	const {startdate, enddate, ...rest} = changes
+
 
 	bubbles[key] = {...bubbles[key],...rest}
 
@@ -121,7 +125,6 @@ const tryReturnValidTransformState = (bubbles,action) =>{
 	} else if(!changes.startdate && changes.enddate){
 		part = 'end'
 	}		
-	// console.log(changes)
 
 	TransformBubble(key,part,changes) 
 	//Main bubble has already been shifted in bubbles

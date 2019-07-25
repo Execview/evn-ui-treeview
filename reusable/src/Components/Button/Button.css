@@ -25,3 +25,17 @@
 .default-button:focus {
 	outline: none;
 }
+
+.disabled {
+	color:grey !important;
+	border-color: grey !important;
+	background-color:#434956 !important;
+	cursor: default !important;
+	opacity: 0.9;
+}
+
+.disabled:hover {
+	color:grey !important;
+	border-color: grey !important;
+	background-color:#434956 !important;
+}

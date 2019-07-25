@@ -128,16 +128,26 @@ export const TOGGLE_NODE = (state,action,reducer) => {
 export const MOVE_BUBBLES = (state,action,reducer) => {
 	let newState = {
 		...state,
-		_data: action._data,
-	}
-
+        _data: action._data,
+        itemChanges: action.itemChanges
+    }
 	if(action.editableValues){
 		newState.editableCells[action.originalAction.key] = action.editableValues 
-	}
+    }
 	return newState
 }
 
 export const TRY_BUBBLE_TRANSFORM = (state,action,reducer) => {
-	//Is dealt with in an epic
+    //Is dealt with in an epic
 	return state
+}
+
+export const CLEAR_CHANGES = (state, action, reducer) => {
+    let newState = {...state, itemChanges: null}
+    return newState;
+}
+
+export const SEND_CHANGES = (state, action, reducer) => {
+    //Is dealt with in an epic
+    return state;
 }

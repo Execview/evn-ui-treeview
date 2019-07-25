@@ -85,7 +85,8 @@
   left:0;
   top:0;
   background-color: #282c34;
-  z-index: 2;
+  z-index: 100;
+  user-select: none;
 }
 
 .color-dropdown-menu {

@@ -4,7 +4,7 @@
 	"main": "./transpiled/exports.js",
 	"private": false,
 	"dependencies": {
-		"@execview/reusable": "0.1.24",
+		"@execview/reusable": "0.1.29",
 		"@fortawesome/fontawesome-svg-core": "^1.2.18",
 		"@fortawesome/free-solid-svg-icons": "^5.8.2",
 		"@fortawesome/react-fontawesome": "^0.1.4",

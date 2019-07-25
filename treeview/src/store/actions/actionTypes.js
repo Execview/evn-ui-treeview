@@ -19,3 +19,5 @@ export const ADD_ROW = 'ADD_ROW';
 export const UNLINK_PARENT_BUBBLE = 'UNLINK_PARENT_BUBBLE';
 export const DELETE_SINGLE = 'DELETE_SINGLE';
 export const DELETE_BUBBLE = 'DELETE_BUBBLE';
+export const CLEAR_CHANGES = 'CLEAR_CHANGES';
+export const SEND_CHANGES = 'SEND_CHANGES';
