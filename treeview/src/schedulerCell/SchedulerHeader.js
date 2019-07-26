@@ -17,12 +17,15 @@ const SchedulerHeader = (props) => {
 	})
 	const formatString = props.data.timeFormatString || 'DD/MM/YY'
 	
-	
-
 	const timeIntervals = snaps.map((snap,index)=>{
 		const diff = index !== snaps.length-1 ? Math.abs((snaps[index+1][1]-snap[1])/2) : 0;
 		if (index === snaps.length - 1) {return '';}
-		return <tspan alignmentBaseline="middle" key={index} x={snap[1]+diff} y={'50%'}>{moment(snap[0]).format(formatString)}</tspan>
+		return (
+			<tspan alignmentBaseline="middle" key={index} x={snap[1]+diff} y={'50%'}>
+				{props.data.schedulerOptions.mode[0] === 'day' && <tspan style={{fill:'rgba(255,255,255,0.4)'}}alignmentBaseline="middle" y={'50%'}>{moment(snap[0]).format('ddd')}</tspan>}
+				{moment(snap[0]).format(formatString)}
+			</tspan>
+		)
 	})
 	
 	return (

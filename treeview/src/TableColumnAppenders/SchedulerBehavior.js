@@ -85,7 +85,7 @@ export const getTimeFormatString = (resolution) => {
 			break;
 		}
 		case 'day': {
-			formatString = 'ddd Do'
+			formatString = ' Do'
 			break;
 		}
 		case 'week': {
