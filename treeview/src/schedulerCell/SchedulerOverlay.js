@@ -23,14 +23,12 @@ const SchedulerOverlay = (props) => {
 	const snaps = props.snaps || []
 	const lines = snaps.map(snap=>snap[1])
 	const majorLineDates = getMajorDatesAndLegend(snaps.map(s=>s[0]))
-
 	const majorLines = majorLineDates.map(d=>getNearestSnapXToDate(d,snaps))
 	const legendDates = (props.mode !== 'day'  
 		?	majorLineDates  
 		:	snaps.map(snap=>snap[0]).filter(d => moment(d).isSame(moment(d).startOf('month')))
 	)
-
-
+	
 	const majorLegends = legendDates.map(md => [getNearestSnapXToDate(md, snaps), getMajorLegend(md, props.mode)])
 	const links = props.links || []
 	const tableHeight = props.tableHeight || 100

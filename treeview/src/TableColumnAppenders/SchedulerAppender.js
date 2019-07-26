@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import SchedulerCell from '../schedulerCell/SchedulerCell'
 import SchedulerHeader from '../schedulerCell/SchedulerHeader';
-import { recursiveDeepDiffs, objectCopierWithStringToDate } from '@execview/reusable';
+import { recursiveDeepDiffs, objectCopierWithStringToDate, injectObjectInObject } from '@execview/reusable';
 
 import { getDrawnLinksFromData, getSnaps, getTimeFormatString, getMajorStartOf } from './SchedulerBehavior'
 import { getColourFromMap } from './BubbleBehavior'
@@ -35,9 +35,11 @@ const SchedulerAppender = (props) => {
 	const [mouseDownOnBubble, setMouseDownOnBubble] = useState({key:'',location:'',dragDiffs:[0,0]})
 	const [mouseDownOnScheduler, setMouseDownOnScheduler] = useState(null)
 
-	const initialStartDate = new Date(Math.min(...Object.keys(props.data).map(key=>props.data[key].startdate)))
+	const tempSchedulerResolution = props.resolution || 'day';
+
+	const initialStartDate = props.start || new Date(Math.min(...Object.keys(props.data).map(key=>props.data[key].startdate)))
 	const [schedulerStart, actuallySetSchedulerStart] = useState(initialStartDate)
-	const [schedulerResolution, actuallySetSchedulerResolution] = useState('day')
+	const [schedulerResolution, actuallySetSchedulerResolution] = useState(tempSchedulerResolution)
 
 	const extrasnaps = 0 //Math.ceil(schedulerWidth/timeWidth)
 
@@ -210,8 +212,9 @@ const SchedulerAppender = (props) => {
 				start: [schedulerStart, ((date)=>setSchedulerStart(date))]
 			}
 		}
-		const newColumnsInfo = {...props.columnsInfo, scheduler: {cellType: 'scheduler', width: 65, height: rowHeight, headerType: 'schedulerHeader', headerData: schedulerheaderdata}}
-		return newColumnsInfo
+		const newColumn = {scheduler: {cellType: 'scheduler', width: 65, height: rowHeight, headerType: 'schedulerHeader', headerData: schedulerheaderdata}};
+		const position = props.schedulerPosition || 'end';
+		return injectObjectInObject(props.columnsInfo, newColumn, position)
 	}
 
 	const addSchedulerData = ()=>{

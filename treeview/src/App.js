@@ -37,6 +37,8 @@ const App = (props) => {
 				wrap={false}
 				rules={rules}
 				height={rowheight}
+				schedulerPosition='end'
+				treePosition='start'
 			>
 				<SchedulerConnector>
 					<Table />

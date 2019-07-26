@@ -1,90 +1,72 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import TreeCell from '../treeCell/TreeCell';
-import { recursiveDeepDiffs } from '@execview/reusable';
+import { injectObjectInObject } from '@execview/reusable';
 
-export default class TreeAppender extends Component {
-	constructor(props){
-		super(props)
-		this.state = { rowHeights: []}
-	}
+const TreeAppender = (props) => {
+	const [tree,setTree] = useState(Object.keys(props.data).reduce((t, key) =>({...t,[key]:false}),{}));
 
-	shouldComponentUpdate(nextProps) {
-      const filterReactComponent = (c) => {
-        const { _owner, $$typeof, ...rest } = c;
-        return rest;
-      };
-      const stopRecursion = (o, u) => {
-        if (React.isValidElement(o) && React.isValidElement(u)) {
-          if (recursiveDeepDiffs(filterReactComponent(o), filterReactComponent(u), { stopRecursion })) {
-            return 'updated';
-          }
-          return 'ignore';
-        }
-        return 'continue';
-      };
-      const diffs = recursiveDeepDiffs(this.props, nextProps, { stopRecursion });
-      return diffs;
-    }
-
-	getDisplayedTreeStructure = (tree, parentNodes)=>{
+	const getDisplayedTreeStructure = (parentNodes)=>{
 		//an array of arrays of the rows to display, their corresponding depths, and whether they are open/closed/neither.
 		var newDisplayedRows = []
 		const pushChildRows = (childnodes,currentdepth=0) => {
 			for(const currentRow of childnodes){
-			let arrowstatus = tree[currentRow].open ? 'open': 'closed';
-			if(tree[currentRow].ChildAssociatedBubbles.length===0){arrowstatus='none'}
-			newDisplayedRows.push({	key:currentRow,
-									depth:currentdepth,
-									nodeStatus: arrowstatus
-								})
-			if(tree[currentRow].open){
-				pushChildRows(tree[currentRow].ChildAssociatedBubbles,currentdepth+1)
+			let arrowstatus = tree[currentRow] ? 'open': 'closed';
+			if(props.data[currentRow].ChildAssociatedBubbles.length===0){arrowstatus='none'}
+			newDisplayedRows.push({	
+				key:currentRow,
+				depth:currentdepth,
+				nodeStatus: arrowstatus
+			})
+			if(tree[currentRow]){
+				pushChildRows(props.data[currentRow].ChildAssociatedBubbles,currentdepth+1)
 			}
 		}}
 		pushChildRows(parentNodes)
 		return newDisplayedRows
 	}
 
-	getParentNodes = (data) => {
+	const getParentNodes = (data) => {
 		return Object.keys(data).filter(key=>data[key].ParentAssociatedBubble==='')
 	}
 
 
-	addTreeData = ()=>{
+	const addTreeData = () => {
 		//inject TreeExpander dataBubble data.
-		const displayedRows = this.getDisplayedTreeStructure(this.props.data, this.getParentNodes(this.props.data))
+		const displayedRows = getDisplayedTreeStructure(getParentNodes(props.data))
 		let newTableData = {}
 		for(let i=0; i<displayedRows.length; i++){
 			const rowId = displayedRows[i].key
-			const select = this.props.setSelected ? {isSelected: rowId === this.props.selectedRow,setSelected: (() => this.props.setSelected(rowId))} : {}
-			newTableData[rowId] = {...this.props.data[rowId],
-									treeExpander:{
-										...displayedRows[i],
-										text: this.props.data[rowId].activityTitle,
-										toggleNode: (()=>this.props.onToggleNode(rowId)),
-										...select
-									}
-								}
+			const select = props.setSelected ? {isSelected: rowId === props.selectedRow,setSelected: (() => props.setSelected(rowId))} : {}
+			newTableData[rowId] = {
+				...props.data[rowId],
+				treeExpander:{
+					...displayedRows[i],
+					text: props.data[rowId].activityTitle,
+					toggleNode: (()=> setTree({...tree,[rowId]:!tree[rowId]})),
+					...select
+				}
+			}
 		}
 		return newTableData
 	}
 
-	addTreeColumn = ()=>{
-		return {treeExpander: {cellType: 'tree', height: (this.props.height || 0), headerData: 'Tree', width:10}, ...this.props.columnsInfo}
+	const addTreeColumn = ()=>{
+		const newColumn = {treeExpander: {cellType: 'tree', height: (props.height || 0), headerData: 'Tree', width:10}}
+		const position = props.treePosition || 'start';
+		return injectObjectInObject(props.columnsInfo, newColumn, position);
 	}
 
-  	render() {//TODO: Remove extra props before spreading!
-		const columnsInfo = this.addTreeColumn()
-		const tableData = this.addTreeData()
-		const {onToggleNode, setSelected, ...newProps} = this.props
-    	return (
-			React.cloneElement(newProps.children,
-			{...newProps,
-			children: newProps.children && newProps.children.props.children,
-			cellTypes: {...newProps.cellTypes, tree: { display: <TreeCell /> }},
-			data: tableData,
-			columnsInfo: columnsInfo})
-		);
-  	}
-
+	const columnsInfo = addTreeColumn()
+	const tableData = addTreeData()
+	const {onToggleNode, setSelected, ...newProps} = props
+	return (
+		React.cloneElement(newProps.children,
+		{...newProps,
+		children: newProps.children && newProps.children.props.children,
+		cellTypes: {...newProps.cellTypes, tree: { display: <TreeCell /> }},
+		data: tableData,
+		columnsInfo: columnsInfo})
+	);
 }
+
+export default TreeAppender;
