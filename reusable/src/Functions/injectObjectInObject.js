@@ -24,23 +24,3 @@ const injectObjectInObject = (o,a,pos) => {
 }
 
 export default injectObjectInObject;
-
-
-// let a;
-// let b;
-
-// a = {a:3,b:4,c:[5,4,7],d:{test:1}}
-// b = {z:4}
-
-// console.log(injectObjectInObject(a,b,0))
-// console.log(injectObjectInObject(a,b,1))
-// console.log(injectObjectInObject(a,b,4))
-// console.log(injectObjectInObject(a,b,5))
-// console.log(injectObjectInObject(a,b,8))
-// console.log(injectObjectInObject(a,b,-1))
-// console.log(injectObjectInObject(a,b,-2))
-// console.log(injectObjectInObject(a,b,-4))
-// console.log(injectObjectInObject(a,b,-5))
-// console.log(injectObjectInObject(a,b,-6))
-// console.log(injectObjectInObject(a,b,'start'))
-// console.log(injectObjectInObject(a,b,'end'))
