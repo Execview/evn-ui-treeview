@@ -7,12 +7,16 @@ const sendEvent = (token,link,argPayload,options={})=>{
 	const method = options.method || 'POST'
 	const debug = options.debug || false
 
-	let Eventbody = {
-		data: {
-			payload: payload
+	let body = {}
+
+	if(holder){
+		body = {
+			payload: payload,
+			meta: {holder: holder}
 		}
+	} else {
+		body = payload
 	}
-	if(holder){Eventbody.data = {...Eventbody.data, meta: {holder: holder}}}
 
 	const fetchOptions = {
 		method:method,
@@ -20,7 +24,7 @@ const sendEvent = (token,link,argPayload,options={})=>{
 			"Content-Type": "application/json",
 			"Authorization": `Bearer ${token}`
 		},
-		body:JSON.stringify(Eventbody)
+		body:JSON.stringify(body)
 	}
 
 	debug && console.log({url: link,fetchOptions: fetchOptions})
