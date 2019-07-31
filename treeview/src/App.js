@@ -62,7 +62,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		onGetLocalData: ()=>dispatch({type: actionTypes.LOAD_FROM_CONFIG}),
-		onAddRow: (columns,parent) => dispatch({type: actionTypes.ADD_ROW, parent: parent, shape:'square', columns})
+		onAddRow: (columns,parent) => dispatch({type: actionTypes.ADD_ROW, parent: parent, shape:'square', editableCells:columns})
 	};
 };
 

@@ -7,49 +7,54 @@ const crypto = require('crypto');
 const hash = crypto.createHash('sha256');
 
 export const ADD_ROW = (state,action,reducer) => {
-    const newId = '_' + hash.update(Date.now() + Math.random().toString()).digest('hex').substring(0, 5);
-    const shape = action.shape || 'bubble'
-    let tempTitle = 'Untitled Activity';
-    switch (shape) {
-        case 'bubble':{
-            tempTitle = 'Untitled Activity';
-            break;
-        }
-        case 'square': {
-            tempTitle = 'Untitled Task';
-            break;
-        }
-        case 'triangle': {
-            tempTitle = 'Untitled Milestone';
-            break; 
-        }
-        default:
-            break;
-    }
-	const parent = action.parent || '';
-    const colors = ['Blue','Red', 'Green', 'Yellow', 'Purple'];
-    const colorIndex = Math.floor((Math.random() * 5));
-	let date = new Date()
-    if(parent){
-		date = state._data[parent].startdate
-	} else {
- 		let startdates = Object.keys(state._data).map(key=>state._data[key].startdate)
-		date = startdates.length > 0 && new Date(Math.min(...startdates))
+	let newRow = action.row
+	let newId = action.id
+	const parent = action.parent || ''
+	if(!newRow){
+		newId = '_' + hash.update(Date.now() + Math.random().toString()).digest('hex').substring(0, 5);
+		const shape = action.shape || 'bubble'
+		let tempTitle = 'Untitled Activity';
+		switch (shape) {
+			case 'bubble':{
+				tempTitle = 'Untitled Activity';
+				break;
+			}
+			case 'square': {
+				tempTitle = 'Untitled Task';
+				break;
+			}
+			case 'triangle': {
+				tempTitle = 'Untitled Milestone';
+				break; 
+			}
+			default:
+				tempTitle = 'Untitled Item';
+				break;
+		}
+		const colors = ['Blue','Red', 'Green', 'Yellow', 'Purple'];
+		const colorIndex = Math.floor((Math.random() * 5));
+		let date = new Date()
+		if(parent){
+			date = state._data[parent].startdate
+		} else {
+			let startdates = Object.keys(state._data).map(key=>state._data[key].startdate)
+			date = startdates.length > 0 && new Date(Math.min(...startdates))
+		}
+		
+		newRow = {
+				startdate: date,
+				enddate: moment(date).add(2,'d').toDate(),
+				colours: {left: colors[colorIndex], middle: colors[colorIndex], right: colors[colorIndex], original: colors[colorIndex]},
+				ChildAssociatedBubbles:[],
+				ParentAssociatedBubble: '',
+				ChildBubbles: {},
+				ParentBubble: '',
+				open:true,
+				activityTitle: tempTitle,
+				progress: 'amber',
+				shape: shape
+		};
 	}
-    
-    const newRow = {
-            startdate: date,
-            enddate: moment(date).add(2,'d').toDate(),
-            colours: {left: colors[colorIndex], middle: colors[colorIndex], right: colors[colorIndex], original: colors[colorIndex]},
-            ChildAssociatedBubbles:[],
-            ParentAssociatedBubble: '',
-            ChildBubbles: {},
-            ParentBubble: '',
-            open:true,
-            activityTitle: tempTitle,
-            progress: 'amber',
-			shape: shape
-    };
     let newState =  {
         ...state,
         _data: {
@@ -58,7 +63,7 @@ export const ADD_ROW = (state,action,reducer) => {
         },
         editableCells: {
             ...state.editableCells,
-            [newId]: action.columns
+            [newId]: action.editableCells
         }
     };
 	if(parent){
