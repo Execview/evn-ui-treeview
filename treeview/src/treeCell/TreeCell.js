@@ -10,7 +10,7 @@ const TreeCell = (props) => {
 	let arrow = <FontAwesomeIcon icon={downIcon} style={{fontSize:'12px', opacity:'0'}}/>;
 
 	// var closestElement = element.closest(selectors); 
-	let showPointerStyle = {};
+	let showPointerStyle = {minHeight: props.style.minHeight};
 	if (props.data.nodeStatus === 'open') {
 		arrow = <FontAwesomeIcon icon={downIcon} style={{fontSize:'12px'}}/>;
 		showPointerStyle = {cursor: 'pointer'};
@@ -27,10 +27,11 @@ const TreeCell = (props) => {
 	if (props.data.isSelected){
 		showPointerStyle = {...showPointerStyle, backgroundColor: 'rgba(126, 101, 236, 0.84)'}
 	}
+
 	return (
 		<div className={classes["cell-container"]} style={{...showPointerStyle}}>
 			{rowSelection}
-			<div className={classes["cell-text"]} onClick={props.data.toggleNode} style={{...props.style,width:props.style.width-18, minHeight: props.style.minHeight}}>	
+			<div className={classes["cell-text"]} onClick={props.data.toggleNode} style={{...props.style,width:props.style.width-18}}>	
 								
 				<p className={classes["tree-text"]} style={{marginLeft: 20 * props.data.depth}}>{arrow} {props.data.text}</p>					
 			</div>

@@ -28,7 +28,7 @@ const mapDispatchToProps = dispatch => {
 		onRemoveLink: (key) => dispatch({type: actionTypes.UNLINK_PARENT_BUBBLE, key}),
 		deleteBubble: (key) => dispatch({type: actionTypes.DELETE_BUBBLE, key}),
 		clearChanges: () => dispatch({type: actionTypes.CLEAR_CHANGES}),
-		sendChanges: (changes) => dispatch({type: actionTypes.SEND_CHANGES, changes})
+		sendChanges: (changes) => dispatch({type: actionTypes.SEND_CHANGES, itemChanges:changes})
 	}
 }
 

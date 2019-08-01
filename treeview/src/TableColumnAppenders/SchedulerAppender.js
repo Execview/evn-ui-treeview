@@ -212,7 +212,14 @@ const SchedulerAppender = (props) => {
 			}
 		}
 		const newColumn = {scheduler: {cellType: 'scheduler', width: 65, height: rowHeight, headerType: 'schedulerHeader', headerData: schedulerheaderdata}};
-		const position = props.schedulerPosition || 'end';
+		let position = 'end';
+		if (props.schedulerOptions) {
+			if (props.schedulerOptions.width) {
+				newColumn.scheduler.width = props.schedulerOptions.width;
+			}
+			position = props.schedulerOptions.position || 'end';
+		}
+		
 		return injectObjectInObject(props.columnsInfo, newColumn, position)
 	}
 

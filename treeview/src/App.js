@@ -19,6 +19,8 @@ const App = (props) => {
 
 	const rowheight = 30
 	const randomNumber = Math.floor((Math.random() * cats.length));
+	const treeOptions = {width: 10, position: 'start'};
+	const schedulerOptions = {width:65, position: 'end'};
 
 	return (
 		<div className={classes["App"]}>
@@ -36,9 +38,8 @@ const App = (props) => {
 				dontPreserveOrder={true}
 				wrap={false}
 				rules={rules}
-				height={rowheight}
-				schedulerPosition='end'
-				treePosition='start'
+				treeOptions={treeOptions}
+				schedulerOptions={schedulerOptions}
 			>
 				<SchedulerConnector>
 					<Table />
