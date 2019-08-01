@@ -204,7 +204,6 @@ const SchedulerAppender = (props) => {
 				closeMenu: ()=>{setBubbleContextMenuKeyAndPosition({key:null,position:null})},
 				options: {
 					removeLink: <div onClick={()=>props.onRemoveLink(bubbleContextMenuKeyAndPosition.key)}>Remove Link</div>, 
-					deleteSingle: <div onClick={()=>props.deleteSingle(bubbleContextMenuKeyAndPosition.key)}>Delete Single</div>,
 					deleteBubble: <div onClick={()=>props.deleteBubble(bubbleContextMenuKeyAndPosition.key)}>Delete Bubble</div> }
 			},
 			schedulerOptions: {

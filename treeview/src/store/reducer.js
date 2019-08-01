@@ -17,7 +17,6 @@ function reducer(state=initialState,action) {
 		case actionTypes.LOAD_DATA_DEVELOPMENT: { newState = DataManagement.LOAD_DATA_DEVELOPMENT(state,action,reducer); break; }		
 
 		case actionTypes.ADD_ROW: { newState = Interactions.ADD_ROW(state,action,reducer); break; }
-		case actionTypes.DELETE_SINGLE: { newState = Interactions.DELETE_SINGLE(state,action,reducer); break; }
 		case actionTypes.DELETE_BUBBLE: { newState = Interactions.DELETE_BUBBLE(state,action,reducer); break; }
 		case actionTypes.TOGGLE_NODE: { newState = Interactions.TOGGLE_NODE(state,action,reducer); break; }
 		case actionTypes.TRY_BUBBLE_TRANSFORM: { newState = Interactions.TRY_BUBBLE_TRANSFORM(state,action,reducer); break; }

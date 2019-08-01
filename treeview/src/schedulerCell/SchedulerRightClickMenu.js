@@ -16,7 +16,7 @@ class SchedulerRightClickMenu extends Component {
 					submit={option => this.onSubmit(option)}
 					options={this.props.options}
 				/>		
-				<img alt="Whats this?" style={{width:'100%'}} src="https://ichef.bbci.co.uk/images/ic/720x405/p0517py6.jpg"/>
+				{/* <img alt="Whats this?" style={{width:'100%'}} src="https://ichef.bbci.co.uk/images/ic/720x405/p0517py6.jpg"/> */}
 			</div>
 		</foreignObject>);
   }

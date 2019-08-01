@@ -73,28 +73,6 @@ export const ADD_ROW = (state,action,reducer) => {
     return newState
 }
 
-export const DELETE_SINGLE = (state,action,reducer) => {
-    let newState = {...state}
-	let parentkey = state._data[action.key].ParentAssociatedBubble
-    //Delete all Child references to this bubble
-    for(var childkey in state._data[action.key].ChildBubbles){
-        newState = reducer(newState,{type: actionTypes.UNLINK_PARENT_BUBBLE,key:childkey})
-    }
-    for(var childkey of state._data[action.key].ChildAssociatedBubbles){
-        newState = reducer(newState,{type: actionTypes.UNLINK_PARENT_ASSOCIATED_BUBBLE,key:childkey})		
-		if(parentkey){newState = reducer(newState,{type: actionTypes.PERFORM_ASSOCIATION, childkey: childkey, parentkey: parentkey })}
-    }
-    //Delete the Parent reference from the parent
-    newState = reducer(newState,{type: actionTypes.UNLINK_PARENT_BUBBLE,key:action.key})
-    newState = reducer(newState,{type: actionTypes.UNLINK_PARENT_ASSOCIATED_BUBBLE,key:action.key})
-
-    //Safely delete the bubble
-    const {[action.key]:placeholder, ...rest} = newState._data
-    newState = {...newState, _data: {...rest}}
-    
-    return newState;
-}
-
 export const DELETE_BUBBLE = (state,action,reducer) => {
 	let newState = {...state}
 
