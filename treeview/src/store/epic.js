@@ -4,13 +4,16 @@ import {ofType} from 'redux-observable'
 import {filter, map, tap} from 'rxjs/operators'
 import { recursiveDeepCopy } from '@execview/reusable';
 import tryReturnValidTransformState from './stateValidator';
+import { Observable } from 'rxjs';
 
 const voidAction = {type: 'dont care'}
 
-export const tryBubbleTransformEpic = (action$,state$) => action$.pipe(
-    ofType(actionTypes.TRY_BUBBLE_TRANSFORM),
-	map(action=>{const state = {...state$.value}; return tryBubbleTransformEpicMap(action,state)})
-)
+export const tryBubbleTransformEpic = (action$,state$) => { return (
+    action$.ofType(actionTypes.TRY_BUBBLE_TRANSFORM).mergeMap(action=>{
+		const state = {...state$.value};
+		return tryBubbleTransformEpicMap(action,state)
+	})
+)}
 export const tryBubbleTransformEpicMap = (action, state)=>{
 	let newState = {...state}
 	//apply transformation to a copy of bubble states. If valid, replace the main state.
@@ -20,11 +23,6 @@ export const tryBubbleTransformEpicMap = (action, state)=>{
 		oldBubbles[bubblekey]=recursiveDeepCopy(bubble)
 	}
 
-	//WTF IS HAPPENING
-	// console.log(action.changes.enddate)
-	// console.log(action.changes)
-	// console.log(action)
-
 	if (action.changes){
 		const newStateBubbles = tryReturnValidTransformState(oldBubbles,action);
 		if(newStateBubbles!==false){
@@ -32,19 +30,23 @@ export const tryBubbleTransformEpicMap = (action, state)=>{
 			for(let x in action.changes) {
 				itemChanges.changes[x] = newStateBubbles[action.key][x]
 			}
-			if (action.sendChanges) {
-				action.sendChanges(itemChanges)
-			}
-			return {
+
+			const moveBubblesAction = {
 				type:actionTypes.MOVE_BUBBLES,
 				originalAction: action,
 				_data: newStateBubbles,
 				editableValues: action.editableValues,
 				itemChanges,
 			}
+
+			if (action.sendChanges) {
+				return Observable.of(moveBubblesAction,{type: actionTypes.SEND_CHANGES, itemChanges})
+			} else {
+				return Observable.of(moveBubblesAction)
+			}
 		}
 	}
-	return voidAction;
+	return Observable.of(voidAction);
 }
 
 export const tryPerformLinkEpic = (action$,state$) => action$.pipe(

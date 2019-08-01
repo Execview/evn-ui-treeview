@@ -258,7 +258,7 @@ const SchedulerAppender = (props) => {
 		const tableRowValues = Object.keys(row).reduce((total,col)=>{return {...total,[col]:rowValues[col]}},{})
 		const newRowValues = objectCopierWithStringToDate(tableRowValues)
 		const changes = recursiveDeepDiffs(row,newRowValues)
-		props.tryBubbleTransform(rowId,changes,editableValues,props.sendChanges)
+		props.tryBubbleTransform(rowId,changes,editableValues,true)
 	}
 
 	const onTableRender = ()=>{

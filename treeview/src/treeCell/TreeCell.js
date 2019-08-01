@@ -21,7 +21,7 @@ const TreeCell = (props) => {
 
 	let rowSelection = '';
 	if (props.data.setSelected) {
-		let icon= (props.data.isSelected && <FontAwesomeIcon icon={faCircle} style={{fontSize:'10px', color:'#00CC6F'}}/>) || <FontAwesomeIcon icon={emptyCircle} style={{fontSize:'10px',color:'rgba(255,255,255,0.4)'}}/>;
+		let icon= props.data.isSelected ? <FontAwesomeIcon icon={faCircle} style={{fontSize:'10px', color:'#00CC6F'}}/> : <FontAwesomeIcon icon={emptyCircle} style={{fontSize:'10px',color:'rgba(255,255,255,0.4)'}}/>;
 		rowSelection = <div className={classes['row-selection']} onClick={props.data.setSelected}>{icon}</div>;
 	}
 	if (props.data.isSelected){
