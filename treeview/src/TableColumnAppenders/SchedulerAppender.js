@@ -249,7 +249,7 @@ const SchedulerAppender = (props) => {
 					rightmouseout:((k,e)=>bubblemouseout(k,e,'right')),					
 					middlemouseout:((k,e)=>bubblemiddlemouseout(k,e,'middle')),
 					onContextMenu:((k,e)=>bubbleOnContextMenu(k,e)),
-					text:tableData[rowId].activityTitle,
+					text:tableData[rowId].name,
 					shadow: shadow,
 					mouseOnScheduler: clickedOnScheduler,
 					shape: tableData[rowId].shape

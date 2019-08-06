@@ -50,7 +50,7 @@ export const ADD_ROW = (state,action,reducer) => {
 				ChildBubbles: {},
 				ParentBubble: '',
 				open:true,
-				activityTitle: tempTitle,
+				name: tempTitle,
 				progress: 'amber',
 				shape: shape
 		};

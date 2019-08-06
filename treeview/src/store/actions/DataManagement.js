@@ -19,7 +19,7 @@ export const LOAD_FROM_CONFIG = (state,action,reducer) => {
 					ChildBubbles: el.ChildBubbles,
 					ParentBubble: el.ParentBubble,
 					open: el.open,
-					activityTitle: el.activityTitle,
+					name: el.name,
 					progress: el.progress,
 					shape: el.type
 				}

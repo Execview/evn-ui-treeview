@@ -9,7 +9,7 @@
 			"_m7ad1":{"childside":"left", "parentside":"right", "xGapDate": 86400000}
 			},
    		"ParentBubble": "",
-    	"activityTitle": "Project Scorpio",
+    	"name": "Project Scorpio",
 		"progress": "amber",
 		"type": "bubble"
 	},
@@ -21,7 +21,7 @@
 		"ParentAssociatedBubble": "",
 		"ChildBubbles": {},
 		"ParentBubble": "_1235d",
-		"activityTitle": "Project X",
+		"name": "Project X",
 		"progress": "red",
 		"type": "square"
 	},
@@ -33,7 +33,7 @@
 		"ParentAssociatedBubble": "_m7ad1",
 		"ChildBubbles": {},
 		"ParentBubble": "",
-		"activityTitle": "Activity Bravo",
+		"name": "Activity Bravo",
 		"progress": "green",
 		"type": "bubble"
 	},
@@ -45,7 +45,7 @@
 		"ParentAssociatedBubble": "_m7ad1",
 		"ChildBubbles": {},
 		"ParentBubble": "",
-		"activityTitle": "Activity Echo",
+		"name": "Activity Echo",
 		"progress": "green",
 		"type": "square"
 	},
@@ -57,7 +57,7 @@
 		"ParentAssociatedBubble": "_1236d",
 		"ChildBubbles": {},
 		"ParentBubble": "",
-		"activityTitle": "Task with a very very very very long name",
+		"name": "Task with a very very very very long name",
 		"progress": "red",
 		"type": "square"
 	},
@@ -69,7 +69,7 @@
 		"ParentAssociatedBubble": "_k8450",
 		"ChildBubbles": {},
 		"ParentBubble": "",
-		"activityTitle": "Subtask Flower",
+		"name": "Subtask Flower",
 		"progress": "amber",
 		"type": "bubble"
 	},
@@ -81,7 +81,7 @@
 		"ParentAssociatedBubble": "",
 		"ChildBubbles": {},
 		"ParentBubble": "",
-		"activityTitle": "XD",
+		"name": "XD",
 		"progress": "amber",
 		"type": "triangle"
 	}

@@ -41,7 +41,7 @@ const TreeAppender = (props) => {
 				...props.data[rowId],
 				treeExpander:{
 					...displayedRows[i],
-					text: props.data[rowId].activityTitle,
+					text: props.data[rowId].name,
 					toggleNode: (()=> setTree({...tree,[rowId]:!tree[rowId]})),
 					...select
 				}

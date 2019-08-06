@@ -57,11 +57,13 @@ const SchedulerOverlay = (props) => {
 	}
 
 	const drawLine = (x,offset,style) => {
+		if(!typeof(x)==='number'){return}
 		return (
 			<line key={x+offset} x1={x} y1={offset} x2={x} y2={tableHeight} style={{zIndex:-1, pointerEvents: 'none',...style}} />
 		)
 	}
 	const drawLegend = (x,text,pos,style) => {
+		if(!typeof(x)==='number'){return}
 		return (
 			<text key={x+text} x={x+5} y={pos-9} style={{zIndex:-1, pointerEvents: 'none',...style}}>{text}</text>
 		)
