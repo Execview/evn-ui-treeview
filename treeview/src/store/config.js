@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { TextCellEditor, TextareaCellDisplay,ColorCellDisplay, ColorCellEditor, DateCellDisplay, DateCellEditor } from '@execview/reusable'
+import { TextCellEditor, TextareaCellDisplay, ColorCellDisplay, ColorCellEditor, DateCellDisplay, DateCellEditor } from '@execview/table'
 
 import Data from './configData.json'
 
@@ -58,7 +58,7 @@ export const cellTypes = {
 
 export const rules = {
   textSize: {
-    errorMessage: 'The size of the field must be of at least 60 characters',
+    errorMessage: 'The size of the field must be of at least 10 characters',
     validator: function validateString(text) {
       if (text.replace(/\n/g, '').length > 10) {
         return true;

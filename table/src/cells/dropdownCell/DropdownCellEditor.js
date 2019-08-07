@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import GenericDropdown from '../GenericDropdown/GenericDropdown';
+import { GenericDropdown } from '@execview/reusable';
 import './DropdownCell.css';
 
 const DropdownCellEditor = (props) => {
@@ -31,4 +31,4 @@ const DropdownCellEditor = (props) => {
 		</div>
 	);
 }
-export default DropdownCellEditor
+export default DropdownCellEditor;

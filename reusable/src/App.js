@@ -1,19 +1,10 @@
 import React, {useState} from 'react';
 import './App.css';
 import Button from './Components/Button/Button'
-import InPlaceCell from './Components/InPlaceCell/InPlaceCell';
 import CircleUser from './Components/CircleUser/CircleUser'
 import GenericDropdown from './Components/GenericDropdown/GenericDropdown'
 import TripleFill from './Components/TripleFill/TripleFill'
 
-import ColorCellDisplay from './Components/colorCell/ColorCellDisplay'
-import ColorCellEditor from './Components/colorCell/ColorCellEditor'
-import DateCellDisplay from './Components/dateCell/DateCellDisplay'
-import DateCellEditor from './Components/dateCell/DateCellEditor'
-import DropdownCellEditor from './Components/dropdownCell/DropdownCellEditor'
-import TextareaCellDisplay from './Components/Cell/CellTypes/TextAreaCells/TextareaCellDisplay'
-import GenericAssignDisplay from './Components/genericAssignCell/GenericAssignDisplay'
-import ImageDisplay from './Components/imageDisplay/ImageDisplay'
 
 import injectObjectInObject from './Functions/injectObjectInObject'
 import objectCopierWithStringToDate from './Functions/objectCopierWithStringToDate'
@@ -23,20 +14,7 @@ import recursiveDeepCopy from './Functions/recursiveDeepCopy'
 import recursiveDeepDiffs from './Functions/recursiveDeepDiffs'
 import sendEvent from './Functions/sendEvent'
 
-function App() {
-	
-	const InPlaceCellPropsText = {data: 'In Place Cell Text', onValidateSave:((x) => { console.log(x) })}
-	const InPlaceCellPropsColour = {data: 'green', type: {display:<ColorCellDisplay/>,editor:<ColorCellEditor/>}, onValidateSave:((x) => { console.log(x) })} 
-	const InPlaceCellPropsDate = {data: new Date('2019-12-25'), type: {display:<DateCellDisplay/>, editor:<DateCellEditor/>}, onValidateSave:((x) => { console.log(x) })} 
-	const InPlaceCellPropsDropdown = {data: 'apple', type: {display:<TextareaCellDisplay/>, editor:<DropdownCellEditor dropdownList={['apple','banana','cat']}/>}, onValidateSave:((x) => { console.log(x) })} 
-
-	const gaais = {a:{name:'apple', image:'https://i.imgur.com/ruSaBxM.jpg'},b:{name:'banana',image:'https://i.imgur.com/6lreFDw.jpg'},c:{name:'cat',image:'https://i.imgur.com/OYBnpPT.jpg'}}
-	const Display = (props) => {
-			const items = props.items || [];
-			const imageDisplayData = gaais && (items.map(u => gaais[u].image) || []);
-			return <ImageDisplay data={imageDisplayData} style={props.style} />;
-	};	
-	const InPlaceCellPropsGenericAssign = {data: ['b','c'], type: {display:<GenericAssignDisplay items={gaais} getOption={(id)=><div>{gaais[id].name}</div>} getSearchField={(id)=>gaais[id].name} display={<Display/>}/>}, onValidateSave:((x) => { console.log(x) })} 
+const App = (props) => {
 	const ButtonProps = {onClick:(() => console.log('xd'))}
 	const CircleUserProps = {size: 50, url: 'https://i.imgur.com/OYBnpPT.jpg'}
 
@@ -57,11 +35,6 @@ function App() {
 
 	return (
 		<div className="App">
-			<InPlaceCell {...InPlaceCellPropsText} />
-			<InPlaceCell {...InPlaceCellPropsColour} />
-			<InPlaceCell {...InPlaceCellPropsDate} />
-			<InPlaceCell {...InPlaceCellPropsDropdown} />
-			<InPlaceCell {...InPlaceCellPropsGenericAssign} />
 			<Button {...ButtonProps}>test button</Button>
 			<TripleFill left={<div>left</div>} center={<div>middle</div>} right={<div>right</div>}/>
 			<CircleUser {...CircleUserProps}/>

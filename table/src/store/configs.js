@@ -1,5 +1,20 @@
 import React from 'react';
-import { TripleFill, CircleUser, TextareaCellEditor, TextareaCellDisplay, TextCellEditor, DropdownCellEditor, ImageDisplay, GenericAssignDisplay, ColorCellEditor, ColorCellDisplay, DateCellEditor, DateCellDisplay } from '@execview/reusable';
+import { TripleFill, CircleUser } from '@execview/reusable';
+import TextareaCellEditor from '../cells/TextAreaCell/TextareaCellEditor';
+import TextareaCellDisplay from '../cells/TextAreaCell/TextareaCellDisplay';
+import TextCellEditor from '../cells/TextCell/TextCellEditor';
+import DropdownCellEditor from '../cells/dropdownCell/DropdownCellEditor';
+import ImageDisplay from '../cells/imageDisplay/ImageDisplay';
+import GenericAssignDisplay from '../cells/genericAssignCell/GenericAssignDisplay';
+import ColorCellDisplay from '../cells/colorCell/ColorCellDisplay';
+import ColorCellEditor from '../cells/colorCell/ColorCellEditor';
+import DateCellDisplay from '../cells/dateCell/DateCellDisplay';
+import DateCellEditor from '../cells/dateCell/DateCellEditor';
+
+
+
+
+
 import UserRoleDisplay from '../UserRoleDisplay/UserRoleDisplay';
 import UserHeaderDisplay from '../headers/UserHeaderDisplay';
 import { countries, priority } from './constants';

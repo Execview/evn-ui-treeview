@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ImageDisplay } from '@execview/reusable';
+import ImageDisplay from '../cells/imageDisplay/ImageDisplay';
 import './CircleUser.css';
 import AssignUsers from './AssignUsers';
 

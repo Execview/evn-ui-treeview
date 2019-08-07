@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import errorIcon from '../Resources/icons-info.svg';
+import errorIcon from '../../Resources/icons-info.svg';
 import './TextareaCell.css';
 
 const TextareaCellDisplay = (props) => {
-	const [showText,setShowText] = useState(false)
+	const [showText, setShowText] = useState(false)
 
 	const showError = (e) => {
 		e.stopPropagation();
@@ -26,6 +26,6 @@ const TextareaCellDisplay = (props) => {
 		);
 	}
 	return <div className={'textarea-cell-container no-select ' + (classes.container || '')} style={props.style}><p className={'textarea-cell-text ' + (classes.text || '')} style={{ overflow: style.overflow, textOverflow: style.textOverflow, whiteSpace: style.whiteSpace }}>{data}</p></div>;
-}
+};
 
 export default TextareaCellDisplay;

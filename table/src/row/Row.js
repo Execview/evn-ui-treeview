@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { Cell, TextareaCellDisplay, TextareaCellEditor, recursiveDeepDiffs } from '@execview/reusable';
+import Cell from '../cells/Cell/Cell';
+import TextareaCellDisplay from '../cells/TextAreaCell/TextareaCellDisplay';
+import TextareaCellEditor from '../cells/TextAreaCell/TextareaCellEditor';
 import './Row.css';
 
 
@@ -41,7 +43,7 @@ export default class Row extends Component {
 		const cellStyleClass = this.props.style || {};
 		return (
 			keys.map((col, index) => {
-				let editRights = editableCells.includes(col);
+				const editRights = editableCells.includes(col);
 				const red = invalidCells.includes(col);
 
 				const isActive = (col === this.props.activeColumn && editRights);
@@ -66,7 +68,7 @@ export default class Row extends Component {
 								data={this.props.rowData[col]}
 								type={cellTypes[columnsInfo[col].cellType]}
 								isActive={isActive}
-								onValidateSave={(data) => this.props.onValidateSave(col, data)}
+								onValidateSave={data => this.props.onValidateSave(col, data)}
 								errorText={red ? errorText : null}
 							/>
 						</div>

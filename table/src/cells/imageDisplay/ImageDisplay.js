@@ -1,5 +1,5 @@
 import React from 'react';
-import CircleUser from '../CircleUser/CircleUser';
+import { CircleUser } from '@execview/reusable';
 import classes from './ImageDisplay.module.css';
 
 const ImageDisplay = (props) => {
