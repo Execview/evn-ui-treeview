@@ -1,45 +1,22 @@
-import React, { Component } from 'react';
+import React from 'react';
 import TextareaCellDisplay from '../TextAreaCell/TextareaCellDisplay';
 import TextCellEditor from '../TextAreaCell/TextareaCellEditor';
 
-
-export default class Cell extends Component {
-	// shouldComponentUpdate(nextProps) {
-	//   if (this.props.style.width !== nextProps.style.width) {
-	//     return true;
-	//   }
-	//   const filterReactComponent = (c) => {
-	//     const { _owner, $$typeof, ...rest } = c;
-	//     return rest;
-	//   };
-	//   const stopRecursion = (o, u) => {
-	//     if (React.isValidElement(o) && React.isValidElement(u)) {
-	//       if (recursiveDeepDiffs(filterReactComponent(o), filterReactComponent(u), { stopRecursion })) {
-	//         return 'updated';
-	//       }
-	//       return 'ignore';
-	//     }
-	//     return 'continue';
-	//   };
-	//   const diffs = recursiveDeepDiffs(this.props, nextProps, { stopRecursion });
-	//   if (!diffs) { return false; }
-	//   return true;
-	// }
-	// dd && (!o || Object.keys(dd).length !== 0)
-
-	render() {
-		const data = this.props.data;
-		const errorText = this.props.errorText || this.props.errorText === '' ? this.props.errorText : null;
-		const style = this.props.style || {};
-		const type = {};
-		type.display = (this.props.type && this.props.type.display) || <TextareaCellDisplay />;
-		type.editor = (this.props.type && this.props.type.editor) || <TextCellEditor />;
-		const onValidateSave = this.props.onValidateSave || (() => { console.log('cell needs onValidateSave brah'); });
-		if (this.props.isActive) {
-			return (
-				React.createElement(type.editor.type, { ...type.editor.props, data, onValidateSave, errorText, style }));
-		}
+const Cell = (props) => {
+	const data = props.data;
+	const errorText = props.errorText || props.errorText === '' ? props.errorText : null;
+	const style = props.style || {};
+	const type = {};
+	type.display = (props.type && props.type.display) || <TextareaCellDisplay />;
+	type.editor = (props.type && props.type.editor) || <TextCellEditor />;
+	const onValidateSave = props.onValidateSave || (() => { console.log('cell needs onValidateSave brah'); });
+	const isEditable = typeof (props.isEditable) === 'boolean' ? props.isEditable : true;
+	if (props.isActive) {
 		return (
-			React.createElement(type.display.type, { ...type.display.props, data, onValidateSave, errorText, style }));
+			React.createElement(type.editor.type, { ...type.editor.props, data, onValidateSave, isEditable, errorText, style }));
 	}
-}
+	return (
+		React.createElement(type.display.type, { ...type.display.props, data, onValidateSave, isEditable, errorText, style }));
+};
+
+export default Cell;

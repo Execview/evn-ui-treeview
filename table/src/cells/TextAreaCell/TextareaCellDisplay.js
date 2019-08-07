@@ -12,20 +12,34 @@ const TextareaCellDisplay = (props) => {
 			setShowText(false);
 		}, 3000);
 	};
-
-	const data = props.data || ''
+	const hasError = props.errorText !== null;
+	const data = props.data || '';
 	const style = props.style || {};
-	const classes = props.classes || {};
-	if (props.errorText !== null) {
-		return (
-			<div className={'textarea-cell-container no-select cell-error ' + (classes.container || '')} style={props.style}>
-				<p className={'cell-text-error ' + (classes.textError || '')} style={{ overflow: style.overflow, textOverflow: style.textOverflow, whiteSpace: style.whiteSpace }}>{data}</p>
-				{props.errorText !== '' && <img className="error-icon" src={errorIcon} alt="info" onClick={e => showError(e)} />}
-				<div className={'error-info ' + (showText ? 'error-shown' : 'error-hidden')}><p className="error-text">{props.errorText}</p></div>
-			</div>
-		);
-	}
-	return <div className={'textarea-cell-container no-select ' + (classes.container || '')} style={props.style}><p className={'textarea-cell-text ' + (classes.text || '')} style={{ overflow: style.overflow, textOverflow: style.textOverflow, whiteSpace: style.whiteSpace }}>{data}</p></div>;
+	const optionalClasses = props.classes || {};
+	const emptyText = props.placeholder || 'Type something here...';
+	
+	const containerClasses = 'textarea-cell-container no-select ' + (optionalClasses.container || '');
+	const errorContainerClasses = hasError ? ' cell-error' : '';
+
+	const textClasses = 'textarea-cell-text' + (optionalClasses.text || '');
+	const errorTextClasses = hasError ? ' cell-text-error ' + (optionalClasses.textError || '') : '';
+	
+	const isEditableClasses = props.isEditable ? ' is-editable ' + (optionalClasses.isEditable || '') : '';
+
+	const errorIconEl = hasError && <img className="error-icon" src={errorIcon} alt="info" onClick={e => showError(e)} />;
+	const errorText = hasError && (
+		<div className={'error-info ' + (showText ? 'error-shown' : 'error-hidden')}>
+			<p className="error-text">{props.errorText}</p>
+		</div>
+	);
+	if (!data && props.isEditable) { return <div className={containerClasses + errorContainerClasses} style={props.style}><p className="empty-editable">{emptyText}</p></div>; }
+	return (
+		<div className={containerClasses + errorContainerClasses} style={props.style}>
+			<p className={textClasses + errorTextClasses + isEditableClasses} style={{ overflow: style.overflow, textOverflow: style.textOverflow, whiteSpace: style.whiteSpace }}>{data}</p>
+			{errorIconEl}
+			{errorText}
+		</div>
+	);
 };
 
 export default TextareaCellDisplay;

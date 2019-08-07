@@ -129,20 +129,30 @@ export default class Table extends Component {
 	});
 
 	getDefaults(props) {
-		const onSave = props.onSave || this.defaultOnSave
 		const toReturn = {
 			columnsInfo: props.columnsInfo,
-			editableCells: props.editableCells,
-			onSave: onSave
+			editableCells: {},
+			onSave: (props.onSave || this.defaultOnSave)
 		};
+		const getUniqueColumns = (data) => {
+			let uniqueColumns = []
+			for(const key in data){
+				const row = data[key]
+				for(const col in row){
+					if(!uniqueColumns.includes(col)){
+						uniqueColumns.push(col)
+					}
+				}
+			}
+			return uniqueColumns
+		}
 		const data = props.data || {};
-		const dataKeys = Object.keys(data);
-		toReturn.columnsInfo = props.columnsInfo || dataKeys.reduce((total, objKey) => { return { ...total, [objKey]: { cellType: 'text', headerData: objKey } }; }, {});
+		toReturn.columnsInfo = props.columnsInfo || getUniqueColumns(data).reduce((total, uniqueColumn) => { return { ...total, [uniqueColumn]: { cellType: 'text', headerData: uniqueColumn } }; }, {});
 
 		toReturn.editableCells = {};
 
-		for (let i = 0; i < dataKeys.length; i++) {
-			toReturn.editableCells[dataKeys[i]] = props.editableCells ? props.editableCells[dataKeys[i]] || [] : [];
+		for(const key in data){
+			toReturn.editableCells[key] = props.editableCells ? props.editableCells[key] || [] : [];
 		}
 
 		return toReturn;
@@ -188,21 +198,20 @@ export default class Table extends Component {
 		const editableRow = [...this.state.editableCells[rowId]];
 		const updatedRow = { ...this.state.data[rowId] };
 		updatedRow[colId] = cellText;
-
 		let objReturned = { updatedRow, editableRow };
 		if (this.props.rowValidation) {
 			objReturned = this.props.rowValidation(updatedRow, editableRow);
 		}
-
 		let hasErrors = false;
-
 		for (const column in this.state.columnsInfo) {
 			if (this.state.columnsInfo[column].rule) {
-				if (!this.props.rules[this.state.columnsInfo[column].rule].validator(updatedRow[column])) {
+				if (!this.props.rules[this.state.columnsInfo[column].rule].validator(objReturned.updatedRow[column])) {
 					hasErrors = true;
-					if (newInvalidCells.filter(el => el.id === rowId && el.col === column).length === 0) {
+					if (!newInvalidCells.find(el => el.id === rowId && el.col === column)) {
 						newInvalidCells.push({ id: rowId, col: column });
 					}
+				} else {
+					newInvalidCells = newInvalidCells.filter(obj => !(obj.id === rowId && obj.col === column));
 				}
 			}
 		}
@@ -221,9 +230,7 @@ export default class Table extends Component {
 				activeCell: [null, null]
 			});
 		} else {
-			newInvalidCells = newInvalidCells.filter(obj => !(obj.id === rowId && obj.col === colId));
-			const activeRow = rowId;
-			this.setState({ invalidCells: newInvalidCells, activeCell: [null, null] }, (() => this.state.onSave(activeRow, objReturned.updatedRow, objReturned.editableRow)));
+			this.setState({ invalidCells: newInvalidCells, activeCell: [null, null] }, (() => this.state.onSave(rowId, objReturned.updatedRow, objReturned.editableRow)));
 		}
 	}
 
@@ -320,7 +327,7 @@ export default class Table extends Component {
 							let selectedRowStyle = {};
 							if (this.props.selectedRow === entry) {
 								// selectedRowStyle = {border:'1px solid rgba(255,255,255,0.3)'};
-								selectedRowStyle = {backgroundColor:'#3a414f'};
+								selectedRowStyle = { backgroundColor: '#3a414f' };
 							}
 							
 							return (

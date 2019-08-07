@@ -8,7 +8,7 @@ const GenericAssign = (props) => {
 	const [leftSearchString, setLeftSearchString] = useState('');
 	const [rightSearchString, setRightSearchString] = useState('');
 
-	
+	const isEditable = props.isEditable;
 
 	const unassignGeneric = (itemId) => {
 		props.onValidateSave(data.filter(el => el !== itemId));
@@ -47,7 +47,7 @@ const GenericAssign = (props) => {
 				<div>
 					{props.leftTitle}
 					<GenericDropdown
-						submit={(key) => { unassignGeneric(key); }}
+						submit={(key) => { if (isEditable) { unassignGeneric(key); } }}
 						canSearch={true}
 						autoFocus={true}
 						onSearchChange={v => setLeftSearchString(v)}
@@ -56,18 +56,20 @@ const GenericAssign = (props) => {
 						style={style}
 					/>
 				</div>
-				<div>
-					{props.rightTitle}
-					<GenericDropdown
-						submit={(key) => { assignGeneric(key); }}
-						canSearch={true}
-						autoFocus={true}
-						onSearchChange={v => setRightSearchString(v)}
-						searchString={rightSearchString}
-						options={filteredRightOptions}
-						style={style}
-					/>
-				</div>
+				{isEditable && (
+					<div>
+						{props.rightTitle}
+						<GenericDropdown
+							submit={(key) => { if (isEditable) { assignGeneric(key); } }}
+							canSearch={true}
+							autoFocus={true}
+							onSearchChange={v => setRightSearchString(v)}
+							searchString={rightSearchString}
+							options={filteredRightOptions}
+							style={style}
+						/>
+					</div>
+				)}
 			</div>
 		</OCO>
 	);

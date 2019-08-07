@@ -23,5 +23,6 @@ const cats = ['https://ichef.bbci.co.uk/images/ic/720x405/p0517py6.jpg',
 	'https://i.imgur.com/DL1M0S1.jpg',
 	'https://i.imgur.com/6YXGVoz.jpg',
 	'https://i.imgur.com/b8OZrQL.jpg',
+	'https://i.imgur.com/EQHkgZm.png'
 ];
 export default cats;

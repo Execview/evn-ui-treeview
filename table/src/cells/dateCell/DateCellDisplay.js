@@ -9,7 +9,7 @@ const DateCellDisplay = (props) => {
 
 	return (
 		<div className="cell-container no-select" style={props.style}>
-			<p className="cell-text" style={{ overflow: style.overflow, textOverflow: style.textOverflow, whiteSpace: style.whiteSpace }}>
+			<p className={"cell-text "+(props.isEditable ? 'is-editable' : '')} style={{ overflow: style.overflow, textOverflow: style.textOverflow, whiteSpace: style.whiteSpace }}>
 				{dateString}
 			</p>
 		</div>

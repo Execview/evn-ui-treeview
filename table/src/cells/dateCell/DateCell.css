@@ -7,6 +7,10 @@
   min-height: 20px;
 }
 
+.is-editable{
+  color: wheat;
+}
+
 .cell-text{
   margin:0;
   padding: 5px;

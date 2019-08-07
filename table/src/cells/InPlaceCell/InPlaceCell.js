@@ -9,7 +9,7 @@ const InPlaceCell = (props) => {
 		setValue(props.data);
 	}, [props.data]);
 	
-	const [editMode, setEditMode] = useState(false)
+	const [editMode, setEditMode] = useState(false);
 
 	const inPlaceOnValidateSave = (data) => {
 		setValue(data);

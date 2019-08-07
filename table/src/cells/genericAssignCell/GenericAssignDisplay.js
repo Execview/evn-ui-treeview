@@ -9,9 +9,9 @@ const GenericAssignDisplay = (props) => {
 
 	return (
 		<div className="generic-cell" onClick={() => setOpen(true)}>
-			{React.createElement(props.display.type, { ...props.display.props, allItems, items: data, style: props.style })}
+			{React.createElement(props.display.type, { ...props.display.props, isEditable: props.isEditable, allItems, items: data, style: props.style })}
 			{open && (
-				<GenericAssign allItems={props.items} items={props.data} getOption={props.getOption} getSearchField={props.getSearchField} style={props.style} closeMenu={() => setOpen(false)} onValidateSave={props.onValidateSave} leftTitle={props.leftTitle} rightTitle={props.rightTitle} />
+				<GenericAssign allItems={props.items} items={props.data} getOption={props.getOption} isEditable={props.isEditable} getSearchField={props.getSearchField} style={props.style} closeMenu={() => setOpen(false)} onValidateSave={props.onValidateSave} leftTitle={props.leftTitle} rightTitle={props.rightTitle} />
 			)}
 		</div>
 	);

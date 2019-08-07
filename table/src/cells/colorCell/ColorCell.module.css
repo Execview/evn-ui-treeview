@@ -6,33 +6,32 @@
   height: 100%;
   word-wrap: break-word;
   padding: 0 5px;
-
 }
 
 .progress{
   height: 100%;
   min-height: 100%;
   border-radius: 4px;
-  transition: background-color 0.7s;
+  overflow: hidden;
 }
 
-.background-red {
+.solid-background-red {
   background-color: #ff3d57;
 }
 
-.background-amber {
+.solid-background-amber {
   background-color: #ffbf00;
 }
 
-.background-green {
+.solid-background-green {
   background-color: #00CC6F;
 }
 
-.background-grey {
+.solid-background-grey {
   background-color: grey;
 }
 
-.background-blue {
+.solid-background-blue {
   background-color: #74dcee;
 }
 
@@ -75,7 +74,6 @@
   width:21px;
   border:1px solid transparent;
   border-radius:50%;
-  transition: background-color 0.7s;
 }
 
 
@@ -102,5 +100,45 @@
 }
 
 
+.is-editable-small{
+  border: 1px solid white;
+}
 
+.non-editable-green {
+  --main-color: #00b361;
+  --stripe-color: #00CC6F;
+  background-image: linear-gradient(135deg, var(--stripe-color) 25%, var(--main-color) 25%, var(--main-color) 50%, var(--stripe-color) 50%, var(--stripe-color) 75%, var(--main-color) 75%, var(--main-color) 100%);
+  background-size: 22.63px 22.63px;
+}
 
+.non-editable-red {
+   --main-color: #c33f51;
+  --stripe-color: #ff3d57;
+  background-image: linear-gradient(135deg, var(--stripe-color) 25%, var(--main-color) 25%, var(--main-color) 50%, var(--stripe-color) 50%, var(--stripe-color) 75%, var(--main-color) 75%, var(--main-color) 100%);
+  background-size: 22.63px 22.63px;
+}
+
+.non-editable-amber {
+   --main-color: #dea700;
+  --stripe-color: #ffbf00;
+  background-image: linear-gradient(135deg, var(--stripe-color) 25%, var(--main-color) 25%, var(--main-color) 50%, var(--stripe-color) 50%, var(--stripe-color) 75%, var(--main-color) 75%, var(--main-color) 100%);
+  background-size: 22.63px 22.63px;
+}
+
+.non-editable-blue {
+   --main-color: #6ac4d4;
+  --stripe-color: #74dcee;
+  background-image: linear-gradient(135deg, var(--stripe-color) 25%, var(--main-color) 25%, var(--main-color) 50%, var(--stripe-color) 50%, var(--stripe-color) 75%, var(--main-color) 75%, var(--main-color) 100%);
+  background-size: 22.63px 22.63px;
+}
+
+.non-editable-grey {
+     --main-color: #6d6d6d;
+  --stripe-color: #808080;
+  background-image: linear-gradient(135deg, var(--stripe-color) 25%, var(--main-color) 25%, var(--main-color) 50%, var(--stripe-color) 50%, var(--stripe-color) 75%, var(--main-color) 75%, var(--main-color) 100%);
+  background-size: 22.63px 22.63px;
+}
+
+.small-stripes{
+  background-size: 5.66px 5.66px;
+}

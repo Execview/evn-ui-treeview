@@ -6,6 +6,10 @@
   height: 100%;
 }
 
+.is-editable{
+  color: wheat;
+}
+
 .cell-error {
   border-bottom:2px solid red;
 }
@@ -104,3 +108,9 @@
 }
 
 .text-input:focus { outline: none; }
+
+.empty-editable{
+  color: rgba(255, 255, 255, 0.3);
+  margin:0;
+  margin-left: 5px;
+}

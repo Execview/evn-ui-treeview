@@ -1,80 +1,58 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Cell from '../cells/Cell/Cell';
 import TextareaCellDisplay from '../cells/TextAreaCell/TextareaCellDisplay';
 import TextareaCellEditor from '../cells/TextAreaCell/TextareaCellEditor';
 import './Row.css';
 
 
-export default class Row extends Component {
-	// shouldComponentUpdate(nextProps) {
-	//   for (const key in nextProps.widths) {
-	//     if (this.props.widths[key] !== nextProps.widths[key]) {
-	//       return true;
-	//     }
-	//   }
-	//   const filterReactComponent = (c) => {
-	//     const { _owner, $$typeof, ...rest } = c;
-	//     return rest;
-	//   };
-	//   const stopRecursion = (o, u) => {
-	//     if (React.isValidElement(o) && React.isValidElement(u)) {
-	//       if (recursiveDeepDiffs(filterReactComponent(o), filterReactComponent(u), { stopRecursion })) {
-	//         return 'updated';
-	//       }
-	//       return 'ignore';
-	//     }
-	//     return 'continue';
-	//   };
-	//   const diffs = recursiveDeepDiffs(this.props, nextProps, { stopRecursion });
-	//   return diffs;
-	// }
+const Row = (props) => {
+	const editableCells = props.editableCells || [];
+	const columnsInfo = props.columnsInfo || Object.keys(props.rowData).reduce((total, objKey) => { return { ...total, [objKey]: { cellType: 'text', colTitle: objKey } }; }, {});
+	const keys = Object.keys(columnsInfo);
+	const invalidCells = props.invalidCells || [];
+	const widths = props.widths || keys.reduce((total, objKey) => { return { ...total, [objKey]: 200 }; }, {});
+	const heights = props.heights || keys.reduce((total, objKey) => { return { ...total, [objKey]: 0 }; }, {});
+	const onSetActive = props.onSetActive || (() => { console.log('row needs onSetActive brah, which sets a cell active'); });
+	const cellTypes = props.cellTypes || { text: { display: <TextareaCellDisplay />, editor: <TextareaCellEditor /> } };
+	const rules = props.rules || {};
+	const onMouseDown = props.onMouseDown || (() => false);
+	const cellStyleClass = props.style || {};
+	return (
+		keys.map((col, index) => {
+			const editRights = editableCells.includes(col);
+			const red = invalidCells.includes(col);
+			const columnCellType = cellTypes[columnsInfo[col].cellType]
+			const isActive = (col === props.activeColumn && editRights) && columnCellType.editor;
 
-	render() {
-		const editableCells = this.props.editableCells || [];
-		const columnsInfo = this.props.columnsInfo || Object.keys(this.props.rowData).reduce((total, objKey) => { return { ...total, [objKey]: { cellType: 'text', colTitle: objKey } }; }, {});
-		const keys = Object.keys(columnsInfo);
-		const invalidCells = this.props.invalidCells || [];
-		const widths = this.props.widths || keys.reduce((total, objKey) => { return { ...total, [objKey]: 200 }; }, {});
-		const heights = this.props.heights || keys.reduce((total, objKey) => { return { ...total, [objKey]: 0 }; }, {});
-		const onSetActive = this.props.onSetActive || (() => { console.log('row needs onSetActive brah, which sets a cell active'); });
-		const cellTypes = this.props.cellTypes || { text: { display: <TextareaCellDisplay />, editor: <TextareaCellEditor /> } };
-		const rules = this.props.rules || {};
-		const onMouseDown = this.props.onMouseDown || (() => false);
-		const cellStyleClass = this.props.style || {};
-		return (
-			keys.map((col, index) => {
-				const editRights = editableCells.includes(col);
-				const red = invalidCells.includes(col);
+			const onClickAction = isActive ? null : (() => onSetActive(col));
+			const lastOne = index === keys.length - 1;
+			let style = { width: Math.round(widths[col]), minHeight: heights[col] };
+			if (!props.wrap) {
+				style = { ...style, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' };
+			}
+			const errorText = rules[columnsInfo[col].rule] ? rules[columnsInfo[col].rule].errorMessage : null;
+			return (
+				<td className={'table-datum ' + (cellStyleClass.tableDatum || 'table-datum-visuals')} key={col}>
+					{!lastOne && props.onMouseDown && <div style={{ touchAction: 'none', position: 'absolute', transform: 'translateX(7px)', top: 0, right: 0, height: '100%', width: '15px', cursor: 'w-resize' }} onPointerDown={e => onMouseDown(e, col)} />}
+					<div
+						title={columnsInfo[col].colTitle}
+						className={(isActive ? 'active-cell' : 'table-label ') + (editRights ? '' : 'no-edit')}
+						onClick={onClickAction}
+					>
+						<Cell
+							style={style}
+							data={props.rowData[col]}
+							type={columnCellType}
+							isActive={isActive}
+							isEditable={editRights}
+							onValidateSave={data => props.onValidateSave(col, data)}
+							errorText={red ? errorText : null}
+						/>
+					</div>
+				</td>
+			);
+		})
+	);
+};
 
-				const isActive = (col === this.props.activeColumn && editRights);
-
-				const onClickAction = isActive ? null : (() => onSetActive(col));
-				const lastOne = index === keys.length - 1;
-				let style = { width: Math.round(widths[col]), minHeight: heights[col] };
-				if (!this.props.wrap) {
-					style = { ...style, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' };
-				}
-				const errorText = rules[columnsInfo[col].rule] ? rules[columnsInfo[col].rule].errorMessage : null;
-				return (
-					<td className={'table-datum ' + (cellStyleClass.tableDatum || 'table-datum-visuals')} key={col}>
-						{!lastOne && this.props.onMouseDown && <div style={{ touchAction: 'none', position: 'absolute', transform: 'translateX(7px)', top: 0, right: 0, height: '100%', width: '15px', cursor: 'w-resize' }} onPointerDown={e => onMouseDown(e, col)} />}
-						<div
-							title={columnsInfo[col].colTitle}
-							className={(isActive ? 'active-cell' : 'table-label ') + (editRights ? '' : 'no-edit')}
-							onClick={onClickAction}
-						>
-							<Cell
-								style={style}
-								data={this.props.rowData[col]}
-								type={cellTypes[columnsInfo[col].cellType]}
-								isActive={isActive}
-								onValidateSave={data => this.props.onValidateSave(col, data)}
-								errorText={red ? errorText : null}
-							/>
-						</div>
-					</td>
-				);
-			})
-		);
-	}
-}
+export default Row;
