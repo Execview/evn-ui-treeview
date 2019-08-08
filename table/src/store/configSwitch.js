@@ -1,7 +1,7 @@
 import * as config from './configs';
 
 // Change this number to change displayed data!
-const configNumber = 3;
+const configNumber = 2;
 
 export const columnsInfo = config['columnsInfo' + configNumber];
 export const editableCells = config['editableCells' + configNumber];

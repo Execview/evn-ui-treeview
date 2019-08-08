@@ -32,10 +32,11 @@ export const columnsInfo1 = {
 export const columnsInfo2 = {
 	activityId: { cellType: 'textarea', headerData: 'Activity ID', width: 5, minWidth: 25 },
 	startDate: { cellType: 'date', headerData: 'Start Date', width: 10 },
+	latestProgress: { cellType: 'textarea', headerData: 'Latest Progress', rule: 'textSize' },
 	dueDate: { cellType: 'date', headerData: 'Due Date', width: 10 },
 	assignedUsers: { cellType: 'users', headerData: 'Assigned Users', width: 10, headerType: 'userHeader' },
 	progress: { cellType: 'color', headerData: 'RAG', width: 10, minWidth: 25 },
-	latestProgress: { cellType: 'textarea', headerData: 'Latest Progress', rule: 'textSize' }
+	
 	// employeeName: { cellType: 'dropdown', headerData: 'Employee Name', width: 400 },
 };
 
