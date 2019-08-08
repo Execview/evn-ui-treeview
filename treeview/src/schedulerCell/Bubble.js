@@ -66,7 +66,6 @@ const Bubble = React.memo((props) => {
 	}
 
 	let filterStyle = !props.shadow ? 'url(#'+key+')' : ''
-	console.log(editableSides)
 	const getCursorStyle = (side) =>  editableSides.includes(side) ? {cursor: 'pointer'} : {};
 	return(
 		<g key={key} onContextMenu={(event=>onContextMenu(key,event))}>
