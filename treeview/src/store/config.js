@@ -34,12 +34,12 @@ export const columnsInfo = {
 };
 
 export const editableCells = {
-	_1235d: ['name', 'startdate', 'progress', 'enddate'],
-	_m7ad1: ['name', 'startdate', 'progress', 'enddate'],
-	_917gb: ['name', 'startdate', 'progress', 'enddate'],
-	_1236d: ['name', 'startdate', 'progress', 'enddate'],
-	_k8450: ['name', 'startdate', 'progress', 'enddate'],
-	_u184b: ['name', 'startdate', 'progress', 'enddate'] };
+	_1235d: ['name', 'startdate', 'progress'],
+	_m7ad1: ['name', 'startdate', 'progress', 'enddate', 'scheduler' ],
+	_917gb: ['name', 'progress', 'enddate'],
+	_1236d: ['name', 'startdate', 'progress', 'enddate', 'scheduler' ],
+	_k8450: ['name', 'startdate', 'progress', 'enddate', 'scheduler' ],
+	_u184b: ['name', 'startdate', 'progress', 'enddate', 'scheduler' ] };
 
 export const cellTypes = {
 	text: {

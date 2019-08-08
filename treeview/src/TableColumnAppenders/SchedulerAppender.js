@@ -43,6 +43,22 @@ const SchedulerAppender = (props) => {
 
 	const extrasnaps = 0 //Math.ceil(schedulerWidth/timeWidth)
 
+	const canOpenRightClickMenu = (key) => {
+		return props.editableCells && props.editableCells[key] && props.editableCells[key].includes('scheduler')
+	}
+
+	const getEditableBubbleSides = (key) => {
+		const propertyToSide = {startdate: 'left', enddate: 'right'}
+		const schedulerChangableProperties = ['startdate','enddate']
+		let editableSides = props.editableCells && props.editableCells[key] && props.editableCells[key].filter(col=>schedulerChangableProperties.includes(col)).map(property=>propertyToSide[property])
+		if(editableSides && editableSides.includes('left') && editableSides.includes('right')){editableSides.push('middle')}
+		return editableSides
+	}
+	const isBubbleSideEditable = (key,side) => {
+		const editableSides = getEditableBubbleSides(key)
+		return editableSides ? editableSides.includes(side) : false
+	}
+
 	const getShiftedStart = (d,r) => {
 		// EXPERIMENTAL -- deals with all the snaps being on sunday. REMOVE WHEN STUFF WORKS PROPERLY
 		if (r === 'week') {
@@ -68,12 +84,14 @@ const SchedulerAppender = (props) => {
 	
 	//#region Mouse Interactions
 	const bubbleclickdown = (key,event,side)=>{
+		if(!isBubbleSideEditable(key,side)){return}
 		setMouseDownOnBubble({key:key, location:side, dragDiffs:[0,0]})
 		props.setBubbleSideColour(key,highlightcolour,side)
 		props.clearChanges();
 	}
 
-	const bubblemiddleclickdown = (key,event,side)=>{		
+	const bubblemiddleclickdown = (key,event,side)=>{
+		if(!isBubbleSideEditable(key,side)){return}
 		const mousedownpos = getInternalMousePosition(event)
 		const dragDiffs =[
 			mousedownpos[0]-getNearestSnapXToDate(props.data[key].startdate,snaps),
@@ -84,12 +102,14 @@ const SchedulerAppender = (props) => {
 	}
 
 	const bubbleclickup = (key,event,side)=>{
+		if(!isBubbleSideEditable(key,side)){return}
 		if(key !== mouseDownOnBubble.key){
 			props.tryPerformLink(key, mouseDownOnBubble.key, side, mouseDownOnBubble.location);
 		}
 		props.setOriginalColour(key, side)
 	}
 	const bubblemiddleclickup = (key,event, side)=>{
+		if(!isBubbleSideEditable(key,side)){return}
 		if(!['left','right'].includes(mouseDownOnBubble.location) && key!==mouseDownOnBubble.key){
 			props.tryPerformAssociation(key, mouseDownOnBubble.key);
 		}
@@ -97,20 +117,25 @@ const SchedulerAppender = (props) => {
 	}
 
 	const bubblemousein = (key, event, side)=>{if(	event.buttons!==0 && mouseDownOnBubble.key!==key && mouseDownOnBubble.location!=='middle'){
+		if(!isBubbleSideEditable(key,side)){return}
 		props.setBubbleSideColour(key, highlightcolour, side)}
 	}
-	const bubblemiddlemousein = (key,event)=>{if(event.buttons!==0 && mouseDownOnBubble.key!==key && mouseDownOnBubble.location==='middle'){
+	const bubblemiddlemousein = (key,event,side)=>{if(event.buttons!==0 && mouseDownOnBubble.key!==key && mouseDownOnBubble.location==='middle'){
+		if(!isBubbleSideEditable(key,side)){return}
 		props.setBubbleSideColour(mouseDownOnBubble.key,props.data[key].colours.original,'middle')}
 	}
 	
 	const bubblemouseout = (key,event, side)=>{if(event.buttons!==0 && mouseDownOnBubble.key!==key && mouseDownOnBubble.location!=='middle'){
+		if(!isBubbleSideEditable(key,side)){return}
 		props.setOriginalColour(key,side)}}
-	const bubblemiddlemouseout = (key,event)=>{if(event.buttons!==0 && mouseDownOnBubble.key!==key && mouseDownOnBubble.location==='middle'){
-		props.setOriginalColour(key,'middle');
+	const bubblemiddlemouseout = (key,event,side)=>{if(event.buttons!==0 && mouseDownOnBubble.key!==key && mouseDownOnBubble.location==='middle'){
+		if(!isBubbleSideEditable(key,side)){return}
+		props.setOriginalColour(key,side);
 		props.setOriginalColour(mouseDownOnBubble.key,'middle')}}
 
 	const bubbleOnContextMenu = (key,event)=>{
 		event.preventDefault();
+		if(!canOpenRightClickMenu(key)){return}
 		const position = getInternalMousePosition(event)
 		setBubbleContextMenuKeyAndPosition({key:key, position:position});
 		
@@ -203,8 +228,8 @@ const SchedulerAppender = (props) => {
 				position: contextMenuPosition,
 				closeMenu: ()=>{setBubbleContextMenuKeyAndPosition({key:null,position:null})},
 				options: {
-					removeLink: <div onClick={()=>props.onRemoveLink(bubbleContextMenuKeyAndPosition.key)}>Remove Link</div>, 
-					deleteBubble: <div onClick={()=>props.deleteBubble(bubbleContextMenuKeyAndPosition.key)}>Delete Bubble</div> }
+					removeLink: <div onClick={()=>{props.onRemoveLink(bubbleContextMenuKeyAndPosition.key)}}>Remove Link</div>, 
+					deleteBubble: <div onClick={()=>{props.deleteBubble(bubbleContextMenuKeyAndPosition.key)}}>Delete Bubble</div> }
 			},
 			schedulerOptions: {
 				mode: [schedulerResolution,((r)=>setSchedulerResolution(r))],
@@ -252,7 +277,8 @@ const SchedulerAppender = (props) => {
 					text:tableData[rowId].name,
 					shadow: shadow,
 					mouseOnScheduler: clickedOnScheduler,
-					shape: tableData[rowId].shape
+					shape: tableData[rowId].shape,
+					editableSides: getEditableBubbleSides(rowId)
 				}
 			}
 		}

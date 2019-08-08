@@ -20,6 +20,7 @@ const Bubble = React.memo((props) => {
 	var key = props.bkey
 	var text = props.text
 	var shape = props.shape || 'bubble'
+	var editableSides = props.editableSides || ['left','middle','right']
 
 	// Must be longer than it is tall
 	//Path arcs  rx ry x-axis-rotation large-arc-flag sweep-flag dx dy
@@ -65,24 +66,26 @@ const Bubble = React.memo((props) => {
 	}
 
 	let filterStyle = !props.shadow ? 'url(#'+key+')' : ''
+	console.log(editableSides)
+	const getCursorStyle = (side) =>  editableSides.includes(side) ? {cursor: 'pointer'} : {};
 	return(
-		<g key={key} style={{cursor: 'pointer'}} onContextMenu={(event=>onContextMenu(key,event))}>
+		<g key={key} onContextMenu={(event=>onContextMenu(key,event))}>
 			<defs>
 				<filter id={key}>
 					<feDropShadow dx="0" dy="0" floodColor={"black"} stdDeviation="1"/>
 				</filter>
 			</defs>
-			{leftend && !isNaN(props.startpoint[0]) && <path d={leftend} fill={leftcolour} strokeWidth='0'
+			{leftend && !isNaN(props.startpoint[0]) && <path d={leftend} fill={leftcolour} strokeWidth='0' style={getCursorStyle('left')}
 				onPointerDown   =	{(event)=>leftclickdown(key,event)}
 				onPointerUp     =	{(event)=>leftclickup(key,event)}
 				onPointerEnter  =	{(event)=>leftmousein(key,event)}
 				onPointerLeave  =	{(event)=>leftmouseout(key,event)}/>}
-			{middle && !isNaN(props.startpoint[0]) && <path d={middle} fill={colour} strokeWidth='0'
+			{middle && !isNaN(props.startpoint[0]) && <path d={middle} fill={colour} strokeWidth='0' style={getCursorStyle('middle')}
 				onPointerDown   =	{(event)=>middleclickdown(key,event)}
 				onPointerUp     =   {(event)=>middleclickup(key,event)}
 				onPointerEnter  =	{(event)=>middlemousein(key,event)}
 				onPointerLeave  =	{(event)=>middlemouseout(key,event)}/>}
-			{rightend && !isNaN(props.startpoint[0]) && <path d={rightend} fill={rightcolour} strokeWidth='0'
+			{rightend && !isNaN(props.startpoint[0]) && <path d={rightend} fill={rightcolour} strokeWidth='0' style={getCursorStyle('right')}
 				onPointerDown   =	{(event)=>rightclickdown(key,event)}
 				onPointerUp     =	{(event)=>rightclickup(key,event)}
 				onPointerEnter  =	{(event)=>rightmousein(key,event)}
