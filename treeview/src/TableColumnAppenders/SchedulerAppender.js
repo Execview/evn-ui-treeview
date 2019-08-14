@@ -38,7 +38,9 @@ const SchedulerAppender = (props) => {
 	const tempSchedulerResolution = props.resolution || 'day';
 
 	const initialStartDate = props.start || new Date(Math.min(...Object.keys(props.data).map(key=>props.data[key].startdate)))
-	const [schedulerStart, actuallySetSchedulerStart] = useState(initialStartDate)
+	const [schedulerStart, actuallySetSchedulerStart] = useState(null)
+	useEffect(()=>{setSchedulerStart(initialStartDate)},[])
+
 	const [schedulerResolution, actuallySetSchedulerResolution] = useState(tempSchedulerResolution)
 
 	const extrasnaps = 0 //Math.ceil(schedulerWidth/timeWidth)
