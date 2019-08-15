@@ -96,8 +96,6 @@ export default class Table extends Component {
 			newData[newInvalidCells[i].id] = this.state.data[newInvalidCells[i].id];
 		}
 
-		// console.log(newWidths);
-
 		this.setState({
 			columnsInfo: defaults.columnsInfo,
 			orderedData: newOrderedData,
@@ -115,19 +113,6 @@ export default class Table extends Component {
 		window.removeEventListener('resize', this.resizeTable);
 	}
 
-	defaultOnSave = ((rowId, rowData, editableData) => {
-		this.setState({
-			data: {
-				...this.state.data,
-				[rowId]: rowData
-			},
-			editableCells: {
-				...this.state.editableCells,
-				[rowId]: editableData
-			}
-		});
-	});
-
 	getDefaults(props) {
 		const toReturn = {
 			columnsInfo: props.columnsInfo,
@@ -144,8 +129,8 @@ export default class Table extends Component {
 					}
 				}
 			}
-			return uniqueColumns
-		}
+			return uniqueColumns;
+		};
 		const data = props.data || {};
 		toReturn.columnsInfo = props.columnsInfo || getUniqueColumns(data).reduce((total, uniqueColumn) => { return { ...total, [uniqueColumn]: { cellType: 'text', headerData: uniqueColumn } }; }, {});
 
@@ -157,6 +142,19 @@ export default class Table extends Component {
 
 		return toReturn;
 	}
+
+	defaultOnSave = ((rowId, rowData, editableData) => {
+		this.setState({
+			data: {
+				...this.state.data,
+				[rowId]: rowData
+			},
+			editableCells: {
+				...this.state.editableCells,
+				[rowId]: editableData
+			}
+		});
+	});
 
 	onMouseDown = (e, colName) => {
 		e.stopPropagation();
@@ -181,10 +179,6 @@ export default class Table extends Component {
 		this.setState({ widths: { ...this.state.widths, [this.state.columnClicked]: newVal, [nextCol]: nextVal } });
 	}
 
-	setActive = (id, col) => {
-		this.setState({ activeCell: [id, col] });
-	}
-
 	removeListener = (e) => {
 		e.stopPropagation();
 		e.preventDefault();
@@ -194,7 +188,7 @@ export default class Table extends Component {
 	}
 
 	validateSave = (rowId, colId, cellText) => {
-		let newInvalidCells = this.state.invalidCells;
+		let newInvalidCells = [...this.state.invalidCells];
 		const editableRow = [...this.state.editableCells[rowId]];
 		const updatedRow = { ...this.state.data[rowId] };
 		updatedRow[colId] = cellText;
@@ -216,22 +210,20 @@ export default class Table extends Component {
 			}
 		}
 
-		if (hasErrors) {
-			this.setState({
-				data: {
-					...this.state.data,
-					[rowId]: objReturned.updatedRow
-				},
-				editableCells: {
-					...this.state.editableCells,
-					[rowId]: objReturned.editableRow
-				},
-				invalidCells: newInvalidCells,
-				activeCell: [null, null]
-			});
-		} else {
-			this.setState({ invalidCells: newInvalidCells, activeCell: [null, null] }, (() => this.state.onSave(rowId, objReturned.updatedRow, objReturned.editableRow)));
-		}
+		
+		this.setState({
+			data: {
+				...this.state.data,
+				[rowId]: objReturned.updatedRow
+			},
+			editableCells: {
+				...this.state.editableCells,
+				[rowId]: objReturned.editableRow
+			},
+			invalidCells: newInvalidCells,
+		});
+
+		if (!hasErrors) { this.state.onSave(rowId, objReturned.updatedRow, objReturned.editableRow); }
 	}
 
 	sortData(col, cellType) {
@@ -306,7 +298,7 @@ export default class Table extends Component {
 								} else {
 									headerStyle.width = Math.floor(this.state.widths[colkey]);
 									data = { spans, title: col.headerData, sortData: () => { if (this.props.dataSort && this.props.dataSort[col.cellType]) { this.sortData(colkey, col.cellType); } }, };
-									type = { display: <HeaderCellDisplay /> };
+									type = <HeaderCellDisplay />;
 								}
 
 								return (
@@ -320,10 +312,6 @@ export default class Table extends Component {
 					</thead>
 					<tbody>
 						{this.state.orderedData.map((entry) => {
-							let column = null;
-							if (entry === this.state.activeCell[0]) {
-								column = this.state.activeCell[1];
-							}
 							let selectedRowStyle = {};
 							if (this.props.selectedRow === entry) {
 								// selectedRowStyle = {border:'1px solid rgba(255,255,255,0.3)'};
@@ -334,14 +322,12 @@ export default class Table extends Component {
 								<tr className={'table-row ' + (style.tableRow || 'table-row-visuals')} key={`tr${entry}`} style={selectedRowStyle}>
 									<Row
 										columnsInfo={this.props.columnsInfo}
-										activeColumn={column}
 										editableCells={this.state.editableCells[entry]}
 										invalidCells={this.state.invalidCells.filter(obj => obj.id === entry).map(el => el.col)}
 										rowData={this.state.data[entry]}
 										widths={this.state.widths}
 										heights={this.state.heights}
 										wrap={this.props.wrap}
-										onSetActive={(col) => this.setActive(entry, col)}
 										cellTypes={this.props.cellTypes}
 										onValidateSave={(col, data) => this.validateSave(entry, col, data)}
 										rules={this.props.rules}

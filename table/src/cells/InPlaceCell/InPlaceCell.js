@@ -16,7 +16,7 @@ const InPlaceCell = (props) => {
 		setEditMode(false);
 	};
 
-	const style = { padding: '5px', paddingRight: '15px', textAlign: 'left', border: 'none', borderRadius: '4px', fontSize: '25px', ...props.style };
+	const style = { padding: '5px', textAlign: 'left', border: 'none', borderRadius: '4px', fontSize: '25px', ...props.style };
 	const newProps = { ...props,
 		data: value,
 		isActive: editMode,
@@ -24,9 +24,8 @@ const InPlaceCell = (props) => {
 		onValidateSave: ((data) => { inPlaceOnValidateSave(data); props.onValidateSave(data)})
 	};
 
-	
-	return ( //if you have an editor and display, or neither. extra ! are needed because ^ is bitwise, not logical.
-		<div onPointerDown={(e) => { if (!(!(props.type && props.type.editor) ^ !(props.type && props.type.display))) { e.preventDefault(); e.stopPropagation(); setEditMode(true); } }} className={classes['default-style'] + ' ' + (props.className || '')}>
+	return (
+		<div onPointerDown={(e) => { if(props.type && props.type.editor) { e.preventDefault(); e.stopPropagation(); setEditMode(true); } }} className={classes['default-style'] + ' ' + (props.className || '')}>
 			<Cell {...newProps} />
 		</div>
 	)

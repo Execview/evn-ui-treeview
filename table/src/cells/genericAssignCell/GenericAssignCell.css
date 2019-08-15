@@ -13,6 +13,7 @@
 .generic-cell {
   height:100%;
   user-select: none;
+  position: relative;
 }
 
 .absolute-caret {

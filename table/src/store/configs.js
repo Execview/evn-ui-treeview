@@ -1,16 +1,11 @@
 import React from 'react';
 import { TripleFill, CircleUser } from '@execview/reusable';
-import TextareaCellEditor from '../cells/TextAreaCell/TextareaCellEditor';
-import TextareaCellDisplay from '../cells/TextAreaCell/TextareaCellDisplay';
-import TextCellEditor from '../cells/TextCell/TextCellEditor';
-import DropdownCellEditor from '../cells/dropdownCell/DropdownCellEditor';
+import DropdownCell from '../cells/dropdownCell/DropdownCell';
 import ImageDisplay from '../cells/imageDisplay/ImageDisplay';
-import GenericAssignDisplay from '../cells/genericAssignCell/GenericAssignDisplay';
-import ColorCellDisplay from '../cells/colorCell/ColorCellDisplay';
-import ColorCellEditor from '../cells/colorCell/ColorCellEditor';
-import DateCellDisplay from '../cells/dateCell/DateCellDisplay';
-import DateCellEditor from '../cells/dateCell/DateCellEditor';
-
+import GenericAssignCell from '../cells/genericAssignCell/GenericAssignCell';
+import ColorCell from '../cells/colorCell/ColorCell';
+import DateCell from '../cells/dateCell/DateCell';
+import TextCell from '../cells/TextCell/TextCell'
 
 
 
@@ -30,7 +25,7 @@ export const columnsInfo1 = {
 };
 
 export const columnsInfo2 = {
-	activityId: { cellType: 'textarea', headerData: 'Activity ID', width: 5, minWidth: 25 },
+	activityId: { cellType: 'text', headerData: 'Activity ID', width: 5, minWidth: 25 },
 	startDate: { cellType: 'date', headerData: 'Start Date', width: 10 },
 	latestProgress: { cellType: 'textarea', headerData: 'Latest Progress', rule: 'textSize' },
 	dueDate: { cellType: 'date', headerData: 'Due Date', width: 10 },
@@ -92,7 +87,7 @@ export const newData1 = {
 };
 
 export const newData2 = {
-	_1: { activityId: '12425', activityTitle: 'Fix PDF', startDate: new Date('2017-08-17T10:39:57.362Z'), latestProgress: 'Fix Chromium', progress: 'green', dueDate: new Date('2018-03-17T10:39:57.362Z'), employeeName: '', assignedUsers: [{ user: 'abd4', role: 'Project Manager', department: 'Kitten Petter' }, { user: 'gte3', role: 'Project Manager' }, { user: 'plo4', role: 'Pleb' }] },
+	_1: { activityId: '12425', activityTitle: 'Fix PDF', startDate: new Date('2017-08-17T10:39:57.362Z'), progress: 'green', dueDate: new Date('2018-03-17T10:39:57.362Z'), employeeName: '', assignedUsers: [{ user: 'abd4', role: 'Project Manager', department: 'Kitten Petter' }, { user: 'gte3', role: 'Project Manager' }, { user: 'plo4', role: 'Pleb' }] },
 	_2: { activityId: '1251251', activityTitle: 'Mobile Shipment', startDate: new Date('2017-08-17T10:39:57.362Z'), latestProgress: 'The current task is in progress and about to be evaluated', progress: 'amber', dueDate: new Date('2017-08-17T10:39:57.362Z'), employeeName: 'Mark', assignedUsers: [{ user: 'abd4', role: 'Legendary Consumer' }] },
 	_3: { activityId: '11241', activityTitle: 'Things to Do', startDate: new Date('2017-08-17T10:39:57.362Z'), latestProgress: 'In progress', progress: 'red', employeeName: 'Paul', assignedUsers: [{ user: 'rew7', role: 'Wizard' }, { user: 'gte3', role: 'Project Manager' }] },
 	_4: { activityId: '765976', activityTitle: 'Replace Tire', startDate: new Date('2017-08-17T10:39:57.362Z'), latestProgress: 'Done', dueDate: new Date('1996-09-13T10:39:57.362Z'), employeeName: 'Agam', assignedUsers: [{ user: 'jio9', role: 'Project Manager' }] },
@@ -186,48 +181,23 @@ const leftTitle = <p className="dropdown-title">Assigned Users</p>;
 const rightTitle = <p className="dropdown-title">Available Users</p>;
 
 export const cellTypes = {
-	textarea: {
-		display: <TextareaCellDisplay />,
-		editor: <TextareaCellEditor />
-	},
-	dropdown: {
-		display: <TextareaCellDisplay />,
-		editor: <DropdownCellEditor dropdownList={countries} />
-	},
-	users: {
-		display: <UserRoleDisplay userProfiles={users} />,
-	},
-	genericAdder: {
-		display: <GenericAssignDisplay display={<Display />} getOption={getOption} getSearchField={getSearchField} items={users} leftTitle={leftTitle} rightTitle={rightTitle}/>,
-	},
-	text: {
-		display: <TextareaCellDisplay />,
-		editor: <TextCellEditor />
-	},
-	number: {
-		display: <TextareaCellDisplay />,
-		editor: <TextCellEditor />
-	},
-	color: {
-		display: <ColorCellDisplay />,
-		editor: <ColorCellEditor />
-	},
-	date: {
-		display: <DateCellDisplay />,
-		editor: <DateCellEditor />
-	},
-	userHeader: {
-		display: <UserHeaderDisplay />
-	},
-	images: {
-		display: <ImageDisplay />
-	}
+	text: <TextCell />,
+	textarea: <TextCell wrap={true} />,
+	number: <TextCell />,
+	dropdown: <DropdownCell dropdownList={countries} />,
+	users: <UserRoleDisplay userProfiles={users} />,
+	genericAdder: <GenericAssignCell display={<Display />} getOption={getOption} getSearchField={getSearchField} items={users} leftTitle={leftTitle} rightTitle={rightTitle} />,
+	color: <ColorCell />,
+	date: <DateCell />,
+	userHeader: <UserHeaderDisplay />,
+	images: <ImageDisplay />
 };
 
 export const rules = {
 	textSize: {
 		errorMessage: 'The size of the field must be of at least 10 characters',
 		validator: function validateString(text) {
+			if(!text){return false}
 			if (text.replace(/\n/g, '').length >= 10) {
 				return true;
 			}

@@ -5,16 +5,13 @@ import './App.css';
 import * as actionTypes from './store/actionTypes';
 import { cellTypes, dataSort, rowValidation, rules, columnsInfo } from './store/configSwitch';
 import cats from './store/ElCatso';
-
-import InPlaceCell from './cells/InPlaceCell/InPlaceCell'
-import ColorCellDisplay from './cells/colorCell/ColorCellDisplay'
-import ColorCellEditor from './cells/colorCell/ColorCellEditor'
-import DateCellDisplay from './cells/dateCell/DateCellDisplay'
-import DateCellEditor from './cells/dateCell/DateCellEditor'
-import DropdownCellEditor from './cells/dropdownCell/DropdownCellEditor'
-import TextareaCellDisplay from './cells/TextAreaCell/TextareaCellDisplay'
-import GenericAssignDisplay from './cells/genericAssignCell/GenericAssignDisplay'
-import ImageDisplay from './cells/imageDisplay/ImageDisplay'
+import TextCell from './cells/TextCell/TextCell';
+import InPlaceCell from './cells/InPlaceCell/InPlaceCell';
+import ColorCell from './cells/colorCell/ColorCell';
+import DateCell from './cells/dateCell/DateCell';
+import DropdownCell from './cells/dropdownCell/DropdownCell';
+import GenericAssignCell from './cells/genericAssignCell/GenericAssignCell';
+import ImageDisplay from './cells/imageDisplay/ImageDisplay';
 
 const App = (props) => {
 	const [data, setData] = useState({})
@@ -39,9 +36,9 @@ const App = (props) => {
 
 
 	const InPlaceCellPropsText = { data: 'In Place Cell Text', onValidateSave: ((x) => { console.log(x); }) };
-	const InPlaceCellPropsColour = { data: 'green', type: { display: <ColorCellDisplay />, editor: <ColorCellEditor /> }, onValidateSave: ((x) => { console.log(x) }) }
-	const InPlaceCellPropsDate = { data: new Date('2019-12-25'), type: { display: <DateCellDisplay />, editor: <DateCellEditor /> }, onValidateSave: ((x) => { console.log(x) }) }
-	const InPlaceCellPropsDropdown = { data: 'apple', type: { display: <TextareaCellDisplay />, editor: <DropdownCellEditor dropdownList={['apple', 'banana', 'cat']} /> }, onValidateSave: ((x) => { console.log(x); }) };
+	const InPlaceCellPropsColour = { data: 'green', type: <ColorCell />, onValidateSave: ((x) => { console.log(x); }) };
+	const InPlaceCellPropsDate = { data: new Date('2019-12-25'), type: <DateCell />, onValidateSave: ((x) => { console.log(x); }) };
+	const InPlaceCellPropsDropdown = { data: 'apple', type: <DropdownCell dropdownList={['apple', 'banana', 'cat']} />, onValidateSave: ((x) => { console.log(x); }) };
 
 	const gaais = { a: { name: 'apple', image: 'https://i.imgur.com/ruSaBxM.jpg' }, b: { name: 'banana', image: 'https://i.imgur.com/6lreFDw.jpg' }, c: { name: 'cat', image: 'https://i.imgur.com/OYBnpPT.jpg' } };
 	const Display = (props) => {
@@ -49,7 +46,7 @@ const App = (props) => {
 		const imageDisplayData = gaais && (items.map(u => gaais[u].image) || []);
 		return <ImageDisplay data={imageDisplayData} style={props.style} />;
 	};
-	const InPlaceCellPropsGenericAssign = { data: ['b', 'c'], type: { display: <GenericAssignDisplay items={gaais} getOption={id => <div>{gaais[id].name}</div>} getSearchField={id => gaais[id].name} display={<Display />} /> }, onValidateSave: ((x) => { console.log(x); }) };
+	const InPlaceCellPropsGenericAssign = { data: ['b', 'c'], type: <GenericAssignCell items={gaais} getOption={id => <div>{gaais[id].name}</div>} getSearchField={id => gaais[id].name} display={<Display />} />, onValidateSave: ((x) => { console.log(x); }) };
 
 	return (
 		<div className="App">
@@ -75,6 +72,7 @@ const App = (props) => {
 				<InPlaceCell {...InPlaceCellPropsDropdown} />
 				<InPlaceCell {...InPlaceCellPropsGenericAssign} />
 			</div>
+			<DropdownCell dropdownList={['apple', 'banana', 'cat']} data={'banana'} onValidateSave={(d)=>console.log(d)}/>
 		</div>
 	);
 };

@@ -1,7 +1,6 @@
 import React from 'react';
 import Cell from '../cells/Cell/Cell';
-import TextareaCellDisplay from '../cells/TextAreaCell/TextareaCellDisplay';
-import TextareaCellEditor from '../cells/TextAreaCell/TextareaCellEditor';
+import TextCell from '../cells/TextCell/TextCell'
 import './Row.css';
 
 
@@ -12,8 +11,7 @@ const Row = (props) => {
 	const invalidCells = props.invalidCells || [];
 	const widths = props.widths || keys.reduce((total, objKey) => { return { ...total, [objKey]: 200 }; }, {});
 	const heights = props.heights || keys.reduce((total, objKey) => { return { ...total, [objKey]: 0 }; }, {});
-	const onSetActive = props.onSetActive || (() => { console.log('row needs onSetActive brah, which sets a cell active'); });
-	const cellTypes = props.cellTypes || { text: { display: <TextareaCellDisplay />, editor: <TextareaCellEditor /> } };
+	const cellTypes = props.cellTypes || { text: <TextCell /> };
 	const rules = props.rules || {};
 	const onMouseDown = props.onMouseDown || (() => false);
 	const cellStyleClass = props.style || {};
@@ -22,9 +20,7 @@ const Row = (props) => {
 			const editRights = editableCells.includes(col);
 			const red = invalidCells.includes(col);
 			const columnCellType = cellTypes[columnsInfo[col].cellType]
-			const isActive = (col === props.activeColumn && editRights) && columnCellType.editor;
 
-			const onClickAction = isActive ? null : (() => onSetActive(col));
 			const lastOne = index === keys.length - 1;
 			let style = { width: Math.round(widths[col]), minHeight: heights[col] };
 			if (!props.wrap) {
@@ -36,14 +32,13 @@ const Row = (props) => {
 					{!lastOne && props.onMouseDown && <div style={{ touchAction: 'none', position: 'absolute', transform: 'translateX(7px)', top: 0, right: 0, height: '100%', width: '15px', cursor: 'w-resize' }} onPointerDown={e => onMouseDown(e, col)} />}
 					<div
 						title={columnsInfo[col].colTitle}
-						className={(isActive ? 'active-cell' : 'table-label ') + (editRights ? '' : 'no-edit')}
-						onClick={onClickAction}
+						className={'table-label ' + (editRights ? '' : 'no-edit')}
 					>
 						<Cell
 							style={style}
 							data={props.rowData[col]}
 							type={columnCellType}
-							isActive={isActive}
+
 							isEditable={editRights}
 							onValidateSave={data => props.onValidateSave(col, data)}
 							errorText={red ? errorText : null}

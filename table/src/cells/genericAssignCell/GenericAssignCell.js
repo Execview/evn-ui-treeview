@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import './GenericAssignDisplay.css';
+import './GenericAssignCell.css';
 import GenericAssign from './GenericAssign';
 
-const GenericAssignDisplay = (props) => {
+const GenericAssignCell = (props) => {
 	const [open, setOpen] = useState(false);
 	const allItems = props.items;
 	const data = props.data || [];
@@ -16,4 +16,4 @@ const GenericAssignDisplay = (props) => {
 		</div>
 	);
 };
-export default GenericAssignDisplay;
+export default GenericAssignCell;

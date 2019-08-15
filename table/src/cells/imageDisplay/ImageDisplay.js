@@ -14,7 +14,7 @@ const ImageDisplay = (props) => {
 	}
 	const minHeight = props.style.minHeight || 40;
 
-	if (data.length===0 && props.isEditable) { return <div className={classes['empty-editable-container']} style={{ minHeight }} ><p className={classes['empty-editable']}>{emptyText}</p></div>; }
+	if (data.length === 0 && props.isEditable) { return <div className={classes['empty-editable-container']} style={{ minHeight }} ><p className={classes['empty-editable']}>{emptyText}</p></div>; }
 	return (
 		<div className={classes['user-cell']} style={{ minHeight }}>
 			<div className={classes['users-container']}>

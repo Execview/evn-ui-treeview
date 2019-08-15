@@ -1,3 +1,7 @@
+.dropdown-container {
+  position: relative;
+}
+
 .dropdown-celleditor{
   position:absolute;
   left:0;
