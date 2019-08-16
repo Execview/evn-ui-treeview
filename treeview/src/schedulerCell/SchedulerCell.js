@@ -1,20 +1,20 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Bubble from './Bubble';
 import classes from './SchedulerCell.module.css';
 
-class SchedulerCell extends Component {	
-  	render() {
-		const touchAction = this.props.data.shadow ? 'none' : 'pan-y'
-    	return (
-			<div className={classes["cell-container"]} style={{touchAction:touchAction, userSelect: 'none'}}>
-				<svg onPointerDown={this.props.data.mouseOnScheduler} style={{position:'absolute', height:'100%', width: '100%', filter: this.props.data.shadow?"drop-shadow(-2px -2px 13px "+this.props.data.colour+")":""}}>
-					<Bubble
-						{...this.props.data}
-					/>
-				</svg>
-			</div>
-		);
-  	}
+const SchedulerCell = (props) => {
+	const data = props.data || {}
+	const style = props.style || []
+	const touchAction = data.shadow ? 'none' : 'pan-y'
+	return (
+		<div className={classes["cell-container"]} style={{minHeight: style.minHeight,touchAction:touchAction, userSelect: 'none'}}>
+			<svg onPointerDown={data.mouseOnScheduler} style={{position:'absolute', height:'100%', width: '100%', filter: data.shadow?"drop-shadow(-2px -2px 13px "+data.colour+")":""}}>
+				<Bubble
+					{...data}
+				/>
+			</svg>
+		</div>
+	);
 }
 
 export default SchedulerCell;

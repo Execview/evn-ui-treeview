@@ -69,7 +69,7 @@ const TreeAppender = (props) => {
 		React.cloneElement(newProps.children,
 		{...newProps,
 		children: newProps.children && newProps.children.props.children,
-		cellTypes: {...newProps.cellTypes, tree: { display: <TreeCell /> }},
+		cellTypes: {...newProps.cellTypes, tree: <TreeCell /> },
 		data: tableData,
 		columnsInfo: columnsInfo})
 	);

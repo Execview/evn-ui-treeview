@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { TextCellEditor, TextareaCellDisplay, ColorCellDisplay, ColorCellEditor, DateCellDisplay, DateCellEditor } from '@execview/table'
+import { TextCell, ColorCell, DateCell } from '@execview/table'
 
 import Data from './configData.json'
 
@@ -42,18 +42,9 @@ export const editableCells = {
 	_u184b: ['name', 'startdate', 'progress', 'enddate', 'scheduler' ] };
 
 export const cellTypes = {
-	text: {
-		display: <TextareaCellDisplay />,
-		editor: <TextCellEditor />
-	},
-	color: {
-		display: <ColorCellDisplay />,
-		editor: <ColorCellEditor />
-	},
-	date: {
-		display: <DateCellDisplay />,
-		editor: <DateCellEditor />
-	},
+	text: <TextCell />,
+	color: <ColorCell/>,
+	date: <DateCell/>,
 };
 
 export const rules = {

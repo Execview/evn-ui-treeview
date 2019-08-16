@@ -312,7 +312,7 @@ const SchedulerAppender = (props) => {
 				children: newProps.children && newProps.children.props.children,
 				data: addSchedulerData(),
 				columnsInfo: addSchedulerColumn(),
-				cellTypes: {...newProps.cellTypes, schedulerHeader: {display: <SchedulerHeader/>}, scheduler: {display: <SchedulerCell/>}},
+				cellTypes: {...newProps.cellTypes, schedulerHeader: <SchedulerHeader/>, scheduler: <SchedulerCell/>},
 				tableRef: tableRef,
 				onRender: ((x)=>{(newProps.onRender && newProps.onRender(x));onTableRender()}),
 				onSave: ((rowId, rowValues, editableValues)=>{( props.onSave && props.onSave(rowId, rowValues, editableValues)); onSaveScheduler(rowId, rowValues, editableValues); })
