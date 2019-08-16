@@ -61,16 +61,20 @@ const TextCell = (props) => {
 		</div>
 	);
 
+	const placeholderText = (props.placeholder || 'Type something here...');
+
 	const textareaProps = {
-		className: (classes['textarea'] + ' ' + textClasses + errorTextClasses + isEditableClasses),
+		className: (classes['textarea'] + ' ' + textClasses + errorTextClasses + isEditableClasses + (!textareaOpen && !text && props.isEditable ? classes['empty-editable'] : '')),
 		autoFocus: true,
+
 		onFocus: resizeSelf
 	};
 
 	const inputProps = {
 		className: (classes['input'] + ' ' + textClasses + errorTextClasses + isEditableClasses),
 		disabled: !props.isEditable,
-		autoFocus: props.autoFocus || false
+		autoFocus: props.autoFocus || false,
+		type: props.password ? 'password' : 'text'
 	};
 
 	const bothProps = {
@@ -78,10 +82,10 @@ const TextCell = (props) => {
 		onChange: (e => setText(e.target.value)),
 		onBlur: (submitTextContent),
 		onKeyPress,
-		placeholder: (!text && props.isEditable ? (props.placeholder || 'Type something here...') : ''),	
+		placeholder: (!text && props.isEditable ? placeholderText : ''),	
 	};
 
-	const textareaInput = !textareaOpen ? <p style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center' }} onClick={() => { if (props.isEditable) { setTextareaOpen(true); } }}>{text}</p> : <textarea />;
+	const textareaInput = !textareaOpen ? <p style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center' }} onClick={() => { if (props.isEditable) { setTextareaOpen(true); } }}>{text || (props.isEditable && placeholderText)}</p> : <textarea />;
 
 	const inputType = props.wrap ? textareaInput : <input />;
 
