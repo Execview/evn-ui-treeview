@@ -48,7 +48,6 @@ export default class Table extends Component {
 			column: '',
 			order: 'desc',
 			orderedData: Object.keys(data),
-			activeCell: [null, null],
 			invalidCells: [],
 			data: this.props.data,
 			editableCells: defaults.editableCells,

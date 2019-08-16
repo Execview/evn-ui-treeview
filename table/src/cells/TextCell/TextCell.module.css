@@ -22,6 +22,11 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font: inherit;
+  color: inherit;
+  width: inherit;
+  background: inherit;
+  box-sizing: border-box;
 }
 
 .cell-error {

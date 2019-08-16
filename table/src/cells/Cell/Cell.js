@@ -10,7 +10,7 @@ const Cell = (props) => {
 	const isEditable = typeof (props.isEditable) === 'boolean' ? props.isEditable : true;
 	
 	return (
-		React.createElement(type.type, { ...type.props, data, onValidateSave, isEditable, errorText, style })
+		React.createElement(type.type, { ...props, ...type.props, data, onValidateSave, isEditable, errorText, style })
 	);
 };
 
