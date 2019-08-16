@@ -19,7 +19,7 @@ const DropdownCell = (props) => {
 
 	const onBlur = () => { props.onValidateSave(props.data); setOpen(false); };
 
-	const options = displayedRows.reduce((total, option) => { return { ...total, [option]: option }; }, {});
+	const options = open && displayedRows.reduce((total, option) => { return { ...total, [option]: option }; }, {})
 	const edit = (
 		<div className="dropdown-container">
 			<div className="dropdown-celleditor">

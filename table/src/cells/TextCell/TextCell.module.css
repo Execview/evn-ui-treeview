@@ -14,7 +14,7 @@
 
 .textarea {
   font: inherit;
-  resize: none;
+  resize: vertical;
 }
 
 .input {

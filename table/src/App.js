@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
 import TableWrapper from './tableWrapper/TableWrapper';
 import './App.css';
@@ -37,7 +37,7 @@ const App = (props) => {
 
 	const InPlaceCellPropsText = { data: 'In Place Cell Text', onValidateSave: ((x) => { console.log(x); }) };
 	const InPlaceCellPropsColour = { data: 'green', type: <ColorCell />, onValidateSave: ((x) => { console.log(x); }) };
-	const InPlaceCellPropsDate = { data: new Date('2019-12-25'), type: <DateCell />, onValidateSave: ((x) => { console.log(x); }) };
+	const InPlaceCellPropsDate = useMemo(() => { return { data: new Date('2019-12-25'), type: <DateCell />, onValidateSave: ((x) => { console.log(x); }) }}, []);
 	const InPlaceCellPropsDropdown = { data: 'apple', type: <DropdownCell dropdownList={['apple', 'banana', 'cat']} />, onValidateSave: ((x) => { console.log(x); }) };
 
 	const gaais = { a: { name: 'apple', image: 'https://i.imgur.com/ruSaBxM.jpg' }, b: { name: 'banana', image: 'https://i.imgur.com/6lreFDw.jpg' }, c: { name: 'cat', image: 'https://i.imgur.com/OYBnpPT.jpg' } };

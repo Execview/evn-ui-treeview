@@ -1,36 +1,14 @@
-import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import errorIcon from '../../Resources/icons-info.svg';
 import classes from './TextCell.module.css';
 
-const TestTextCell = (props) => {
+const TextCell = (props) => {
 	const [showText, setShowText] = useState(false);
-	const data = props.data || '';
-	const [text, setText] = useState(data);
-
-	useEffect(() => {
-		setText(data);
-	}, [data]);
-
-	const inputRef = useRef();
-
-	const getInputFromRef = (ref) => {
-		const currentNode = ref.current || {};
-		const childNode = (currentNode.childNodes || [])[0] || {};
-		return childNode;
-	};
-
-	const resizeSelf = () => {
-		const childNode = getInputFromRef(inputRef);
-		if (childNode.type === 'textarea') {
-			childNode.style.height = '1px';
-			childNode.style.height = childNode.scrollHeight + 'px';
-		}
-	};
-
-	useLayoutEffect(resizeSelf);
-
+	const [text, setText] = useState('');
+	useEffect(() => setText(props.data || ''), [props.data]);
+	const [textareaOpen, setTextareaOpen] = useState((props.autoFocus && props.wrap) || false);
+	const style = props.style || {};
 	const errorText = props.errorText;
-
 	const showError = (e) => {
 		e.stopPropagation();
 		if (errorText !== '') {
@@ -41,21 +19,30 @@ const TestTextCell = (props) => {
 		}
 	};
 
-	const onChange = (value) => {
-		setText(value);
+	const onKeyPress = (e) => {
+		const childNode = e.target;
+		if (e.key === 'Enter' && !(e.shiftKey)) {
+			childNode && childNode.blur()
+		}
 	};
 
-	const onKeyPress = (e) => {
-		
-		if (e.key === 'Enter' && !(e.shiftKey)) {
-			const childNode = getInputFromRef(inputRef);
-			childNode && childNode.blur()
+	const submitTextContent = (e) => {
+		const val = e.target.value;
+		props.onValidateSave(val);
+		setTextareaOpen(false);
+	};
+
+	const resizeSelf = (e) => {
+		const childNode = e.target;
+		if (childNode.type === 'textarea') {
+			childNode.style.height = '1px';
+			childNode.style.height = childNode.scrollHeight + 'px';
 		}
 	};
 
 	
 	const hasError = typeof (errorText) === 'string';
-	const style = props.style || {};
+	
 	const optionalClasses = props.classes || {};
 	
 	const containerClasses = classes['textarea-cell-container'] + ' ' + classes['no-select'] + ' ' + (optionalClasses.container || '') + ' ';
@@ -76,32 +63,34 @@ const TestTextCell = (props) => {
 
 	const textareaProps = {
 		className: (classes['textarea'] + ' ' + textClasses + errorTextClasses + isEditableClasses),
-		onChange: ((e) => { onChange(e.target.value); resizeSelf(); }),
+		autoFocus: true,
+		onFocus: resizeSelf
 	};
 
 	const inputProps = {
 		className: (classes['input'] + ' ' + textClasses + errorTextClasses + isEditableClasses),
-	};
-
-
-	const bothProps = {
-		value: text,
-		onBlur: (() => { props.onValidateSave(text); }),
-		placeholder: (!text && props.isEditable ? (props.placeholder || 'Type something here...') : ''),
 		disabled: !props.isEditable,
-		onChange: (e => onChange(e.target.value)),
-		onKeyPress: onKeyPress,
 		autoFocus: props.autoFocus || false
 	};
 
-	const inputType = props.wrap ? <textarea row={1} /> : <input />;
+	const bothProps = {
+		value: text,
+		onChange: (e => setText(e.target.value)),
+		onBlur: (submitTextContent),
+		onKeyPress,
+		placeholder: (!text && props.isEditable ? (props.placeholder || 'Type something here...') : ''),	
+	};
+
+	const textareaInput = !textareaOpen ? <p style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center' }} onClick={() => { if (props.isEditable) { setTextareaOpen(true); } }}>{text}</p> : <textarea />;
+
+	const inputType = props.wrap ? textareaInput : <input />;
 
 	return (
-		<div className={containerClasses + errorContainerClasses} style={style} ref={inputRef} onClick={props.onClick}>
+		<div className={containerClasses + errorContainerClasses} style={style} onClick={props.onClick}>
 			{React.createElement(inputType.type, { ...inputType.props, ...bothProps, ...(props.wrap ? textareaProps : inputProps) })}
 			{errorIconEl}
 		</div>
 	);
 };
 
-export default TestTextCell;
+export default TextCell;
