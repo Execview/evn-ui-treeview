@@ -1,7 +1,7 @@
 
 const sendEvent = (token,link,argPayload,options={})=>{
 	
-	if(!(token && link)){console.log('missing arguments for sending events'); return}
+	if(!(link)){console.log('missing arguments for sending events'); return}
 	const payload = argPayload || {}
 	const holder = options.holder || ''
 	const method = options.method || 'POST'
@@ -18,16 +18,17 @@ const sendEvent = (token,link,argPayload,options={})=>{
 		body = payload
 	}
 
+	let headers = {}
+	if(method!=='GET'){headers["Content-Type"] = "application/json"}
+	if(token){headers["Authorization"] = "Bearer "+token}
+
 	const fetchOptions = {
 		method:method,
-		headers: {
-			"Content-Type": "application/json",
-			"Authorization": `Bearer ${token}`
-		},
+		headers: headers,
 		body:JSON.stringify(body)
 	}
 
-	debug && console.log({url: link,fetchOptions: fetchOptions})
+	debug && console.log({url: link,fetchOptions: {...fetchOptions, body:body}})
 
 	return fetch(link, fetchOptions)
 }

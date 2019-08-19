@@ -85,4 +85,6 @@ export default App;
 		// console.log(recursiveDeepDiffs(rdda,rddb))
 	
 	//sendEvent
-		// sendEvent('token','localhostDummy',{testing:'potato'},{holder:'farm',debug:true}).catch(res=>console.log(res.text()))
+		// sendEvent(null,'https://evnext-api.evlem.net/api/login',{username: 'namyts', password: 'password'},{debug:true})
+		// .then(res=>res.json())
+		// .then(data=>console.log(data))
