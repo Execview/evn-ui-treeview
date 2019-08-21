@@ -10,16 +10,21 @@ import TextCell from '../TextCell/TextCell';
 const DateCell = (props) => {
 	const [open, setOpen] = useState(false);
 
-	const selectedDate = props.data ? new Date(props.data) : new Date()
+	const selectedDate = props.data ? new Date(props.data) : new Date();
 	
 	const displayFormat = props.format || 'ddd DD/MMM/YYYY';
 	const dateString = props.data ? moment(props.data).format(displayFormat) : 'Date Unknown';
 	const submit = (date) => {
-		props.onValidateSave(date);
+		if (date && !isNaN(date.getTime())) {
+			props.onValidateSave(date);
+		} else {
+			props.onValidateSave(null);
+		}
 		setOpen(false);
 	};
 
 	const extraDatePickerProps = props.datepickerProps || {};
+
 	const datePickerProps = {
 		selected: selectedDate,
 		onSelect: ((changedDate) => { submit(changedDate); }),
@@ -41,9 +46,9 @@ const DateCell = (props) => {
 	const editorContent = moment(selectedDate).format(editorFormat);
 
 	const pickerAndEditor = (
-		<OCO OCO={() => setOpen(false)} eventTypes="pointerup">
-			<div style={{ height: '100%' }}>
-				<TextCell autoFocus={!isMobile} errorText={props.errorText} isEditable={props.isEditable} style={props.style} placeholder={editorFormat} data={editorContent} onValidateSave={(d) => { if (d === editorContent) { return; } submit(moment(d, editorFormat).toDate()); }} />
+		<OCO OCO={() => submit(props.data)} eventTypes="pointerup">
+			<div style={{ height: '100%', position: 'relative' }}>
+				<TextCell autoFocus={!isMobile} errorText={props.errorText} classes={props.editorClasses} isEditable={props.isEditable} style={props.style} placeholder={editorFormat} data={editorContent} onValidateSave={(d) => { if (d === editorContent) { return; } submit(moment(d, editorFormat).toDate()); }} />
 				<div className="desktop-datepicker">{picker}</div>
 			</div>
 		</OCO>

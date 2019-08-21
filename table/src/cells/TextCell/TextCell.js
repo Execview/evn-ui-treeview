@@ -45,7 +45,7 @@ const TextCell = (props) => {
 	
 	const optionalClasses = props.classes || {};
 	
-	const containerClasses = classes['textarea-cell-container'] + ' ' + classes['no-select'] + ' ' + (optionalClasses.container || '') + ' ';
+	const containerClasses = classes['default-cell-container'] + ' ' + (optionalClasses.container || classes['textarea-cell-container']) + ' ' + classes['no-select'] + ' ';
 	const errorContainerClasses = hasError ? classes['cell-error'] : '';
 
 	const textClasses = classes['textarea-cell-text'] + ' ' + (props.isEditable ? classes['no-select'] : '') + ' ' + (optionalClasses.text || '') + ' ';
@@ -55,7 +55,7 @@ const TextCell = (props) => {
 	const errorIconEl = hasError && (
 		<div>
 			<img className={classes['error-icon']} src={errorIcon} alt="info" onClick={e => showError(e)} />
-			<div className={classes['error-info'] + ' ' + (showText ? classes['error-shown'] : classes['error-hidden'])}>
+			<div className={classes['error-info'] + ' ' + optionalClasses.errorText + ' ' + (showText ? classes['error-shown'] : classes['error-hidden'])}>
 				<p className={classes['error-text']}>{errorText}</p>
 			</div>
 		</div>
@@ -79,7 +79,7 @@ const TextCell = (props) => {
 
 	const bothProps = {
 		value: text,
-		onChange: (e => setText(e.target.value)),
+		onChange: ((e) => { setText(e.target.value); if (props.onChange) { props.onChange(e.target.value); } }),
 		onBlur: (submitTextContent),
 		onKeyPress,
 		placeholder: (!text && props.isEditable ? placeholderText : ''),	

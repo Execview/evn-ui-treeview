@@ -26,7 +26,7 @@ export const columnsInfo1 = {
 
 export const columnsInfo2 = {
 	activityId: { cellType: 'text', headerData: 'Activity ID', width: 5, minWidth: 25 },
-	startDate: { cellType: 'date', headerData: 'Start Date', width: 10 },
+	startDate: { cellType: 'date', headerData: 'Start Date', width: 10, rule: 'dateExists' },
 	latestProgress: { cellType: 'textarea', headerData: 'Latest Progress', rule: 'textSize' },
 	dueDate: { cellType: 'date', headerData: 'Due Date', width: 10 },
 	assignedUsers: { cellType: 'users', headerData: 'Assigned Users', width: 10, headerType: 'userHeader' },
@@ -87,7 +87,7 @@ export const newData1 = {
 };
 
 export const newData2 = {
-	_1: { activityId: '', activityTitle: 'Fix PDF', startDate: new Date('2017-08-17T10:39:57.362Z'), progress: 'green', dueDate: new Date('2018-03-17T10:39:57.362Z'), employeeName: '', assignedUsers: [{ user: 'abd4', role: 'Project Manager', department: 'Kitten Petter' }, { user: 'gte3', role: 'Project Manager' }, { user: 'plo4', role: 'Pleb' }] },
+	_1: { activityId: '', activityTitle: 'Fix PDF', progress: 'green', dueDate: new Date('2018-03-17T10:39:57.362Z'), employeeName: '', assignedUsers: [{ user: 'abd4', role: 'Project Manager', department: 'Kitten Petter' }, { user: 'gte3', role: 'Project Manager' }, { user: 'plo4', role: 'Pleb' }] },
 	_2: { activityId: '1251251', activityTitle: 'Mobile Shipment', startDate: new Date('2017-08-17T10:39:57.362Z'), latestProgress: 'The current task is in progress and about to be evaluated', progress: 'amber', dueDate: new Date('2017-08-17T10:39:57.362Z'), employeeName: 'Mark', assignedUsers: [{ user: 'abd4', role: 'Legendary Consumer' }] },
 	_3: { activityId: '11241', activityTitle: 'Things to Do', startDate: new Date('2017-08-17T10:39:57.362Z'), latestProgress: 'In progress', progress: 'red', employeeName: 'Paul', assignedUsers: [{ user: 'rew7', role: 'Wizard' }, { user: 'gte3', role: 'Project Manager' }] },
 	_4: { activityId: '765976', activityTitle: 'Replace Tire', startDate: new Date('2017-08-17T10:39:57.362Z'), latestProgress: 'Done', dueDate: new Date('1996-09-13T10:39:57.362Z'), employeeName: 'Agam', assignedUsers: [{ user: 'jio9', role: 'Project Manager' }] },
@@ -211,6 +211,12 @@ export const rules = {
 				return true;
 			}
 			return false;
+		}
+	},
+	dateExists: {
+		errorMessage: 'haHAA',
+		validator: function validateDate(date) {
+			return date;
 		}
 	}
 };
