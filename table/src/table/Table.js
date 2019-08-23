@@ -292,8 +292,7 @@ export default class Table extends Component {
 								let type = null;
 								if (col.headerType) {
 									data = col.headerData;
-									type = this.props.cellTypes[col.headerType];
-									// headerStyle.width = this.state.widths[colkey] - 10;
+									type = typeof(col.headerType)==='string' ? this.props.cellTypes[col.headerType] : col.headerType
 								} else {
 									headerStyle.width = Math.floor(this.state.widths[colkey]);
 									data = { spans, title: col.headerData, sortData: () => { if (this.props.dataSort && this.props.dataSort[col.cellType]) { this.sortData(colkey, col.cellType); } }, };

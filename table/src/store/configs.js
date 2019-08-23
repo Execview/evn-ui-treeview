@@ -15,7 +15,7 @@ import UserHeaderDisplay from '../headers/UserHeaderDisplay';
 import { countries, priority } from './constants';
 
 export const columnsInfo1 = {
-	images: { cellType: 'images', headerData: 'Images', width: 4 },
+	images: { cellType: 'images', headerType: <ImageDisplay data={['https://i.imgur.com/w2pv5Ux.png']}/>, width: 4 },
 	company: { cellType: 'textarea', headerData: 'CompanyCompanyCompanyCompanyCompany', rule: 'textSize' },
 	contact: { cellType: 'textarea', headerData: 'Contact', rule: 'textSize' },
 	country: { cellType: 'dropdown', headerData: 'Country' },

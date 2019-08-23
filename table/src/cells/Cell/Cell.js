@@ -2,7 +2,6 @@ import React from 'react';
 import TextCell from '../TextCell/TextCell';
 
 const Cell = (props) => {
-	const data = props.data;
 	const errorText = props.errorText || props.errorText === '' ? props.errorText : null;
 	const style = props.style || {};
 	const type = props.type || <TextCell />;
@@ -10,7 +9,7 @@ const Cell = (props) => {
 	const isEditable = typeof (props.isEditable) === 'boolean' ? props.isEditable : true;
 	
 	return (
-		React.createElement(type.type, { ...props, ...type.props, data, onValidateSave, isEditable, errorText, style })
+		React.createElement(type.type, { ...props, onValidateSave, isEditable, errorText, style, ...type.props })
 	);
 };
 
