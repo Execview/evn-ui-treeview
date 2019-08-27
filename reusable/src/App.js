@@ -75,6 +75,10 @@ export default App;
 		// const rdab = {b: [1,2,{ee:'ee'}], c: 'altered', d: (new Date()).toISOString()}
 		// console.log(recursiveDeepAssign(rdaa,rdab))
 
+		// const rdac = {}
+		// const rdad = {}
+		// console.log(recursiveDeepAssign(rdac,rdad))
+
 	//recursiveDeepCopy
 		// const rdc = {a: 'oompa loompa', b: [1,2,'three'], c: null, d: (new Date()).toISOString()}
 		// console.log(recursiveDeepCopy(rdc))

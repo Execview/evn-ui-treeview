@@ -73,7 +73,7 @@ const recursiveDeepAssign = (o,u,options={}) => {
 	}
 
 	const result = RDA(o,u)
-	return result===sit.equal ? null : result
+	return result===sit.equal ? u : result
 }
 
 export default recursiveDeepAssign;
