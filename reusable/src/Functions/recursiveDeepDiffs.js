@@ -11,7 +11,7 @@ const recursiveDeepDiffs = (o,u,options={}) => {
 	const sit = {...sitdefaults,...sitoptions}
 	const RDD = (o,u) => {
 		switch(stopRecursion(o,u)){
-	  	case "updated": return u
+	  		case "updated": return u
 			case "ignore": return sit.equal
 			default:break;
 		}

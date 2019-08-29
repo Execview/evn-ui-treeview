@@ -11,6 +11,7 @@ import orderedObjectAssign from './Functions/orderedObjectAssign'
 import recursiveDeepAssign from './Functions/recursiveDeepAssign'
 import recursiveDeepCopy from './Functions/recursiveDeepCopy'
 import recursiveDeepDiffs from './Functions/recursiveDeepDiffs'
+import recursiveDeepDiffsREACT from './Functions/recursiveDeepDiffsREACT'
 import sendEvent from './Functions/sendEvent'
 
 module.exports = {
@@ -25,6 +26,7 @@ module.exports = {
 	recursiveDeepAssign,
 	recursiveDeepCopy,
 	recursiveDeepDiffs,
+	recursiveDeepDiffsREACT,
 	sendEvent,
 	OCO
 };

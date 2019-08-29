@@ -12,6 +12,7 @@ import orderedObjectAssign from './Functions/orderedObjectAssign'
 import recursiveDeepAssign from './Functions/recursiveDeepAssign'
 import recursiveDeepCopy from './Functions/recursiveDeepCopy'
 import recursiveDeepDiffs from './Functions/recursiveDeepDiffs'
+import recursiveDeepDiffsREACT from './Functions/recursiveDeepDiffsREACT'
 import sendEvent from './Functions/sendEvent'
 
 const App = (props) => {
@@ -87,6 +88,11 @@ export default App;
 		// const rdda = {a: 'oompa loompa', b: [1,2,{thr:'thr'}], c: null, d: (new Date()).toISOString()}
 		// const rddb = {a: 'oompa loompa', b: [1,4,{thr:'thr'}], c: 'test', d: (new Date()).toISOString()}
 		// console.log(recursiveDeepDiffs(rdda,rddb))
+
+	//recursiveDeepDiffsREACT
+		// const rdda = {a: 'oompa loompa', b: [1,2,{thr:'thr'}], c: null, d: (new Date()).toISOString(), e: <Button/>}
+		// const rddb = {a: 'oompa loompa', b: [1,4,{thr:'thr'}], c: 'test', d: (new Date()).toISOString()}
+		// console.log(recursiveDeepDiffsREACT(rdda,rddb))
 	
 	//sendEvent
 		// sendEvent(null,'https://evnext-api.evlem.net/api/login',{username: 'namyts', password: 'password'},{debug:true})
