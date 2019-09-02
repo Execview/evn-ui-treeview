@@ -98,3 +98,32 @@ export default App;
 		// sendEvent(null,'https://evnext-api.evlem.net/api/login',{username: 'namyts', password: 'password'},{debug:true})
 		// .then(res=>res.json())
 		// .then(data=>console.log(data))
+
+
+// BENCHMARK TEST
+// const size = 50000
+// const find = 'test'
+// let arr = []
+// let obj = {}
+// let start = null;
+
+// const getCurrentTime = () => (new Date()).getTime()
+// start = getCurrentTime()
+// for(let i=0; i<size; i++){
+//   arr.push({row:i, col:'test', content:'hello'+i})
+
+// }
+// console.log(getCurrentTime()-start)
+// start = getCurrentTime()
+// for(let i=0; i<size; i++){
+
+//   obj[i] = {['test']:{content: 'hello'+i}}
+// }
+// console.log(getCurrentTime()-start)
+// start = getCurrentTime()
+// const arranswer = arr.filter(el=>el.col===find).map(cell=>cell.content)
+// console.log(getCurrentTime()-start)
+// start = getCurrentTime()
+// const objanswer = Object.keys(obj).map(rowId=>obj[rowId]['test'].content)
+// console.log(getCurrentTime()-start)
+
