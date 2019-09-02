@@ -6,7 +6,7 @@ const GenericDropDown = (props) => {
 	const handleClickOutside = props.onBlur || (() => { });
 
 	const style = props.style
-	const classes = props.genericDropDownClasses || {};
+	const classes = props.genericDropdownClasses || {};
 	const submit = props.submit || (() => { });
 	const options = props.options || {}
 	return (
