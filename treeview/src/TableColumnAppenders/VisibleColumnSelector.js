@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
-const VisibleColumnSelectorWrapper = (props) => {
+const VisibleColumnSelector = (props) => {
 	const filterList = props.filteredColumns
 	const columnsInfo = props.columnsInfo || {}
 	const [visibleColumns, setVisibleColumns] = useState(Object.keys(columnsInfo).filter(c=>!filterList.includes(c)))
@@ -41,4 +41,4 @@ const VisibleColumnSelectorWrapper = (props) => {
 	);
 }
 
-export default VisibleColumnSelectorWrapper
+export default VisibleColumnSelector

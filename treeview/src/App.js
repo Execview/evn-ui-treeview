@@ -7,7 +7,7 @@ import { Table, cats } from '@execview/table';
 import { columnsInfo, cellTypes, rules } from './store/config';
 import { PropInspector, Button } from '@execview/reusable'
 import classes from './App.module.css';
-import VisibleColumnSelectorWrapper from './TableColumnAppenders/VisibleColumnSelectorWrapper';
+import VisibleColumnSelector from './TableColumnAppenders/VisibleColumnSelector';
 
 const App = (props) => {
 
@@ -46,9 +46,9 @@ const App = (props) => {
 				filteredColumns={filteredColumns}
 			>
 				<SchedulerConnector>
-					<VisibleColumnSelectorWrapper>
+					<VisibleColumnSelector>
 							<Table />
-					</VisibleColumnSelectorWrapper>
+					</VisibleColumnSelector>
 				</SchedulerConnector>
 			</TreeConnector>}
 			<div style={{ margin: 'auto', marginTop: '30px', maxWidth: '400px' }}>

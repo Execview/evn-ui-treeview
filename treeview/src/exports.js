@@ -1,5 +1,6 @@
 import SchedulerConnector from './TableColumnAppenders/SchedulerConnector';
 import TreeConnector from './TableColumnAppenders/TreeConnector';
+import VisibleColumnSelector from './TableColumnAppenders/VisibleColumnSelector'
 import reducer from './store/reducer'
 import EventStoreSynchroniser from './store/ess'
 import * as actionTypes from './store/actions/actionTypes'
@@ -8,6 +9,7 @@ import { tryBubbleTransformEpicMap, tryPerformLinkEpicMap, tryPerformAssociation
 module.exports = {
 	SchedulerConnector,
 	TreeConnector,
+	VisibleColumnSelector,
 	reducer,
 	EventStoreSynchroniser,
 	actionTypes,
