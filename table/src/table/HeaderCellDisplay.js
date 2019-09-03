@@ -19,10 +19,11 @@ export default class HeaderCellDisplay extends Component {
 				</div>
 			);
 		}
+
 		return (
 			<div className="header-cell no-select" onClick={this.props.data.sortData}>
 				{spans}
-				<div className="thead-container" style={{ width: cellWidth }}>{this.props.data.title}</div>
+				<div className="thead-container" style={{ width:  isNaN(cellWidth) ? 'auto' : cellWidth }}>{this.props.data.title}</div>
 			</div>
 		);
 	}

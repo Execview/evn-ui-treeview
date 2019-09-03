@@ -1,28 +1,44 @@
 /* eslint-disable guard-for-in */
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import Table from '../table/OldTable';
 //import Table from '../table/Table';
 import './TableWrapper.css';
 
 const TableWrapper = (props) => {
-	const tableData = {};
-	for (const row in props.data) {
-		for (const col in props.data[row]) {
-			if (!tableData[row]) { tableData[row] = {}; }
-			const cell = {
-				isEditable: props.editableCells[row].includes(col),
-				data: props.data[row][col],
-				errorText: null
-			};
-			tableData[row][col] = cell;
-		}
+	// const tableData = {};
+	// for (const row in props.data) {
+	// 	for (const col in props.data[row]) {
+	// 		if (!tableData[row]) { tableData[row] = {}; }
+	// 		const cell = {
+	// 			isEditable: props.editableCells[row].includes(col),
+	// 			data: props.data[row][col],
+	// 			errorText: null
+	// 		};
+	// 		tableData[row][col] = cell;
+	// 	}
+	// }
+
+	let [columnsInfo,setColumnsInfo] = useState(props.columnsInfo);
+
+	useEffect(()=>{
+		setColumnsInfo(props.columnsInfo)
+	},[props.columnsInfo])
+
+	const changeColumnsInfo = () => {
+		setColumnsInfo(Object.fromEntries(Object.entries(columnsInfo).filter(([k,v],i)=>i!==0)))
+	}
+
+	const addColumnsInfo = () => {
+		setColumnsInfo({ ...columnsInfo, progress: { cellType: 'color', headerData: 'RAG', minWidth: 25 } });
 	}
 
 	return (
 		<div style={{ width: '100%', userSelect: 'none' }}>
+			<button onClick={changeColumnsInfo}>-</button>
+			<button onClick={addColumnsInfo}>+</button>
 			<Table
 				data={props.data}
-				columnsInfo={props.columnsInfo}
+				columnsInfo={columnsInfo}
 				cellTypes={props.cellTypes}
 				onSave={props.onSave}
 				dataSort={props.dataSort}

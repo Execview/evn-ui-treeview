@@ -52,7 +52,7 @@ export default class Table extends Component {
 			data: this.props.data,
 			editableCells: defaults.editableCells,
 			onSave: defaults.onSave,
-			contextMenu: {col: null, contextMenu: null}
+			contextMenu: { col: null, component: null }
 		};
 		this.resizeTable = this.resizeTable.bind(this);
 	}
@@ -66,21 +66,6 @@ export default class Table extends Component {
 
 	componentWillReceiveProps(newProps) {
 		const defaults = this.getDefaults(newProps);
-
-		// const maxTableWidth = ReactDOM.findDOMNode(this).parentNode.offsetWidth;
-		// const initWidth = maxTableWidth / Object.keys(defaults.columnsInfo).length;
-		// const initialWidths = Object.keys(defaults.columnsInfo).reduce((total, key) => { return { ...total, [key]: initWidth }; }, {});
-		// const minWidths = Object.keys(defaults.columnsInfo).reduce((total, key) => { return { ...total, [key]: 5 }; }, {});
-
-		// let newTableWidth = this.state.tableWidth;
-		// let newWidths = this.state.widths;
-		// let newMinWidths = this.state.minWidths;
-
-		// if (JSON.stringify(Object.keys(this.state.columnsInfo)) !== JSON.stringify(Object.keys(defaults.columnsInfo))) {
-		//   newTableWidth = maxTableWidth;
-		//   newWidths = initialWidths;
-		//   newMinWidths = minWidths;
-		// }
 
 		const keys = Object.keys(newProps.data);
 		let newOrderedData = Object.keys(newProps.data);
@@ -256,10 +241,37 @@ export default class Table extends Component {
 	resizeTable() {
 		const parentNode = ReactDOM.findDOMNode(this).parentNode;
 		const windowWidth = window.getComputedStyle(parentNode, null).getPropertyValue('width').slice(0, -2);
+		let newWidths = this.state.widths || {};
+		let changes = false;
+		
+		const newColumns = Object.keys(this.state.columnsInfo).filter(col => !Object.keys(newWidths).includes(col));
+		if (newColumns.length > 0) {
+			newColumns.forEach((c) => {
+				const cWidth = this.state.columnsInfo[c].width ? this.state.columnsInfo[c].width : 100 / Object.keys(this.state.columnsInfo).length;
+				const scaleFactor = (100 - cWidth) / 100;
+				newWidths = Object.keys(newWidths).reduce((total, col) => { return { ...total, [col]: newWidths[col] * scaleFactor }; }, {});
+				newWidths[c] = (cWidth / 100) * this.state.tableWidth;
+				changes = true;
+			});
+		}
+
+		const removedColumns = Object.keys(newWidths).filter(col => !Object.keys(this.state.columnsInfo).includes(col));
+		if (removedColumns.length > 0) {
+			removedColumns.forEach((c) => {
+				const cWidth = 100 * newWidths[c] / this.state.tableWidth;
+				const scaleFactor = 100 / (100 - cWidth);
+				newWidths = Object.keys(newWidths).filter(k => k !== c).reduce((total, col) => { return { ...total, [col]: newWidths[col] * scaleFactor }; }, {});
+				changes = true;
+			});
+		}
+
 		if (this.state.tableWidth !== windowWidth) {
 			const scaleFactor = (windowWidth / this.state.tableWidth);
-			const scaledWidths = Object.keys(this.state.widths).reduce((total, col) => { return { ...total, [col]: this.state.widths[col] * scaleFactor }; }, {});
-			this.setState({ widths: scaledWidths, tableWidth: windowWidth });
+			newWidths = Object.keys(newWidths).reduce((total, col) => { return { ...total, [col]: newWidths[col] * scaleFactor }; }, {});
+			changes = true;
+		}
+		if (changes) {
+			this.setState({ widths: newWidths, tableWidth: windowWidth });
 		}
 	}
 

@@ -12,7 +12,7 @@ import UserHeaderDisplay from '../headers/UserHeaderDisplay';
 import { countries, priority } from './constants';
 
 export const columnsInfo1 = {
-	images: { cellType: 'images', headerType: <ImageDisplay data={['https://i.imgur.com/w2pv5Ux.png']}/>, width: 4 },
+	images: { cellType: 'images', headerType: <ImageDisplay data={['https://i.imgur.com/w2pv5Ux.png']} />, width: 4 },
 	company: { cellType: 'text', headerData: 'CompanyCompanyCompanyCompanyCompany', rule: 'textSize' },
 	contact: { cellType: 'text', headerData: 'Contact', rule: 'textSize' },
 	country: { cellType: 'dropdown', headerData: 'Country' },
@@ -37,7 +37,6 @@ export const columnsInfo3 = {
 	startDate: { cellType: 'date', headerData: 'Start Date', width: 10 },
 	dueDate: { cellType: 'date', headerData: 'Due Date', width: 10 },
 	assignedGeneric: { cellType: 'genericAdder', headerData: 'Assigned Generic', width: 10, headerType: 'userHeader', height: 40 },
-	progress: { cellType: 'color', headerData: 'RAG', width: 10, minWidth: 25 },
 	latestProgress: { cellType: 'textarea', headerData: 'Latest Progress' }
 	// employeeName: { cellType: 'dropdown', headerData: 'Employee Name', width: 400 },
 };

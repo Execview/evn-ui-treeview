@@ -11,6 +11,7 @@ import GenericAssignCell from './cells/genericAssignCell/GenericAssignCell';
 import ImageDisplay from './cells/imageDisplay/ImageDisplay';
 import InPlaceCell from './cells/InPlaceCell/InPlaceCell';
 import TextCell from './cells/TextCell/TextCell';
+import Panel from './Panel/Panel';
 
 module.exports = {
 	Table,
@@ -24,5 +25,6 @@ module.exports = {
 	GenericAssignCell,
 	ImageDisplay,
 	InPlaceCell,
-	TextCell
+	TextCell,
+	Panel
 };
