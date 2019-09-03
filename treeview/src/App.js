@@ -7,6 +7,7 @@ import { Table, cats } from '@execview/table';
 import { columnsInfo, cellTypes, rules } from './store/config';
 import { PropInspector, Button } from '@execview/reusable'
 import classes from './App.module.css';
+import VisibleColumnSelectorWrapper from './TableColumnAppenders/VisibleColumnSelectorWrapper';
 
 const App = (props) => {
 
@@ -16,16 +17,18 @@ const App = (props) => {
 
 	const [selectedRow, setSelectedRow] = useState();
 
+	const [showEnddate, setShowEnddate] = useState(true)
 
 	const rowheight = 30
 	const randomNumber = Math.floor((Math.random() * cats.length));
 	const treeOptions = {width: 10, position: 'start'};
 	const schedulerOptions = {width:65, position: 'end'};
-
+	const filteredColumns = ['enddate'].filter(e=>e!=='enddate' || showEnddate)
 	return (
 		<div className={classes["App"]}>
 			<div className={classes["button-container"]}>
 				<Button onClick={()=>props.onAddRow(Object.keys(columnsInfo),selectedRow)}>Add Row</Button>
+				<Button onClick={()=>setShowEnddate(!showEnddate)}>Toggle Enddate</Button>
 			</div>
 			{Object.keys(props.data).length !== 0 && <TreeConnector
 				itemChanges={props.itemChanges}
@@ -40,9 +43,12 @@ const App = (props) => {
 				rules={rules}
 				treeOptions={treeOptions}
 				schedulerOptions={schedulerOptions}
+				filteredColumns={filteredColumns}
 			>
 				<SchedulerConnector>
-					<Table />
+					<VisibleColumnSelectorWrapper>
+							<Table />
+					</VisibleColumnSelectorWrapper>
 				</SchedulerConnector>
 			</TreeConnector>}
 			<div style={{ margin: 'auto', marginTop: '30px', maxWidth: '400px' }}>

@@ -238,7 +238,7 @@ const SchedulerAppender = (props) => {
 				start: [schedulerStart, ((date)=>setSchedulerStart(date))]
 			}
 		}
-		const newColumn = {scheduler: {cellType: 'scheduler', width: 65, height: rowHeight, headerType: 'schedulerHeader', headerData: schedulerheaderdata}};
+		const newColumn = {scheduler: {cellType: 'scheduler', width: 65, height: rowHeight, headerType: <SchedulerHeader data={schedulerheaderdata}/>}};
 		let position = 'end';
 		if (props.schedulerOptions) {
 			if (props.schedulerOptions.width) {
@@ -312,7 +312,7 @@ const SchedulerAppender = (props) => {
 				children: newProps.children && newProps.children.props.children,
 				data: addSchedulerData(),
 				columnsInfo: addSchedulerColumn(),
-				cellTypes: {...newProps.cellTypes, schedulerHeader: <SchedulerHeader/>, scheduler: <SchedulerCell/>},
+				cellTypes: {...newProps.cellTypes, scheduler: <SchedulerCell/>},
 				tableRef: tableRef,
 				onRender: ((x)=>{(newProps.onRender && newProps.onRender(x));onTableRender()}),
 				onSave: ((rowId, rowValues, editableValues)=>{( props.onSave && props.onSave(rowId, rowValues, editableValues)); onSaveScheduler(rowId, rowValues, editableValues); })
