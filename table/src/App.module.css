@@ -51,3 +51,18 @@ body,html {
   right: 0;
   bottom: 1px;
 }
+
+.black-text{
+  color:black;
+}
+
+.red-text{
+  color:red;
+}
+
+.header-context-menu {
+  position: absolute;
+  top:100%;
+  left:0;
+  z-index:100;
+}

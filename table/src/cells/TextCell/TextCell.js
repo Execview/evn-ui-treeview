@@ -5,6 +5,8 @@ import classes from './TextCell.module.css';
 const TextCell = (props) => {
 	const [showText, setShowText] = useState(false);
 	const [text, setText] = useState('');
+	const isEditableStyles = props.isEditable || props.isEditableStyles;
+	const canEdit = props.isEditable;
 	useEffect(() => setText(props.data || ''), [props.data]);
 	const [textareaOpen, setTextareaOpen] = useState((props.autoFocus && props.wrap) || false);
 	const style = props.style || {};
@@ -28,7 +30,7 @@ const TextCell = (props) => {
 
 	const submitTextContent = (e) => {
 		const val = e.target.value;
-		props.onValidateSave(val);
+		props.onValidateSave && props.onValidateSave(val);
 		setTextareaOpen(false);
 	};
 
@@ -48,10 +50,10 @@ const TextCell = (props) => {
 	const containerClasses = classes['default-cell-container'] + ' ' + (optionalClasses.container || classes['textarea-cell-container']) + ' ' + classes['no-select'] + ' ';
 	const errorContainerClasses = hasError ? classes['cell-error'] : '';
 
-	const textClasses = classes['textarea-cell-text'] + ' ' + (props.isEditable ? classes['no-select'] : '') + ' ' + (optionalClasses.text || '') + ' ';
+	const textClasses = classes['textarea-cell-text'] + ' ' + (isEditableStyles ? classes['no-select'] : '') + ' ' + (optionalClasses.text || '') + ' ';
 	const errorTextClasses = hasError ? classes['cell-text-error'] + ' ' + (optionalClasses.textError || '') + ' ' : '';
 	
-	const isEditableClasses = props.isEditable ? classes['is-editable'] + ' ' + (optionalClasses.isEditable || '') + ' ' : '';
+	const isEditableStylesClasses = isEditableStyles ? classes['is-editable'] + ' ' + (optionalClasses.isEditableStyles || '') + ' ' : '';
 	const errorIconEl = hasError && (
 		<div>
 			<img className={classes['error-icon']} src={errorIcon} alt="info" onClick={e => showError(e)} />
@@ -64,15 +66,14 @@ const TextCell = (props) => {
 	const placeholderText = (props.placeholder || 'Type something here...');
 
 	const textareaProps = {
-		className: (classes['textarea'] + ' ' + textClasses + errorTextClasses + isEditableClasses + (!textareaOpen && !text && props.isEditable ? classes['empty-editable'] : '')),
+		className: (classes['textarea'] + ' ' + textClasses + errorTextClasses + isEditableStylesClasses + (!text && isEditableStyles ? (classes['empty-editable'] + ' ' + (optionalClasses.placeholder || '')) : '')),
 		autoFocus: true,
-
 		onFocus: resizeSelf
 	};
 
 	const inputProps = {
-		className: (classes['input'] + ' ' + textClasses + errorTextClasses + isEditableClasses),
-		disabled: !props.isEditable,
+		className: (classes['input'] + ' ' + textClasses + errorTextClasses + isEditableStylesClasses + (!text && isEditableStyles ? (classes['empty-editable'] + ' ' + (optionalClasses.placeholder || '')) : '')),
+		disabled: !canEdit,
 		autoFocus: props.autoFocus || false,
 		type: props.password ? 'password' : 'text'
 	};
@@ -82,15 +83,19 @@ const TextCell = (props) => {
 		onChange: ((e) => { setText(e.target.value); if (props.onChange) { props.onChange(e.target.value); } }),
 		onBlur: (submitTextContent),
 		onKeyPress,
-		placeholder: (!text && props.isEditable ? placeholderText : ''),	
+		placeholder: (!text && isEditableStyles ? placeholderText : ''),	
 	};
 
-	const textareaInput = !textareaOpen ? <p style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center' }} onClick={() => { if (props.isEditable) { setTextareaOpen(true); } }}>{text || (props.isEditable && placeholderText)}</p> : <textarea />;
+	const textareaInput = !textareaOpen ? <p style={{ width: '100%'}}>{text || (isEditableStyles && placeholderText)}</p> : <textarea />;
 
 	const inputType = props.wrap ? textareaInput : <input />;
 
 	return (
-		<div className={containerClasses + errorContainerClasses} style={style} onClick={props.onClick}>
+		<div
+			className={containerClasses + errorContainerClasses}
+			style={style}
+			onClick={(e) => { if (props.wrap && canEdit) { setTextareaOpen(true); } if (props.onClick) { props.onClick(e); } }}
+		>
 			{React.createElement(inputType.type, { ...inputType.props, ...bothProps, ...(props.wrap ? textareaProps : inputProps) })}
 			{errorIconEl}
 		</div>

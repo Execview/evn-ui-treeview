@@ -1,6 +1,7 @@
-import React, {useState, useEffect } from 'react';
-import Cell from '../Cell/Cell';
+import React, { useState, useEffect } from 'react';
 import classes from './InPlaceCell.module.css';
+import Cell from '../Cell/Cell';
+
 
 const InPlaceCell = (props) => {
 	const [value, setValue] = useState();
@@ -16,7 +17,7 @@ const InPlaceCell = (props) => {
 		setEditMode(false);
 	};
 
-	const style = { padding: '5px', textAlign: 'left', border: 'none', borderRadius: '4px', fontSize: '25px', ...props.style };
+	const style = { border: 'none', borderRadius: '4px', ...props.style };
 	const newProps = { ...props,
 		data: value,
 		isActive: editMode,

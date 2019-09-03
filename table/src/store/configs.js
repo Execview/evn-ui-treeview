@@ -7,17 +7,14 @@ import ColorCell from '../cells/colorCell/ColorCell';
 import DateCell from '../cells/dateCell/DateCell';
 import TextCell from '../cells/TextCell/TextCell'
 
-
-
-
 import UserRoleDisplay from '../UserRoleDisplay/UserRoleDisplay';
 import UserHeaderDisplay from '../headers/UserHeaderDisplay';
 import { countries, priority } from './constants';
 
 export const columnsInfo1 = {
 	images: { cellType: 'images', headerType: <ImageDisplay data={['https://i.imgur.com/w2pv5Ux.png']}/>, width: 4 },
-	company: { cellType: 'textarea', headerData: 'CompanyCompanyCompanyCompanyCompany', rule: 'textSize' },
-	contact: { cellType: 'textarea', headerData: 'Contact', rule: 'textSize' },
+	company: { cellType: 'text', headerData: 'CompanyCompanyCompanyCompanyCompany', rule: 'textSize' },
+	contact: { cellType: 'text', headerData: 'Contact', rule: 'textSize' },
 	country: { cellType: 'dropdown', headerData: 'Country' },
 	dueDate: { cellType: 'date', headerData: 'Due Date' },
 	value: { cellType: 'number', headerData: 'Value (in $M)', rule: 'numberHigher' },
@@ -25,7 +22,7 @@ export const columnsInfo1 = {
 };
 
 export const columnsInfo2 = {
-	activityId: { cellType: 'text', headerData: 'Activity ID', width: 5, minWidth: 25 },
+	activityId: { cellType: 'text', headerData: 'Activity ID', width: 5, minWidth: 25, rule: 'textSize' },
 	startDate: { cellType: 'date', headerData: 'Start Date', width: 10, rule: 'dateExists' },
 	latestProgress: { cellType: 'textarea', headerData: 'Latest Progress', rule: 'textSize' },
 	dueDate: { cellType: 'date', headerData: 'Due Date', width: 10 },
@@ -36,7 +33,7 @@ export const columnsInfo2 = {
 };
 
 export const columnsInfo3 = {
-	activityId: { cellType: 'textarea', headerData: 'Activity ID', width: 5, minWidth: 25 },
+	activityId: { cellType: 'text', headerData: 'Activity ID', width: 5, minWidth: 25 },
 	startDate: { cellType: 'date', headerData: 'Start Date', width: 10 },
 	dueDate: { cellType: 'date', headerData: 'Due Date', width: 10 },
 	assignedGeneric: { cellType: 'genericAdder', headerData: 'Assigned Generic', width: 10, headerType: 'userHeader', height: 40 },
@@ -184,7 +181,7 @@ export const cellTypes = {
 	text: <TextCell />,
 	textarea: <TextCell wrap={true} />,
 	number: <TextCell />,
-	dropdown: <DropdownCell dropdownList={countries} />,
+	dropdown: <DropdownCell dropdownList={countries} canSearch={true} inline={true} />,
 	users: <UserRoleDisplay userProfiles={users} />,
 	genericAdder: <GenericAssignCell display={<Display />} getOption={getOption} getSearchField={getSearchField} items={users} leftTitle={leftTitle} rightTitle={rightTitle} />,
 	color: <ColorCell />,

@@ -93,10 +93,6 @@
   color:white;
 }
 
-.textarea-cell-text::placeholder {
-  color: rgba(255,255,255,0.3);
-}
-
 @-moz-document url-prefix() {
   .cell-text{
     display: inline;
@@ -137,10 +133,8 @@
   color: wheat;
 }
 
-.empty-editable{
-  color: rgba(255, 255, 255, 0.3);
+.empty-editable, .empty-editable::placeholder {
+  color: rgba(255,255,255,0.3);
   margin:0;
-  margin-left: 5px;
 }
-
 

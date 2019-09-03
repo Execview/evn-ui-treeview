@@ -1,71 +1,82 @@
-import React, { Component } from 'react';
-import Table from '../table/Table';
+/* eslint-disable guard-for-in */
+import React from 'react';
+import Table from '../table/OldTable';
+//import Table from '../table/Table';
 import './TableWrapper.css';
 
-const crypto = require('crypto');
-
-const hash = crypto.createHash('sha256');
-
-export default class TableWrapper extends Component {
-	tableWidth = this.props.tableWidth;
-
-	constructor(props) {
-		super(props);
-		this.state = {
-			wrap: true,
-		};
+const TableWrapper = (props) => {
+	const tableData = {};
+	for (const row in props.data) {
+		for (const col in props.data[row]) {
+			if (!tableData[row]) { tableData[row] = {}; }
+			const cell = {
+				isEditable: props.editableCells[row].includes(col),
+				data: props.data[row][col],
+				errorText: null
+			};
+			tableData[row][col] = cell;
+		}
 	}
 
-	toggleWrap() {
-		const wr = this.state.wrap;
-		this.setState({ wrap: !wr });
-	}
-
-	addRow() {
-		const newId = '_' + hash.update(Date.now() + Math.random().toString()).digest('hex').substring(0, 5);
-		this.props.onSave(newId, {}, Object.keys(this.props.columnsInfo));
-		// this.props.onSave(newId, {}, { company: true, contact: true, country: true, value: true, progress: true, dueDate: true });
-	}
-
-
-	render() {
-		return (
-			<div style={{ width: '100%', userSelect: 'none' }}>
-				<div className="button-wrapper">
-					<button className="get-data" type="button" onClick={() => this.toggleWrap()}>Toggle Cell Wrap</button>
-					<button className="get-data" type="button" onClick={() => this.addRow()}>Add Row</button>
-					<button className="get-data" type="button" onClick={() => { this.tableWidth = 500; this.forceUpdate(); }}>change width</button>
-					{/* <button type="button" onClick={() => this.forceUpdate()}>RENDER</button> */}
-				</div>
-				<Table
-					columnsInfo={this.props.columnsInfo}
-					editableCells={this.props.editableCells}
-					data={this.props.data}
-					wrap={this.state.wrap}
-					cellTypes={this.props.cellTypes}
-					onSave={this.props.onSave}
-					rules={this.props.rules}
-					dataSort={this.props.dataSort}
-					tableWidth={this.tableWidth}
-					selectedRow={'_2'}
-				/>
-			</div>
-		);
-	}
+	return (
+		<div style={{ width: '100%', userSelect: 'none' }}>
+			<Table
+				data={props.data}
+				columnsInfo={props.columnsInfo}
+				cellTypes={props.cellTypes}
+				onSave={props.onSave}
+				dataSort={props.dataSort}
+				editableCells={props.editableCells} /* for oldTable */
+				rules={props.rules} /* for oldTable */
+				selectedRow={props.selectedRow}
+				getContextMenu={props.getContextMenu}
+			/>
+		</div>
+	);
 }
+// data = {
+// 	row1: {
+// 		col1: {
+// 			isEditable: true,
+// 			data: w/e,
+// 			errorText,
+// 		}
+// 	}
+// }
 
-//
-// <Table
-//   columnsInfo={this.props.columnsInfo}
-//   orderedData={this.state.orderedData}
-//   editableCells={this.props.editableCells}
-//   data={this.props.data}
-//   wrap={this.state.wrap}
-//   cellTypes={this.props.cellTypes}
-//   onSave={this.props.onSave}
-//   rules={this.props.rules}
-//   dataSort={this.props.dataSort}
-//   rowValidation={this.props.rowValidation}
-//   validators={this.props.validators}
-//   tableWidth={this.props.tableWidth}
-// />
+
+/* const style = props.style || {};
+	const [data, setData] = useState(props.data);
+	const [orderedData, setOrderedData] = useState(Object.keys(data)); 
+	const [editableCells, setEditableCells] = useState(props.editableCells);
+	const [invalidCells, setInvalidCells] = useState({});
+
+	useEffect(() => {
+		const newData = props.data;
+		const keys = Object.keys(newData);
+		if (!props.dontPreserveOrder) {
+			const alreadyOrderedData = orderedData.filter(el => keys.includes(el));
+			const dataToAdd = keys.filter(el => !orderedData.includes(el));
+			setOrderedData(alreadyOrderedData.concat(dataToAdd));
+		}
+		const newInvalidCells = invalidCells.filter(el => keys.includes(el.id));
+		newInvalidCells.forEach((ic) => {
+			newData[ic.id] = data[ic.id];
+		});
+		setData(newData);
+		setInvalidCells(newInvalidCells);
+	}, [props.data]);
+
+	useEffect(() => {
+		const newEditableCells = {};
+		for(const key in data){
+			newEditableCells[key] = props.editableCells ? props.editableCells[key] || [] : [];
+		};
+		setEditableCells(newEditableCells);
+	}, [props.editableCells]);
+
+	const columnsInfo = props.columnsInfo || getUniqueColumns(data).reduce((total, uniqueColumn) => { return { ...total, [uniqueColumn]: { cellType: 'text', headerData: uniqueColumn } }; }, {});
+ */
+
+
+export default TableWrapper

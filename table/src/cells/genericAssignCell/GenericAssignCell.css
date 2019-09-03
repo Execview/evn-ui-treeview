@@ -1,4 +1,4 @@
-.generic-menu{
+/* .generic-menu{
   display: flex;
   justify-content: space-between;  
   padding:10px;
@@ -8,6 +8,21 @@
   z-index: 100;
   border-radius: 4px;
   left: -125px;  
+} */
+
+.generic-container {
+  display: flex;
+  justify-content: space-between;  
+}
+
+.generic-panel {
+  position:absolute;
+  z-index: 100;
+  left: -125px;  
+}
+
+.generic-caret {
+  left:150px;
 }
 
 .generic-cell {
@@ -16,7 +31,7 @@
   position: relative;
 }
 
-.absolute-caret {
+/* .absolute-caret {
   width: 0;
   height: 0;
   border-style: solid;
@@ -25,7 +40,7 @@
   position: absolute;
   top: -10px;
   left: 142px;
-}
+} */
 
 .dropdown-title {
   margin:0;

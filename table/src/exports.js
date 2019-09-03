@@ -1,4 +1,4 @@
-import Table from './table/Table';
+import Table from './table/OldTable';
 import cats from './store/ElCatso';
 
 import UserRoleDisplay from './UserRoleDisplay/UserRoleDisplay';

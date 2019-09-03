@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { GenericDropdown, OCO } from '@execview/reusable';
+import { GenericDropdown } from '@execview/reusable';
 
 const GenericAssign = (props) => {
 	const data = props.items || [];
@@ -41,37 +41,34 @@ const GenericAssign = (props) => {
 	const filteredRightOptions = Object.keys(rightOptions).filter(k => getSearchField(k).toLowerCase().includes(rightSearchString)).reduce((t, k) => { return { ...t, [k]: rightOptions[k] }; }, {});
 	const style = { width: '300px' };
 	return (
-		<OCO OCO={() => props.closeMenu()}>
-			<div className="generic-menu">
-				<div className="absolute-caret" />
+		<div className="generic-container">
+			<div>
+				{props.leftTitle}
+				<GenericDropdown
+					submit={(key) => { if (isEditable) { unassignGeneric(key); } }}
+					canSearch={true}
+					autoFocus={true}
+					onSearchChange={v => setLeftSearchString(v)}
+					searchString={leftSearchString}
+					options={filteredLeftOptions}
+					style={style}
+				/>
+			</div>
+			{isEditable && (
 				<div>
-					{props.leftTitle}
+					{props.rightTitle}
 					<GenericDropdown
-						submit={(key) => { if (isEditable) { unassignGeneric(key); } }}
+						submit={(key) => { if (isEditable) { assignGeneric(key); } }}
 						canSearch={true}
 						autoFocus={true}
-						onSearchChange={v => setLeftSearchString(v)}
-						searchString={leftSearchString}
-						options={filteredLeftOptions}
+						onSearchChange={v => setRightSearchString(v)}
+						searchString={rightSearchString}
+						options={filteredRightOptions}
 						style={style}
 					/>
 				</div>
-				{isEditable && (
-					<div>
-						{props.rightTitle}
-						<GenericDropdown
-							submit={(key) => { if (isEditable) { assignGeneric(key); } }}
-							canSearch={true}
-							autoFocus={true}
-							onSearchChange={v => setRightSearchString(v)}
-							searchString={rightSearchString}
-							options={filteredRightOptions}
-							style={style}
-						/>
-					</div>
-				)}
-			</div>
-		</OCO>
+			)}
+		</div>
 	);
 };
 

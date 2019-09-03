@@ -1,17 +1,21 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
+import { Button } from '@execview/reusable';
 import TableWrapper from './tableWrapper/TableWrapper';
-import './App.css';
 import * as actionTypes from './store/actionTypes';
 import { cellTypes, dataSort, rowValidation, rules, columnsInfo } from './store/configSwitch';
 import cats from './store/ElCatso';
-import TextCell from './cells/TextCell/TextCell';
 import InPlaceCell from './cells/InPlaceCell/InPlaceCell';
 import ColorCell from './cells/colorCell/ColorCell';
 import DateCell from './cells/dateCell/DateCell';
 import DropdownCell from './cells/dropdownCell/DropdownCell';
 import GenericAssignCell from './cells/genericAssignCell/GenericAssignCell';
 import ImageDisplay from './cells/imageDisplay/ImageDisplay';
+import classes from './App.module.css';
+import Panel from './Panel/Panel';
+
+const crypto = require('crypto');
+const hash = crypto.createHash('sha256');
 
 const App = (props) => {
 	const [data, setData] = useState({})
@@ -35,7 +39,8 @@ const App = (props) => {
 
 
 
-	const InPlaceCellPropsText = { data: 'In Place Cell Text', onValidateSave: ((x) => { console.log(x); }) };
+	const InPlaceCellPropsText = { data: '', onValidateSave: ((x) => { console.log(x); }) };
+	const InPlaceCellPropsTextarea = {...InPlaceCellPropsText, wrap:true, classes:{text:classes['black-text'], textareaPlaceholder:classes['red-text']}}
 	const InPlaceCellPropsColour = { data: 'green', type: <ColorCell />, onValidateSave: ((x) => { console.log(x); }) };
 	const InPlaceCellPropsDate = useMemo(() => { return { data: new Date('2019-12-25'), type: <DateCell />, onValidateSave: ((x) => { console.log(x); }) }}, []);
 	const InPlaceCellPropsDropdown = { data: 'apple', type: <DropdownCell dropdownList={['apple', 'banana', 'cat']} />, onValidateSave: ((x) => { console.log(x); }) };
@@ -48,9 +53,24 @@ const App = (props) => {
 	};
 	const InPlaceCellPropsGenericAssign = { data: ['b', 'c'], type: <GenericAssignCell items={gaais} getOption={id => <div>{gaais[id].name}</div>} getSearchField={id => gaais[id].name} display={<Display />} />, onValidateSave: ((x) => { console.log(x); }) };
 
+	const addRow = () => {
+		console.log('adding new row')
+		const newId = '_' + hash.update(Date.now() + Math.random().toString()).digest('hex').substring(0, 5);
+		props.onSave(newId, {}, Object.keys(columnsInfo));
+	}
+
+	const getContextMenu = (col) => {
+		return (
+			<Panel panelClass={classes["header-context-menu"]}>
+				{col}
+			</Panel>
+		)
+	}
+
 	return (
-		<div className="App">
+		<div className={classes["App"]}>
 			<div>
+				<Button style={{margin:'10px', padding: '30px', paddingTop:'15px', paddingBottom:'15px'}} onClick={addRow}>Add row</Button>
 				<TableWrapper
 					columnsInfo={columnsInfo}
 					editableCells={props.editableCells}
@@ -60,13 +80,16 @@ const App = (props) => {
 					rules={rules}
 					dataSort={dataSort}
 					tableWidth={1200}
+					selectedRow={'_2'}
+					getContextMenu={getContextMenu}
 				/>
 			</div>
 			<div style={{ margin: 'auto', marginTop: '30px', maxWidth: '400px' }}>
 				<img style={{ marginTop: '30px', maxWidth: '100%' }} src={cats[randomNumber]} alt="xd" />
 			</div>
-			<div className="inplacecells">
+			<div className={classes["inplacecells"]}>
 				<InPlaceCell {...InPlaceCellPropsText} />
+				<InPlaceCell {...InPlaceCellPropsTextarea} />
 				<InPlaceCell {...InPlaceCellPropsColour} />
 				<InPlaceCell {...InPlaceCellPropsDate} />
 				<InPlaceCell {...InPlaceCellPropsDropdown} />

@@ -22,10 +22,7 @@ const Row = (props) => {
 			const columnCellType = cellTypes[columnsInfo[col].cellType]
 
 			const lastOne = index === keys.length - 1;
-			let style = { width: Math.round(widths[col]), minHeight: heights[col] };
-			if (!props.wrap) {
-				style = { ...style, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' };
-			}
+			const style = { width: Math.round(widths[col]), minHeight: heights[col] };
 			const errorText = rules[columnsInfo[col].rule] ? rules[columnsInfo[col].rule].errorMessage : null;
 			return (
 				<td className={'table-datum ' + (cellStyleClass.tableDatum || 'table-datum-visuals')} key={col}>
