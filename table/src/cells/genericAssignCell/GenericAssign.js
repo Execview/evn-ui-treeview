@@ -12,11 +12,11 @@ const GenericAssign = (props) => {
 	const isEditable = props.isEditable;
 
 	const unassignGeneric = (itemId) => {
-		props.onValidateSave(data.filter(el => el !== itemId));
+		props.onValidateSave && props.onValidateSave(data.filter(el => el !== itemId));
 	};
 
 	const assignGeneric = (newItem) => {
-		props.onValidateSave([...data, newItem]);
+		props.onValidateSave && props.onValidateSave([...data, newItem]);
 	};	
 
 	
