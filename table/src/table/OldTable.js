@@ -313,7 +313,7 @@ export default class Table extends Component {
 								}
 
 								return (
-									<th className={'table-header ' + (style.tableHeader || 'table-header-visuals')} key={colkey} style={{ width: this.state.widths[colkey], position: 'relative' }} onContextMenu={(e)=>{e.preventDefault();this.setState({contextMenu: {col: colkey, component: this.props.getContextMenu && this.props.getContextMenu(colkey)}})}}>
+									<th className={'table-header ' + (style.tableHeader || 'table-header-visuals')} key={colkey} style={{ width: this.state.widths[colkey], position: 'relative' }} onContextMenu={(e)=>{e.preventDefault();this.setState({contextMenu: {col: colkey, component: (this.props.getContextMenu && this.props.getContextMenu(colkey) || null)}})}}>
 										{colkey===this.state.contextMenu.col && <OCO OCO={()=>this.setState({contextMenu: {col: null, component: null}})}>
 											{this.state.contextMenu.component}
 										</OCO>}
