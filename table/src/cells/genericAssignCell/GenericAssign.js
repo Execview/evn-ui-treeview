@@ -4,6 +4,7 @@ import { GenericDropdown } from '@execview/reusable';
 const GenericAssign = (props) => {
 	const data = props.items || [];
 	const allItems = props.allItems || {};
+	const allKeys = !Array.isArray(allItems) ? Object.keys(allItems) : allItems
 
 	const [leftSearchString, setLeftSearchString] = useState('');
 	const [rightSearchString, setRightSearchString] = useState('');
@@ -33,7 +34,7 @@ const GenericAssign = (props) => {
 
 
 	const leftOptions = generateOptions(data);
-	const rightOptions = generateOptions(Object.keys(allItems).filter(i => !data.includes(i)));
+	const rightOptions = generateOptions(allKeys.filter(i => !data.includes(i)));
 		
 
 	const filteredLeftOptions = Object.keys(leftOptions).filter(k => getSearchField(k).toLowerCase().includes(leftSearchString)).reduce((t, k) => { return { ...t, [k]: leftOptions[k] }; }, {});

@@ -154,7 +154,7 @@ const users = {
 const allItems = users;
 const Display = (props) => {
 	const items = props.items || [];
-	const imageDisplayData = props.allItems && (items.map(u => props.allItems[u].image) || []);
+	const imageDisplayData = items.map(u => users[u].image);
 	return <ImageDisplay data={imageDisplayData} style={props.style} isEditable={props.isEditable} placeholder={'Assign a user...'}/>;
 };
 const getSearchField = (id) => {
@@ -182,7 +182,7 @@ export const cellTypes = {
 	number: <TextCell />,
 	dropdown: <DropdownCell dropdownList={countries} canSearch={true} inline={true} />,
 	users: <UserRoleDisplay userProfiles={users} />,
-	genericAdder: <GenericAssignCell display={<Display />} getOption={getOption} getSearchField={getSearchField} items={users} leftTitle={leftTitle} rightTitle={rightTitle} />,
+	genericAdder: <GenericAssignCell display={<Display />} getOption={getOption} getSearchField={getSearchField} items={Object.keys(users)} leftTitle={leftTitle} rightTitle={rightTitle} />,
 	color: <ColorCell />,
 	date: <DateCell />,
 	userHeader: <UserHeaderDisplay />,
