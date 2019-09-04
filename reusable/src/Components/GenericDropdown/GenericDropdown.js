@@ -12,12 +12,10 @@ const GenericDropDown = (props) => {
 	return (
 		<OCO OCO={handleClickOutside}>
 			<div className={classes.dropdown || 'dropdown'} style={style}>
-				<div className="dropdown-content">
-					{props.canSearch && <input className={classes.dropdownInput || 'dropdown-input'} autoFocus={props.autoFocus} type="text" value={props.searchString} onChange={e => props.onSearchChange(e.target.value)} placeholder={props.placeholder || 'Search..'} />}
-					<ul className={classes.dropdownMenu || 'dropdown-menu'}>
-						{Object.keys(options).map((v, index) => <li className={classes.dropdownItem || 'dropdown-item'} key={index} onClick={e => submit(v)}>{options[v]}</li>)}
-					</ul>
-				</div>
+				{props.canSearch && <input className={classes.dropdownInput || 'dropdown-input'} autoFocus={props.autoFocus} type="text" value={props.searchString} onChange={e => props.onSearchChange(e.target.value)} placeholder={props.placeholder || 'Search..'} />}
+				<ul className={classes.dropdownMenu || 'dropdown-menu'}>
+					{Object.keys(options).map((v, index) => <li className={classes.dropdownItem || 'dropdown-item'} key={index} onClick={e => submit(v)}>{options[v]}</li>)}
+				</ul>
 			</div>
 		</OCO>
 	);
