@@ -52,7 +52,7 @@ export default class Table extends Component {
 			data: this.props.data,
 			editableCells: defaults.editableCells,
 			onSave: defaults.onSave,
-			contextMenu: { col: null, component: null }
+			contextMenu: null
 		};
 		this.resizeTable = this.resizeTable.bind(this);
 	}
@@ -313,9 +313,9 @@ export default class Table extends Component {
 								}
 
 								return (
-									<th className={'table-header ' + (style.tableHeader || 'table-header-visuals')} key={colkey} style={{ width: this.state.widths[colkey], position: 'relative' }} onContextMenu={(e)=>{e.preventDefault();this.setState({contextMenu: {col: colkey, component: (this.props.getContextMenu && this.props.getContextMenu(colkey) || null)}})}}>
-										{colkey===this.state.contextMenu.col && <OCO OCO={()=>this.setState({contextMenu: {col: null, component: null}})}>
-											{this.state.contextMenu.component}
+									<th className={'table-header ' + (style.tableHeader || 'table-header-visuals')} key={colkey} style={{ width: this.state.widths[colkey], position: 'relative' }} onContextMenu={(e)=>{e.preventDefault();this.setState({contextMenu: colkey})}}>
+										{colkey===this.state.contextMenu && <OCO OCO={()=>this.setState({contextMenu: null})}>
+											{(this.props.getContextMenu && this.props.getContextMenu(colkey) || null)}
 										</OCO>}
 										<Cell data={data} style={headerStyle} type={type} />
 										{!lastOne && <div style={{ touchAction: 'none', position: 'absolute', WebkitTransform: 'translate(7px)', transform: 'translateX(7px)', top: 0, right: 0, height: '100%', width: '15px', cursor: 'w-resize' }} onPointerDown={e => this.onMouseDown(e, colkey)} onPointerUp={this.stopPr} />}

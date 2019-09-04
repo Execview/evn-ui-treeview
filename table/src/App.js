@@ -58,11 +58,12 @@ const App = (props) => {
 		const newId = '_' + hash.update(Date.now() + Math.random().toString()).digest('hex').substring(0, 5);
 		props.onSave(newId, {}, Object.keys(columnsInfo));
 	}
-
+	const [cmv, setCmv] = useState('')
 	const getContextMenu = (col) => {
 		return (
 			<Panel panelClass={classes["header-context-menu"]}>
-				{col}
+				{col+cmv}
+				<Button onClick={()=>setCmv(cmv ? '' :' toggled!')}>Test re-render</Button>
 			</Panel>
 		)
 	}
