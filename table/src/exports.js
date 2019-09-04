@@ -8,6 +8,7 @@ import ColorCell from './cells/colorCell/ColorCell';
 import DateCell from './cells/dateCell/DateCell';
 import DropdownCell from './cells/dropdownCell/DropdownCell';
 import GenericAssignCell from './cells/genericAssignCell/GenericAssignCell';
+import GenericAssign from './cells/genericAssignCell/GenericAssign'
 import ImageDisplay from './cells/imageDisplay/ImageDisplay';
 import InPlaceCell from './cells/InPlaceCell/InPlaceCell';
 import TextCell from './cells/TextCell/TextCell';
@@ -23,6 +24,7 @@ module.exports = {
 	DateCell,
 	DropdownCell,
 	GenericAssignCell,
+	GenericAssign,
 	ImageDisplay,
 	InPlaceCell,
 	TextCell,
