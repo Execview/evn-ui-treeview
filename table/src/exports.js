@@ -5,6 +5,7 @@ import UserRoleDisplay from './UserRoleDisplay/UserRoleDisplay';
 import UserHeaderDisplay from './headers/UserHeaderDisplay';
 import Cell from './cells/Cell/Cell';
 import ColorCell from './cells/colorCell/ColorCell';
+import ColorFilter from './cells/colorCell/ColorFilter';
 import DateCell from './cells/dateCell/DateCell';
 import DropdownCell from './cells/dropdownCell/DropdownCell';
 import GenericAssignCell from './cells/genericAssignCell/GenericAssignCell';
@@ -21,6 +22,7 @@ module.exports = {
 	UserHeaderDisplay,
 	Cell,
 	ColorCell,
+	ColorFilter,
 	DateCell,
 	DropdownCell,
 	GenericAssignCell,

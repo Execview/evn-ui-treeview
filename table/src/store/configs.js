@@ -4,12 +4,15 @@ import DropdownCell from '../cells/dropdownCell/DropdownCell';
 import ImageDisplay from '../cells/imageDisplay/ImageDisplay';
 import GenericAssignCell from '../cells/genericAssignCell/GenericAssignCell';
 import ColorCell from '../cells/colorCell/ColorCell';
+import ColorFilter from '../cells/colorCell/ColorFilter';
 import DateCell from '../cells/dateCell/DateCell';
 import TextCell from '../cells/TextCell/TextCell'
 
 import UserRoleDisplay from '../UserRoleDisplay/UserRoleDisplay';
 import UserHeaderDisplay from '../headers/UserHeaderDisplay';
 import { countries, priority } from './constants';
+
+const progressValues = { green: 'On track', amber: 'At Risk', red: 'Blocked', grey: 'Unknown Status', blue: 'Completed'};
 
 export const columnsInfo1 = {
 	images: { cellType: 'images', headerType: <ImageDisplay data={['https://i.imgur.com/w2pv5Ux.png']} />, width: 4 },
@@ -24,10 +27,11 @@ export const columnsInfo1 = {
 export const columnsInfo2 = {
 	activityId: { cellType: 'text', headerData: 'Activity ID', width: 5, minWidth: 25, rule: 'textSize' },
 	startDate: { cellType: 'date', headerData: 'Start Date', width: 10, rule: 'dateExists' },
-	latestProgress: { cellType: 'textarea', headerData: 'Latest Progress', rule: 'textSize' },
+	latestProgress: { cellType: 'textarea', headerData: 'Latest Progress', rule: 'textSize'},
 	dueDate: { cellType: 'date', headerData: 'Due Date', width: 10 },
+	progress: { cellType: 'color', headerData: 'RAG', width: 10, minWidth: 25, filter: <ColorFilter colorStrings={progressValues}/>  },
 	assignedUsers: { cellType: 'users', headerData: 'Assigned Users', width: 10, headerType: 'userHeader' },
-	progress: { cellType: 'color', headerData: 'RAG', width: 10, minWidth: 25 },
+
 	
 	// employeeName: { cellType: 'dropdown', headerData: 'Employee Name', width: 400 },
 };
@@ -183,7 +187,7 @@ export const cellTypes = {
 	dropdown: <DropdownCell dropdownList={countries} canSearch={true} inline={true} />,
 	users: <UserRoleDisplay userProfiles={users} />,
 	genericAdder: <GenericAssignCell display={<Display />} getOption={getOption} getSearchField={getSearchField} items={Object.keys(users)} leftTitle={leftTitle} rightTitle={rightTitle} />,
-	color: <ColorCell />,
+	color: <ColorCell colorStrings={progressValues} inline={true}/>,
 	date: <DateCell />,
 	userHeader: <UserHeaderDisplay />,
 	images: <ImageDisplay />

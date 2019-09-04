@@ -14,11 +14,13 @@ import ImageDisplay from './cells/imageDisplay/ImageDisplay';
 import classes from './App.module.css';
 import Panel from './Panel/Panel';
 
+
 const crypto = require('crypto');
 const hash = crypto.createHash('sha256');
 
 const App = (props) => {
 	const [data, setData] = useState({})
+	const [filters, setFilters] = useState({})
 
 	useEffect(() => {
 		setData(props.data);
@@ -34,6 +36,16 @@ const App = (props) => {
 	for (let i = 0; i < dataKeys.length; i++) {
 		t2[dataKeys[i]] = data[dataKeys[i]];
 	}
+	const allData = t2
+
+	let filteredData = allData
+	Object.values(filters).forEach((colFilter)=>{
+		Object.values(colFilter).forEach(filterFunction=>{
+			const old = filteredData
+			filteredData = filterFunction(filteredData)
+		})
+	})
+
 	const randomNumber = Math.floor((Math.random() * cats.length));
 
 
@@ -60,10 +72,12 @@ const App = (props) => {
 	}
 	const [cmv, setCmv] = useState('')
 	const getContextMenu = (col) => {
+		const filterComponent = columnsInfo[col].filter || null
 		return (
 			<Panel panelClass={classes["header-context-menu"]}>
 				{col+cmv}
 				<Button onClick={()=>setCmv(cmv ? '' :' toggled!')}>Test re-render</Button>
+				{filterComponent && React.cloneElement(filterComponent,{...filterComponent.props, allData: allData, filterProperties:['progress'], activeFilter: filters[col], onValidateSave: ((newFilters)=>setFilters({...filters,[col]:newFilters})), className: classes['context-filter']})}
 			</Panel>
 		)
 	}
@@ -75,7 +89,7 @@ const App = (props) => {
 				<TableWrapper
 					columnsInfo={columnsInfo}
 					editableCells={props.editableCells}
-					data={t2}
+					data={filteredData}
 					cellTypes={cellTypes}
 					onSave={props.onSave}
 					rules={rules}

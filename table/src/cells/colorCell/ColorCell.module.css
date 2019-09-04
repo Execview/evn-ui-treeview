@@ -144,3 +144,14 @@
 .small-stripes{
   background-size: 5.66px 5.66px;
 }
+
+.panel{
+  position:absolute;
+  left:0;
+  top:0;
+  z-index: 1;
+}
+
+.caret{
+	left:0px;
+}
