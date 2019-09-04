@@ -40,7 +40,8 @@ const App = (props) => {
 
 	let filteredData = allData
 	Object.values(filters).forEach((colFilter)=>{
-		Object.values(colFilter).forEach(filterFunction=>{
+		Object.values(colFilter).forEach(subfilter=>{
+			const filterFunction = subfilter.filter || (()=>{console.log('filter function does not exist')})
 			const old = filteredData
 			filteredData = filterFunction(filteredData)
 		})
@@ -77,7 +78,7 @@ const App = (props) => {
 			<Panel panelClass={classes["header-context-menu"]}>
 				{col+cmv}
 				<Button onClick={()=>setCmv(cmv ? '' :' toggled!')}>Test re-render</Button>
-				{filterComponent && React.cloneElement(filterComponent,{...filterComponent.props, allData: allData, filterProperties:['progress'], activeFilter: filters[col], onValidateSave: ((newFilters)=>setFilters({...filters,[col]:newFilters})), className: classes['context-filter']})}
+				{filterComponent && React.cloneElement(filterComponent,{...filterComponent.props, allData: allData, activeFilter: filters[col], onValidateSave: ((newFilters)=>setFilters({...filters,[col]:newFilters})), className: classes['context-filter']})}
 			</Panel>
 		)
 	}

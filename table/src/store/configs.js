@@ -6,6 +6,7 @@ import GenericAssignCell from '../cells/genericAssignCell/GenericAssignCell';
 import ColorCell from '../cells/colorCell/ColorCell';
 import ColorFilter from '../cells/colorCell/ColorFilter';
 import DateCell from '../cells/dateCell/DateCell';
+import DateFilter from '../cells/dateCell/DateFilter'
 import TextCell from '../cells/TextCell/TextCell'
 
 import UserRoleDisplay from '../UserRoleDisplay/UserRoleDisplay';
@@ -28,8 +29,8 @@ export const columnsInfo2 = {
 	activityId: { cellType: 'text', headerData: 'Activity ID', width: 5, minWidth: 25, rule: 'textSize' },
 	startDate: { cellType: 'date', headerData: 'Start Date', width: 10, rule: 'dateExists' },
 	latestProgress: { cellType: 'textarea', headerData: 'Latest Progress', rule: 'textSize'},
-	dueDate: { cellType: 'date', headerData: 'Due Date', width: 10 },
-	progress: { cellType: 'color', headerData: 'RAG', width: 10, minWidth: 25, filter: <ColorFilter colorStrings={progressValues}/>  },
+	dueDate: { cellType: 'date', headerData: 'Due Date', width: 10, filter: <DateFilter filterProperties={['dueDate']}/> },
+	progress: { cellType: 'color', headerData: 'RAG', width: 10, minWidth: 25, filter: <ColorFilter colorStrings={progressValues} filterProperties={['progress']}/>  },
 	assignedUsers: { cellType: 'users', headerData: 'Assigned Users', width: 10, headerType: 'userHeader' },
 
 	

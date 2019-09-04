@@ -28,13 +28,15 @@ const ColorFilter = (props) => {
 		const toggledOn = !Object.keys(activeFilters).includes(f)
 		let updatedFilters = activeFilters
 		if(toggledOn){
-			updatedFilters[f] = ((allData)=>{
-				return Object.fromEntries(Object.entries(allData).filter(([rowkey,row])=>{
-					const colorColumn = props.filterProperties[0]
-					const color = row[colorColumn]
-					return color!==f && !(f==='grey' && !color)
-				}))
-			})
+			updatedFilters[f] = {
+				filter:((allData)=>{
+					return Object.fromEntries(Object.entries(allData).filter(([rowkey,row])=>{
+						const colorColumn = props.filterProperties[0]
+						const color = row[colorColumn]
+						return color!==f && !(f==='grey' && !color)
+					}))
+				})
+			}
 		} else {
 			const {[f]:_,...newFilters} = activeFilters
 			updatedFilters = newFilters

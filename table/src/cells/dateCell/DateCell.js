@@ -9,11 +9,12 @@ import TextCell from '../TextCell/TextCell';
 
 const DateCell = (props) => {
 	const [open, setOpen] = useState(false);
+	const unknownString = props.dateUnknown || 'Date Unknown'
 
 	const selectedDate = props.data ? new Date(props.data) : new Date();
 	
 	const displayFormat = props.format || 'ddd DD/MMM/YYYY';
-	const dateString = props.data ? moment(props.data).format(displayFormat) : 'Date Unknown';
+	const dateString = props.data ? moment(props.data).format(displayFormat) : unknownString;
 	const submit = (date) => {
 		if (date && !isNaN(date.getTime())) {
 			props.onValidateSave(date);

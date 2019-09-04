@@ -22,7 +22,7 @@ const InPlaceCell = (props) => {
 		data: value,
 		isActive: editMode,
 		style,
-		onValidateSave: ((data) => { inPlaceOnValidateSave(data); props.onValidateSave(data)})
+		onValidateSave: ((data) => { inPlaceOnValidateSave(data); props.onValidateSave && props.onValidateSave(data)})
 	};
 
 	return (

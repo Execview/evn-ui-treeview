@@ -7,6 +7,7 @@ import Cell from './cells/Cell/Cell';
 import ColorCell from './cells/colorCell/ColorCell';
 import ColorFilter from './cells/colorCell/ColorFilter';
 import DateCell from './cells/dateCell/DateCell';
+import DateFilter from './cells/dateCell/DateFilter'
 import DropdownCell from './cells/dropdownCell/DropdownCell';
 import GenericAssignCell from './cells/genericAssignCell/GenericAssignCell';
 import GenericAssign from './cells/genericAssignCell/GenericAssign'
@@ -24,6 +25,7 @@ module.exports = {
 	ColorCell,
 	ColorFilter,
 	DateCell,
+	DateFilter,
 	DropdownCell,
 	GenericAssignCell,
 	GenericAssign,
