@@ -6,19 +6,19 @@ import { faWindowClose } from '@fortawesome/free-solid-svg-icons'
 import DateCell from './DateCell'
 
 const DateFilter = (props) => {
-	const activeFilters = props.activeFilter || {} // {removeRed: ()=>removesRedFromData}
-
+	const activeFilters = props.activeFilter || {}
+	const text = props.text || {}
 	const beforeFilter = activeFilters.beforeFilter
 	const afterFilter = activeFilters.afterFilter
 
 	const options = {
 		before: {
-			text: 'Before',
+			text: text.before || 'Before',
 			date: beforeFilter && beforeFilter.meta,
 			filter: 'beforeFilter'
 		},
 		after: {
-			text: 'After',
+			text: text.after || 'After',
 			date: afterFilter && afterFilter.meta,
 			filter: 'afterFilter'
 		},
@@ -56,9 +56,9 @@ const DateFilter = (props) => {
 			<div className={classes['date-filter']}>
 				{Object.entries(options).map(([o,op])=>{
 					return (
-						<div className={classes['filter-option']}>
+						<div className={classes['filter-option']} key={o}>
 							<div>{op.text}:</div> 
-							<InPlaceCell data={op.date} type={<DateCell dateUnknown='Any' onValidateSave={(d)=>setFilter(o,d)}/>}/>
+							<InPlaceCell data={op.date} type={<DateCell dateUnknown='Any'/>} onValidateSave={(d)=>setFilter(o,d)}/>
 							{op.date ? <FontAwesomeIcon icon={faWindowClose} style={{color: 'red'}} onClick={()=>removeFilter(o)}/> : null}
 						</div>
 					)
@@ -69,15 +69,3 @@ const DateFilter = (props) => {
 }
 
 export default DateFilter
-
-/* 
-
-updatedFilters[f] = ((allData)=>{
-	return Object.fromEntries(Object.entries(allData).filter(([rowkey,row])=>{
-		const colorColumn = props.filterProperties[0]
-		const color = row[colorColumn]
-		return color!==f && !(f==='grey' && !color)
-	}))
-})
-
- */

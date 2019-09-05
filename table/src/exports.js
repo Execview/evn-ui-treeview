@@ -14,6 +14,7 @@ import GenericAssign from './cells/genericAssignCell/GenericAssign'
 import ImageDisplay from './cells/imageDisplay/ImageDisplay';
 import InPlaceCell from './cells/InPlaceCell/InPlaceCell';
 import TextCell from './cells/TextCell/TextCell';
+import TextFilter from './cells/TextCell/TextFilter'
 import Panel from './Panel/Panel';
 
 module.exports = {
@@ -32,5 +33,6 @@ module.exports = {
 	ImageDisplay,
 	InPlaceCell,
 	TextCell,
+	TextFilter,
 	Panel
 };

@@ -11,7 +11,7 @@ const ColorFilter = (props) => {
 
 	const colors = props.colorStrings || { green: 'green', amber: 'amber', red: 'red', grey: 'grey', blue: 'blue'}
 	const options = Object.fromEntries(Object.entries(colors).map(([c,s])=>{
-		const checked = Object.keys(activeFilters).includes(c)
+		const checked = !Object.keys(activeFilters).includes(c)
 		const optionComponent = (
 			<div className={classes['color-option']}>
 				<div style={{display:'flex', alignItems: 'center'}}>
