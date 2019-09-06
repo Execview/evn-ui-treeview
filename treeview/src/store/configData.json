@@ -23,7 +23,7 @@
 		"ParentBubble": "_1235d",
 		"name": "Project X",
 		"progress": "red",
-		"type": "square"
+		"type": "arrow"
 	},
 	"_917gb": {
 		"startdate": "2018-12-19T00:00:00.000Z",
@@ -35,7 +35,7 @@
 		"ParentBubble": "",
 		"name": "Activity Bravo",
 		"progress": "green",
-		"type": "bubble"
+		"type": "square"
 	},
 	"_1236d": {
 		"startdate": "2018-12-21T00:00:00.000Z",
@@ -47,7 +47,7 @@
 		"ParentBubble": "",
 		"name": "Activity Echo",
 		"progress": "green",
-		"type": "square"
+		"type": "rhombus"
 	},
 	"_k8450": {
 		"startdate": "2018-12-21T00:00:00.000Z",
@@ -73,6 +73,18 @@
 		"progress": "amber",
 		"type": "bubble"
 	},
+	"tempDiamond": {
+		"startdate": "2018-12-19T00:00:00.000Z",
+		"enddate": "2018-12-20T00:00:00.000Z",
+		"colour": "Green",
+		"ChildAssociatedBubbles":[],
+		"ParentAssociatedBubble": "",
+		"ChildBubbles": {},
+		"ParentBubble": "",
+		"name": "Diamondy Maximus",
+		"progress": "amber",
+		"type": "diamond"
+	},
 	"tempTriangle": {
 		"startdate": "2018-12-19T00:00:00.000Z",
 		"enddate": "2018-12-20T00:00:00.000Z",
@@ -81,9 +93,45 @@
 		"ParentAssociatedBubble": "",
 		"ChildBubbles": {},
 		"ParentBubble": "",
-		"name": "XD",
+		"name": "Tri Bolton",
 		"progress": "amber",
 		"type": "triangle"
+	},
+	"tempInvertedBubble": {
+		"startdate": "2018-12-21T00:00:00.000Z",
+		"enddate": "2018-12-26T00:00:00.000Z",
+		"colour": "Blue",
+		"ChildAssociatedBubbles":[],
+		"ParentAssociatedBubble": "",
+		"ChildBubbles": {},
+		"ParentBubble": "",
+		"name": "Inverted",
+		"progress": "amber",
+		"type": "invertedBubble"
+	},
+	"tempRhombus": {
+		"startdate": "2018-12-21T00:00:00.000Z",
+		"enddate": "2018-12-26T00:00:00.000Z",
+		"colour": "Purple",
+		"ChildAssociatedBubbles":[],
+		"ParentAssociatedBubble": "",
+		"ChildBubbles": {},
+		"ParentBubble": "",
+		"name": "Rhonda",
+		"progress": "amber",
+		"type": "rhombus"
+	},
+	"tempFirecracker": {
+		"startdate": "2018-12-21T00:00:00.000Z",
+		"enddate": "2018-12-26T00:00:00.000Z",
+		"colour": "Purple",
+		"ChildAssociatedBubbles":[],
+		"ParentAssociatedBubble": "",
+		"ChildBubbles": {},
+		"ParentBubble": "",
+		"name": "Crack",
+		"progress": "green",
+		"type": "cracker"
 	}
 }
 
