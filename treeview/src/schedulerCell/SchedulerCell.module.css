@@ -20,6 +20,7 @@
 
 .scheduler-header{
 	display: flex;
+	justify-content: space-between;
 }
 
 .menu-container {

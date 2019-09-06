@@ -6,7 +6,7 @@ import DatePicker from 'react-datepicker';
 import moment from 'moment';
 
 const SchedulerMenu = (props) => {
-	const options = {hour:'Hour', day:'Day', week:'Week', month:'Month'};
+	const options = {hour:'Hour', day:'Day', week:'Week', month:'Month', quarter: 'Quarter'};
 	const [selected,setSelected] = props.mode
 	const [start, setStart] = props.start
 

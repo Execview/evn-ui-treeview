@@ -21,16 +21,18 @@ const SchedulerHeader = (props) => {
 	const timeIntervals = snaps.map((snap,index)=>{
 		const diff = index !== snaps.length-1 ? Math.abs((snaps[index+1][1]-snap[1])/2) : 0;
 		if (index === snaps.length - 1) {return '';}
+		let strings = moment(snap[0]).format(formatString).split(' ')
+		if(strings.length===1){strings = ['',...strings]}
 		return (
 			<tspan alignmentBaseline="middle" key={index} x={snap[1]+diff} y={'50%'}>
-				{props.data.schedulerOptions.mode[0] === 'day' && <tspan style={{fill:'rgba(255,255,255,0.4)'}}alignmentBaseline="middle" y={'50%'}>{moment(snap[0]).format('ddd')}</tspan>}
-				{moment(snap[0]).format(formatString)}
+				<tspan style={{fill:'rgba(255,255,255,0.4)'}}alignmentBaseline="middle" y={'50%'}>{strings[0]}</tspan>
+				{' '+strings.slice(1,strings.length).join(' ')}
 			</tspan>
 		)
 	})
 	
 	return (
-		<div className={classes["header-cell"]+' '+classes["no-select"]+' '+classes["scheduler-header"]} style={{width:style.width, touchAction: 'pan-y' }} >
+		<div className={`${classes["header-cell"]} ${classes["no-select"]} ${classes["scheduler-header"]}`} style={{touchAction: 'pan-y' }} >
 			<svg height='100%' width='100%' onPointerDown={props.data.mouseOnScheduler}>
 				<text style={{fill:'white', fontSize:'12px', textAnchor: 'middle'}}>
 				{timeIntervals}

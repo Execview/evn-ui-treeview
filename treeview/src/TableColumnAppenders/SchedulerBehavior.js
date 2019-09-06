@@ -85,7 +85,7 @@ export const getTimeFormatString = (resolution) => {
 			break;
 		}
 		case 'day': {
-			formatString = ' Do'
+			formatString = 'ddd Do'
 			break;
 		}
 		case 'week': {
@@ -94,6 +94,10 @@ export const getTimeFormatString = (resolution) => {
 		}
 		case 'month': {
 			formatString = 'MMM'
+			break;
+		}
+		case 'quarter': {
+			formatString = '[Q]Q YYYY'
 			break;
 		}
 		default: {
