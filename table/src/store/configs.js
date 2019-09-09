@@ -186,7 +186,7 @@ export const cellTypes = {
 	text: <TextCell />,
 	textarea: <TextCell wrap={true} />,
 	number: <TextCell />,
-	dropdown: <DropdownCell dropdownList={countries} canSearch={true} inline={true} />,
+	dropdown: <DropdownCell options={countries} canSearch={true} inline={true} />,
 	users: <UserRoleDisplay userProfiles={users} />,
 	genericAdder: <GenericAssignCell display={<Display />} getOption={getOption} getSearchField={getSearchField} items={Object.keys(users)} leftTitle={leftTitle} rightTitle={rightTitle} />,
 	color: <ColorCell colorStrings={progressValues} inline={true}/>,

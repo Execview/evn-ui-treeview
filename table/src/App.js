@@ -56,7 +56,7 @@ const App = (props) => {
 	const InPlaceCellPropsTextarea = {...InPlaceCellPropsText, wrap:true, classes:{text:classes['black-text'], textareaPlaceholder:classes['red-text']}}
 	const InPlaceCellPropsColour = { data: 'green', type: <ColorCell />, onValidateSave: ((x) => { console.log(x); }) };
 	const InPlaceCellPropsDate = useMemo(() => { return { data: new Date('2019-12-25'), type: <DateCell />, onValidateSave: ((x) => { console.log(x); }) }}, []);
-	const InPlaceCellPropsDropdown = { data: 'apple', type: <DropdownCell dropdownList={['apple', 'banana', 'cat']} />, onValidateSave: ((x) => { console.log(x); }) };
+	const InPlaceCellPropsDropdown = { data: 'apple', type: <DropdownCell options={['apple', 'banana', 'cat']} />, onValidateSave: ((x) => { console.log(x); }) };
 
 	const gaais = { a: { name: 'apple', image: 'https://i.imgur.com/ruSaBxM.jpg' }, b: { name: 'banana', image: 'https://i.imgur.com/6lreFDw.jpg' }, c: { name: 'cat', image: 'https://i.imgur.com/OYBnpPT.jpg' } };
 	const Display = (props) => {
@@ -111,7 +111,6 @@ const App = (props) => {
 				<InPlaceCell {...InPlaceCellPropsDropdown} />
 				<InPlaceCell {...InPlaceCellPropsGenericAssign} />
 			</div>
-			<DropdownCell dropdownList={['apple', 'banana', 'cat']} data={'banana'} onValidateSave={(d)=>console.log(d)}/>
 		</div>
 	);
 };

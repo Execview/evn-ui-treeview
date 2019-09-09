@@ -6,23 +6,34 @@ import './DropdownCell.css';
 
 const DropdownCell = (props) => {
 	const [open, setOpen] = useState(false);
+
+	const input = props.options || {};
+	const optionsIsArray = Array.isArray(input);
+	const inputOptions = !optionsIsArray ? input : Object.fromEntries(input.map(o => [o, o]));
+
 	const [searchString, setSearchString] = useState('');
-	const [displayedRows, setDisplayedRows] = useState(props.dropdownList || []);
+	const [displayedRows, setDisplayedRows] = useState(Object.keys(inputOptions));
 	const inlineMode = props.inline;
 
 	const data = props.data;
 	const displayCell = props.display || <DefaultDropdownDisplay {...props} looksEditable={props.isEditable} showCaret={!inlineMode} />;
 	
+	const getSearchField = (key) => {
+		if (props.getSearchField) {
+			return props.getSearchField(key);
+		}
+		return key;
+	};
 
 	const onSearchChange = (value) => {
-		const newRows = props.dropdownList.filter(v => v.toLowerCase().includes(value));
+		const newRows = Object.keys(inputOptions).filter(v => getSearchField(v).toLowerCase().includes(value.toLowerCase()));
 		setSearchString(value);
 		setDisplayedRows(newRows);
 	};
 
 	const onBlur = () => { props.onValidateSave(props.data); setOpen(false); };
 
-	const options = open && displayedRows.reduce((total, option) => { return { ...total, [option]: option }; }, {})
+	const options = Object.fromEntries(Object.entries(inputOptions).filter(([o,op]) => displayedRows.includes(o)))
 	const edit = (
 		<div className="dropdown-container">
 			<Panel panelClass="panel" hideCaret={inlineMode}> 
@@ -30,6 +41,7 @@ const DropdownCell = (props) => {
 					{...props}
 					onBlur={onBlur}
 					submit={(key) => { setOpen(false); props.onValidateSave(options[key]); }}
+					canSearch={props.canSearch}
 					onSearchChange={onSearchChange}
 					searchString={searchString}
 					options={options}
