@@ -32,23 +32,22 @@ const fetchy = (link,options={})=>{
 	if(method!=='GET'){headers["Content-Type"] = "application/json"}
 	if(token){headers["Authorization"] = "Bearer "+token}
 
+	const controller = new AbortController();
 	let fetchOptions = {
 		method:method,
 		headers: headers,
+		signal: controller.signal,
 		...otherOptions
 	}
 	if(hasBody){fetchOptions.body = JSON.stringify(body)}
 
 	const failedToFetchReturn = null
 	const debugInfo = {url: link,fetchOptions: {...fetchOptions, body:body}}
-	debug && console.log(debugInfo)
+	//debug && console.log(debugInfo)
+	//
 	return Promise.race([
 		fetch(link, fetchOptions),
-		new Promise((resolve)=>{
-			console.log('request failed:')
-			console.log(debugInfo)
-			setTimeout(resolve, timeout, failedToFetchReturn)
-		})
+		new Promise((resolve) => setTimeout(() => {;controller.abort(); return resolve(failedToFetchReturn)}, timeout))
 	])
 }
 
