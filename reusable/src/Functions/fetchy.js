@@ -43,10 +43,9 @@ const fetchy = (link,options={})=>{
 
 	const debugInfo = {url: link,fetchOptions: {...fetchOptions, body:body}}
 	debug && console.log(debugInfo)
-	console.log(timeout)
 	return Promise.race([
 		fetch(link, fetchOptions),
-		new Promise((resolve, reject) => setTimeout(() => {reject('too slow!'); controller.abort()}, timeout))
+		new Promise((resolve, reject) => setTimeout(() => {reject('too slow! -> '+link); controller.abort()}, timeout))
 	])
 }
 
