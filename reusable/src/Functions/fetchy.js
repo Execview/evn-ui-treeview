@@ -40,10 +40,15 @@ const fetchy = (link,options={})=>{
 	if(hasBody){fetchOptions.body = JSON.stringify(body)}
 
 	const failedToFetchReturn = null
-	debug && console.log({url: link,fetchOptions: {...fetchOptions, body:body}})
+	const debugInfo = {url: link,fetchOptions: {...fetchOptions, body:body}}
+	debug && console.log(debugInfo)
 	return Promise.race([
 		fetch(link, fetchOptions),
-		new Promise((resolve)=>setTimeout(resolve, timeout, failedToFetchReturn))
+		new Promise((resolve)=>{
+			console.log('request failed:')
+			console.log(debugInfo)
+			setTimeout(resolve, timeout, failedToFetchReturn)
+		})
 	])
 }
 

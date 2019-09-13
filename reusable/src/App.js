@@ -95,7 +95,8 @@ export default App;
 		// console.log(recursiveDeepDiffsREACT(rdda,rddb))
 	
 	//fetchy
-		// fetchy('https://evnext-api.evlem.net/api/login',{debug:true, body:{username: 'namyts', password: 'password'}})
+		//fetchy('https://evnext-api.evlem.net/api/login',{debug:true, body:{username: 'namyts', password: 'password'}})
+		// fetchy('http://james.evlem.net:3000/api/login',{debug:true, body:{username: 'namyts', password: 'password'}})
 		// .then(res=>res.json())
 		// .then(data=>console.log(data))
 
