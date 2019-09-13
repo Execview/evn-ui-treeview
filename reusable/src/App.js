@@ -13,7 +13,7 @@ import recursiveDeepAssign from './Functions/recursiveDeepAssign'
 import recursiveDeepCopy from './Functions/recursiveDeepCopy'
 import recursiveDeepDiffs from './Functions/recursiveDeepDiffs'
 import recursiveDeepDiffsREACT from './Functions/recursiveDeepDiffsREACT'
-import sendEvent from './Functions/sendEvent'
+import fetchy from './Functions/fetchy'
 
 const App = (props) => {
 	const ButtonProps = {onClick:(() => console.log('xd'))}
@@ -94,8 +94,8 @@ export default App;
 		// const rddb = {a: 'oompa loompa', b: [1,4,{thr:'thr'}], c: 'test', d: (new Date()).toISOString()}
 		// console.log(recursiveDeepDiffsREACT(rdda,rddb))
 	
-	//sendEvent
-		// sendEvent(null,'https://evnext-api.evlem.net/api/login',{username: 'namyts', password: 'password'},{debug:true})
+	//fetchy
+		// fetchy('https://evnext-api.evlem.net/api/login',{debug:true, body:{username: 'namyts', password: 'password'}})
 		// .then(res=>res.json())
 		// .then(data=>console.log(data))
 

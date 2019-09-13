@@ -12,7 +12,7 @@ import recursiveDeepAssign from './Functions/recursiveDeepAssign'
 import recursiveDeepCopy from './Functions/recursiveDeepCopy'
 import recursiveDeepDiffs from './Functions/recursiveDeepDiffs'
 import recursiveDeepDiffsREACT from './Functions/recursiveDeepDiffsREACT'
-import sendEvent from './Functions/sendEvent'
+import fetchy from './Functions/fetchy'
 
 module.exports = {
 	Button,
@@ -27,6 +27,6 @@ module.exports = {
 	recursiveDeepCopy,
 	recursiveDeepDiffs,
 	recursiveDeepDiffsREACT,
-	sendEvent,
+	fetchy,
 	OCO
 };
