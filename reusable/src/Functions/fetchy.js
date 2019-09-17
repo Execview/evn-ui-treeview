@@ -1,5 +1,5 @@
 const removeOurOptions = (options) => {
-	const {debug,payload,token,holder,method,timeout,...otherOptions} = options
+	const {body,debug,payload,token,holder,method,timeout,...otherOptions} = options
 	return otherOptions
 }
 
@@ -39,7 +39,11 @@ const fetchy = (link,options={})=>{
 		headers: headers,
 		...otherOptions
 	}
-	if(hasBody){fetchOptions.body = JSON.stringify(body)}
+	if(hasBody){
+		isTextFormat = ['json','text'].includes(fetchOptions.headers["Content-Type"] || '') 
+		fetchOptions.body = isTextFormat ? JSON.stringify(body) : body
+	}
+	
 	if(token){fetchOptions.headers["Authorization"] = "Bearer "+token}
 
 	const debugInfo = {url: link,fetchOptions: {...fetchOptions, body:body}}
