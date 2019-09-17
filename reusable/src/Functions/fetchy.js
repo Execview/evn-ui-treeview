@@ -40,7 +40,7 @@ const fetchy = (link,options={})=>{
 		...otherOptions
 	}
 	if(hasBody){
-		const isTextFormat = ['json','text'].includes(fetchOptions.headers["Content-Type"] || '') 
+		const isTextFormat = ['json','text'].some(w=>(fetchOptions.headers["Content-Type"] || '').includes(w)) 
 		fetchOptions.body = isTextFormat ? JSON.stringify(body) : body
 	}
 	
