@@ -16,7 +16,7 @@ const DropdownCell = (props) => {
 	const inlineMode = props.inline;
 
 	const data = props.data;
-	const displayCell = props.display || <DefaultDropdownDisplay {...props} looksEditable={props.isEditable} showCaret={!inlineMode} />;
+
 	
 	const getSearchField = (key) => {
 		if (props.getSearchField) {
@@ -50,6 +50,8 @@ const DropdownCell = (props) => {
 			</Panel>
 		</div>
 	);
+
+	const displayCell = props.display || <DefaultDropdownDisplay {...props} data={options[data]} looksEditable={props.isEditable} showCaret={!inlineMode} />;
 
 	const display = (
 		<div style={{ height: '100%' }} onClick={() => setOpen(true)}>

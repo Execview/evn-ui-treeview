@@ -30,7 +30,7 @@ const fetchy = (link,options={})=>{
 
 	let headers = {}
 	if(method!=='GET'){headers["Content-Type"] = "application/json"}
-	if(token){headers["Authorization"] = "Bearer "+token}
+	
 
 	let controller = new AbortController();
 	let fetchOptions = {
@@ -40,6 +40,7 @@ const fetchy = (link,options={})=>{
 		...otherOptions
 	}
 	if(hasBody){fetchOptions.body = JSON.stringify(body)}
+	if(token){fetchOptions.headers["Authorization"] = "Bearer "+token}
 
 	const debugInfo = {url: link,fetchOptions: {...fetchOptions, body:body}}
 	debug && console.log(debugInfo)
