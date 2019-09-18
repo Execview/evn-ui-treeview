@@ -54,7 +54,7 @@ export const getSnaps = (start, schedulerResolution, schedulerWidth, timeWidth, 
 			// if([0,6].includes(moment(currentdate).day())){number++;continue;}
 
 			//EXPERIMENTAL -- deals with months that start with saturday/sunday/monday. pls remove
-			if (schedulerResolution === 'month') {
+			if (schedulerResolution === 'month' || schedulerResolution === 'quarter') {
 				while (!moment(currentdate).isWorkingTime()) {
 					currentdate = moment(currentdate).add(1,'d').toDate();
 				}
