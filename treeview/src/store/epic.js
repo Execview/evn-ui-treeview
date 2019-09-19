@@ -15,36 +15,38 @@ export const tryBubbleTransformEpic = (action$,state$) => { return (
 	})
 )}
 export const tryBubbleTransformEpicMap = (action, state)=>{
-	let newState = {...state}
 	//apply transformation to a copy of bubble states. If valid, replace the main state.
-	const oldBubbles = {}
-	for (const bubblekey in newState._data){
-		const bubble = newState._data[bubblekey]
-		oldBubbles[bubblekey]=recursiveDeepCopy(bubble)
+	const bubbleCopies = {}
+	for (const bubblekey in state._data){
+		const bubble = state._data[bubblekey]
+		bubbleCopies[bubblekey]=recursiveDeepCopy(bubble)
 	}
 
 	if (action.changes){
-		const newStateBubbles = tryReturnValidTransformState(oldBubbles,action);
-		if(newStateBubbles!==false){
-			let itemChanges = {key: action.key, changes: action.changes};
-			for(let x in action.changes) {
-				itemChanges.changes[x] = newStateBubbles[action.key][x]
-			}
+		const {startdate, enddate, ...nonDateChanges} = action.changes
+		const newStateBubbles = tryReturnValidTransformState(bubbleCopies,action.key,{startdate,enddate});
+		const newBubbles = newStateBubbles || state._data
+		const newState = {...newBubbles,[action.key]:{...newBubbles[action.key],...nonDateChanges}}
 
-			const moveBubblesAction = {
-				type:actionTypes.MOVE_BUBBLES,
-				originalAction: action,
-				_data: newStateBubbles,
-				editableValues: action.editableValues,
-				itemChanges,
-			}
-
-			if (action.sendChanges) {
-				return Observable.of(moveBubblesAction,{type: actionTypes.SEND_CHANGES, itemChanges})
-			} else {
-				return Observable.of(moveBubblesAction)
-			}
+		let itemChanges = {key: action.key, changes: {}};
+		for(let x in action.changes) {
+			itemChanges.changes[x] = newState[action.key][x]
 		}
+
+		const moveBubblesAction = {
+			type:actionTypes.MOVE_BUBBLES,
+			originalAction: action,
+			_data: newState,
+			editableValues: action.editableValues,
+			itemChanges,
+		}
+
+		if (action.sendChanges) {
+			return Observable.of(moveBubblesAction,{type: actionTypes.SEND_CHANGES, itemChanges})
+		} else {
+			return Observable.of(moveBubblesAction)
+		}
+
 	}
 	return Observable.of(voidAction);
 }

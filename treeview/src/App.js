@@ -17,7 +17,7 @@ const App = (props) => {
 
 	const [selectedRow, setSelectedRow] = useState();
 
-	const [showEnddate, setShowEnddate] = useState(true)
+	const [showEnddate, setShowEnddate] = useState(false)
 
 	const rowheight = 30
 	const randomNumber = Math.floor((Math.random() * cats.length));

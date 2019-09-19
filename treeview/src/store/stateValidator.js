@@ -20,8 +20,7 @@ moment.locale('en', {
     }
 });
 
-const tryReturnValidTransformState = (bubbles,action) =>{
-	const {key, changes} = action
+const tryReturnValidTransformState = (bubbles,key,changes) =>{
 	//Return the updated state if it is valid, else return false.
 	var InvalidMovement = false //keep track if any previous steps have set StateInvalid to false
 
@@ -113,10 +112,6 @@ const tryReturnValidTransformState = (bubbles,action) =>{
 				break;
 		}
 	}
-	const {startdate, enddate, ...rest} = changes
-
-
-	bubbles[key] = {...bubbles[key],...rest}
 
 	var part = ''
 	if(changes.startdate && changes.enddate){
