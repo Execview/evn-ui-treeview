@@ -9,7 +9,7 @@ export const getDrawnLinksFromData = (data,getBubbleY,snaps) => {
 	
 	for(let i=0; i<displayedRows.length; i++){
 		const rowId = displayedRows[i]
-		let childlinks = data[rowId].ChildBubbles
+		let childlinks = data[rowId].ChildBubbles || {};
 		for(const childId in childlinks){
 			if(!(data[rowId] && data[childId])) {continue;}
 			const parentdate = data[rowId]['right'=== childlinks[childId].parentside ? "enddate" : "startdate"]

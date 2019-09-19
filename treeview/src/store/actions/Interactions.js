@@ -43,10 +43,6 @@ export const ADD_ROW = (state,action,reducer) => {
 				startdate: date,
 				enddate: moment(date).add(2,'d').toDate(),
 				colours: {left: colors[colorIndex], middle: colors[colorIndex], right: colors[colorIndex], original: colors[colorIndex]},
-				ChildAssociatedBubbles:[],
-				ParentAssociatedBubble: '',
-				ChildBubbles: {},
-				ParentBubble: '',
 				open:true,
 				name: tempTitle,
 				progress: 'amber',
@@ -75,12 +71,12 @@ export const DELETE_BUBBLE = (state,action,reducer) => {
 	let newState = {...state}
 
 	//Delete all Child references to this bubble
-	for(var childkey in state._data[action.key].ChildBubbles){
+	for(var childkey in (state._data[action.key].ChildBubbles || {})){
         newState = reducer(newState,{type: actionTypes.UNLINK_PARENT_BUBBLE,key:childkey})
     }
 
 	//Delete all Child associates of this bubble
-	for(var childkey of state._data[action.key].ChildAssociatedBubbles){
+	for(var childkey of (state._data[action.key].ChildAssociatedBubbles || [])){
         newState = reducer(newState,{type: actionTypes.DELETE_BUBBLE, key:childkey})
     } 
 

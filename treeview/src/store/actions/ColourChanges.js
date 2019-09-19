@@ -2,10 +2,10 @@ import * as actionTypes from './actionTypes';
 
 export const SET_ORIGINAL_COLOUR = (state,action,reducer) => {
 	var colourtoset=state._data[action.key].colours.original
-	var parentkey = state._data[action.key]["ParentBubble"]
+	var parentkey = state._data[action.key].ParentBubble
 	if(parentkey){
-		var thislink = state._data[parentkey]["ChildBubbles"][action.key]
-		if(thislink!=null){
+		var thislink = (state._data[parentkey].ChildBubbles || {})[action.key]
+		if(thislink){
 			if(thislink.childside===action.side){
 				colourtoset=state._data[parentkey].colours.original
 			}

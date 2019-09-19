@@ -11,7 +11,7 @@ const TreeAppender = (props) => {
 		const pushChildRows = (childnodes,currentdepth=0) => {
 			for(const currentRow of childnodes){
 			let arrowstatus = tree[currentRow] ? 'open': 'closed';
-			if(props.data[currentRow].ChildAssociatedBubbles.length===0){arrowstatus='none'}
+			if((props.data[currentRow].ChildAssociatedBubbles || []).length===0){arrowstatus='none'}
 			newDisplayedRows.push({	
 				key:currentRow,
 				depth:currentdepth,
@@ -26,7 +26,7 @@ const TreeAppender = (props) => {
 	}
 
 	const getParentNodes = (data) => {
-		return Object.keys(data).filter(key=>data[key].ParentAssociatedBubble==='')
+		return Object.keys(data).filter(key=>!data[key].ParentAssociatedBubble)
 	}
 
 

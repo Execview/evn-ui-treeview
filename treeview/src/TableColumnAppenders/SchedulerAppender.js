@@ -209,7 +209,7 @@ const SchedulerAppender = (props) => {
 	}
 
 	const clickedOnScheduler = (event) => {
-		if(mouseDownOnBubble.key==="") {
+		if(!mouseDownOnBubble.key) {
 			const mouse = getInternalMousePosition(event)
 			const XDownDate = getNearestSnapDateToX(mouse[0],snaps)
 			setMouseDownOnScheduler(XDownDate)

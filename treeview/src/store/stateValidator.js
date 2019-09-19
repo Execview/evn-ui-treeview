@@ -27,8 +27,8 @@ const tryReturnValidTransformState = (bubbles,action) =>{
 
 	const LinkForcingAlgorithm = (parentbubblekey,amount,side) =>{
 		//Move all bubbles based on links
-		for(var childkey in bubbles[parentbubblekey]["ChildBubbles"]){
-			var parentside = 'right'=== bubbles[parentbubblekey]["ChildBubbles"][childkey].parentside ? 'end' : 'start'
+		for(var childkey in (bubbles[parentbubblekey].ChildBubbles || {})){
+			var parentside = 'right'=== bubbles[parentbubblekey].ChildBubbles[childkey].parentside ? 'end' : 'start'
 			
 			
 			if(side === parentside || side === 'middle'){
@@ -46,11 +46,12 @@ const tryReturnValidTransformState = (bubbles,action) =>{
 	}
 
 	const cantMoveSide = (bubblekey,lockedSide)=>{
-		if(bubbles[bubblekey].ParentBubble){
-			return bubbles[bubbles[bubblekey].ParentBubble].ChildBubbles[bubblekey].childside===lockedSide}
-		else{
-			return false
+		const parentBubble = bubbles[bubblekey].ParentBubble
+		if(parentBubble){
+			const childBubbles = bubbles[parentBubble].ChildBubbles || {};
+			return (childBubbles[bubblekey] || {}).childside===lockedSide
 		}
+		return false
 	}
 	//doesn't work properly on hours
 	const TransformBubble = (bubblekey,part,bubbleChanges) =>{

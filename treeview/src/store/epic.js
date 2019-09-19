@@ -56,7 +56,7 @@ export const tryPerformLinkEpic = (action$,state$) => action$.pipe(
 export const tryPerformLinkEpicMap = (action,state)=>{
 	if ((action.parentside === 'left' || action.parentside === 'right') && action.childkey!==action.parentkey) {
 		// if child doesnt have parent AND parent hasnt already linked child
-		if((state._data[action.childkey]["ParentBubble"]==='')&&(state._data[action.parentkey]["ChildBubbles"][action.childkey]==null)){
+		if((!state._data[action.childkey].ParentBubble)&&(!(state._data[action.parentkey].ChildBubbles || {})[action.childkey])){
 			return {...action, type: actionTypes.PERFORM_LINK} 
 		}
 	}	
@@ -68,7 +68,7 @@ export const tryPerformAssociationEpic = (action$,state$) => action$.pipe(
 	map((action)=>{const state = {...state$.value}; return tryPerformAssociationEpicMap(action,state)})
 )
 export const tryPerformAssociationEpicMap = (action,state) => {
-	if(action.childkey && (action.childkey!==action.parentkey) && !state._data[action.parentkey]["ChildAssociatedBubbles"].includes(action.childkey) && !(state._data[action.childkey]["ParentAssociatedBubble"]===action.parentkey)){
+	if(action.childkey && (action.childkey!==action.parentkey) && !(state._data[action.parentkey].ChildAssociatedBubbles || []).includes(action.childkey) && !(state._data[action.childkey].ParentAssociatedBubble===action.parentkey)){
 		return {...action, type: actionTypes.PERFORM_ASSOCIATION} 
 	}
 	return voidAction;

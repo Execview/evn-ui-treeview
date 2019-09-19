@@ -26,7 +26,7 @@ export const ADD_CHILD_LINK = (state,action,reducer) => {
 			...state,
 			_data: {...state._data,
 				[action.parentkey]:{...state._data[action.parentkey],
-					ChildBubbles:{...state._data[action.parentkey]["ChildBubbles"],
+					ChildBubbles:{...(state._data[action.parentkey].ChildBubbles|| {}),
 						[action.childkey]: {childside: action.childside, parentside: action.parentside, xGapDate: action.xGapDate}
 					}
 				}
@@ -50,7 +50,7 @@ export const ADD_CHILD_ASSOCIATION = (state,action,reducer) => {
 		...state,
 		_data: {...state._data,
 			[action.parentkey]:{...state._data[action.parentkey],
-				ChildAssociatedBubbles:[...state._data[action.parentkey]["ChildAssociatedBubbles"], action.childkey],
+				ChildAssociatedBubbles:[...(state._data[action.parentkey].ChildAssociatedBubbles || []), action.childkey],
 			}
 		}
 	}
@@ -70,14 +70,14 @@ export const ADD_PARENT_ASSOCIATION = (state,action,reducer) => {
 export const UNLINK_PARENT_BUBBLE = (state,action,reducer) => {
 	var newState = {...state}
 	var parentBubbleKey = state._data[action.key].ParentBubble
-	if(parentBubbleKey!==''){
+	if(parentBubbleKey){
 		//remove ParentBubble property value
 		newState = {...newState,
 				_data: {...newState._data,
 							[action.key]:{...newState._data[action.key],
 											ParentBubble:''}}}
 		//remove ChildBubble property from the parent
-		const {[action.key]:value, ...rest} = newState._data[parentBubbleKey]["ChildBubbles"]
+		const {[action.key]:value, ...rest} = (newState._data[parentBubbleKey].ChildBubbles || {})
 		newState = { ...newState,
 			_data: {...newState._data,
 							[parentBubbleKey]:{...newState._data[parentBubbleKey],
@@ -101,8 +101,9 @@ export const UNLINK_PARENT_ASSOCIATED_BUBBLE = (state,action,reducer) => {
 							[action.key]:{...newState._data[action.key],
 											ParentAssociatedBubble:''}}}
 		//remove ChildBubble property from the parent
-		const ChildIndex = newState._data[parentAssociatedBubbleKey]["ChildAssociatedBubbles"].indexOf(action.key)
-		var newChildAssociatedBubbles = [...newState._data[parentAssociatedBubbleKey].ChildAssociatedBubbles]
+		const oldChildAssociatedBubbles = newState._data[parentAssociatedBubbleKey].ChildAssociatedBubbles || []
+		const ChildIndex = oldChildAssociatedBubbles.indexOf(action.key)
+		let newChildAssociatedBubbles = [...oldChildAssociatedBubbles]
 		newChildAssociatedBubbles.splice(ChildIndex,1)
 		newState = { ...newState,
 			_data: {...newState._data,
