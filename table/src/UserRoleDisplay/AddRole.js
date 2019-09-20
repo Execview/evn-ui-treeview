@@ -33,7 +33,6 @@ export default class AddRole extends PureComponent {
           canSearch={true}
           autoFocus={!isMobile}
           placeholder="Assign a role..."
-          style={{ color: 'white' }}
         />
       </div>
     );

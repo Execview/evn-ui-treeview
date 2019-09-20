@@ -1,3 +1,7 @@
 .text-filter{
 	display: flex;
 }
+
+.remove-filter{
+	color: var(--color18, #ff3d57);
+}

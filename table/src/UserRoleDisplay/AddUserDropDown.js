@@ -34,7 +34,7 @@ export default class AddUserDropDown extends PureComponent {
     const addButtonCSS = 'add-role-button ' + (this.state.addUsers.length > 0 ? '' : 'add-role-button-grey');
     const dropDownOptions = this.state.displayedRows.reduce((total, user) => {
       const selectUser = this.state.addUsers.includes(user);
-      const tickColour = selectUser ? 'green' : 'transparent';
+      const tickColour = selectUser ? 'green-tick' : 'transparent-tick';
       return { ...total,
         [user]: (
           <div style={{ height: '40px' }}>
@@ -42,7 +42,7 @@ export default class AddUserDropDown extends PureComponent {
               left={(
                 <div>
                   <div style={{ position: 'relative' }}>
-                    <FontAwesomeIcon icon={faCheckCircle} style={{ position: 'absolute', color: tickColour, fontSize: '38px', top: '1px', left: '1px' }} />
+                    <FontAwesomeIcon className={tickColour} icon={faCheckCircle} style={{ position: 'absolute', fontSize: '38px', top: '1px', left: '1px' }} />
                     <CircleUser url={this.props.getUserProfile(user).image}/>
                   </div>
                 </div>

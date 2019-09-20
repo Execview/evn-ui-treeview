@@ -2,6 +2,10 @@
 
 }
 
+.remove-filter{
+	color: var(--color18, #ff3d57);
+}
+
 .filter-option{
 	display: flex;
 }

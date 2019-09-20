@@ -6,8 +6,8 @@
 .user-menu{
   padding:10px;
   position:absolute;
-  background-color: #282c34;
-  color: black;
+  background-color: var(--color24, #282c34);
+  color: var(--color14, black);
   z-index: 100;
   width: 300px;
   border-radius: 4px;
@@ -31,30 +31,30 @@
   position: absolute;
   right:5px;
   top:23px;
-  color:lightgray;
+  color:var(--color25, #c8c8c8);
   font-size: 15px;
   font-weight: bold;
 }
 
 .confirmation-container {
-  background-color: #282c34;
-  color:white;
+  background-color: var(--color24, #282c34);
+  color:var(--color5, white);
   border-radius: 4px;
 }
 
 .success-message{
-  color: #47c9a2;
+  color: var(--color17, #00CC6F);
   margin-top: 0;
 }
 
 .current-users-message {
-  color: #47c9a2;
+  color: var(--color17, #00CC6F); /*#47c9a2*/
   text-align: center;
   margin-bottom: 0;
 }
 
 .no-users-message {
-  color: #ffbf00;
+  color: var(--color19, #eda645);
   text-align: center;
   margin-bottom: 0;
 }
@@ -62,7 +62,7 @@
 .check-container {
   height:70px;
   line-height:70px;
-  background-color:#47c9a2;
+  background-color:var(--color17, #00CC6F);
   text-align:center;
   font-size:50px;
   border-radius: 4px;
@@ -77,7 +77,7 @@
 .check-success {
   margin:0;
   font-size:35px;
-  color: #47c9a2;
+  color: var(--color17, #00CC6F);
 }
 
 .confirmation-content {
@@ -97,8 +97,8 @@
 }
 
 .user-toggle-details{
-  color: #ffbf00;
-  background-color: #434956;
+  color: var(--color15, #ffc92a);
+  background-color: var(--color7, #434956);
   padding: 10px;
   margin-right: 5px;
 }
@@ -122,7 +122,7 @@
   height: 0;
   border-style: solid;
   border-width: 0 18px 17px 18px;
-  border-color: transparent transparent #282c34 transparent;
+  border-color: transparent transparent var(--color24, #282c34) transparent;
   position: absolute;
   top: -10px;
   left: 142px;
@@ -130,23 +130,13 @@
 
 .user-row{
   /* height:40px; */
-  color:white;
+  color:var(--color5, white);
   transition: all 0.5s;
 }
 
-/* .close-container{
-  margin-top:10px;
-  margin-right:1px;
-  height:20px;
-  width:20px;
-  background-color:red;
-  border-radius: 50%;
-  cursor: pointer;
-  text-align: center;
-} */
 
 .close-icon {
-  color:red;
+  color:var(--color18, #ff3d57);
   font-size:20px;
   line-height: 40px;
   cursor: pointer;
@@ -163,8 +153,8 @@
 }
 
 .plus-container {
-  background-color: #282c34;
-  color:white;
+  background-color: var(--color24, #282c34);
+  color:var(--color5, white);
   height:40px;
   padding-top:5px;
   cursor:pointer;
@@ -177,7 +167,7 @@
 
 .dropdown-wrapper {
   padding:0;
-  background-color: #282c34;
+  background-color: var(--color24, #282c34);
 }
 
 .hover-class {
@@ -189,9 +179,9 @@
 }
 
 .add-role-button{
-  color: #fff;
+  color: var(--color5, white);
   border-radius: 4px;
-  background: #eeb711;
+  background: var(--color15, #ffc92a);
   text-decoration: none;
   transition: all 0.4s;
   line-height: normal;
@@ -204,15 +194,15 @@
 }
 
 .add-role-button:hover {
-  background: #eda645;
+  background: var(--color19, #dea700);
   outline: none;
 }
 
 .add-role-button-grey{
-	background: rgb(200,200,200);
+	background: var(--color25, #c8c8c8) ;
 }
 .add-role-button-grey:hover{
-	background: rgb(200,200,200);
+	background: var(--color25, #c8c8c8) ;
 }
 
 .text-focus-in {

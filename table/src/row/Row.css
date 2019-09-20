@@ -26,9 +26,5 @@
 }
 
 .table-datum-visuals:hover {
-  background-color: #00b0a4;
-}
-
-.table-datum-visuals:hover {
-  background-color: #00998f;
+  background-color: var(--color12, #00998f);
 }

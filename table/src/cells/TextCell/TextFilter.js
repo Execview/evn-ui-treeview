@@ -39,7 +39,7 @@ const TextFilter = (props) => {
 			<div>Filter:</div>
 			<div className={classes['text-filter']}>
 				<InPlaceCell data={currentSearch} type={<TextCell onChange={(d)=>setFilter(d)} placeholder={text.placeholder || 'Search for text...'} autoFocus />}/>
-				{currentSearch ? <FontAwesomeIcon icon={faWindowClose} style={{color: 'red'}} onClick={()=>removeFilter()}/> : null}
+				{currentSearch ? <FontAwesomeIcon icon={faWindowClose} className={classes['remove-filter']} onClick={()=>removeFilter()}/> : null}
 
 			</div>
 		</div>

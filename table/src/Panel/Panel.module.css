@@ -1,6 +1,6 @@
 .panel{
-  background-color: #282c34;
-  color: rgb(255, 255, 255);
+  background-color: var(--color24, #282c34);
+  color: var(--color5, white);
   border-radius: 4px;
   box-sizing: border-box;
 }
@@ -14,7 +14,7 @@
   height: 0;
   border-style: solid;
   border-width: 0 18px 17px 18px;
-  border-color: transparent transparent #282c34 transparent;
+  border-color: transparent transparent var(--color24, #282c34) transparent;
   position: absolute;
   top: -10px;
 }

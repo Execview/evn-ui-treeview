@@ -59,7 +59,7 @@ const DateFilter = (props) => {
 						<div className={classes['filter-option']} key={o}>
 							<div>{op.text}:</div> 
 							<InPlaceCell data={op.date} type={<DateCell dateUnknown='Any'/>} onValidateSave={(d)=>setFilter(o,d)}/>
-							{op.date ? <FontAwesomeIcon icon={faWindowClose} style={{color: 'red'}} onClick={()=>removeFilter(o)}/> : null}
+							{op.date ? <FontAwesomeIcon icon={faWindowClose} className={classes['remove-filter']} onClick={()=>removeFilter(o)}/> : null}
 						</div>
 					)
 				})}

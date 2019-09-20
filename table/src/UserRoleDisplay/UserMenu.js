@@ -52,7 +52,7 @@ export default class UserMenu extends PureComponent {
       : <p className="no-users-message">There are no users currently assigned to this project!</p>;
     return (
       <div>
-        <div className="check-container"><FontAwesomeIcon icon={faUsers} style={{ color: 'white' }} /></div>
+        <div className="check-container"><FontAwesomeIcon icon={faUsers} /></div>
         {welcomeMessage}
         <GenericDropdown
           style={{ dropdownItem: 'hover-class', dropdown: 'dropdown-wrapper' }}

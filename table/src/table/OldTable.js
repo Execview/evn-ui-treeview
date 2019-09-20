@@ -326,14 +326,14 @@ export default class Table extends Component {
 					</thead>
 					<tbody>
 						{this.state.orderedData.map((entry) => {
-							let selectedRowStyle = {};
+							let selectedRowClass = {};
 							if (this.props.selectedRow === entry) {
 								// selectedRowStyle = {border:'1px solid rgba(255,255,255,0.3)'};
-								selectedRowStyle = { backgroundColor: '#3a414f' };
+								selectedRowClass = 'table-selected-row';
 							}
 							
 							return (
-								<tr className={'table-row ' + (style.tableRow || 'table-row-visuals')} key={`tr${entry}`} style={selectedRowStyle}>
+								<tr className={'table-row ' + (style.tableRow || 'table-row-visuals') + ' ' + selectedRowClass} key={`tr${entry}`}>
 									<Row
 										columnsInfo={this.props.columnsInfo}
 										editableCells={this.state.editableCells[entry]}
