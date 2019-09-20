@@ -21,7 +21,7 @@ const SchedulerAppender = (props) => {
 		return ()=>{mouseSubscription.unsubscribe()}
 	})
 
-	const colours = props.colours || Lightcolours	
+	const colours = props.colours || UNSATColours	
 	const rowHeight = props.height || 25	
 	const bubbleHeight = rowHeight*0.9
 	const timeWidth = props.timeWidth || 70
