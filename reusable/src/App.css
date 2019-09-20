@@ -1,13 +1,39 @@
 .App {
   text-align: center;
-  background-color: #282c34;
-  /* background-color: #5a6272; */
+  /* background-color: #282c34; */
+  background-color: var(--color1, #5a6272);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: var(--color5, white);
 }
 
+.color-scheme{
+  --color1: #5a6272; /*background*/
+  --color2: #383d47; /*secondary background*/
+  --color3: #2f3441; /*table header*/
+  --color4: #4f5564; /*even row background*/
+  --color5: white; /*text*/
+  --color6: grey; /*disabled text*/
+  --color7: #434956; /*disabled background*/
+  --color8: #272727; /*header hover*/
+  --color9: wheat; /*editable text*/
+  --color10: #4da6ff; /*dropdown hover*/
+  --color11: #00b0a4; /*table hover on row*/
+  --color12: #00998f; /* table hover on cell*/
+  --color13: teal; /*edit button*/
+  --color14: black; /*black*/
+  --color15: #ffc92a; /*yellow RAG*/
+  --color16: #74dcee; /*teal RAG*/
+  --color17: #00CC6F; /*green RAG*/
+  --color18: #ff3d57; /*red RAG*/
+  --color19: #dea700; /*yellow2 RAG*/
+  --color20: #6ac4d4; /*teal2 RAG*/
+  --color21: #00b361; /*green2 RAG*/
+  --color22: #c33f51; /*red2 RAG*/
+  --color23: #6d6d6d; /*grey2 RAG*/
+  --color24: #282c34; /*panel background*/
+}

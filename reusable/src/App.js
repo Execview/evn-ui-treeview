@@ -35,7 +35,7 @@ const App = (props) => {
 	}
 
 	return (
-		<div className="App">
+		<div className="App color-scheme">
 			<Button {...ButtonProps}>test button</Button>
 			<TripleFill left={<div>left</div>} center={<div>middle</div>} right={<div>right</div>}/>
 			<CircleUser {...CircleUserProps}/>

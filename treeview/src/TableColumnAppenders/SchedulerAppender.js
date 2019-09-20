@@ -6,7 +6,7 @@ import { recursiveDeepDiffs, objectCopierWithStringToDate, injectObjectInObject 
 import { getDrawnLinksFromData, getSnaps, getTimeFormatString, getMajorStartOf } from './SchedulerBehavior'
 import { getColourFromMap } from './BubbleBehavior'
 import {getNearestSnapXToDate, getInternalMousePosition, getNearestSnapDateToX, getExactNearestSnapDateToX, getYPositionFromRowNumber} from './schedulerFunctions'
-import { UNSATColours } from './colourOptions'
+import { UNSATColours, Lightcolours, Darkcolours, testColours } from './colourOptions'
 
 
 var Rx = require('rxjs/Rx')
@@ -21,7 +21,7 @@ const SchedulerAppender = (props) => {
 		return ()=>{mouseSubscription.unsubscribe()}
 	})
 
-	const colours = props.colours || UNSATColours	
+	const colours = props.colours || Lightcolours	
 	const rowHeight = props.height || 25	
 	const bubbleHeight = rowHeight*0.9
 	const timeWidth = props.timeWidth || 70

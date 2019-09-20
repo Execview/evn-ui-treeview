@@ -1,7 +1,7 @@
 .default-button {
-	background-color: #434956;
-	color: white;
-	border: 1px solid white;
+	background-color: var(--color7,#434956);
+	color: var(--color5,white);
+	border: 1px solid var(--color5,white);;
 	border-radius: 4px;
 	padding: 10px 20px;
 	font-size: 14px;
@@ -14,28 +14,25 @@
 }
 
 .default-interactions:hover {
-	background-color: white;
-	color: black;
+	background-color: var(--color5,white);
+	color: var(--color14,black);
 }
 
 .default-interactions:active {
-	border: 1px solid rgb(199, 199, 199);
+	border: 1px solid var(--color6,grey);
 }
 
-.default-button:focus {
-	outline: none;
-}
 
 .disabled {
-	color:grey !important;
-	border-color: grey !important;
-	background-color:#434956 !important;
+	color: var(--color6,grey) !important;
+	border-color: var(--color6,grey) !important;
+	background-color: var(--color4,#4f5564) !important;
 	cursor: default !important;
 	opacity: 0.9;
 }
 
 .disabled:hover {
-	color:grey !important;
-	border-color: grey !important;
-	background-color:#434956 !important;
+	color:var(--color6,grey) !important;
+	border-color: var(--color6,grey) !important;
+	background-color: var(--color7,#434956) !important;
 }
