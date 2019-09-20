@@ -31,7 +31,7 @@
   position: absolute;
   right:5px;
   top:23px;
-  color:var(--color25, #c8c8c8);
+  color:var(--color5, white);
   font-size: 15px;
   font-weight: bold;
 }
@@ -48,7 +48,7 @@
 }
 
 .current-users-message {
-  color: var(--color17, #00CC6F); /*#47c9a2*/
+  color: var(--color17, #00CC6F);
   text-align: center;
   margin-bottom: 0;
 }
@@ -66,6 +66,7 @@
   text-align:center;
   font-size:50px;
   border-radius: 4px;
+  color: var(--color5, white);
 }
 
 .assigned-title {
@@ -77,7 +78,7 @@
 .check-success {
   margin:0;
   font-size:35px;
-  color: var(--color17, #00CC6F);
+  color: var(--color17, #00CC6F); /*#47c9a2*/
 }
 
 .confirmation-content {
@@ -181,7 +182,7 @@
 .add-role-button{
   color: var(--color5, white);
   border-radius: 4px;
-  background: var(--color15, #ffc92a);
+  background: var(--color19, #eda645);
   text-decoration: none;
   transition: all 0.4s;
   line-height: normal;
@@ -194,15 +195,15 @@
 }
 
 .add-role-button:hover {
-  background: var(--color19, #dea700);
+  background: var(--color15, #ffc92a); /*#eda645*/
   outline: none;
 }
 
 .add-role-button-grey{
-	background: var(--color25, #c8c8c8) ;
+	background: var(--color25, #c8c8c8);
 }
 .add-role-button-grey:hover{
-	background: var(--color25, #c8c8c8) ;
+	background: var(--color25, #c8c8c8);
 }
 
 .text-focus-in {
@@ -210,6 +211,14 @@
 	-webkit-animation: text-focus-in 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
 	        animation: text-focus-in 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
 }
+
+.green-tick{
+  color:var(--color17, #00CC6F);
+}
+
+.transparent-tick{
+  color: transparent;
+} 
 
 @-webkit-keyframes text-focus-in {
   0% {

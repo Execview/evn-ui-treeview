@@ -326,10 +326,9 @@ export default class Table extends Component {
 					</thead>
 					<tbody>
 						{this.state.orderedData.map((entry) => {
-							let selectedRowClass = {};
+							let selectedRowClass = '';
 							if (this.props.selectedRow === entry) {
-								// selectedRowStyle = {border:'1px solid rgba(255,255,255,0.3)'};
-								selectedRowClass = 'table-selected-row';
+								selectedRowClass = 'table-selected-row ';
 							}
 							
 							return (

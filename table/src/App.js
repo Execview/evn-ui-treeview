@@ -84,7 +84,7 @@ const App = (props) => {
 	}
 
 	return (
-		<div className={classes["App"]}>
+		<div className={`${classes["App"]} ${classes["color-scheme"]}`}>
 			<div>
 				<Button style={{margin:'10px', padding: '30px', paddingTop:'15px', paddingBottom:'15px'}} onClick={addRow}>Add row</Button>
 				<TableWrapper
