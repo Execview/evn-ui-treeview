@@ -2,8 +2,8 @@
 	position: absolute;
 	right: 0;
 	top:100%;
-	background-color: #383d47;
-	border: 1px solid white;
+	background-color: var(--color2, #383d47);
+	border: 1px solid var(--color5, white);
 	border-radius: 5px;
 	padding: 10px;
 	z-index: 5;
@@ -20,13 +20,13 @@
 .item {
 	padding:3px;
 	display:inline-block;
-	border:1px solid white;
+	border:1px solid var(--color5, white);
 	border-collapse: collapse;
 	cursor:pointer;
 }
 
 .selected {
-	background-color: green;
+	background-color: var(--color21, #00b361);
 }
 
 .datepicker-container {

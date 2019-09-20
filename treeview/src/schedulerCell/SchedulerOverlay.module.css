@@ -1,0 +1,29 @@
+.markings{
+	z-index: -1;
+	pointer-events: none;
+}
+
+.weekend-box {
+    fill:var(--color2, #383d47);
+    pointer-events: none;
+    fill-opacity: 0.4;
+}
+
+.major-lines{
+    stroke: var(--color5, white);
+	stroke-opacity: 0.5;
+	stroke-width: 2px;
+}
+
+.minor-lines{
+	stroke: var(--color5, white);
+	stroke-opacity: 0.1;
+	stroke-width: 1px;
+}
+
+.legend {
+    font-size: 30px;
+    font-weight: 300;
+    fill: var(--color5, white);
+    fill-opacity: 0.5;
+}

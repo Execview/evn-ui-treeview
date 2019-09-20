@@ -25,7 +25,7 @@ const App = (props) => {
 	const schedulerOptions = {width:65, position: 'end'};
 	const filteredColumns = ['enddate'].filter(e=>e!=='enddate' || showEnddate)
 	return (
-		<div className={classes["App"]}>
+		<div className={`${classes["App"]} ${classes['color-scheme']}`}>
 			<div className={classes["button-container"]}>
 				<Button onClick={()=>props.onAddRow(Object.keys(columnsInfo),selectedRow)}>Add Row</Button>
 				<Button onClick={()=>setShowEnddate(!showEnddate)}>Toggle Enddate</Button>

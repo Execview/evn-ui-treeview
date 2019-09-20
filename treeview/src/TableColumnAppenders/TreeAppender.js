@@ -18,7 +18,7 @@ const TreeAppender = (props) => {
 				nodeStatus: arrowstatus
 			})
 			if(tree[currentRow]){
-				pushChildRows(props.data[currentRow].ChildAssociatedBubbles,currentdepth+1)
+				pushChildRows(props.data[currentRow].ChildAssociatedBubbles || [],currentdepth+1)
 			}
 		}}
 		pushChildRows(parentNodes)

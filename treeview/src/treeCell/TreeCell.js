@@ -11,25 +11,26 @@ const TreeCell = (props) => {
 
 	// var closestElement = element.closest(selectors); 
 	let showPointerStyle = {minHeight: props.style.minHeight};
+	let pointerClass = ''
 	if (props.data.nodeStatus === 'open') {
 		arrow = <FontAwesomeIcon icon={downIcon} style={{fontSize:'12px'}}/>;
-		showPointerStyle = {cursor: 'pointer'};
+		pointerClass = classes['pointer'];
 	} else if (props.data.nodeStatus === 'closed') {
 		arrow = <FontAwesomeIcon icon={rightIcon} style={{fontSize:'12px'}}/>;
-		showPointerStyle = {cursor: 'pointer'};
+		pointerClass = classes['pointer'];
 	}
 
 	let rowSelection = '';
 	if (props.data.setSelected) {
-		let icon= props.data.isSelected ? <FontAwesomeIcon icon={faCircle} style={{fontSize:'10px', color:'#00CC6F'}}/> : <FontAwesomeIcon icon={emptyCircle} style={{fontSize:'10px',color:'rgba(255,255,255,0.4)'}}/>;
+		let icon= props.data.isSelected ? <FontAwesomeIcon icon={faCircle} className={classes['green-circle']} /> : <FontAwesomeIcon icon={emptyCircle} className={classes['empty-circle']} />;
 		rowSelection = <div className={classes['row-selection']} onClick={props.data.setSelected}>{icon}</div>;
 	}
-	if (props.data.isSelected){
-		showPointerStyle = {...showPointerStyle, backgroundColor: 'rgba(126, 101, 236, 0.84)'}
-	}
+	
+	let selectedBackgroundClass = props.data.isSelected ? classes['selected-background'] : ''
+
 
 	return (
-		<div className={classes["cell-container"]} style={{...showPointerStyle}}>
+		<div className={`${classes["cell-container"]} ${pointerClass} ${selectedBackgroundClass}`} style={{...showPointerStyle}}>
 			{rowSelection}
 			<div className={classes["cell-text"]} onClick={props.data.toggleNode} style={{...props.style,width:props.style.width-18}}>	
 								

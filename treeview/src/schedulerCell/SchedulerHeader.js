@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import SchedulerOverlay from './SchedulerOverlay'
 import SchedulerMenu from './SchedulerMenu'
-import classes from './SchedulerCell.module.css';
+import classes from './SchedulerHeader.module.css';
 import { Button, OCO } from '@execview/reusable'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter, faChevronDown } from '@fortawesome/free-solid-svg-icons';
@@ -25,7 +25,7 @@ const SchedulerHeader = (props) => {
 		if(strings.length===1){strings = ['',...strings]}
 		return (
 			<tspan alignmentBaseline="middle" key={index} x={snap[1]+diff} y={'50%'}>
-				<tspan style={{fill:'rgba(255,255,255,0.4)'}}alignmentBaseline="middle" y={'50%'}>{strings[0]}</tspan>
+				<tspan className={classes['grey-text']} alignmentBaseline="middle" y={'50%'}>{strings[0]}</tspan>
 				{' '+strings.slice(1,strings.length).join(' ')}
 			</tspan>
 		)
@@ -34,7 +34,7 @@ const SchedulerHeader = (props) => {
 	return (
 		<div className={`${classes["header-cell"]} ${classes["no-select"]} ${classes["scheduler-header"]}`} style={{touchAction: 'pan-y' }} >
 			<svg height='100%' width='100%' onPointerDown={props.data.mouseOnScheduler}>
-				<text style={{fill:'white', fontSize:'12px', textAnchor: 'middle'}}>
+				<text className={classes['header-text']}>
 				{timeIntervals}
 				</text>
 			</svg>

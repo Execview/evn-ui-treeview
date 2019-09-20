@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import SchedulerRightClickMenu from './SchedulerRightClickMenu'
 import { getNearestSnapXToDate } from '../TableColumnAppenders/schedulerFunctions'
 import { getMajorStartOf, getMajorLegend } from '../TableColumnAppenders/SchedulerBehavior'
+import classes from './SchedulerOverlay.module.css';
 import moment from 'moment'
 
 const SchedulerOverlay = (props) => {
@@ -56,22 +57,21 @@ const SchedulerOverlay = (props) => {
 		
 	}
 
-	const drawLine = (x,offset,style) => {
+	const drawLine = (x,offset,className) => {
 		if(!typeof(x)==='number'){return}
 		return (
-			<line key={x+offset} x1={x} y1={offset} x2={x} y2={tableHeight} style={{zIndex:-1, pointerEvents: 'none',...style}} />
+			<line key={x+offset} x1={x} y1={offset} x2={x} y2={tableHeight} className={`${classes['markings']} ${className}`} />
 		)
 	}
-	const drawLegend = (x,text,pos,style) => {
+	const drawLegend = (x,text,pos,className) => {
 		if(!typeof(x)==='number'){return}
 		return (
-			<text key={x+text} x={x+5} y={pos-9} style={{zIndex:-1, pointerEvents: 'none',...style}}>{text}</text>
+			<text key={x+text} x={x+5} y={pos-9} className={`${classes['markings']} ${className}`}>{text}</text>
 		)
 	}
 	const weekends = snaps.filter(snap => moment(snap[0]).day() === 0 || moment(snap[0]).day() === 6)
 	const testGrey = weekends.map(snap => {
-		return ( <rect key={snap[1]} x={snap[1]} y="40" width="70" height={tableHeight}
-		style={{fill:'#383d47',pointerEvents: 'none',fillOpacity:0.4}} />)
+		return ( <rect key={snap[1]} x={snap[1]} y="40" width="70" height={tableHeight} className={classes['weekend-box']} />)
 	})
 
 	const showMenu = props.contextMenu && props.contextMenu.position
@@ -90,10 +90,11 @@ const SchedulerOverlay = (props) => {
 			{/* UNDERLAY! */}
 			<svg height={tableHeight + (showMenu?500:0)} width='100%' style={{top:'0px', left: '0px', position: "absolute",pointerEvents: 'none', zIndex:'1'}}>
 				<g style={{pointerEvents: 'auto'}}> 
-					{lines.length > 0 &&  lines.map((x)=>drawLine(x,0,{stroke:'rgba(255,255,255,0.1)',strokeWidth:1}))}
-					{(majorLines.length > 0) && !isNaN(majorLines[0]) && majorLines.map((x)=>drawLine(x,40,{stroke:'rgba(255,255,255,0.5)',strokeWidth:2}))}
-					{majorLegends.map((ll)=>drawLegend(ll[0],ll[1],tableHeight,{fontSize:30,fontWeight:300,fill:'rgba(255,255,255,0.5)'}))}
 					{testGrey}
+					{lines.length > 0 &&  lines.map((x)=>drawLine(x,0,classes['minor-lines']))}
+					{(majorLines.length > 0) && !isNaN(majorLines[0]) && majorLines.map((x)=>drawLine(x,40,classes['major-lines']))}
+					{majorLegends.map((ll)=>drawLegend(ll[0],ll[1],tableHeight,classes['legend']))}
+					
 				</g>
 			</svg>
 		</div>

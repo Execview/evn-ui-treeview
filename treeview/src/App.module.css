@@ -1,12 +1,41 @@
 body {
-  background-color: #5a6272;
+  background-color: var(--color1, #5a6272);
 }
 
 .App {
   text-align: center;
   height: 100vh;
-  color: white;
+  color: var(--color5, white);
   font-size: 16px;
+}
+
+.color-scheme{
+	--color1: #5a6272; /*background*/
+	--color2: #383d47; /*secondary background*/
+	--color3: #2f3441; /*table header*/
+	--color4: #4f5564; /*even row background*/
+	--color5: white; /*text*/
+	--color6: grey; /*disabled text*/
+	--color7: #434956; /*disabled background*/
+	--color8: #272727; /*header hover*/
+	--color9: wheat; /*editable text*/
+	--color10: #4da6ff; /*dropdown hover*/
+	--color11: #00b0a4; /*table hover on row*/
+	--color12: #00998f; /*table hover on cell*/
+	--color13: teal; /*edit button*/
+	--color14: black; /*black*/
+	--color15: #ffc92a; /*yellow RAG*/
+	--color16: #74dcee; /*teal RAG*/
+	--color17: #00CC6F; /*green RAG*/
+	--color18: #ff3d57; /*red RAG*/
+	--color19: #eda645; /*yellow2 RAG*/
+	--color20: #6ac4d4; /*teal2 RAG*/
+	--color21: #00b361; /*green2 RAG*/
+	--color22: #c33f51; /*red2 RAG*/
+	--color23: #6d6d6d; /*grey2 RAG*/
+	--color24: #282c34; /*panel background*/
+	--color25: #c8c8c8; /*lightgray*/
+	--color26: #3a414f; /*shade of charcoal*/
 }
 
 table{
@@ -26,9 +55,9 @@ pre {
 }
 
 .get-data {
-  background-color: #434956;
-  color: white;
-  border: 2px solid white;
+  background-color: var(--color7, #434956);
+  color: var(--color5, white);
+  border: 2px solid var(--color5, white);
   border-radius: 4px;
   padding:15px 30px;
   font-size: 14px;
@@ -41,8 +70,8 @@ pre {
 }
 
 .get-data:hover {
-    background-color: white;
-    color: black;
+    background-color: var(--color5, white);
+    color: var(--color8, #272727);
 }
 
 .get-data:focus { outline: none; }
