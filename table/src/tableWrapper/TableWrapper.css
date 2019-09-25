@@ -1,5 +1,5 @@
 .get-data {
-  background-color: var(--color7, #434956);
+  background-color: var(--color2, #383d47);
   color: var(--color5, white);
   border: 2px solid var(--color5, white);
   padding:15px 30px;
@@ -14,8 +14,8 @@
 }
 
 .get-data:hover {
-    background-color: var(--color5, white);
-    color: var(--color14, black);
+    background-color: var(--color8, #272727);
+    color: var(--color28, white); 
 }
 
 .get-data:focus { outline: none; }

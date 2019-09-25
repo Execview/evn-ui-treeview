@@ -1,6 +1,6 @@
 .dropdown {
   padding:10px;
-  background-color: var(--color24, #282c34);
+  background-color: var(--color2, #383d47);
   z-index: 1;
 }
 
@@ -53,7 +53,7 @@
 }
 
 .dropdown-item:hover {
-  background-color: var(--color10, #4da6ff);
+  background-color: var(--color8, #272727);
 }
 
 .dropdown-menu::-webkit-scrollbar {

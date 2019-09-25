@@ -1,7 +1,7 @@
 .default-button {
-	background-color: var(--color7,#434956);
+	background-color: var(--color2, #383d47);
 	color: var(--color5,white);
-	border: 1px solid var(--color5,white);;
+	border: 1px solid var(--color5,white);
 	border-radius: 4px;
 	padding: 10px 20px;
 	font-size: 14px;
@@ -14,8 +14,8 @@
 }
 
 .default-interactions:hover {
-	background-color: var(--color5,white);
-	color: var(--color14,black);
+	background-color: var(--color8, #272727);
+	color: var(--color28, white);
 }
 
 .default-interactions:active {
@@ -34,5 +34,5 @@
 .disabled:hover {
 	color:var(--color6,grey) !important;
 	border-color: var(--color6,grey) !important;
-	background-color: var(--color7,#434956) !important;
+	background-color: var(--color4,#4f5564) !important;
 }

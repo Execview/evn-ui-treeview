@@ -1,5 +1,5 @@
 .panel{
-  background-color: var(--color24, #282c34);
+  background-color: var(--color2, #383d47);
   color: var(--color5, white);
   border-radius: 4px;
   box-sizing: border-box;

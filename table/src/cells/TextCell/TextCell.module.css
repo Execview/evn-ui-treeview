@@ -9,7 +9,7 @@
 }
 
 .textarea-cell-container:focus-within{
-  background-color: var(--color24, #282c34);
+  background-color: var(--color2, #383d47);
   border: 1px solid var(--color5, white);
 }
 
@@ -100,7 +100,7 @@
 }
 
 .text-container{
-  background-color: var(--color24, #282c34);
+  background-color: var(--color2, #383d47);
   border:1px solid var(--color5, white);
   height:100%;
   width:100%;

@@ -28,7 +28,7 @@
 }
 
 .solid-background-grey {
-  background-color: var(--color6, grey);
+  background-color: var(--color10, grey);
 }
 
 .solid-background-blue {
@@ -48,7 +48,7 @@
 }
 
 .hover-grey:hover{
-  background-color: var(--color6, grey);
+  background-color: var(--color10, grey);
 }
 
 .hover-blue:hover{
@@ -84,7 +84,7 @@
   position:absolute;
   left:0;
   top:0;
-  background-color: var(--color24, #282c34);
+  background-color: var(--color2, #383d47);
   z-index: 100;
   user-select: none;
 }
@@ -114,28 +114,28 @@
 }
 
 .non-editable-red {
-   --main-color: var(--color18, #ff3d57);
+  --main-color: var(--color18, #ff3d57);
   --stripe-color: var(--color22, #c33f51);
   background-image: linear-gradient(135deg, var(--stripe-color) 25%, var(--main-color) 25%, var(--main-color) 50%, var(--stripe-color) 50%, var(--stripe-color) 75%, var(--main-color) 75%, var(--main-color) 100%);
   background-size: 22.63px 22.63px;
 }
 
 .non-editable-amber {
-   --main-color: var(--color15, #ffc92a);
+  --main-color: var(--color15, #ffc92a);
   --stripe-color: var(--color19, #dea700);
   background-image: linear-gradient(135deg, var(--stripe-color) 25%, var(--main-color) 25%, var(--main-color) 50%, var(--stripe-color) 50%, var(--stripe-color) 75%, var(--main-color) 75%, var(--main-color) 100%);
   background-size: 22.63px 22.63px;
 }
 
 .non-editable-blue {
-   --main-color: var(--color16, #74dcee);
+  --main-color: var(--color16, #74dcee);
   --stripe-color: var(--color20, #6ac4d4);
   background-image: linear-gradient(135deg, var(--stripe-color) 25%, var(--main-color) 25%, var(--main-color) 50%, var(--stripe-color) 50%, var(--stripe-color) 75%, var(--main-color) 75%, var(--main-color) 100%);
   background-size: 22.63px 22.63px;
 }
 
 .non-editable-grey {
-     --main-color: var(--color6, grey);
+  --main-color: var(--color10, grey);
   --stripe-color: var(--color23, #6d6d6d);
   background-image: linear-gradient(135deg, var(--stripe-color) 25%, var(--main-color) 25%, var(--main-color) 50%, var(--stripe-color) 50%, var(--stripe-color) 75%, var(--main-color) 75%, var(--main-color) 100%);
   background-size: 22.63px 22.63px;
