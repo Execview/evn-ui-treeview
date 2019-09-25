@@ -1,29 +1,28 @@
 .no-select {
-    user-select: none;
- }
- 
- .header-cell {
-    height: 40px;
-    overflow: hidden;
-    font-weight: normal;
- }
- 
- .scheduler-header{
-     display: flex;
-     justify-content: space-between;
- }
- 
- .menu-container {
-    z-index:4;
- }
+	user-select: none;
+}
 
- .grey-text {
-    color: var(--color5, white);
-    opacity: 0.4;
- }
+.header-cell {
+	height: 40px;
+	overflow: hidden;
+	font-weight: normal;
+}
 
- .header-text {
-    fill: var(--color5, white);
-    text-anchor: middle;
+.scheduler-header {
+	display: flex;
+	justify-content: space-between;
+}
+
+.menu-container {
+	z-index: 4;
+}
+
+.grey-text {
+	fill: var(--color25, #c8c8c8);
+}
+
+.header-text {
+	fill: var(--color5, white);
+	text-anchor: middle;
 	font-size: 12px;
- }
+}

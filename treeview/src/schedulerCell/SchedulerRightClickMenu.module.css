@@ -1,4 +1,13 @@
+.foreign-object{
+	width: 1px;
+	height: 1px;
+	overflow: visible;
+	user-select: all;
+}
+
 .menu{
+	width: 200px;
 	border: 1px solid var(--color5, white);
 	border-radius: 5px;
+	user-select: auto;
 }
