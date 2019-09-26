@@ -1,6 +1,6 @@
 {
   "name": "@execview/reusable",
-  "version": "0.1.52",
+  "version": "0.1.53",
   "main": "./transpiled/exports.js",
   "private": false,
   "dependencies": {
@@ -17,7 +17,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "prepublish": "babel src -d transpiled --copy-files",
+    "prepublish": "npm install --no-save @babel/cli @babel/core @babel/plugin-proposal-class-properties @babel/preset-react && babel src -d transpiled --copy-files --plugins=@babel/plugin-proposal-class-properties --presets=@babel/preset-env,@babel/preset-react",
     "postpublish": "rmdir /S /Q transpiled"
   },
   "keywords": [],
@@ -40,21 +40,6 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
-    ]
-  },
-  "devDependencies": {
-    "@babel/cli": "^7.4.4",
-    "@babel/core": "^7.4.4",
-    "@babel/plugin-proposal-class-properties": "^7.4.4",
-    "@babel/preset-react": "^7.0.0"
-  },
-  "babel": {
-    "presets": [
-      "@babel/preset-env",
-      "@babel/preset-react"
-    ],
-    "plugins": [
-      "@babel/plugin-proposal-class-properties"
     ]
   }
 }
