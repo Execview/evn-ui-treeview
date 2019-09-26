@@ -26,7 +26,8 @@
 }
 
 .selected {
-	background-color: var(--color21, #00b361);
+	background-color: var(--color8, #272727); 
+	color: var(--color28, white);
 }
 
 .datepicker-container {

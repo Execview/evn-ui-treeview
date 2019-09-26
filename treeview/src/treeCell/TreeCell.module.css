@@ -45,5 +45,5 @@
 }
 
 .selected-background {
-    background-color: var(--color10, #4da6ff)
+    background-color: var(--color8, #272727);
 }
