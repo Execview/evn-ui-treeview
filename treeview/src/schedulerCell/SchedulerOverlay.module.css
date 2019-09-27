@@ -17,11 +17,12 @@
 
 .minor-lines{
 	stroke: var(--color5, white);
-	stroke-opacity: 0.1;
-	stroke-width: 1px;
+    stroke-width: 1px;
+    opacity:0.1;
 }
 
 .legend {
+    
     font-size: 30px;
     font-weight: 300;
     fill: var(--color5, white);

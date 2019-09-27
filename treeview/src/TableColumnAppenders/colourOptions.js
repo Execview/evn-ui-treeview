@@ -26,7 +26,7 @@ export const UNSATColours = [
     ['Blue', 'rgb(117, 215, 255)'],
     ['Red', 'rgb(255, 63, 114)'],
     ['Green', 'rgb(89, 224, 114)'],
-    ['Yellow', 'rgb(240, 255, 84)'],
+    ['Yellow', '#ffc92a'],
     ['Purple', 'rgb(250, 107, 255)'],
     ['Grey', 'rgb(240,240,240)']
 ]

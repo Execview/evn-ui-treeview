@@ -1,5 +1,6 @@
 import React from 'react';
 import getBubblePath from './getBubblePath'
+import classes from './Bubble.module.css'
 
 const Bubble = React.memo((props) => {
 	//var startpoint, var endpoint
@@ -26,15 +27,9 @@ const Bubble = React.memo((props) => {
 
 	const {leftend, middle, rightend} = getBubblePath(shape, props.startpoint, props.endpoint)
 
-	let filterStyle = !props.shadow ? 'url(#'+key+')' : ''
 	const getCursorStyle = (side) =>  editableSides.includes(side) ? {cursor: 'pointer'} : {};
 	return(
 		<g key={key} onContextMenu={(event=>onContextMenu(key,event))}>
-			<defs>
-				<filter id={key}>
-					<feDropShadow dx="0" dy="0" floodColor={"black"} stdDeviation="1"/>
-				</filter>
-			</defs>
 			{middle && !isNaN(props.startpoint[0]) && <path d={middle} fill={colour} strokeWidth='0' style={getCursorStyle('middle')}
 				onPointerDown   =	{(event)=>middleclickdown(key,event)}
 				onPointerUp     =   {(event)=>middleclickup(key,event)}
@@ -51,7 +46,7 @@ const Bubble = React.memo((props) => {
 				onPointerEnter  =	{(event)=>rightmousein(key,event)}
 				onPointerLeave  =	{(event)=>rightmouseout(key,event)}/>}
 
-			{!['triangle','diamond'].includes(shape) && !isNaN(props.startpoint[0]) && <text style={{filter:filterStyle, fill: 'white', MozUserSelect:"none", WebkitUserSelect:"none", msUserSelect:"none", pointerEvents: "none"}}
+			{!['triangle','diamond'].includes(shape) && !isNaN(props.startpoint[0]) && <text className={classes['bubble-text']}
 				x={(props.startpoint[0]+props.endpoint[0])/2}
 				y={(props.startpoint[1]+props.endpoint[1])/2}
 				textAnchor='middle'
