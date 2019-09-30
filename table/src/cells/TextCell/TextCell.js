@@ -50,7 +50,7 @@ const TextCell = (props) => {
 	const containerClasses = classes['default-cell-container'] + ' ' + (optionalClasses.container || classes['textarea-cell-container']) + ' ' + classes['no-select'] + ' ';
 	const errorContainerClasses = hasError ? classes['cell-error'] : '';
 
-	const textClasses = classes['textarea-cell-text'] + ' ' + (isEditableStyles ? classes['no-select'] : '') + ' ' + (optionalClasses.text || '') + ' ';
+	const textClasses = classes['textarea-cell-text'] + ' ' + (!isEditableStyles ? classes['no-select'] : '') + ' ' + (optionalClasses.text || '') + ' ';
 	const errorTextClasses = hasError ? classes['cell-text-error'] + ' ' + (optionalClasses.textError || '') + ' ' : '';
 	
 	const isEditableStylesClasses = isEditableStyles ? classes['is-editable'] + ' ' + (optionalClasses.isEditableStyles || '') + ' ' : '';
