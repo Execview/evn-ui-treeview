@@ -21,8 +21,16 @@
 	fill: var(--color25, #c8c8c8);
 }
 
+.white-text{
+	fill: var(--color5, white);
+}
+
 .header-text {
 	fill: var(--color5, white);
 	text-anchor: middle;
 	font-size: 12px;
+}
+
+.edge-bad{
+	fill: rgba(0,0,0,0)
 }

@@ -23,10 +23,13 @@ const SchedulerHeader = (props) => {
 		if (index === snaps.length - 1) {return '';}
 		let strings = moment(snap[0]).format(formatString).split(' ')
 		if(strings.length===1){strings = ['',...strings]}
+		const greyString = strings[0]
+		const otherStrings = ' '+strings.slice(1,strings.length).join(' ')
 		return (
-			<tspan alignmentBaseline="middle" key={index} x={snap[1]+diff} y={'50%'}>
-				<tspan className={classes['grey-text']} alignmentBaseline="middle" y={'50%'}>{strings[0]}</tspan>
-				{' '+strings.slice(1,strings.length).join(' ')}
+			<tspan className={classes['edge-bad']} alignmentBaseline="middle" key={index} x={snap[1]+diff} y={'50%'}>
+				.
+				<tspan className={classes['grey-text']} alignmentBaseline="middle">{greyString}</tspan>
+				<tspan className={classes['white-text']} alignmentBaseline="middle">{otherStrings}</tspan>
 			</tspan>
 		)
 	})

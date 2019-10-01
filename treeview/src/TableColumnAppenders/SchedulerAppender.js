@@ -113,7 +113,7 @@ const SchedulerAppender = (props) => {
 	const bubblemiddleclickup = (key,event, side)=>{
 		if(!isBubbleSideEditable(key,side)){return}
 		if(!['left','right'].includes(mouseDownOnBubble.location) && key!==mouseDownOnBubble.key){
-			props.tryPerformAssociation(key, mouseDownOnBubble.key);
+			//props.tryPerformAssociation(key, mouseDownOnBubble.key);
 		}
 		props.setOriginalColour(key,'left'); props.setOriginalColour(key,'middle'); props.setOriginalColour(key,'right')
 	}
@@ -124,8 +124,8 @@ const SchedulerAppender = (props) => {
 	}
 	const bubblemiddlemousein = (key,event,side)=>{if(event.buttons!==0 && mouseDownOnBubble.key!==key && mouseDownOnBubble.location==='middle'){
 		if(!isBubbleSideEditable(key,side)){return}
-		props.setBubbleSideColour(mouseDownOnBubble.key,props.data[key].colours.original,'middle')}
-	}
+		//props.setBubbleSideColour(mouseDownOnBubble.key,props.data[key].colours.original,'middle')
+	}}
 	
 	const bubblemouseout = (key,event, side)=>{if(event.buttons!==0 && mouseDownOnBubble.key!==key && mouseDownOnBubble.location!=='middle'){
 		if(!isBubbleSideEditable(key,side)){return}
