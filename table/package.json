@@ -1,10 +1,10 @@
 {
 	"name": "@execview/table",
-	"version": "0.1.111",
+	"version": "0.1.113",
 	"main": "./transpiled/exports.js",
 	"private": false,
 	"dependencies": {
-		"@execview/reusable": "0.1.52",
+		"@execview/reusable": "0.1.55",
 		"@fortawesome/fontawesome-svg-core": "^1.2.18",
 		"@fortawesome/free-solid-svg-icons": "^5.8.2",
 		"@fortawesome/react-fontawesome": "^0.1.4",
@@ -14,8 +14,8 @@
 		"react-device-detect": "^1.6.2",
 		"react-dom": "^16.7.0",
 		"react-onclickoutside": "^6.8.0",
-		"react-redux": "^6.0.0",
-		"react-scripts": "^3.0.1",
+		"react-redux": "^7.1.1",
+		"react-scripts": "3.1.2",
 		"redux": "^4.0.1"
 	},
 	"scripts": {
@@ -43,6 +43,6 @@
 		"not op_mini all"
 	],
 	"devDependencies": {
-		"eslint-config-airbnb": "^17.1.0"
+		"eslint-config-airbnb": "^18.0.1"
 	}
 }

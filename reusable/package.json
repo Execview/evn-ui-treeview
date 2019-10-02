@@ -1,6 +1,6 @@
 {
   "name": "@execview/reusable",
-  "version": "0.1.53",
+  "version": "0.1.55",
   "main": "./transpiled/exports.js",
   "private": false,
   "dependencies": {
@@ -10,7 +10,7 @@
     "react-device-detect": "^1.6.2",
     "react-dom": "^16.8.6",
     "react-onclickoutside": "^6.8.0",
-    "react-scripts": "3.0.1"
+    "react-scripts": "3.1.2"
   },
   "scripts": {
     "start": "react-scripts start",
