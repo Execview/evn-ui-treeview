@@ -332,7 +332,7 @@ export default class Table extends Component {
 							}
 							
 							return (
-								<tr className={'table-row ' + (style.tableRow || 'table-row-visuals') + ' ' + selectedRowClass} key={`tr${entry}`}>
+								<tr className={'table-row ' + (style.tableRow || 'table-row-visuals') + ' ' + selectedRowClass} key={`tr${entry}`} id={entry}>
 									<Row
 										columnsInfo={this.props.columnsInfo}
 										editableCells={this.state.editableCells[entry]}
