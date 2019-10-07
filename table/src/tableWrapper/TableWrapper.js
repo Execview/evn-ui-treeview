@@ -46,6 +46,7 @@ const TableWrapper = (props) => {
 				rules={props.rules} /* for oldTable */
 				selectedRow={props.selectedRow}
 				getContextMenu={props.getContextMenu}
+				
 			/>
 		</div>
 	);

@@ -270,7 +270,7 @@ export default class Table extends Component {
 			newWidths = Object.keys(newWidths).reduce((total, col) => { return { ...total, [col]: newWidths[col] * scaleFactor }; }, {});
 			changes = true;
 		}
-		if (changes) {
+	if (changes) {
 			this.setState({ widths: newWidths, tableWidth: windowWidth });
 		}
 	}
@@ -284,7 +284,7 @@ export default class Table extends Component {
 		const style = this.props.style || {};
 		return (
 				<table className={'table ' + (style.table || '')} ref={this.props.tableRef}>
-					<thead>
+					{React.createElement((this.props.noHeader ? 'tbody' : 'thead'), {}, (
 						<tr className={'table-row ' + (style.tableRow || 'table-row-visuals')}>
 							{Object.keys(this.state.columnsInfo).map((colkey, index) => {
 								const col = this.state.columnsInfo[colkey];
@@ -323,7 +323,7 @@ export default class Table extends Component {
 								);
 							})}
 						</tr>
-					</thead>
+					))}
 					<tbody>
 						{this.state.orderedData.map((entry) => {
 							let selectedRowClass = '';
