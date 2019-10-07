@@ -4,18 +4,27 @@ import SchedulerMenu from './SchedulerMenu'
 import classes from './SchedulerHeader.module.css';
 import { Button, OCO } from '@execview/reusable'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFilter, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment'
- 
- 
+
 const SchedulerHeader = (props) => {
 	const [open, setOpen] = useState(false)
 	const snaps = props.data.snaps || []
 	const style = props.style || {}
 
+	const [tableRefCurrent, setTableRefCurrent] = useState(null)
+	useEffect(()=>{
+		if(props.data.tableRef){
+			setTableRefCurrent(props.data.tableRef.current)
+		}
+	},[props.data.tableRef])
+	
+	const tableHeight = tableRefCurrent ? tableRefCurrent.getBoundingClientRect().height : 0
+
 	useEffect(()=>{
 		props.data.getWidth && props.data.getWidth(style.width)
 	})
+
 	const formatString = props.data.timeFormatString || 'DD/MM/YY'
 	
 	const timeIntervals = snaps.map((snap,index)=>{
@@ -33,7 +42,7 @@ const SchedulerHeader = (props) => {
 			</tspan>
 		)
 	})
-	
+
 	return (
 		<div className={`${classes["header-cell"]} ${classes["no-select"]} ${classes["scheduler-header"]}`} style={{touchAction: 'pan-y' }} >
 			<svg height='100%' width='100%' onPointerDown={props.data.mouseOnScheduler}>
@@ -47,7 +56,9 @@ const SchedulerHeader = (props) => {
 					{open && <SchedulerMenu {...props.data.schedulerOptions}/>}
 				</div>
 			</OCO>			
-			<SchedulerOverlay contextMenu={props.data.contextMenu} tableHeight={props.data.tableHeight} snaps={snaps} links={props.data.links} mode={props.data.schedulerOptions.mode[0]}/>
+
+			<SchedulerOverlay contextMenu={props.data.contextMenu} tableHeight={tableHeight} snaps={snaps} links={props.data.links} mode={props.data.schedulerOptions.mode[0]}/>
+		
 			
 		</div>
 	);

@@ -5,7 +5,7 @@ import { recursiveDeepDiffs, objectCopierWithStringToDate, injectObjectInObject 
 
 import { getDrawnLinksFromData, getSnaps, getTimeFormatString, getMajorStartOf } from './SchedulerBehavior'
 import { getColourFromMap } from './BubbleBehavior'
-import {getNearestSnapXToDate, getInternalMousePosition, getNearestSnapDateToX, getExactNearestSnapDateToX, getYPositionFromRowNumber} from './schedulerFunctions'
+import {getNearestSnapXToDate, getInternalMousePosition, getNearestSnapDateToX, getExactNearestSnapDateToX, getYPositionFromRowId} from './schedulerFunctions'
 import { UNSATColours, Lightcolours, Darkcolours, testColours } from './colourOptions'
 
 
@@ -152,6 +152,7 @@ const SchedulerAppender = (props) => {
 		if(event.buttons===0) {
 			if(key){
 				if(props.itemChanges) {
+					// props.tryBubbleTransform(key, {startdate: getNearestSnapDateToX(getNearestSnapXToDate(bubble.startdate,snaps),snaps), enddate: getNearestSnapDateToX(getNearestSnapXToDate(bubble.enddate,snaps),snaps)})
 					props.sendChanges(props.itemChanges);
 				}
 				props.setOriginalColour(key,'left'); props.setOriginalColour(key,'right'); props.setOriginalColour(key,'middle')
@@ -218,11 +219,11 @@ const SchedulerAppender = (props) => {
 	//#endregion
 
 	const addSchedulerColumn = ()=>{
-		const contextMenuPosition = bubbleContextMenuKeyAndPosition.position && [bubbleContextMenuKeyAndPosition.position[0],getYPositionFromRowNumber(Object.keys(props.data).indexOf(bubbleContextMenuKeyAndPosition.key)+1,rowHeights)+bubbleContextMenuKeyAndPosition.position[1]]
+		const contextMenuPosition = bubbleContextMenuKeyAndPosition.position && [bubbleContextMenuKeyAndPosition.position[0],getYPositionFromRowId(bubbleContextMenuKeyAndPosition.key,rowHeights)+bubbleContextMenuKeyAndPosition.position[1]]
 		const schedulerheaderdata = {
 			snaps: snaps,
-			tableHeight: rowHeights.reduce((total,rh)=>total+rh,0),
-			links: getDrawnLinksFromData(props.data,((i)=>getYPositionFromRowNumber(i,rowHeights)+bubbleHeight/2),snaps),
+			tableRef: tableRef,
+			links: getDrawnLinksFromData(props.data,((id)=>getYPositionFromRowId(id,rowHeights)+(((rowHeights[id] || {}).height || 0)/2)),snaps),
 			getWidth: ((w)=>{if(w!==schedulerWidth){setSchedulerWidth(w)}}),
 			mouseOnScheduler: clickedOnScheduler,
 			timeFormatString: getTimeFormatString(schedulerResolution),
@@ -297,7 +298,17 @@ const SchedulerAppender = (props) => {
 
 	const onTableRender = ()=>{
 		const getRowHeights = (ref)=>{
-			return (ref && ref.current) ? [...ref.current.getElementsByTagName('tr')].map(el=>el.clientHeight) : []
+
+			const trHeaderTop = ref.current.getBoundingClientRect().top
+	
+			return ref.current ? [...ref.current.getElementsByTagName('tr')].reduce((t,e)=>{
+				const trId = e.id
+				const trDimensions = e.getBoundingClientRect()
+				return {
+					...t,
+					[trId]: {y: trDimensions.top-trHeaderTop, height: trDimensions.height}
+				}
+			},{}) : {}
 		}
 		const newRowHeights = getRowHeights(tableRef);
 		if(JSON.stringify(rowHeights)!==JSON.stringify(newRowHeights)){

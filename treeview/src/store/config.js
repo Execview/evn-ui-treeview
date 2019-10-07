@@ -22,7 +22,16 @@ export const editableCells = {
 	_u184b: ['name', 'startdate', 'progress', 'enddate', 'scheduler' ],
 	tempInvertedBubble: ['name', 'startdate', 'progress', 'enddate', 'scheduler' ],
 	tempRhombus: ['name', 'startdate', 'progress', 'enddate', 'scheduler' ],
-	tempFirecracker: ['name', 'startdate', 'progress', 'enddate', 'scheduler' ]
+  tempFirecracker: ['name', 'startdate', 'progress', 'enddate', 'scheduler' ],
+  tempFirecracker1: ['name', 'startdate', 'progress', 'enddate', 'scheduler'],
+  tempFirecracker2: ['name', 'startdate', 'progress', 'enddate', 'scheduler'],
+  tempFirecracker3: ['name', 'startdate', 'progress', 'enddate', 'scheduler'],
+  tempFirecracker4: ['name', 'startdate', 'progress', 'enddate', 'scheduler'],
+  tempFirecracker5: ['name', 'startdate', 'progress', 'enddate', 'scheduler'],
+  tempFirecracker6: ['name', 'startdate', 'progress', 'enddate', 'scheduler'],
+  tempFirecracker13: ['name', 'startdate', 'progress', 'enddate', 'scheduler'],
+  tempFirecracker14: ['name', 'startdate', 'progress', 'enddate', 'scheduler'],
+
 };
 
 export const cellTypes = {

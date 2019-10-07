@@ -16,10 +16,10 @@ export const getDrawnLinksFromData = (data,getBubbleY,snaps) => {
 			const childdate = data[childId]['right'=== childlinks[childId].childside ? "enddate" : "startdate"]
 
 			const parentx = getNearestSnapXToDate(parentdate,snaps)
-			const parenty = getBubbleY(i+1)
+			const parenty = getBubbleY(rowId)
 
 			const childx = getNearestSnapXToDate(childdate,snaps) 
-			const childy = getBubbleY(displayedRows.indexOf(childId)+1)
+			const childy = getBubbleY(displayedRows[displayedRows.indexOf(rowId)+1])
 
 			const xDirection = Math.abs((childx-parentx)/2)
 

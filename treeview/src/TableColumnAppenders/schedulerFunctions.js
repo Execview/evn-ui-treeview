@@ -1,5 +1,5 @@
-export const getYPositionFromRowNumber = (i,rowHeights) => {
-		return [...rowHeights].splice(0,i).reduce((total,rh)=>total+rh,0)
+export const getYPositionFromRowId = (id,rowHeights) => {
+		return (rowHeights[id] || {}).y || 0
 }
 
 class SVGHolder {

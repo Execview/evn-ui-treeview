@@ -44,6 +44,7 @@ const App = (props) => {
 				treeOptions={treeOptions}
 				schedulerOptions={schedulerOptions}
 				filteredColumns={filteredColumns}
+				noHeader
 			>
 				<SchedulerConnector>
 					<VisibleColumnSelector>

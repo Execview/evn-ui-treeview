@@ -77,7 +77,7 @@ const SchedulerOverlay = (props) => {
 	const [menuHeight, setMenuHeight] = useState(1)
 	const showMenu = props.contextMenu && props.contextMenu.position
 	return (
-		<div>
+		<div className={props.className} style={props.style}>
 			{/* OVERLAY! */}
 			<svg height={tableHeight + (showMenu?menuHeight:0)} width='100%' style={{top:'0px', left: '0px', position: "absolute",pointerEvents: 'none', zIndex:'3', overflow:'visible'}}>
 				<g style={{pointerEvents: 'auto'}}>
