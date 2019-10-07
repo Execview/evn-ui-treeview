@@ -1,6 +1,6 @@
 {
 	"name": "@execview/treeview",
-	"version": "0.1.88",
+	"version": "0.1.89",
 	"main": "./transpiled/exports.js",
 	"private": false,
 	"dependencies": {
