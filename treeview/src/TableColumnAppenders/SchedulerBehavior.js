@@ -3,7 +3,7 @@ import { getNearestSnapXToDate } from './schedulerFunctions';
 var moment = require('moment')
  
 
-export const getDrawnLinksFromData = (data,getBubbleY,snaps) => {
+export const getDrawnLinksFromData = (data,getBubbleYById,getBubbleXFromDate) => {
 	let drawLinks = []
 	const displayedRows = Object.keys(data)
 	
@@ -15,11 +15,11 @@ export const getDrawnLinksFromData = (data,getBubbleY,snaps) => {
 			const parentdate = data[rowId]['right'=== childlinks[childId].parentside ? "enddate" : "startdate"]
 			const childdate = data[childId]['right'=== childlinks[childId].childside ? "enddate" : "startdate"]
 
-			const parentx = getNearestSnapXToDate(parentdate,snaps)
-			const parenty = getBubbleY(rowId)
+			const parentx = getBubbleXFromDate(parentdate)
+			const parenty = getBubbleYById(rowId)
 
-			const childx = getNearestSnapXToDate(childdate,snaps) 
-			const childy = getBubbleY(displayedRows[displayedRows.indexOf(rowId)+1])
+			const childx = getBubbleXFromDate(childdate) 
+			const childy = getBubbleYById(childId)
 
 			const xDirection = Math.abs((childx-parentx)/2)
 

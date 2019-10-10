@@ -223,7 +223,7 @@ const SchedulerAppender = (props) => {
 		const schedulerheaderdata = {
 			snaps: snaps,
 			tableRef: tableRef,
-			links: getDrawnLinksFromData(props.data,((id)=>getYPositionFromRowId(id,rowHeights)+(((rowHeights[id] || {}).height || 0)/2)),snaps),
+			links: getDrawnLinksFromData(props.data,((id)=>getYPositionFromRowId(id,rowHeights)+(((rowHeights[id] || {}).height || 0)/2)),((bubbleDate)=>getNearestSnapXToDate(bubbleDate,snaps))),
 			getWidth: ((w)=>{if(w!==schedulerWidth){setSchedulerWidth(w)}}),
 			mouseOnScheduler: clickedOnScheduler,
 			timeFormatString: getTimeFormatString(schedulerResolution),
