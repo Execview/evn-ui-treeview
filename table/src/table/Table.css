@@ -101,3 +101,25 @@
 .table-selected-row.table-selected-row {
   background-color: var(--color2, #383d47);
 }
+
+
+
+
+.horizontal-scroll {
+    overflow-x: auto;
+    background-color: var(--color1, #5a6272);
+}
+
+.horizontal-scroll::-webkit-scrollbar {
+    height:10px;
+}
+  
+  .horizontal-scroll::-webkit-scrollbar-thumb {
+    background: var(--color11, #00b0a4);
+    border-radius: 5px;
+  }
+  
+  .horizontal-scroll::-webkit-scrollbar-thumb:hover {
+    background: var(--color12, #00998f);
+  }
+  

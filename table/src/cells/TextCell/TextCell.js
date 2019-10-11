@@ -86,7 +86,7 @@ const TextCell = (props) => {
 		placeholder: (!text && isEditableStyles ? placeholderText : ''),	
 	};
 
-	const textareaInput = !textareaOpen ? <p style={{ width: '100%'}}>{text || (isEditableStyles && placeholderText)}</p> : <textarea />;
+	const textareaInput = !textareaOpen ? <p style={{ width: '100%', boxSizing: 'border-box' }}>{text || (isEditableStyles && placeholderText)}</p> : <textarea />;
 
 	const inputType = props.wrap ? textareaInput : <input />;
 

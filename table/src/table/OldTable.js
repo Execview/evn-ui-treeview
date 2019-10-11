@@ -17,9 +17,10 @@ export default class Table extends Component {
 		
 		const initialWidths = {};
 		for (let i = 0; i < keys.length; i++) {
-			if (defaults.columnsInfo[keys[i]].width) {
-				maxTableWidth -= defaults.columnsInfo[keys[i]].width;
-				initialWidths[keys[i]] = defaults.columnsInfo[keys[i]].width;
+			const colWidth = defaults.columnsInfo[keys[i]].width
+			if (colWidth) {
+				maxTableWidth -= colWidth;
+				initialWidths[keys[i]] = colWidth;
 			}
 		}
 
@@ -61,6 +62,7 @@ export default class Table extends Component {
 		this.resizeTable();
 		window.addEventListener('resize', this.resizeTable);
 		this.props.onRender && this.props.onRender();
+		this.resizeTable();
 	}
 
 
@@ -238,12 +240,12 @@ export default class Table extends Component {
 		});
 	}
 
-	resizeTable() {
+	resizeTable() {		
 		const parentNode = ReactDOM.findDOMNode(this).parentNode;
 		const windowWidth = window.getComputedStyle(parentNode, null).getPropertyValue('width').slice(0, -2);
 		let newWidths = this.state.widths || {};
 		let changes = false;
-		
+
 		const newColumns = Object.keys(this.state.columnsInfo).filter(col => !Object.keys(newWidths).includes(col));
 		if (newColumns.length > 0) {
 			newColumns.forEach((c) => {
@@ -266,11 +268,31 @@ export default class Table extends Component {
 		}
 
 		if (this.state.tableWidth !== windowWidth) {
-			const scaleFactor = (windowWidth / this.state.tableWidth);
-			newWidths = Object.keys(newWidths).reduce((total, col) => { return { ...total, [col]: newWidths[col] * scaleFactor }; }, {});
+			let finalWidths = {}
+			const scaleFactor = windowWidth / this.state.tableWidth
+
+			const colsThatNeedMinWidth = Object.keys(newWidths).filter(col=>newWidths[col]*scaleFactor < this.state.minWidths[col])
+			for(const col of colsThatNeedMinWidth){finalWidths[col] = this.state.minWidths[col]}
+
+			const spaceLeft = Math.max(colsThatNeedMinWidth.reduce((t,c)=>t-this.state.minWidths[c],windowWidth),0);
+
+			const colsThatUsePercentage = Object.keys(newWidths).filter(c=>!colsThatNeedMinWidth.includes(c))
+
+			const originalPercentages = Object.fromEntries(Object.entries(newWidths).map(([c,w])=>[c,w/this.state.tableWidth]))
+			
+			const newScaleFactor = 1/colsThatUsePercentage.reduce((t,c)=>t+originalPercentages[c],0)
+			const colsThatUsePercentageNewPercentage = Object.fromEntries(colsThatUsePercentage.map(c=>[c,newScaleFactor*newWidths[c]/this.state.tableWidth]))
+
+
+			for (const col in colsThatUsePercentageNewPercentage){
+				finalWidths[col] = Math.floor(Math.max(spaceLeft*colsThatUsePercentageNewPercentage[col],this.state.minWidths[col]));
+			}
+			
+			newWidths = finalWidths
 			changes = true;
 		}
-	if (changes) {
+
+		if (changes) {
 			this.setState({ widths: newWidths, tableWidth: windowWidth });
 		}
 	}
@@ -283,6 +305,7 @@ export default class Table extends Component {
 	render() {
 		const style = this.props.style || {};
 		return (
+			<div className={'horizontal-scroll'}>
 				<table className={'table ' + (style.table || '')} ref={this.props.tableRef}>
 					{React.createElement((this.props.noHeader ? 'tbody' : 'thead'), {}, (
 						<tr className={'table-row ' + (style.tableRow || 'table-row-visuals')}>
@@ -351,6 +374,7 @@ export default class Table extends Component {
 						})}
 					</tbody>
 				</table>
+			</div>
 		);
 	}
 }

@@ -26,7 +26,7 @@ const Row = (props) => {
 			const errorText = rules[columnsInfo[col].rule] ? rules[columnsInfo[col].rule].errorMessage : null;
 			return (
 				<td className={'table-datum ' + (cellStyleClass.tableDatum || 'table-datum-visuals')} key={col}>
-					{!lastOne && props.onMouseDown && <div style={{ touchAction: 'none', position: 'absolute', transform: 'translateX(7px)', top: 0, right: 0, height: '100%', width: '15px', cursor: 'w-resize' }} onPointerDown={e => onMouseDown(e, col)} />}
+					{!lastOne && props.onMouseDown && <div style={{ touchAction: 'none', position: 'absolute', transform: 'translateX(7px)', top: 0, right: 0, height: '100%', width: '15px', cursor: 'w-resize', zIndex: 1 }} onPointerDown={e => onMouseDown(e, col)} />}
 					<div
 						title={columnsInfo[col].colTitle}
 						className={'table-label ' + (editRights ? '' : 'no-edit')}
