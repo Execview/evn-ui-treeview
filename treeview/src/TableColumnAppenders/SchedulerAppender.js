@@ -239,14 +239,9 @@ const SchedulerAppender = (props) => {
 				start: [schedulerStart, ((date)=>setSchedulerStart(date))]
 			}
 		}
-		const newColumn = {scheduler: {cellType: 'scheduler', width: 65, height: rowHeight, headerType: <SchedulerHeader data={schedulerheaderdata}/>}};
-		let position = 'end';
-		if (props.schedulerOptions) {
-			if (props.schedulerOptions.width) {
-				newColumn.scheduler.width = props.schedulerOptions.width;
-			}
-			position = props.schedulerOptions.position || 'end';
-		}
+		let {position, ...otherSchedulerOptions} = props.schedulerOptions;
+		const newColumn = {scheduler: {cellType: 'scheduler',height: rowHeight, headerType: <SchedulerHeader data={schedulerheaderdata}/>, ...otherSchedulerOptions}};
+		position = position || 'end';
 		
 		return injectObjectInObject(props.columnsInfo, newColumn, position)
 	}
