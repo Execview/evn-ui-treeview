@@ -239,7 +239,7 @@ const SchedulerAppender = (props) => {
 				start: [schedulerStart, ((date)=>setSchedulerStart(date))]
 			}
 		}
-		let {position, ...otherSchedulerOptions} = props.schedulerOptions;
+		let {position, ...otherSchedulerOptions} = props.schedulerOptions || {};
 		const newColumn = {scheduler: {cellType: 'scheduler',height: rowHeight, headerType: <SchedulerHeader data={schedulerheaderdata}/>, ...otherSchedulerOptions}};
 		position = position || 'end';
 		

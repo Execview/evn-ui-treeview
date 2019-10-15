@@ -51,7 +51,7 @@ const TreeAppender = (props) => {
 	}
 
 	const addTreeColumn = ()=>{
-		let {position, ...otherTreeOptions} = props.treeOptions
+		let {position, ...otherTreeOptions} = props.treeOptions || {}
 		position = position || 'start';
 		const newColumn = {treeExpander: {cellType: 'tree', height: (props.height || 0), headerData: 'Tree', ...otherTreeOptions}}
 
