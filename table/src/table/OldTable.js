@@ -62,9 +62,7 @@ export default class Table extends Component {
 		this.resizeTable();
 		window.addEventListener('resize', this.resizeTable);
 		this.props.onRender && this.props.onRender();
-		this.resizeTable();
 	}
-
 
 	componentWillReceiveProps(newProps) {
 		const defaults = this.getDefaults(newProps);
@@ -94,6 +92,7 @@ export default class Table extends Component {
 
 	componentDidUpdate() {
 		this.props.onRender && this.props.onRender();
+		this.resizeTable();
 	}
 
 	componentWillUnmount() {
@@ -268,27 +267,27 @@ export default class Table extends Component {
 		}
 
 		if (this.state.tableWidth !== windowWidth) {
-			let finalWidths = {}
-			const scaleFactor = windowWidth / this.state.tableWidth
+			const finalWidths = {};
+			const scaleFactor = windowWidth / this.state.tableWidth;
 
-			const colsThatNeedMinWidth = Object.keys(newWidths).filter(col=>newWidths[col]*scaleFactor < this.state.minWidths[col])
-			for(const col of colsThatNeedMinWidth){finalWidths[col] = this.state.minWidths[col]}
+			const colsThatNeedMinWidth = Object.keys(newWidths).filter((col) => newWidths[col] * scaleFactor < this.state.minWidths[col]);
+			for (const col of colsThatNeedMinWidth) { finalWidths[col] = this.state.minWidths[col]; }
 
-			const spaceLeft = Math.max(colsThatNeedMinWidth.reduce((t,c)=>t-this.state.minWidths[c],windowWidth),0);
+			const spaceLeft = Math.max(colsThatNeedMinWidth.reduce((t, c) => t - this.state.minWidths[c], windowWidth), 0);
 
-			const colsThatUsePercentage = Object.keys(newWidths).filter(c=>!colsThatNeedMinWidth.includes(c))
+			const colsThatUsePercentage = Object.keys(newWidths).filter(c => !colsThatNeedMinWidth.includes(c));
 
-			const originalPercentages = Object.fromEntries(Object.entries(newWidths).map(([c,w])=>[c,w/this.state.tableWidth]))
+			const originalPercentages = Object.fromEntries(Object.entries(newWidths).map(([c, w]) => [c, w / this.state.tableWidth]));
 			
-			const newScaleFactor = 1/colsThatUsePercentage.reduce((t,c)=>t+originalPercentages[c],0)
-			const colsThatUsePercentageNewPercentage = Object.fromEntries(colsThatUsePercentage.map(c=>[c,newScaleFactor*newWidths[c]/this.state.tableWidth]))
+			const newScaleFactor = 1 / colsThatUsePercentage.reduce((t, c) => t + originalPercentages[c], 0);
+			const colsThatUsePercentageNewPercentage = Object.fromEntries(colsThatUsePercentage.map((c) => [c, newScaleFactor * newWidths[c] / this.state.tableWidth]));
 
 
-			for (const col in colsThatUsePercentageNewPercentage){
-				finalWidths[col] = Math.floor(Math.max(spaceLeft*colsThatUsePercentageNewPercentage[col],this.state.minWidths[col]));
+			for (const col in colsThatUsePercentageNewPercentage) {
+				finalWidths[col] = Math.floor(Math.max(spaceLeft *colsThatUsePercentageNewPercentage[col], this.state.minWidths[col]));
 			}
 			
-			newWidths = finalWidths
+			newWidths = finalWidths;
 			changes = true;
 		}
 
@@ -336,10 +335,12 @@ export default class Table extends Component {
 								}
 
 								return (
-									<th className={'table-header ' + (style.tableHeader || 'table-header-visuals')} key={colkey} style={{ width: this.state.widths[colkey], position: 'relative' }} onContextMenu={(e)=>{e.preventDefault();this.setState({contextMenu: colkey})}}>
-										{colkey===this.state.contextMenu && <OCO OCO={()=>this.setState({contextMenu: null})}>
-											{(this.props.getContextMenu && this.props.getContextMenu(colkey) || null)}
-										</OCO>}
+									<th className={'table-header ' + (style.tableHeader || 'table-header-visuals')} key={colkey} style={{ minWidth: this.state.widths[colkey], position: 'relative' }} onContextMenu={(e)=>{e.preventDefault();this.setState({contextMenu: colkey})}}>
+										{colkey === this.state.contextMenu && (
+											<OCO OCO={() => this.setState({ contextMenu: null })}>
+												{(this.props.getContextMenu && this.props.getContextMenu(colkey) || null)}
+											</OCO>
+										)}
 										<Cell data={data} style={headerStyle} type={type} />
 										{!lastOne && <div style={{ touchAction: 'none', position: 'absolute', WebkitTransform: 'translate(7px)', transform: 'translateX(7px)', top: 0, right: 0, height: '100%', width: '15px', cursor: 'w-resize' }} onPointerDown={e => this.onMouseDown(e, colkey)} onPointerUp={this.stopPr} />}
 									</th>
