@@ -41,3 +41,18 @@
 	--color27: #159e9e; /*var(--color27, #159e9e); teal button hover*/
   --color28: white; /*var(--color28, white); text hover color, button hover color*/
 }
+
+.dropdown{
+	height: 100%;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+.dropdown-menu{
+	max-height: 100%;
+}
+
+.rcm{
+	height: 300px;
+}

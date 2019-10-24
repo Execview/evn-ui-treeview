@@ -1,11 +1,8 @@
 import React, {useState} from 'react';
-import './App.css';
 import Button from './Components/Button/Button'
 import CircleUser from './Components/CircleUser/CircleUser'
 import GenericDropdown from './Components/GenericDropdown/GenericDropdown'
 import TripleFill from './Components/TripleFill/TripleFill'
-
-
 import injectObjectInObject from './Functions/injectObjectInObject'
 import objectCopierWithStringToDate from './Functions/objectCopierWithStringToDate'
 import orderedObjectAssign from './Functions/orderedObjectAssign'
@@ -14,8 +11,12 @@ import recursiveDeepCopy from './Functions/recursiveDeepCopy'
 import recursiveDeepDiffs from './Functions/recursiveDeepDiffs'
 import recursiveDeepDiffsREACT from './Functions/recursiveDeepDiffsREACT'
 import fetchy from './Functions/fetchy'
+import RightClickMenuWrapper from './Components/RightClickMenu/RightClickMenuWrapper';
+
+import classes from './App.module.css';
 
 const App = (props) => {
+	const RCM = <div style={{width:'500px', height: '200px'}}>Testing very very very very very long</div>
 	const ButtonProps = {onClick:(() => console.log('xd'))}
 	const CircleUserProps = {size: 50, url: 'https://i.imgur.com/OYBnpPT.jpg'}
 
@@ -23,7 +24,20 @@ const App = (props) => {
 	const GenericDropdownPropsAllOptions = {
 		a: {name: 'apple', comp: <div>apple</div>},
 		b: {name: 'banana', comp: <div>banana</div>},
-		c: {name: 'cat', comp: <img style={{width: '200px'}} src='https://i.imgur.com/VqZOPIw.jpg' alt='cat'/>}
+		c: {name: 'cat', comp: <img style={{width: '200px'}} src='https://i.imgur.com/VqZOPIw.jpg' alt='cat'/>},
+		d: {name: 'long', comp: <div>looooooooooooong</div>},
+		e: {name: 'five', comp: <div>2.23606797749978</div>},
+
+		f: {name: 'apple', comp: <div>apple</div>},
+		g: {name: 'banana', comp: <div>banana</div>},
+		h: {name: 'cat', comp: <img style={{width: '200px'}} src='https://i.imgur.com/VqZOPIw.jpg' alt='cat'/>},
+		i: {name: 'long', comp: <div>looooooooooooong</div>},
+		j: {name: 'five', comp: <div>2.23606797749978</div>},
+		k: {name: 'apple', comp: <div>apple</div>},
+		l: {name: 'banana', comp: <div>banana</div>},
+		m: {name: 'cat', comp: <img style={{width: '200px'}} src='https://i.imgur.com/VqZOPIw.jpg' alt='cat'/>},
+		n: {name: 'long', comp: <div>looooooooooooong</div>},
+		o: {name: 'five', comp: <div>2.23606797749978</div>},
 	}
 	const GenericDropdownPropsOptions = Object.keys(GenericDropdownPropsAllOptions).filter(id=>GenericDropdownPropsAllOptions[id].name.includes(genericDropdownPropsSearchString)).reduce((t,i)=>{ return {...t,[i]:GenericDropdownPropsAllOptions[i].comp}},{})
 	const GenericDropdownProps = {
@@ -35,11 +49,17 @@ const App = (props) => {
 	}
 
 	return (
-		<div className="App color-scheme">
+		<div className={`${classes["App"]} ${classes['color-scheme']}`}>
+			<div>================== start ==================</div>
+			<div style={{width:'500px', height: '200px', border: '1px solid white', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+				<RightClickMenuWrapper rightClickMenuClassName={classes['rcm']}>{<GenericDropdown {...GenericDropdownProps} genericDropdownClasses={{dropdown: classes['dropdown'], dropdownMenu: classes['dropdown-menu']}}/>}</RightClickMenuWrapper>
+				Right-click me!
+			</div>
 			<Button {...ButtonProps}>test button</Button>
 			<TripleFill left={<div>left</div>} center={<div>middle</div>} right={<div>right</div>}/>
 			<CircleUser {...CircleUserProps}/>
 			<GenericDropdown {...GenericDropdownProps}/>
+			<div>================== end ==================</div>
 		</div>
 	);
 }

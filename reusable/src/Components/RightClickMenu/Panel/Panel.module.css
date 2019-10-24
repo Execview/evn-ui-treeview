@@ -1,0 +1,27 @@
+.panel {
+	position: absolute;
+	background-color: var(--color2, #383d47);
+	color: var(--color5, white);
+	border-radius: 4px;
+	box-sizing: border-box;
+	z-index: 10000;
+}
+
+.panel-padding {
+	padding: 10px;
+	border: 1px solid var(--color5, white);
+}
+
+.absolute-caret {
+	width: 0;
+	height: 0;
+	border-style: solid;	
+	position: absolute;
+}
+
+.absolute-caret-border-colors-up {
+	border-color: transparent transparent var(--color5, white) transparent;
+}
+.absolute-caret-border-colors-down {
+	border-color: var(--color5, white) transparent transparent  transparent;
+}

@@ -4,6 +4,7 @@ import PropInspector from './Components/PropInspector/PropInspector'
 import TripleFill from './Components/TripleFill/TripleFill'
 import CircleUser from './Components/CircleUser/CircleUser';
 import OCO from './Components/OCO/OCO'
+import RightClickMenuWrapper from './Components/RightClickMenu/RightClickMenuWrapper'
 
 import injectObjectInObject from './Functions/injectObjectInObject'
 import objectCopierWithStringToDate from './Functions/objectCopierWithStringToDate'
@@ -13,6 +14,7 @@ import recursiveDeepCopy from './Functions/recursiveDeepCopy'
 import recursiveDeepDiffs from './Functions/recursiveDeepDiffs'
 import recursiveDeepDiffsREACT from './Functions/recursiveDeepDiffsREACT'
 import fetchy from './Functions/fetchy'
+import useFunctionalRef from './Functions/useFunctionalRef'
 
 module.exports = {
 	Button,
@@ -20,6 +22,8 @@ module.exports = {
 	PropInspector,
 	TripleFill,
 	CircleUser,
+	OCO,
+	RightClickMenuWrapper,
 	injectObjectInObject,
 	objectCopierWithStringToDate,
 	orderedObjectAssign,
@@ -28,5 +32,5 @@ module.exports = {
 	recursiveDeepDiffs,
 	recursiveDeepDiffsREACT,
 	fetchy,
-	OCO
+	useFunctionalRef
 };
