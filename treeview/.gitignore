@@ -4,6 +4,7 @@
 /node_modules
 /.pnp
 .pnp.js
+.vs
 
 # testing
 /coverage
@@ -24,4 +25,5 @@ yarn-debug.log*
 yarn-error.log*
 
 package-lock.json
+/transpiled
 
