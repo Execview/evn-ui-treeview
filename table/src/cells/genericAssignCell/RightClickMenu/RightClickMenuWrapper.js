@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import RightClickMenu from './RightClickMenu';
-import useFunctionalRef from '../../Functions/useFunctionalRef';
+import useFunctionalRef from './useFunctionalRef';
 
 const RightClickMenuWrapper = (props) => {
 	const [wrapperRef, current] = useFunctionalRef();
@@ -14,6 +14,7 @@ const RightClickMenuWrapper = (props) => {
 
 		if (props.takeParentLocation) {
 			const PR = parentNode.getBoundingClientRect();
+			console.log(PR)
 			const documentRect = document.documentElement.getBoundingClientRect();
 			const newParentPosition = {
 				x: PR.left - documentRect.left,
@@ -23,6 +24,7 @@ const RightClickMenuWrapper = (props) => {
 				width: PR.width,
 				height: PR.height
 			};
+			console.log(newParentPosition)
 			setParentPosition(newParentPosition);
 		} else {
 			const newMousePosition = {

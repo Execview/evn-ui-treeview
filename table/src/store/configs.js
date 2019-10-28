@@ -43,7 +43,7 @@ export const columnsInfo3 = {
 	startDate: { cellType: 'date', headerData: 'Start Date', width: 10 },
 	dueDate: { cellType: 'date', headerData: 'Due Date', width: 10 },
 	assignedGeneric: { cellType: 'genericAdder', headerData: 'Assigned Generic', width: 10, headerType: 'userHeader', height: 40 },
-	latestProgress: { cellType: 'textarea', headerData: 'Latest Progress' }
+	// latestProgress: { cellType: 'textarea', headerData: 'Latest Progress' }
 	// employeeName: { cellType: 'dropdown', headerData: 'Employee Name', width: 400 },
 };
 

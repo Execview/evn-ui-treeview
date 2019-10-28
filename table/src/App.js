@@ -12,7 +12,6 @@ import DropdownCell from './cells/dropdownCell/DropdownCell';
 import GenericAssignCell from './cells/genericAssignCell/GenericAssignCell';
 import ImageDisplay from './cells/imageDisplay/ImageDisplay';
 import classes from './App.module.css';
-import Panel from './Panel/Panel';
 
 
 const crypto = require('crypto');
@@ -72,19 +71,30 @@ const App = (props) => {
 		props.onSave(newId, {}, Object.keys(columnsInfo));
 	}
 	const [cmv, setCmv] = useState('')
-	const getContextMenu = (col) => {
-		const filterComponent = columnsInfo[col].filter || null
-		return (
-			<Panel panelClass={classes["header-context-menu"]}>
-				{col+cmv}
-				<Button onClick={()=>setCmv(cmv ? '' :' toggled!')}>Test re-render</Button>
-				{filterComponent && React.cloneElement(filterComponent,{...filterComponent.props, allData: allData, activeFilter: filters[col], onValidateSave: ((newFilters)=>setFilters({...filters,[col]:newFilters})), className: classes['context-filter']})}
-			</Panel>
-		)
-	}
+	// const getContextMenu = (col) => {
+	// 	const filterComponent = columnsInfo[col].filter || null
+	// 	return (
+	// 		<Panel panelClass={classes["header-context-menu"]}>
+	// 			{col+cmv}
+	// 			<Button onClick={()=>setCmv(cmv ? '' :' toggled!')}>Test re-render</Button>
+	// 			{filterComponent && React.cloneElement(filterComponent,{...filterComponent.props, allData: allData, activeFilter: filters[col], onValidateSave: ((newFilters)=>setFilters({...filters,[col]:newFilters})), className: classes['context-filter']})}
+	// 		</Panel>
+	// 	)
+	// }
 
 	return (
 		<div className={`${classes["App"]} ${classes["color-scheme"]}`}>
+			<div style={{ margin: 'auto', marginTop: '30px', maxWidth: '400px' }}>
+				<img style={{ marginTop: '30px', maxWidth: '100%' }} src={cats[randomNumber]} alt="xd" />
+			</div>
+			<div className={classes["inplacecells"]}>
+				<InPlaceCell {...InPlaceCellPropsText} />
+				<InPlaceCell {...InPlaceCellPropsTextarea} />
+				<InPlaceCell {...InPlaceCellPropsColour} />
+				<InPlaceCell {...InPlaceCellPropsDate} />
+				<InPlaceCell {...InPlaceCellPropsDropdown} />
+				<InPlaceCell {...InPlaceCellPropsGenericAssign} />
+			</div>
 			<div>
 				<Button style={{margin:'10px', padding: '30px', paddingTop:'15px', paddingBottom:'15px'}} onClick={addRow}>Add row</Button>
 				<TableWrapper
@@ -97,20 +107,10 @@ const App = (props) => {
 					dataSort={dataSort}
 					tableWidth={1200}
 					selectedRow={'_2'}
-					getContextMenu={getContextMenu}
+					// getContextMenu={getContextMenu}
 				/>
 			</div>
-			<div style={{ margin: 'auto', marginTop: '30px', maxWidth: '400px' }}>
-				<img style={{ marginTop: '30px', maxWidth: '100%' }} src={cats[randomNumber]} alt="xd" />
-			</div>
-			<div className={classes["inplacecells"]}>
-				<InPlaceCell {...InPlaceCellPropsText} />
-				<InPlaceCell {...InPlaceCellPropsTextarea} />
-				<InPlaceCell {...InPlaceCellPropsColour} />
-				<InPlaceCell {...InPlaceCellPropsDate} />
-				<InPlaceCell {...InPlaceCellPropsDropdown} />
-				<InPlaceCell {...InPlaceCellPropsGenericAssign} />
-			</div>
+			
 		</div>
 	);
 };

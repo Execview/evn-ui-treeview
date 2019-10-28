@@ -81,9 +81,6 @@
 }
 
 .color-dropdown {
-  position:absolute;
-  left:0;
-  top:0;
   background-color: var(--color2, #383d47);
   z-index: 100;
   user-select: none;
