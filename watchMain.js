@@ -1,41 +1,32 @@
-import {exec,spawn} from 'child_process'
 import chokidar from 'chokidar'
 import config from './config.json'
+import transpileModule, { isAModule, getModulePath } from './transpileModule.js'
 
+const toWatch = Object.keys(config).filter((n)=>isAModule(n))
 
-const toWatch = Object.fromEntries(Object.entries(config).filter(([n,l])=>n.includes('@')))
-
-
-Object.entries(toWatch).forEach(([n,l])=>{
-	const srcPath = l+"/src"
-	const transpiledPath = l+"/transpiled"
-	const transpileCommand = `babel ${srcPath} -d ${transpiledPath} --copy-files --plugins=@babel/plugin-proposal-class-properties --presets=@babel/preset-env,@babel/preset-react`
-
-	let scanned = false
-	console.log("watching "+n+" in "+l)
-	chokidar.watch(srcPath,{persistent:true}).on('all', (event, path) => {
-		console.log(event, path);
+toWatch.forEach((n)=>{
+	const srcPath = getModulePath(n)+'/src'
+	let scanned = false	
+	const onAnyChange = (event,path) => {
+		scanned && console.log(event, path);
 		switch(event){
 			case 'change': {
-				console.log(`transpiling ${n}`)
-				console.log(transpileCommand)
-				exec(transpileCommand)
-				console.log('done!')
+				transpileModule(n)
 				break;
 			}
 			case 'add': {
+				scanned && transpileModule(n)
 				break;
 			}
 			case 'ready' : {
-				console.log('rdy!')
 				scanned=true
+				transpileModule(n)
+				.catch(err=>console.log(err))
+				.then(res=>console.log("watching "+n+" in "+srcPath))
 			}
 			default: break;
 		}
-		if(event==='change'){
-			
-		}
-	});
-
-	// exec(command)
+	}
+	
+	chokidar.watch(srcPath,{persistent:true, followSymlinks: true}).on('all',onAnyChange).on('ready',()=>onAnyChange('ready',srcPath));
 })
