@@ -50,9 +50,13 @@ Object.entries(linkModuleWithPackage).forEach(([mod,dependants])=>{
 console.log(modLinkCommands)
 console.log(dependantInstallCommands)
 
+console.log('transpiling modules...')
 Promise.all(Object.keys(config).map(n=>transpileModule(n)))
+.then(()=>console.log('running npm link commands'))
 .then(()=>Promise.all(modLinkCommands.map(mlc=>execute(mlc[0],{cwd: mlc[1]}))))
+.then(()=>console.log('running installing the npm link modules'))
 .then(()=>Promise.all(dependantInstallCommands.map(dic=>execute(dic[0],{cwd: dic[1]}))))
+.then(()=>console.log(unlinkMode?'reinstalling original packages':''))
 .then(()=>Promise.all(reinstallCommands.map(rc=>execute(rc[0],{cwd: rc[1]}))))
 .then(()=>console.log('success!'))
 

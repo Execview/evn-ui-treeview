@@ -7,7 +7,8 @@
 		"start": "nodemon --ignore \"./packages\" watchIndex.js",
 		"watch": "npm start",
 		"link-modules": "nodemon --ignore \"./packages\" linkIndex link",
-		"unlink-modules": "nodemon --ignore \"./packages\" linkIndex unlink"
+		"unlink-modules": "nodemon --ignore \"./packages\" linkIndex unlink",
+		"postinstall": "mkdir packages"
 	},
 	"author": "",
 	"license": "ISC",
