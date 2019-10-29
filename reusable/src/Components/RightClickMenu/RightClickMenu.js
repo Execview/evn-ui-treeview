@@ -85,7 +85,7 @@ const RightClickMenu = (props) => {
 		LEFT = Math.max(LEFT,0)
 		CARET_SLIDE = Math.min(CARET_SLIDE, menu.width-caretDimensions[0]-1)
 		CARET_SLIDE = Math.max(0,CARET_SLIDE)
-
+		console.log('testing!!!!!!!2.0')
 		menuChildren = (
 			<OCO OCO={props.closeMenu}>
 				<Panel ref={selfRef} style={{top:TOP,left:LEFT}} hideCaret={inlineMode} caretDimensions={caretDimensions} caretPosition={[caretPosition,'left']} caretAdjustment={[CARET_SLIDE,0]} className={`${classes['rcm-panel']} ${props.rightClickMenuClassName}`}>

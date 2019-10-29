@@ -1,6 +1,6 @@
 {
   "name": "@execview/reusable",
-  "version": "0.1.60",
+  "version": "0.1.62",
   "main": "./transpiled/exports.js",
   "private": false,
   "dependencies": {
@@ -20,6 +20,10 @@
     "prepublishOnly": "npm install --no-save @babel/cli @babel/core @babel/preset-env @babel/plugin-proposal-class-properties @babel/preset-react && babel src -d transpiled --copy-files --plugins=@babel/plugin-proposal-class-properties --presets=@babel/preset-env,@babel/preset-react",
     "postpublish": "rmdir /S /Q transpiled"
   },
+  "files": [
+    "/public",
+    "/transpiled"
+  ],
   "keywords": [],
   "author": "james.styman@execview.com",
   "license": "ISC",

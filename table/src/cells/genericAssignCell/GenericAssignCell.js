@@ -1,6 +1,6 @@
 import React from 'react';
 import './GenericAssignCell.css';
-import RightClickMenuWrapper from './RightClickMenu/RightClickMenuWrapper';
+import { RightClickMenuWrapper } from '@execview/reusable';
 import GenericAssign from './GenericAssign';
 
 const GenericAssignCell = (props) => {

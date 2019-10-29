@@ -1,11 +1,11 @@
 {
 	"name": "@execview/treeview",
-	"version": "0.1.92",
+	"version": "0.1.93",
 	"main": "./transpiled/exports.js",
 	"private": false,
 	"dependencies": {
-		"@execview/reusable": "0.1.55",
-		"@execview/table": "0.1.116",
+		"@execview/reusable": "^0.1.60",
+		"@execview/table": "^0.1.118",
 		"@fortawesome/fontawesome-svg-core": "^1.2.17",
 		"@fortawesome/free-regular-svg-icons": "^5.9.0",
 		"@fortawesome/free-solid-svg-icons": "^5.8.1",
@@ -28,9 +28,13 @@
 		"build": "react-scripts build",
 		"test": "react-scripts test",
 		"eject": "react-scripts eject",
-		"prepublish": "npm install --no-save @babel/cli @babel/core @babel/preset-env @babel/plugin-proposal-class-properties @babel/preset-react && babel src -d transpiled --copy-files --plugins=@babel/plugin-proposal-class-properties --presets=@babel/preset-env,@babel/preset-react",
+		"prepublishOnly": "npm install --no-save @babel/cli @babel/core @babel/preset-env @babel/plugin-proposal-class-properties @babel/preset-react && babel src -d transpiled --copy-files --plugins=@babel/plugin-proposal-class-properties --presets=@babel/preset-env,@babel/preset-react",
 		"postpublish": "rmdir /S /Q transpiled"
 	},
+	"files": [
+		"/public",
+		"/transpiled"
+	],
 	"keywords": [],
 	"author": "james.styman@execview.com",
 	"license": "ISC",

@@ -1,10 +1,10 @@
 {
 	"name": "@execview/table",
-	"version": "0.1.118",
+	"version": "0.1.119",
 	"main": "./transpiled/exports.js",
 	"private": false,
 	"dependencies": {
-		"@execview/reusable": "0.1.60",
+		"@execview/reusable": "^0.1.60",
 		"@fortawesome/fontawesome-svg-core": "^1.2.18",
 		"@fortawesome/free-solid-svg-icons": "^5.8.2",
 		"@fortawesome/react-fontawesome": "^0.1.7",
@@ -13,7 +13,7 @@
 		"react-datepicker": "^2.9.6",
 		"react-device-detect": "^1.9.10",
 		"react-dom": "^16.11.0",
-		"react-onclickoutside": "^6.8.0",
+		"react-onclickoutside": "^6.9.0",
 		"react-redux": "^7.1.1",
 		"react-scripts": "^3.2.0",
 		"redux": "^4.0.4"
@@ -26,6 +26,10 @@
 		"prepublishOnly": "npm install --no-save @babel/cli @babel/core @babel/plugin-proposal-class-properties @babel/preset-env @babel/preset-react && babel src -d transpiled --copy-files --plugins=@babel/plugin-proposal-class-properties --presets=@babel/preset-env,@babel/preset-react",
 		"postpublish": "rmdir /S /Q transpiled"
 	},
+	"files": [
+		"/public",
+		"/transpiled"
+	],
 	"keywords": [],
 	"author": "teodor-andrei.jalba@execview.com",
 	"license": "ISC",
@@ -36,13 +40,13 @@
 	"eslintConfig": {
 		"extends": "react-app"
 	},
+	"devDependencies": {
+		"eslint-config-airbnb": "^18.0.1"
+	},
 	"browserslist": [
 		">0.2%",
 		"not dead",
 		"not ie <= 11",
 		"not op_mini all"
-	],
-	"devDependencies": {
-		"eslint-config-airbnb": "^18.0.1"
-	}
+	]
 }

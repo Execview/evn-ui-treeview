@@ -13,7 +13,6 @@ import GenericAssignCell from './cells/genericAssignCell/GenericAssignCell';
 import ImageDisplay from './cells/imageDisplay/ImageDisplay';
 import classes from './App.module.css';
 
-
 const crypto = require('crypto');
 const hash = crypto.createHash('sha256');
 
