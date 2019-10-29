@@ -1,0 +1,24 @@
+{
+	"name": "packagelinker",
+	"version": "1.0.0",
+	"description": "",
+	"main": "./src/watchIndex.js",
+	"scripts": {
+		"start": "node ./src/watchIndex",
+		"watch": "npm start",
+		"link-modules": "node ./src/linkIndex link",
+		"unlink-modules": "node ./src/linkIndex unlink",
+		"all": "node ./src/runAllIndex"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"@babel/cli": "^7.6.4",
+		"@babel/core": "^7.6.4",
+		"@babel/plugin-proposal-class-properties": "^7.5.5",
+		"@babel/preset-env": "^7.6.3",
+		"@babel/preset-react": "^7.6.3",
+		"chokidar": "^3.2.2",
+		"esm": "^3.2.25"
+	}
+}
