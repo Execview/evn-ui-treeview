@@ -2,13 +2,12 @@
 	"name": "packagelinker",
 	"version": "1.0.0",
 	"description": "",
-	"main": "watchIndex.js",
+	"main": "./src/watchIndex.js",
 	"scripts": {
-		"start": "nodemon --ignore \"./packages\" watchIndex.js",
+		"start": "nodemon ./src/watchIndex.js",
 		"watch": "npm start",
-		"link-modules": "nodemon --ignore \"./packages\" linkIndex link",
-		"unlink-modules": "nodemon --ignore \"./packages\" linkIndex unlink",
-		"postinstall": "mkdir packages"
+		"link-modules": "nodemon ./src/linkIndex link",
+		"unlink-modules": "nodemon ./src/linkIndex unlink"
 	},
 	"author": "",
 	"license": "ISC",

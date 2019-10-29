@@ -1,7 +1,7 @@
-import config from './config.json'
-
+import config from '../config.json'
+import path from 'path'
 import * as fs from 'fs'
-import transpileModule, { getTranspiledModulePath, synchronousCommandExecuter, getModulePath, isAModule, execute } from './transpileModule.js'
+import transpileModule, { getTranspiledModulePath, getModulePath, isAModule, execute } from './transpileModule.js'
 
 let linkModuleWithPackage = Object.fromEntries(Object.keys(config).map(k=>[k,[]]))
 
@@ -9,7 +9,7 @@ console.log(linkModuleWithPackage)
 
 Object.keys(linkModuleWithPackage).forEach(n=>{
 	transpileModule(n)
-	const packageJsonFile = fs.readFileSync(getModulePath(n)+'\\package.json');
+	const packageJsonFile = fs.readFileSync(path.resolve(getModulePath(n),'./package.json'));
 	if(!packageJsonFile || !packageJsonFile[0]==='{'){return}
 	const packageJson = JSON.parse(packageJsonFile)
 	const depProperties = Object.keys(packageJson).filter(k=>k.includes('dep')) //peerDeps, devDeps, deps, etc...
@@ -49,12 +49,13 @@ Object.entries(linkModuleWithPackage).forEach(([mod,dependants])=>{
 
 console.log(modLinkCommands)
 console.log(dependantInstallCommands)
+unlinkMode && console.log(reinstallCommands)
 
 console.log('transpiling modules...')
 Promise.all(Object.keys(config).map(n=>transpileModule(n)))
 .then(()=>console.log('running npm link commands'))
 .then(()=>Promise.all(modLinkCommands.map(mlc=>execute(mlc[0],{cwd: mlc[1]}))))
-.then(()=>console.log('running installing the npm link modules'))
+.then(()=>console.log('installing the npm link modules'))
 .then(()=>Promise.all(dependantInstallCommands.map(dic=>execute(dic[0],{cwd: dic[1]}))))
 .then(()=>console.log(unlinkMode?'reinstalling original packages':''))
 .then(()=>Promise.all(reinstallCommands.map(rc=>execute(rc[0],{cwd: rc[1]}))))
