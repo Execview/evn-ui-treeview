@@ -8,7 +8,8 @@
 		"watch": "npm start",
 		"link-modules": "node ./src/linkIndex link",
 		"unlink-modules": "node ./src/linkIndex unlink",
-		"all": "node ./src/runAllIndex"
+		"all": "node ./src/runAllIndex",
+		"clean": "wsl rm -rfd ./node_modules && wsl rm -rfd ./transpiled && wsl rm ./package-lock.json"
 	},
 	"author": "",
 	"license": "ISC",
