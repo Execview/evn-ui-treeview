@@ -1,6 +1,6 @@
 {
-	"@execview/reusable": "../Components/reusable",
-	"@execview/table": "../Components/table",
-	"@execview/treeview": "../Components/treeview",
-	"evn-ui-web": "../Site"
+	"@execview/reusable": "../reusable",
+	"@execview/table": "../table",
+	"@execview/treeview": "../treeview",
+	"evn-ui-web": "../../Site"
 }
