@@ -2,5 +2,5 @@
 	"@execview/reusable": "../reusable",
 	"@execview/table": "../table",
 	"@execview/treeview": "../treeview",
-	"evn-ui-web": "../../Site"
+	"evn-ui-web": "[Insert relative path here. Do not commit this file]"
 }
