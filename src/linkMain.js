@@ -28,9 +28,25 @@ const unlinkMode = (process.argv[2] && process.argv[2]==='unlink')
 
 let modLinkCommands = []
 let dependantInstallCommands = []
+let mainReactInstallCommand = ''
+let reactDuplicateCommands = []
 let reinstallCommands = []
 
+let lastModule = ""
 Object.entries(linkModuleWithPackage).forEach(([mod,dependants])=>{
+	// For hooks to work, there must only be one React! This is the workaround suggested by: https://reactjs.org/warnings/invalid-hook-call-warning.html#duplicate-react . This will hopefully overwrite the react symlink with each subsequent module's.
+
+	if(lastModule){
+		//npm link the previous module's version of react
+		const lastModulePath = getModulePath(lastModule)
+		const lastModuleCommand = unlinkMode ? `npm unlink react` : `npm link react`
+		reactDuplicateCommands.push([lastModuleCommand,lastModulePath])
+	}
+
+	const reactPath = path.resolve(getModulePath(mod),'./node_modules/react')
+	const reactCommand = unlinkMode ? `npm unlink` : `npm link`
+	mainReactInstallCommand = [reactCommand,reactPath]
+	lastModule = mod
 	
 	if(isAModule(mod)){
 		const modPath = getTranspiledModulePath(mod)
@@ -48,16 +64,22 @@ Object.entries(linkModuleWithPackage).forEach(([mod,dependants])=>{
 })
 
 console.log(modLinkCommands)
+console.log(mainReactInstallCommand)
 console.log(dependantInstallCommands)
+console.log(reactDuplicateCommands)
 unlinkMode && console.log(reinstallCommands)
 
 console.log('transpiling modules...')
 Promise.all(Object.keys(config).map(n=>transpileModule(n)))
-.then(()=>console.log('running npm link commands'))
+.then(()=>console.log('creating module npm links...'))
 .then(()=>Promise.all(modLinkCommands.map(mlc=>execute(mlc[0],{cwd: mlc[1]}))))
-.then(()=>console.log('installing the npm link modules'))
+.then(()=>console.log('creating react npm link...'))
+.then(()=>execute(mainReactInstallCommand[0],{cwd: mainReactInstallCommand[1]}))
+.then(()=>console.log('installing the module npm links...'))
 .then(()=>Promise.all(dependantInstallCommands.map(dic=>execute(dic[0],{cwd: dic[1]}))))
-.then(()=>console.log(unlinkMode?'reinstalling original packages':''))
+.then(()=>console.log('installing the module react links...'))
+.then(()=>Promise.all(reactDuplicateCommands.map(rdc=>execute(rdc[0],{cwd: rdc[1]}))))
+.then(()=>console.log(unlinkMode?'reinstalling original packages...':''))
 .then(()=>Promise.all(reinstallCommands.map(rc=>execute(rc[0],{cwd: rc[1]}))))
 .then(()=>console.log('success!'))
 
