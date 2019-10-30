@@ -3,6 +3,7 @@ import {RightClickMenuWrapper} from '@execview/reusable';
 import classes from './ColorCell.module.css';
 
 const ColorCell = (props) => {
+	const [open, setOpen] = useState(false)
 	const inlineMode = props.inline;
 	const colors = props.colorStrings || { green: 'green', amber: 'amber', red: 'red', grey: 'grey', blue: 'blue'};
 	const text = props.data || 'grey';
@@ -21,6 +22,7 @@ const ColorCell = (props) => {
 	);
 
 	const submit = (newData) => {
+		setOpen(false)
 		props.onValidateSave(newData);
 	};
 
@@ -43,7 +45,7 @@ const ColorCell = (props) => {
 			<div style={{ height: '100%' }}>
 				{display}
 			</div>
-			{isEditable && <RightClickMenuWrapper onLeftClick inline={inlineMode} takeParentLocation>
+			{isEditable && <RightClickMenuWrapper onLeftClick inline={inlineMode} takeParentLocation open={open} setOpen={setOpen}>
 				<div className={classes['color-dropdown']} style={{ width }}>
 					<ul className={classes['color-dropdown-menu']}>
 						{Object.keys(colors).map(objKey => <li className={classes['color-dropdown-item'] + ' ' + classes['hover-' + objKey]} key={objKey} onClick={(e) => { e.stopPropagation(); e.preventDefault(); submit(objKey); }}>{colors[objKey]}</li>)}

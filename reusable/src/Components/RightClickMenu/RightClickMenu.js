@@ -17,13 +17,14 @@ const RightClickMenu = (props) => {
 			setSelfDimensions(newSelfDimensions)
 		}
 	})
-	console.log('line 20 pls')
-	const page = {width: rightClickDOMNode.clientWidth, height: rightClickDOMNode.clientHeight}
-	const menu = {width: selfDimensions.width, height: selfDimensions.height}
-	
-	const parentPosition = props.parentPosition
-	const mousePosition = props.mousePosition
 
+	const page = {width: Math.min(window.innerWidth,rightClickDOMNode.clientWidth), height: Math.min(window.innerHeight,rightClickDOMNode.clientHeight)}
+	const menu = {width: selfDimensions.width, height: selfDimensions.height}
+
+	const takeParentLocation = props.takeParentLocation	
+
+	const position = props.position
+	if(!position){return null}
 
 	const inlineMode = props.inline	
 	const caretDimensions = !inlineMode ? (props.caretDimensions || [18,9]) : [0,0]
@@ -31,11 +32,8 @@ const RightClickMenu = (props) => {
 	const slideBox = !inlineMode ? (props.slideBox || 50) : 0
 
 
-	const position = parentPosition ? parentPosition : mousePosition;
-
-
-	let TOP = parentPosition ? position.y + moveBox[1] : position.y
-	let LEFT = parentPosition ? position.x + moveBox[0] : position.x
+	let TOP = takeParentLocation ? position.y + moveBox[1] : position.y
+	let LEFT = takeParentLocation ? position.x + moveBox[0] : position.x
 	let CARET_SLIDE = slideBox
 	let caretPosition = 'top'
 
@@ -55,19 +53,19 @@ const RightClickMenu = (props) => {
 		)
 	} else {
 		let positionScreenY = position.screenY
-		if(parentPosition && !inlineMode){
-			positionScreenY = positionScreenY+parentPosition.height
-			TOP += parentPosition.height
+		if(takeParentLocation && !inlineMode){
+			positionScreenY = positionScreenY+position.height
+			TOP += position.height
 		}
-
+	console.log(positionScreenY,menu.height,caretDimensions[1],page.height)
 		if(positionScreenY+menu.height+caretDimensions[1]>page.height){
 			TOP = TOP-menu.height-caretDimensions[1] 
 			caretPosition = 'bottom'
-			if(parentPosition){
+			if(takeParentLocation){
 				if(!inlineMode){
-					TOP -= parentPosition.height + 2*moveBox[1]
+					TOP -= position.height + 2*moveBox[1]
 				} else {
-					TOP += parentPosition.height
+					TOP += position.height
 				}
 			}
 		} else {
@@ -94,9 +92,7 @@ const RightClickMenu = (props) => {
 			</OCO>
 		)
 	}
-
 	
-	if(!(mousePosition || parentPosition)){return null}
 	return (
 		ReactDOM.createPortal(menuChildren,rightClickDOMNode)
 	)

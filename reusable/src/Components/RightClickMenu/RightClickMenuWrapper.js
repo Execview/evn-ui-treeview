@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import RightClickMenu from './RightClickMenu';
 import useFunctionalRef from '../../Functions/useFunctionalRef';
 
-const RightClickMenuWrapper = (props) => {
+const RightClickMenuWrapper = (props) => { //TODO MAKE TAKEPARENTLOCATION TRUE IF POSITION IS EMPTY BUT OPEN IS TRUE. MAKE IT CALCULATE THE PARENT LOCATION TOO...
 	const [wrapperRef, current] = useFunctionalRef();
 	const parentNode = current && current.parentNode;
-	const [rightClickPosition, setRightClickPosition] = useState(null);
-	const [parentPosition, setParentPosition] = useState(null);
-	
+
+	const [open, setOpen] = props.setOpen ? [props.open,props.setOpen] : useState(false)
+	const [position, setPosition] = useState(null);
 
 	const openMenu = (e) => {
 		if (props.stopPropagation) { e.stopPropagation(); }
@@ -22,16 +22,20 @@ const RightClickMenuWrapper = (props) => {
 				width: PR.width,
 				height: PR.height
 			};
-			setParentPosition(newParentPosition);
+			setPosition(newParentPosition);
+			setOpen(true)
 		} else {
 			const newMousePosition = {
 				x: e.pageX,
 				y: e.pageY,
 				screenX: e.clientX,
-				screenY: e.clientY
+				screenY: e.clientY,
+				width: 0,
+				height: 0
 			};
 			
-			setRightClickPosition(newMousePosition);
+			setPosition(newMousePosition);
+			setOpen(true)
 		}
 	};
 
@@ -46,11 +50,12 @@ const RightClickMenuWrapper = (props) => {
 			parentNode.removeEventListener('click',onLeftClick)
 			parentNode.removeEventListener('contextmenu',onContextMenu)
 		})
-	});
+	},[parentNode]);
+
 	return (
         <div ref={wrapperRef}>
-			{(rightClickPosition || parentPosition) && (
-				<RightClickMenu inline={props.inline} mousePosition={rightClickPosition} parentPosition={parentPosition} closeMenu={()=>{setRightClickPosition(null);setParentPosition(null)}} enableModal={props.enableModal} forceModal={props.forceModal}  rightClickMenuClassName={props.rightClickMenuClassName} modalClassName={props.modalClassName}>
+			{position && open && (
+				<RightClickMenu inline={props.inline} position={position} takeParentLocation={props.takeParentLocation} closeMenu={()=>setOpen(false)} enableModal={props.enableModal} forceModal={props.forceModal} rightClickMenuClassName={props.rightClickMenuClassName} modalClassName={props.modalClassName}>
 					{props.children}
 				</RightClickMenu>
 			)}
@@ -59,16 +64,3 @@ const RightClickMenuWrapper = (props) => {
 };
 
 export default RightClickMenuWrapper;
-
-
-
-const getPositionOnPage = el => {
-	let x = 0
-	let y = 0
-	while( el && !isNaN( el.offsetLeft ) && !isNaN( el.offsetTop ) ) {
-		x += el.offsetLeft - el.scrollLeft;
-		y += el.offsetTop - el.scrollTop;
-		el = el.offsetParent;
-    }
-    return { x, y };
-}
