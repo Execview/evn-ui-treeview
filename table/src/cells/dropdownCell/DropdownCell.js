@@ -52,7 +52,7 @@ const DropdownCell = (props) => {
 			<div style={{ height: '100%' }}>
 				{display}
 			</div>
-			<RightClickMenuWrapper inline={inlineMode} takeParentLocation>
+			<RightClickMenuWrapper onLeftClick inline={inlineMode} takeParentLocation>
 				<GenericDropdown
 					{...props}
 					onBlur={onBlur}

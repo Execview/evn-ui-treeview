@@ -17,7 +17,7 @@ const RightClickMenu = (props) => {
 			setSelfDimensions(newSelfDimensions)
 		}
 	})
-
+	console.log('line 20 pls')
 	const page = {width: rightClickDOMNode.clientWidth, height: rightClickDOMNode.clientHeight}
 	const menu = {width: selfDimensions.width, height: selfDimensions.height}
 	
@@ -27,7 +27,7 @@ const RightClickMenu = (props) => {
 
 	const inlineMode = props.inline	
 	const caretDimensions = !inlineMode ? (props.caretDimensions || [18,9]) : [0,0]
-	const moveBox = !inlineMode ? (props.moveBox || [50,-50]) : [0,0]
+	const moveBox = !inlineMode ? (props.moveBox || [0,0]) : [0,0]
 	const slideBox = !inlineMode ? (props.slideBox || 50) : 0
 
 
@@ -85,7 +85,7 @@ const RightClickMenu = (props) => {
 		LEFT = Math.max(LEFT,0)
 		CARET_SLIDE = Math.min(CARET_SLIDE, menu.width-caretDimensions[0]-1)
 		CARET_SLIDE = Math.max(0,CARET_SLIDE)
-		console.log('testing!!!!!!!2.0')
+
 		menuChildren = (
 			<OCO OCO={props.closeMenu}>
 				<Panel ref={selfRef} style={{top:TOP,left:LEFT}} hideCaret={inlineMode} caretDimensions={caretDimensions} caretPosition={[caretPosition,'left']} caretAdjustment={[CARET_SLIDE,0]} className={`${classes['rcm-panel']} ${props.rightClickMenuClassName}`}>

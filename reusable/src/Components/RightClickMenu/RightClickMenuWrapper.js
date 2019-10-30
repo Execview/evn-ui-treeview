@@ -14,11 +14,9 @@ const RightClickMenuWrapper = (props) => {
 
 		if (props.takeParentLocation) {
 			const PR = parentNode.getBoundingClientRect();
-			const documentRect = document.documentElement.getBoundingClientRect();
-			console.log(PR)
 			const newParentPosition = {
-				x: PR.left - documentRect.left,
-				y: PR.top - documentRect.top,
+				x: PR.left + window.pageXOffset,
+				y: PR.top + window.scrollY,
 				screenX: PR.left,
 				screenY: PR.top,
 				width: PR.width,
@@ -61,3 +59,16 @@ const RightClickMenuWrapper = (props) => {
 };
 
 export default RightClickMenuWrapper;
+
+
+
+const getPositionOnPage = el => {
+	let x = 0
+	let y = 0
+	while( el && !isNaN( el.offsetLeft ) && !isNaN( el.offsetTop ) ) {
+		x += el.offsetLeft - el.scrollLeft;
+		y += el.offsetTop - el.scrollTop;
+		el = el.offsetParent;
+    }
+    return { x, y };
+}

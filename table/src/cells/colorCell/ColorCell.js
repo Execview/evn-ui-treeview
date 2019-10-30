@@ -43,7 +43,7 @@ const ColorCell = (props) => {
 			<div style={{ height: '100%' }}>
 				{display}
 			</div>
-			{isEditable && <RightClickMenuWrapper inline={inlineMode} takeParentLocation>
+			{isEditable && <RightClickMenuWrapper onLeftClick inline={inlineMode} takeParentLocation>
 				<div className={classes['color-dropdown']} style={{ width }}>
 					<ul className={classes['color-dropdown-menu']}>
 						{Object.keys(colors).map(objKey => <li className={classes['color-dropdown-item'] + ' ' + classes['hover-' + objKey]} key={objKey} onClick={(e) => { e.stopPropagation(); e.preventDefault(); submit(objKey); }}>{colors[objKey]}</li>)}
