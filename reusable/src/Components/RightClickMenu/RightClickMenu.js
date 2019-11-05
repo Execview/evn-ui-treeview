@@ -36,11 +36,10 @@ const RightClickMenu = (props) => {
 	let CARET_SLIDE = slideBox
 	let caretPosition = 'top'
 
-
 	//modal thing
 	let menuChildren = null
 	const showModal = page.width<menu.width || page.height<menu.height
-	if((showModal && props.enableModal) || props.forceModal){ //for Mobile
+	if((showModal && !props.disableModal) || props.forceModal){ //for Mobile
 		menuChildren = (
 			<div className={`${classes['modal']}`}>
 				<OCO OCO={props.closeMenu} {...props.OCOProps}>

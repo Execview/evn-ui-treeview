@@ -5,8 +5,8 @@ import useFunctionalRef from '../../Functions/useFunctionalRef';
 const RightClickMenuWrapper = (props) => {
 	const [wrapperRef, current] = useFunctionalRef();
 	const parentNode = current && current.parentNode;
-
-	const [open, setOpen] = props.setOpen ? [props.open,props.setOpen] : useState(false)
+	const [selfOpen, setSelfOpen] = useState(false)
+	const [open, setOpen] = props.setOpen ? [props.open,props.setOpen] : [selfOpen, setSelfOpen]
 	const [position, setPosition] = useState(null);
 
 	const openMenu = (e) => {
