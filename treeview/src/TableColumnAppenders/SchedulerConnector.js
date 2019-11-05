@@ -1,16 +1,14 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React from 'react';
 import SchedulerAppender from './SchedulerAppender';
+import { connect } from 'react-redux';
 import * as actionTypes from '../store/actions/actionTypes';
 
-class SchedulerConnector extends Component {
-  	render() {
-    	return (
-			<SchedulerAppender 
-				{...this.props}
-			/>
-		);
-  	}
+const SchedulerConnector = (props) => {
+	return (
+		<SchedulerAppender 
+			{...props}
+		/>
+	);
 }
 
 const mapStateToProps = state => {

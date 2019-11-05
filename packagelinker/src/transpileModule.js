@@ -1,6 +1,7 @@
 import {exec} from 'child_process'
 import path from 'path'
 import config from '../config.json'
+import * as fs from 'fs'
 
 export const getFullPath = p => path.resolve(process.cwd(),p)
 
@@ -22,5 +23,17 @@ export const execute = (command,options) => new Promise((resolve,reject)=>{
 	const defaultCommand = 'cd' 
 	exec(command || defaultCommand,options,(err,stdout,stderr)=>stdout ? resolve(stdout) : reject(err||stderr))
 })
+
+
+export const moduleContainsPackageInDependencies = (n,p) => {
+	const packageJsonFile = fs.readFileSync(path.resolve(getModulePath(n),'./package.json'));
+	if(!packageJsonFile || !packageJsonFile[0]==='{'){return}
+	const packageJson = JSON.parse(packageJsonFile)
+	const depProperties = Object.keys(packageJson).filter(k=>k.includes('dep')) //peerDeps, devDeps, deps, etc...	
+	return depProperties.some(dep=>{
+		return Object.keys(packageJson[dep]).includes(p)
+	})
+}
+
 
 export default transpileModule
