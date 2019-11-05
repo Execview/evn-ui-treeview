@@ -28,15 +28,6 @@ const ColorCell = (props) => {
 
 	const width = props.style.width >= 137 ? props.style.width : 137;
 
-	// const edit = (
-	// 	<div className={classes['color-dropdown-container']}>
-	// 		<Panel panelClass={classes["panel"]} caretClass={classes["caret"]} hideCaret={inlineMode}> 
-	// 			<OCO OCO={() => setOpen(false)}>
-					
-	// 			</OCO>
-	// 		</Panel>
-	// 	</div>
-	// );
 	const display = props.style.width >= 95 ? bigView : smallView;
 
 
@@ -45,10 +36,18 @@ const ColorCell = (props) => {
 			<div style={{ height: '100%' }}>
 				{display}
 			</div>
-			{isEditable && <RightClickMenuWrapper onLeftClick inline={inlineMode} takeParentLocation open={open} setOpen={setOpen}>
-				<div className={classes['color-dropdown']} style={{ width }}>
+			{isEditable && <RightClickMenuWrapper onLeftClick inline={inlineMode} takeParentLocation open={open} setOpen={setOpen} rightClickMenuStyle={{width}} {...props.rightClickMenuWrapperProps}>
+				<div className={classes['color-dropdown']}>
 					<ul className={classes['color-dropdown-menu']}>
-						{Object.keys(colors).map(objKey => <li className={classes['color-dropdown-item'] + ' ' + classes['hover-' + objKey]} key={objKey} onClick={(e) => { e.stopPropagation(); e.preventDefault(); submit(objKey); }}>{colors[objKey]}</li>)}
+						{Object.keys(colors).map(objKey => (
+							<li 
+								className={classes['color-dropdown-item'] + ' ' + classes['hover-' + objKey]}
+								key={objKey}
+								onClick={(e) => { e.stopPropagation(); e.preventDefault(); submit(objKey); }}
+							>
+								{colors[objKey]}
+							</li>
+						))}
 					</ul>
 				</div>
 			</RightClickMenuWrapper>}

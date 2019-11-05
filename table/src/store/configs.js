@@ -13,6 +13,7 @@ import TextFilter from '../cells/TextCell/TextFilter'
 import UserRoleDisplay from '../UserRoleDisplay/UserRoleDisplay';
 import UserHeaderDisplay from '../headers/UserHeaderDisplay';
 import { countries, priority } from './constants';
+import classes from '../App.module.css';
 
 const progressValues = { green: 'On track', amber: 'At Risk', red: 'Blocked', grey: 'Unknown Status', blue: 'Completed'};
 
@@ -173,14 +174,14 @@ const getOption = (id) => {
 			<TripleFill
 				style={{ height: '40px', cursor: 'pointer' }}
 				left={<CircleUser url={allItems[id].image} />}
-				center={<p className="tripleFill-user-name">{allItems[id].name}</p>}
+				center={<p className={classes["tripleFill-user-name"]}>{allItems[id].name}</p>}
 			/>
 		</div>
 	);
 };
 
-const leftTitle = <p className="dropdown-title">Assigned Users</p>;
-const rightTitle = <p className="dropdown-title">Available Users</p>;
+const leftTitle = <p className={classes["dropdown-title"]}>Assigned Users</p>;
+const rightTitle = <p className={classes["dropdown-title"]}>Available Users</p>;
 
 export const cellTypes = {
 	text: <TextCell />,

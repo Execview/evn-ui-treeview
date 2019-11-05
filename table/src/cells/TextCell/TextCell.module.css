@@ -89,7 +89,6 @@
   word-wrap: break-word;
   background-color: transparent;
   border: none;
-  outline: none;
   color:var(--color5, white);
 }
 
@@ -127,7 +126,6 @@
 	height:20px;
 }
 
-.text-input:focus { outline: none; }
 
 .is-editable{
   color: var(--color9, wheat);

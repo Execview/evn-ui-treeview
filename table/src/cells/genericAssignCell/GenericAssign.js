@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { GenericDropdown } from '@execview/reusable';
+import classes from './GenericAssignCell.module.css';
 
 const GenericAssign = (props) => {
 	const data = props.items || [];
@@ -40,11 +41,13 @@ const GenericAssign = (props) => {
 	const filteredLeftOptions = Object.keys(leftOptions).filter(k => getSearchField(k).toLowerCase().includes(leftSearchString)).reduce((t, k) => { return { ...t, [k]: leftOptions[k] }; }, {});
 
 	const filteredRightOptions = Object.keys(rightOptions).filter(k => getSearchField(k).toLowerCase().includes(rightSearchString)).reduce((t, k) => { return { ...t, [k]: rightOptions[k] }; }, {});
-	const style = { width: '300px' };
+
 	return (
-		<div className="generic-container">
-			<div>
-				{props.leftTitle}
+		<div className={classes["generic-container"]}>
+			<div className={classes['dropdown-with-title']}>
+				<div className={classes['title']}>
+					{props.leftTitle}
+				</div>
 				<GenericDropdown
 					submit={(key) => { if (isEditable) { unassignGeneric(key); } }}
 					canSearch={true}
@@ -52,12 +55,14 @@ const GenericAssign = (props) => {
 					onSearchChange={v => setLeftSearchString(v)}
 					searchString={leftSearchString}
 					options={filteredLeftOptions}
-					style={style}
+					genericDropdownClasses={{dropdown:classes['dd'], dropdownMenu:classes['ddm']}}
 				/>
 			</div>
 			{isEditable && (
-				<div>
-					{props.rightTitle}
+				<div className={classes['dropdown-with-title']}>
+					<div className={classes['title']}>
+						{props.rightTitle}
+					</div>
 					<GenericDropdown
 						submit={(key) => { if (isEditable) { assignGeneric(key); } }}
 						canSearch={true}
@@ -65,7 +70,7 @@ const GenericAssign = (props) => {
 						onSearchChange={v => setRightSearchString(v)}
 						searchString={rightSearchString}
 						options={filteredRightOptions}
-						style={style}
+						genericDropdownClasses={{dropdown:classes['dd'], dropdownMenu:classes['ddm']}}
 					/>
 				</div>
 			)}

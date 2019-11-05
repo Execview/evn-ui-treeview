@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import SchedulerCell from '../schedulerCell/SchedulerCell'
 import SchedulerHeader from '../schedulerCell/SchedulerHeader';
-import { recursiveDeepDiffs, objectCopierWithStringToDate, injectObjectInObject } from '@execview/reusable';
+import { recursiveDeepDiffs, objectCopierWithStringToDate, injectObjectInObject, RightClickMenuWrapper } from '@execview/reusable';
 
 import { getDrawnLinksFromData, getSnaps, getTimeFormatString, getMajorStartOf } from './SchedulerBehavior'
 import { getColourFromMap } from './BubbleBehavior'
@@ -31,7 +31,7 @@ const SchedulerAppender = (props) => {
 	const [rowHeights, setRowHeights] = useState([])
 	const [schedulerWidth, setSchedulerWidth] = useState(0)
 
-	const [bubbleContextMenuKeyAndPosition, setBubbleContextMenuKeyAndPosition] = useState({key:null,position:null})
+	const [bubbleContextMenuKey, setBubbleContextMenuKey] = useState(null)
 	const [mouseDownOnBubble, setMouseDownOnBubble] = useState({key:'',location:'',dragDiffs:[0,0]})
 	const [mouseDownOnScheduler, setMouseDownOnScheduler] = useState(null)
 
@@ -138,9 +138,7 @@ const SchedulerAppender = (props) => {
 	const bubbleOnContextMenu = (key,event)=>{
 		event.preventDefault();
 		if(!canOpenRightClickMenu(key)){return}
-		const position = getInternalMousePosition(event)
-		setBubbleContextMenuKeyAndPosition({key:key, position:position});
-		
+		setBubbleContextMenuKey(key);
 	}
 
 	const mouseEvent = (event) => {
@@ -219,7 +217,8 @@ const SchedulerAppender = (props) => {
 	//#endregion
 
 	const addSchedulerColumn = ()=>{
-		const contextMenuPosition = bubbleContextMenuKeyAndPosition.position && [bubbleContextMenuKeyAndPosition.position[0],getYPositionFromRowId(bubbleContextMenuKeyAndPosition.key,rowHeights)+bubbleContextMenuKeyAndPosition.position[1]]
+		//HERE
+		
 		const schedulerheaderdata = {
 			snaps: snaps,
 			tableRef: tableRef,
@@ -227,13 +226,7 @@ const SchedulerAppender = (props) => {
 			getWidth: ((w)=>{if(w!==schedulerWidth){setSchedulerWidth(w)}}),
 			mouseOnScheduler: clickedOnScheduler,
 			timeFormatString: getTimeFormatString(schedulerResolution),
-			contextMenu: {
-				position: contextMenuPosition,
-				closeMenu: ()=>{setBubbleContextMenuKeyAndPosition({key:null,position:null})},
-				options: {
-					removeLink: <div onClick={()=>{props.onRemoveLink(bubbleContextMenuKeyAndPosition.key)}}>Remove Link</div>, 
-					deleteBubble: <div onClick={()=>{props.deleteBubble(bubbleContextMenuKeyAndPosition.key)}}>Delete Bubble</div> }
-			},
+			// contextMenu: ,
 			schedulerOptions: {
 				mode: [schedulerResolution,((r)=>setSchedulerResolution(r))],
 				start: [schedulerStart, ((date)=>setSchedulerStart(date))]
@@ -276,7 +269,15 @@ const SchedulerAppender = (props) => {
 					shadow: shadow,
 					mouseOnScheduler: clickedOnScheduler,
 					shape: tableData[rowId].shape,
-					editableSides: getEditableBubbleSides(rowId)
+					editableSides: getEditableBubbleSides(rowId),
+					rightClickMenuOptions: {
+						open: bubbleContextMenuKey===rowId,
+						setOpen: (newState)=>{newState ? setBubbleContextMenuKey(bubbleContextMenuKey) : setBubbleContextMenuKey(null)},
+						options: {
+							removeLink: <div onClick={()=>{props.onRemoveLink(bubbleContextMenuKey)}}>Remove Link</div>, 
+							deleteBubble: <div onClick={()=>{props.deleteBubble(bubbleContextMenuKey)}}>Delete Bubble</div> 
+						}
+					}
 				}
 			}
 		}

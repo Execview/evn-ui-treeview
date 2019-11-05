@@ -1,14 +1,14 @@
 .scheduler-menu{
-	position: absolute;
+	/* position: absolute;
 	right: 0;
 	top:100%;
 	background-color: var(--color2, #383d47);
 	border: 1px solid var(--color5, white);
-	border-radius: 5px;
+	border-radius: 5px; */
 	padding: 10px;
 	z-index: 5;
 	cursor: default;
-	width: 220px;
+	width: 245px;
 }
 
 .items-list {

@@ -190,12 +190,10 @@
   padding: 6px 20px;
   border: none;
   cursor: pointer;
-  outline: none;
 }
 
 .add-role-button:hover {
   background: var(--color15, #ffc92a); /*#eda645*/
-  outline: none;
 }
 
 .add-role-button-grey{

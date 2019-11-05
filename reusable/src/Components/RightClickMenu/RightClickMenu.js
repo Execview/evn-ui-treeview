@@ -6,7 +6,7 @@ import useFunctionalRef from '../../Functions/useFunctionalRef'
 import classes from './RightClickMenu.module.css'
 
 const RightClickMenu = (props) => {
-	const rightClickDOMNode = document.getElementById('root')
+	const rightClickDOMNode = props.rightClickDOMNode || document.getElementById('root')
 	const [selfRef, current] = useFunctionalRef()
 	const [selfDimensions, setSelfDimensions] = useState({ width: 0, height: 0 })
 	useLayoutEffect(()=>{
@@ -31,7 +31,6 @@ const RightClickMenu = (props) => {
 	const moveBox = !inlineMode ? (props.moveBox || [0,0]) : [0,0]
 	const slideBox = !inlineMode ? (props.slideBox || 50) : 0
 
-
 	let TOP = takeParentLocation ? position.y + moveBox[1] : position.y
 	let LEFT = takeParentLocation ? position.x + moveBox[0] : position.x
 	let CARET_SLIDE = slideBox
@@ -44,8 +43,12 @@ const RightClickMenu = (props) => {
 	if((showModal && props.enableModal) || props.forceModal){ //for Mobile
 		menuChildren = (
 			<div className={`${classes['modal']}`}>
-				<OCO OCO={props.closeMenu}>
-					<Panel hideCaret className={`${classes['modal-panel']} ${props.modalClassName}`}>
+				<OCO OCO={props.closeMenu} {...props.OCOProps}>
+					<Panel 
+						hideCaret
+						className={`${classes['modal-panel']} ${props.modalClassName}`}
+						style={props.modalStyle}
+					>
 						{props.children}
 					</Panel>
 				</OCO>
@@ -57,7 +60,7 @@ const RightClickMenu = (props) => {
 			positionScreenY = positionScreenY+position.height
 			TOP += position.height
 		}
-	console.log(positionScreenY,menu.height,caretDimensions[1],page.height)
+
 		if(positionScreenY+menu.height+caretDimensions[1]>page.height){
 			TOP = TOP-menu.height-caretDimensions[1] 
 			caretPosition = 'bottom'
@@ -84,13 +87,29 @@ const RightClickMenu = (props) => {
 		CARET_SLIDE = Math.min(CARET_SLIDE, menu.width-caretDimensions[0]-1)
 		CARET_SLIDE = Math.max(0,CARET_SLIDE)
 
+		if(props.dontPortal){
+			TOP=TOP-position.y
+			LEFT=LEFT-position.x
+		}
+
 		menuChildren = (
-			<OCO OCO={props.closeMenu}>
-				<Panel ref={selfRef} style={{top:TOP,left:LEFT}} hideCaret={inlineMode} caretDimensions={caretDimensions} caretPosition={[caretPosition,'left']} caretAdjustment={[CARET_SLIDE,0]} className={`${classes['rcm-panel']} ${props.rightClickMenuClassName}`}>
+			<OCO OCO={props.closeMenu} {...props.OCOProps}>
+				<Panel
+					ref={selfRef} 
+					style={{...props.rightClickMenuStyle, top:TOP,left:LEFT}} 
+					hideCaret={inlineMode} 
+					caretDimensions={caretDimensions} 
+					caretPosition={[caretPosition,'left']}
+					caretAdjustment={[CARET_SLIDE,0]} 
+					className={`${classes['rcm-panel']} ${(props.rightClickMenuClassName || '')}`}
+				>
 					{props.children}
 				</Panel>
 			</OCO>
 		)
+	}
+	if(props.dontPortal){ //remember to put position relative on the parent where you are placing the rightClickMenu
+		return menuChildren
 	}
 	
 	return (

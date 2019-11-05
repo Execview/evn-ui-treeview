@@ -20,7 +20,7 @@ const Panel = React.forwardRef((props,ref) => {
 	}
 	
 	return (
-		<div ref={ref} className={`${classes['panel']} ${!props.hideCaret ? classes['panel-padding'] : ''} ${props.className||''}`} style={props.style}>
+		<div ref={ref} className={`${classes['panel']} ${!props.hideCaret ? classes['panel-padding'] : ''} ${props.className || ''}`} style={props.style}>
 			{!props.hideCaret && <div className={`${classes['absolute-caret']} ${classes['absolute-caret-border-colors-'+(caretDown ? 'down' : 'up')]}`} style={caretStyles} />}
 			{props.children}
 		</div>

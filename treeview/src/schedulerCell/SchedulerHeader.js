@@ -2,13 +2,12 @@ import React, { useEffect, useState } from 'react';
 import SchedulerOverlay from './SchedulerOverlay'
 import SchedulerMenu from './SchedulerMenu'
 import classes from './SchedulerHeader.module.css';
-import { Button, OCO } from '@execview/reusable'
+import { Button, OCO, RightClickMenuWrapper } from '@execview/reusable'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment'
 
 const SchedulerHeader = (props) => {
-	const [open, setOpen] = useState(false)
 	const snaps = props.data.snaps || []
 	const style = props.style || {}
 
@@ -50,16 +49,13 @@ const SchedulerHeader = (props) => {
 				{timeIntervals}
 				</text>
 			</svg>
-			<OCO OCO={()=>setOpen(false)}>
-				<div className={classes['menu-container']}>
-					<Button onClick={()=>setOpen(!open)} style={{height:'40px'}}><FontAwesomeIcon icon={faChevronDown}/></Button>
-					{open && <SchedulerMenu {...props.data.schedulerOptions}/>}
-				</div>
-			</OCO>			
-
-			<SchedulerOverlay contextMenu={props.data.contextMenu} tableHeight={tableHeight} snaps={snaps} links={props.data.links} mode={props.data.schedulerOptions.mode[0]}/>
-		
-			
+			<div className={classes['menu-container']}>
+				<Button style={{height:'40px'}}><FontAwesomeIcon icon={faChevronDown}/></Button>
+				<RightClickMenuWrapper onLeftClick takeParentLocation moveBox={[27,0]}>
+					<SchedulerMenu {...props.data.schedulerOptions}/>
+				</RightClickMenuWrapper>
+			</div>
+			<SchedulerOverlay tableHeight={tableHeight} snaps={snaps} links={props.data.links} mode={props.data.schedulerOptions.mode[0]}/>
 		</div>
 	);
 }

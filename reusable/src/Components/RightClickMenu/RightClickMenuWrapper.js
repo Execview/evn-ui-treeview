@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import RightClickMenu from './RightClickMenu';
 import useFunctionalRef from '../../Functions/useFunctionalRef';
 
-const RightClickMenuWrapper = (props) => { //TODO MAKE TAKEPARENTLOCATION TRUE IF POSITION IS EMPTY BUT OPEN IS TRUE. MAKE IT CALCULATE THE PARENT LOCATION TOO...
+const RightClickMenuWrapper = (props) => {
 	const [wrapperRef, current] = useFunctionalRef();
 	const parentNode = current && current.parentNode;
 
@@ -33,7 +33,6 @@ const RightClickMenuWrapper = (props) => { //TODO MAKE TAKEPARENTLOCATION TRUE I
 				width: 0,
 				height: 0
 			};
-			
 			setPosition(newMousePosition);
 			setOpen(true)
 		}
@@ -55,7 +54,22 @@ const RightClickMenuWrapper = (props) => { //TODO MAKE TAKEPARENTLOCATION TRUE I
 	return (
         <div ref={wrapperRef}>
 			{position && open && (
-				<RightClickMenu inline={props.inline} position={position} takeParentLocation={props.takeParentLocation} closeMenu={()=>setOpen(false)} enableModal={props.enableModal} forceModal={props.forceModal} rightClickMenuClassName={props.rightClickMenuClassName} modalClassName={props.modalClassName}>
+				<RightClickMenu
+					rightClickDOMNode={props.rightClickDOMNode}
+					dontPortal={props.dontPortal}
+					inline={props.inline}
+					position={position}
+					takeParentLocation={props.takeParentLocation}
+					closeMenu={()=>setOpen(false)}
+					enableModal={props.enableModal}
+					forceModal={props.forceModal}
+					rightClickMenuClassName={props.rightClickMenuClassName}
+					modalClassName={props.modalClassName}
+					rightClickMenuStyle={props.rightClickMenuStyle}
+					modalStyle={props.modalStyle}
+					OCOProps ={props.OCOProps}
+					moveBox={props.moveBox}
+				>
 					{props.children}
 				</RightClickMenu>
 			)}

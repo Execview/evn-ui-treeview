@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { GenericDropdown, RightClickMenuWrapper } from '@execview/reusable';
 import DefaultDropdownDisplay from './DefaultDropdownDisplay';
-import './DropdownCell.css';
+import classes from './DropdownCell.module.css';
 
 const DropdownCell = (props) => {
+	const [open, setOpen] = useState(false)
 	const input = props.options || {};
 	const optionsIsArray = Array.isArray(input);
 	const inputOptions = !optionsIsArray ? input : Object.fromEntries(input.map(o => [o, o]));
@@ -28,16 +29,9 @@ const DropdownCell = (props) => {
 		setDisplayedRows(newRows);
 	};
 
-	const onBlur = () => { props.onValidateSave(props.data); };
+	const onBlur = () => { props.onValidateSave(props.data); setOpen(false) };
 
 	const options = Object.fromEntries(Object.entries(inputOptions).filter(([o,op]) => displayedRows.includes(o)))
-	// const edit = (
-	// 	<div className="dropdown-container">
-	// 		<Panel panelClass="panel" hideCaret={inlineMode}> 
-				
-	// 		</Panel>
-	// 	</div>
-	// );
 
 	const displayCell = props.display || <DefaultDropdownDisplay {...props} data={options[data]} looksEditable={props.isEditable} showCaret={!inlineMode} />;
 
@@ -47,21 +41,24 @@ const DropdownCell = (props) => {
 		</div>
 	);
 
+	const {style,... rest} = props;
+
 	return (
 		<div style={{ height: '100%' }}>
 			<div style={{ height: '100%' }}>
 				{display}
 			</div>
-			<RightClickMenuWrapper onLeftClick inline={inlineMode} takeParentLocation>
+			<RightClickMenuWrapper onLeftClick inline={inlineMode} takeParentLocation open={open} setOpen={setOpen} rightClickMenuStyle={style} rightClickMenuClassName={classes['rcm']} {...props.rightClickMenuWrapperProps}>
 				<GenericDropdown
-					{...props}
+					{...rest}
 					onBlur={onBlur}
-					submit={(key) => { props.onValidateSave(options[key]); }}
+					submit={(key) => { props.onValidateSave(options[key]); setOpen(false)}}
 					canSearch={props.canSearch}
 					onSearchChange={onSearchChange}
 					searchString={searchString}
 					options={options}
 					autoFocus={true}
+					genericDropdownClasses={{dropdown: classes['dropdown'], dropdownMenu: classes['dropdown-menu']}}
 				/>
 			</RightClickMenuWrapper>
 		</div>

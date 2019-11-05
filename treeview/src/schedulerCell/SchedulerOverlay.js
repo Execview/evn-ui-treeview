@@ -74,22 +74,17 @@ const SchedulerOverlay = (props) => {
 		return ( <rect key={snap[1]} x={snap[1]} y="40" width="70" height={tableHeight-40} className={classes['weekend-box']} />)
 	})
 
-	const [menuHeight, setMenuHeight] = useState(1)
-	const showMenu = props.contextMenu && props.contextMenu.position
 	return (
 		<div className={props.className} style={props.style}>
 			{/* OVERLAY! */}
-			<svg height={tableHeight + (showMenu?menuHeight:0)} width='100%' style={{top:'0px', left: '0px', position: "absolute",pointerEvents: 'none', zIndex:'3', overflow:'visible'}}>
+			<svg height={tableHeight} width='100%' style={{top:'0px', left: '0px', position: "absolute",pointerEvents: 'none', zIndex:'3'}}>
 				<g style={{pointerEvents: 'auto'}}>
 					{links[0] && !isNaN(links[0].parent[0]) && links.map((l, i)=>drawLink(l,i))}
 					
 				</g>
-				{showMenu && <g style={{pointerEvents: 'auto'}}>
-					<SchedulerRightClickMenu {...props.contextMenu} menuHeight={menuHeight} setMenuHeight={setMenuHeight}/>  
-				</g>}
 			</svg>
 			{/* UNDERLAY! */}
-			<svg height={tableHeight + (showMenu?menuHeight:0)} width='100%' style={{top:'0px', left: '0px', position: "absolute",pointerEvents: 'none', zIndex:'1'}}>
+			<svg height={tableHeight} width='100%' style={{top:'0px', left: '0px', position: "absolute",pointerEvents: 'none', zIndex:'1'}}>
 				<g style={{pointerEvents: 'auto'}}> 
 					{testGrey}
 					{lines.length > 0 &&  lines.map((x)=>drawLine(x,0,classes['minor-lines']))}

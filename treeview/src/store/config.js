@@ -34,9 +34,11 @@ export const editableCells = {
 
 };
 
+const progressValues = { green: 'On track', amber: 'At Risk', red: 'Blocked', grey: 'Unknown Status', blue: 'Completed'};
+
 export const cellTypes = {
 	text: <TextCell />,
-	color: <ColorCell/>,
+	color: <ColorCell colorStrings={progressValues} inline/>,
 	date: <DateCell/>,
 };
 

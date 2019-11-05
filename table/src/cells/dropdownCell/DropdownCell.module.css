@@ -1,14 +1,3 @@
-.dropdown-container {
-  position: relative;
-}
-
-.panel{
-  position:absolute;
-  left:0;
-  top:0;
-  z-index: 1;
-}
-
 .dropdown{
 	height: 100%;
 	width: 100%;
@@ -18,4 +7,8 @@
 
 .dropdown-menu{
 	max-height: 100%;
+}
+
+.rcm {
+	height:300px;
 }
