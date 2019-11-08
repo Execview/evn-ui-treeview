@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { GenericDropdown, RightClickMenuWrapper } from '@execview/reusable';
 import DefaultDropdownDisplay from './DefaultDropdownDisplay';
 import classes from './DropdownCell.module.css';
@@ -11,6 +11,8 @@ const DropdownCell = (props) => {
 
 	const [searchString, setSearchString] = useState('');
 	const [displayedRows, setDisplayedRows] = useState(Object.keys(inputOptions));
+	useEffect(()=>onSearchChange(searchString),[props.options])
+
 	const inlineMode = props.inline;
 
 	const data = props.data;
@@ -37,7 +39,7 @@ const DropdownCell = (props) => {
 
 	const display = (
 		<div style={{ height: '100%' }}>
-			{React.createElement(displayCell.type, { ...displayCell.props, isEditableStyles: props.isEditable, data, style: props.style })}
+			{React.createElement(displayCell.type, {  data, ...displayCell.props, isEditableStyles: props.isEditable, style: props.style })}
 		</div>
 	);
 
@@ -52,7 +54,7 @@ const DropdownCell = (props) => {
 				<GenericDropdown
 					{...rest}
 					onBlur={onBlur}
-					submit={(key) => { props.onValidateSave(options[key]); setOpen(false)}}
+					submit={(key) => { props.onValidateSave(key); if(!props.dontCloseOnClick){setOpen(false)} }}
 					canSearch={props.canSearch}
 					onSearchChange={onSearchChange}
 					searchString={searchString}

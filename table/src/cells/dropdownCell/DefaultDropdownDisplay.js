@@ -4,7 +4,7 @@ import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import classes from './DefaultDropdownDisplay.module.css';
 
 const defaultDropdownDisplay = (props) => {
-	const data = props.data;
+	const data = props.data || '';
 	const looksEditable = props.looksEditable;
 	const showCaret = props.showCaret;
 	const style = props.style || {};
@@ -19,7 +19,7 @@ const defaultDropdownDisplay = (props) => {
 
 	return (
 		<div className={containerClasses} style={{ ...style, width: style.width }}>
-			{data}
+			<div>{data}</div>
 			{showCaret && caret}
 		</div>
 	);

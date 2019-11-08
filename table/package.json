@@ -1,10 +1,10 @@
 {
 	"name": "@execview/table",
-	"version": "0.1.122",
+	"version": "0.1.125",
 	"main": "./transpiled/exports.js",
 	"private": false,
 	"dependencies": {
-		"@execview/reusable": "0.1.65",
+		"@execview/reusable": "0.1.66",
 		"@fortawesome/fontawesome-svg-core": "^1.2.25",
 		"@fortawesome/free-solid-svg-icons": "^5.11.2",
 		"@fortawesome/react-fontawesome": "^0.1.7",
@@ -23,7 +23,7 @@
 		"build": "react-scripts build",
 		"test": "react-scripts test",
 		"eject": "react-scripts eject",
-		"prepublishOnly": "npm install --no-save @babel/cli @babel/core @babel/plugin-proposal-class-properties @babel/preset-env @babel/preset-react && babel src -d transpiled --copy-files --plugins=@babel/plugin-proposal-class-properties --presets=@babel/preset-env,@babel/preset-react",
+		"prepublishOnly": "npm version patch && npm install --no-save @babel/cli @babel/core @babel/plugin-proposal-class-properties @babel/preset-env @babel/preset-react && babel src -d transpiled --copy-files --plugins=@babel/plugin-proposal-class-properties --presets=@babel/preset-env,@babel/preset-react",
 		"postpublish": "rmdir /S /Q transpiled",
 		"clean": "wsl rm -rfd ./node_modules && wsl rm -rfd ./transpiled && wsl rm ./package-lock.json"
 	},

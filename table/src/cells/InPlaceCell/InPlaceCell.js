@@ -17,16 +17,14 @@ const InPlaceCell = (props) => {
 		setEditMode(false);
 	};
 
-	const style = { border: 'none', borderRadius: '4px', ...props.style };
 	const newProps = { ...props,
 		data: value,
 		isActive: editMode,
-		style,
 		onValidateSave: ((data) => { inPlaceOnValidateSave(data); props.onValidateSave && props.onValidateSave(data)})
 	};
 
 	return (
-		<div onPointerDown={(e) => { if(props.type && props.type.editor) { e.preventDefault(); e.stopPropagation(); setEditMode(true); } }} className={classes['default-style'] + ' ' + (props.className || '')}>
+		<div onPointerDown={(e) => { if(props.type && props.type.editor) { e.preventDefault(); e.stopPropagation(); setEditMode(true); } }} className={`${classes['default-style']} ${(props.className || '')}`}>
 			<Cell {...newProps} />
 		</div>
 	)

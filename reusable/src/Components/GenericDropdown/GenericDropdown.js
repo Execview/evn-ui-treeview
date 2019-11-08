@@ -1,6 +1,6 @@
 import React from 'react';
 import OCO from '../OCO/OCO'
-import classes from './DropdownCell.module.css';
+import classes from './GenericDropdown.module.css';
 
 const GenericDropDown = (props) => {
 	const handleClickOutside = props.onBlur || (() => { });
