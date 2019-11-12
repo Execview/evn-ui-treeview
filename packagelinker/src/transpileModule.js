@@ -2,6 +2,7 @@ import {exec} from 'child_process'
 import path from 'path'
 import config from '../config.json'
 import * as fs from 'fs'
+import moment from 'moment';
 
 export const getFullPath = p => path.resolve(process.cwd(),p)
 
@@ -38,11 +39,11 @@ export const forceDependantsToRefresh = (n) => {
 	const modulesThatRequireN = Object.keys(config).filter(k=>moduleContainsPackageInDependencies(k,n))
 	modulesThatRequireN.forEach(k=>{
 		//append something to a file for each k
-		const fileToAlter = path.resolve(getModuleSrc(k),'./latestRefresh.json')
-		const now = new Date()
-		const newText = {latestRefresh: `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`}
-		console.log('writing: '+JSON.stringify(newText))
-		fs.writeFileSync(fileToAlter, JSON.stringify(newText))
+		const fileToAlter = path.resolve(getModuleSrc(k),'./version.js') //
+		const datePart = `${moment(new Date()).format('YYYY-MM-DD [at] HH:mma ss.S[s]')}`
+		const newText = `export default {version: '${datePart}'};`
+		console.log(newText)
+		fs.writeFileSync(fileToAlter, newText)
 	})
 }
 

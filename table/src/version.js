@@ -1,0 +1,1 @@
+export default {version: '2019-11-12 at 10:51am 23.4s'};

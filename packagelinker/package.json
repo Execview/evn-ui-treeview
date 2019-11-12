@@ -19,6 +19,7 @@
 		"@babel/preset-env": "^7.6.3",
 		"@babel/preset-react": "^7.6.3",
 		"chokidar": "^3.2.2",
-		"esm": "^3.2.25"
+		"esm": "^3.2.25",
+		"moment": "^2.24.0"
 	}
 }
