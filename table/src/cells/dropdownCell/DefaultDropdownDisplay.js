@@ -19,7 +19,7 @@ const defaultDropdownDisplay = (props) => {
 
 	return (
 		<div className={containerClasses} style={{ ...style, width: style.width }}>
-			<div>{data}</div>
+			<div className={classes['content']}>{data}</div>
 			{showCaret && caret}
 		</div>
 	);

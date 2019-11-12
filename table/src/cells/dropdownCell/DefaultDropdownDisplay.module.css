@@ -7,6 +7,12 @@
 	box-sizing: border-box;
 }
 
+.content{
+	white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .caret{
 	margin-right: 10px;
 	font-size: 1.2em;

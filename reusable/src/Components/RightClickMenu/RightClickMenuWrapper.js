@@ -69,6 +69,7 @@ const RightClickMenuWrapper = (props) => {
 					modalStyle={props.modalStyle}
 					OCOProps ={props.OCOProps}
 					moveBox={props.moveBox}
+					slideBox={props.slideBox}
 				>
 					{props.children}
 				</RightClickMenu>

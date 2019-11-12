@@ -28,8 +28,8 @@ const RightClickMenu = (props) => {
 
 	const inlineMode = props.inline	
 	const caretDimensions = !inlineMode ? (props.caretDimensions || [18,9]) : [0,0]
-	const moveBox = !inlineMode ? (props.moveBox || [0,0]) : [0,0]
-	const slideBox = !inlineMode ? (props.slideBox || 50) : 0
+	const moveBox = !inlineMode ? (props.moveBox || [30,0]) : [0,0]
+	const slideBox = !inlineMode ? (props.slideBox || 30) : 0
 
 	let TOP = takeParentLocation ? position.y + moveBox[1] : position.y
 	let LEFT = takeParentLocation ? position.x + moveBox[0] : position.x
