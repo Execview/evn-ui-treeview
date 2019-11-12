@@ -6,17 +6,41 @@ import * as fs from 'fs'
 export const getFullPath = p => path.resolve(process.cwd(),p)
 
 export const getModulePath = (n) => getFullPath(config[n])
-export const getTranspiledModulePath = (n) => getModulePath(n)
+export const getModuleSrc = (n) => path.resolve(getModulePath(n),'./src')
+export const getModulePackageJson = (n) => fs.readFileSync(path.resolve(getModulePath(n),'./package.json'))
+
+export const getTranspiledModulePath = (n) => path.resolve(getFullPath('.'),'./transpiled/'+n)
 
 export const isAModule = (n) => n.includes('@')
 
 const transpileModule = (n) => {
 	if(!isAModule(n)){return}
-	const transpileCommand = `babel "${path.resolve(getModulePath(n),'./src')}" -d "${path.resolve(getTranspiledModulePath(n),'./transpiled')}" --copy-files --plugins=@babel/plugin-proposal-class-properties --presets=@babel/preset-env,@babel/preset-react`
-	console.log(`transpiling ${n}`)
+	const transpileCommand = `babel "${getModuleSrc(n)}" -d "${getTranspiledModulePath(n)}" --copy-files --plugins=@babel/plugin-proposal-class-properties --presets=@babel/preset-env,@babel/preset-react`
 	return (
 		execute(transpileCommand)
 	)
+}
+
+export const copyTranspiledFolderIntoNodeModules = (n) => {
+	const copyCommands = []
+	const modulesThatRequireN = Object.keys(config).filter(k=>moduleContainsPackageInDependencies(k,n))
+	modulesThatRequireN.forEach(k=>{
+		//copy transpiled n into k
+		const copy = process.platform === "win32"?'robocopy /E':'cp'
+		const copyCommand = `${copy} "${getTranspiledModulePath(n)}" "${path.resolve(getModulePath(k),`./node_modules/${n}/transpiled`)}"`
+		copyCommands.push(copyCommand)
+	})
+
+	return Promise.all(copyCommands.map(cc=>execute(cc))).then(()=>console.log(`[${n}]: Transpiled & copied!`))
+}
+
+export const forceDependantsToRefresh = (n) => {
+	const modulesThatRequireN = Object.keys(config).filter(k=>moduleContainsPackageInDependencies(k,n))
+	modulesThatRequireN.forEach(k=>{
+		//append something to a file for each k
+		const fileToAlter = path.resolve(getModuleSrc(k),'./refreshTimes.txt')
+		fs.appendFile(fileToAlter, JSON.stringify(new Date())+'\n',(res)=>{/*console.log('refreshing...')*/})
+	})
 }
 
 export const execute = (command,options) => new Promise((resolve,reject)=>{
@@ -26,7 +50,7 @@ export const execute = (command,options) => new Promise((resolve,reject)=>{
 
 
 export const moduleContainsPackageInDependencies = (n,p) => {
-	const packageJsonFile = fs.readFileSync(path.resolve(getModulePath(n),'./package.json'));
+	const packageJsonFile = getModulePackageJson(n);
 	if(!packageJsonFile || !packageJsonFile[0]==='{'){return}
 	const packageJson = JSON.parse(packageJsonFile)
 	const depProperties = Object.keys(packageJson).filter(k=>k.includes('dep')) //peerDeps, devDeps, deps, etc...	

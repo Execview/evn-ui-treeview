@@ -1,2 +1,2 @@
 require = require("esm")(module/*, options*/)
-module.exports = require("./linkMain.js")
+module.exports = require("./setupMain.js")

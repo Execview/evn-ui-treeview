@@ -1,29 +1,35 @@
 import chokidar from 'chokidar'
 import path from 'path'
 import config from '../config.json'
-import transpileModule, { isAModule, getModulePath } from './transpileModule.js'
+import transpileModule, { isAModule, getModuleSrc, copyTranspiledFolderIntoNodeModules, forceDependantsToRefresh } from './transpileModule.js'
 
 const toWatch = Object.keys(config).filter((n)=>isAModule(n))
 
-const transpileModuleAndLog = (n) => transpileModule(n).then(res=>{console.log('done'); return res})
+const transpileModuleThenCopyIntoNodeModulesAndLog = (n) => {
+	return (
+		transpileModule(n)
+		.then(()=>copyTranspiledFolderIntoNodeModules(n))
+		.then(()=>forceDependantsToRefresh(n))
+	)
+}
 
 toWatch.forEach((n)=>{
-	const srcPath = path.resolve(getModulePath(n),'./src')
+	const srcPath = getModuleSrc(n)
 	let scanned = false	
 	const onAnyChange = (event,path) => {
 		scanned && console.log(event, path);
 		switch(event){
 			case 'change': {
-				transpileModuleAndLog(n)
+				transpileModuleThenCopyIntoNodeModulesAndLog(n)
 				break;
 			}
 			case 'add': {
-				scanned && transpileModuleAndLog(n)
+				scanned && transpileModuleThenCopyIntoNodeModulesAndLog(n)
 				break;
 			}
 			case 'ready' : {
 				scanned=true
-				transpileModuleAndLog(n)
+				transpileModuleThenCopyIntoNodeModulesAndLog(n)
 				.catch(err=>console.log(err))
 				.then(res=>console.log("watching "+n+" in "+srcPath))
 			}

@@ -4,10 +4,9 @@
 	"description": "",
 	"main": "./src/watchIndex.js",
 	"scripts": {
-		"start": "node ./src/watchIndex",
+		"start": "nodemon --ignore ./transpiled ./src/watchIndex",
 		"watch": "npm start",
-		"link-modules": "node ./src/linkIndex link",
-		"unlink-modules": "node ./src/linkIndex unlink",
+		"setup": "node ./src/setupIndex",
 		"all": "node ./src/runAllIndex",
 		"clean": "wsl rm -rfd ./node_modules && wsl rm -rfd ./transpiled && wsl rm ./package-lock.json"
 	},
