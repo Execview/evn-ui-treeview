@@ -27,4 +27,4 @@ yarn-error.log*
 package-lock.json
 /transpiled
 /.vscode
-/src/refreshTimes.txt
+/src/latestRefresh.json

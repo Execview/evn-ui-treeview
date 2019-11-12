@@ -38,8 +38,11 @@ export const forceDependantsToRefresh = (n) => {
 	const modulesThatRequireN = Object.keys(config).filter(k=>moduleContainsPackageInDependencies(k,n))
 	modulesThatRequireN.forEach(k=>{
 		//append something to a file for each k
-		const fileToAlter = path.resolve(getModuleSrc(k),'./refreshTimes.txt')
-		fs.appendFile(fileToAlter, JSON.stringify(new Date())+'\n',(res)=>{/*console.log('refreshing...')*/})
+		const fileToAlter = path.resolve(getModuleSrc(k),'./latestRefresh.json')
+		const now = new Date()
+		const newText = {latestRefresh: `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`}
+		console.log('writing: '+JSON.stringify(newText))
+		fs.writeFileSync(fileToAlter, JSON.stringify(newText))
 	})
 }
 
