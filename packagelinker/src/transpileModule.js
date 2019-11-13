@@ -41,7 +41,7 @@ export const forceDependantsToRefresh = (n) => {
 		//append something to a file for each k
 		const fileToAlter = path.resolve(getModuleSrc(k),'./version.js') //
 		const datePart = `${moment(new Date()).format('YYYY-MM-DD [at] HH:mma ss.S[s]')}`
-		const newText = `export default {version: '${datePart}'};`
+		const newText = `export default {version: '#${datePart}#'};`
 		console.log(newText)
 		fs.writeFileSync(fileToAlter, newText)
 	})
