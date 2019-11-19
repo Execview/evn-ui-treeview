@@ -14,3 +14,7 @@
 .date-cell-default{
 	position: relative;
 }
+
+.looks-editable {
+	cursor: pointer;
+}

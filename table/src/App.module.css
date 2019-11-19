@@ -76,8 +76,8 @@ body,html {
 }
 
 .context-filter{
-	margin-top: 20px;
 }
+
 
 .tripleFill-user-name {
   overflow: hidden;
@@ -89,4 +89,8 @@ body,html {
 
 .dropdown-title {
   margin:0;
+}
+
+.rcm{
+  padding: 10px;
 }

@@ -25,32 +25,55 @@ const DateCell = (props) => {
 		} else {
 			props.onValidateSave(null);
 		}
+		setOpen(false);
 	};
 
 	const extraDatePickerProps = props.datepickerProps || {};
 
 	const datePickerProps = {
 		selected: selectedDate,
-		onSelect: ((changedDate) => {submit(changedDate); setOpen(false)})
+		onSelect: ((changedDate) => {submit(changedDate)})
 	};	
+
 	
-	const display = (
-		<div style={{display:'flex', justifyContent:'space-between'}}>
-			<TextCell {...props} data={dateString} />
-			{props.showCalendar && <FontAwesomeIcon icon={faCalendarAlt}/>}
-		</div>
-	);
+	const {onValidateSave,...rest} = props;
+	// const display = (
+	// 	<div style={{ display: 'flex', justifyContent: 'space-between', height: '100%' }}>
+	// 		<TextCell {...rest} isEditableStyles={props.isEditable} classes={{isEditableStyles: classes['looks-editable']}} data={dateString} />
+	// 		{props.showCalendar && <FontAwesomeIcon icon={faCalendarAlt}/>} 
+	// 	</div>
+	// );
 
 	const editorFormat = 'DD/MM/YYYY';
 	const editorContent = moment(selectedDate).format(editorFormat);
 
-	const editor = (
-		<TextCell autoFocus={!isMobile} errorText={props.errorText} classes={props.editorClasses} isEditable={props.isEditable} style={props.style} placeholder={editorFormat} data={editorContent} onValidateSave={(d) => { if (d === editorContent) { return; } submit(moment(d, editorFormat).toDate()); }} />
-	);
-	//remove background from modal datepicker + center.
+	const displayProps = {
+		...rest,
+		isEditableStyles: props.isEditable,
+		classes: { isEditableStyles: classes['looks-editable'] },
+		data: dateString
+	};
+
+	const editProps = {
+		errorText: props.errorText,
+		classes: props.editorClasses,
+		isEditable: props.isEditable,
+		style: props.style,
+		placeholder: editorFormat,
+		data: editorContent,
+		onValidateSave: (d) => { if (d === editorContent) { return; } submit(moment(d, editorFormat).toDate())}
+	};
+
+	// const editor = (
+	// 	<TextCell autoFocus={!isMobile} errorText={props.errorText} classes={props.editorClasses} isEditable={props.isEditable} style={props.style} placeholder={editorFormat} data={editorContent} onValidateSave={(d) => { if (d === editorContent) { return; } submit(moment(d, editorFormat).toDate()); }} />
+	// );
+	// remove background from modal datepicker + center.
+	const textCellProps = !open ? displayProps : editProps;
+	const style = { width: '100%', height: '100%' };
 	return (
-		<div className={classes["date-cell-default"]} style={{width:'100%',height:'100%'}}>
-			{!open ? display : editor}
+		<div className={classes['date-cell-default']} style={style}>
+			<TextCell {...textCellProps} />
+			{/* <input {...textCellProps} /> */}
 			{props.isEditable && (
 				<RightClickMenuWrapper
 					{...props.rightClickMenuWrapperProps}
@@ -61,8 +84,6 @@ const DateCell = (props) => {
 					OCOProps={{eventTypes:"pointerup"}}
 					modalClassName={classes['datepicker-modal']}
 					rightClickMenuClassName={classes['rcm']}
-					moveBox={[40,0]}
-					
 				>
 					<DatePicker inline {...datePickerProps} {...extraDatePickerProps} />
 				</RightClickMenuWrapper>
