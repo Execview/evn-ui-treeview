@@ -1,40 +1,31 @@
-import React, { useState, useEffect, useLayoutEffect } from 'react'
-import {useFunctionalRef} from '@execview/reusable'
+import React, { useState, useEffect, useMemo } from 'react'
 
 const getRandom = (n) => parseInt(n*Math.random())
 
 const BadComponent = (props) => {
-	const [large,small] = [300,50]
-	const [ref, current] = useFunctionalRef()
+	const randomColour = useMemo(()=>`rgb(${getRandom(255)},${getRandom(255)},${getRandom(255)})`,[])
+	const [large,small] = [300,150]
 	const [forcedHeight, setForcedHeight] = useState(small)
-	const [actualHeight, setActualHeight] = useState(forcedHeight)
 
-	useLayoutEffect(()=>{
-		if(!current){return}
-		const dimensions = current.getBoundingClientRect()
-		if(props.afterRender && dimensions.height!==actualHeight){
-			setActualHeight(dimensions.height)
-			props.afterRender(dimensions.height)
-		}
-	})
-
-	
 	useEffect(()=>{
 		setTimeout(()=>{
 			setForcedHeight(large)
-		},3000)
+		},1000)
 	},[])
 
-	const randomColour = `rgb(${getRandom(255)},${getRandom(255)},${getRandom(255)})`
 	const badComponentStyle = {
 		backgroundColor: randomColour,
 		height: forcedHeight,
-		...props.style
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'center',
+		alignItems: 'center',
+		fontSize: '3em'
 	}
 
 	return (
-		<div ref={ref} style={badComponentStyle}>
-			<div>{`${props.i}: ${props.date}`}</div>
+		<div style={badComponentStyle}>
+			<div>{`${props.i}`}</div>
 			<button onClick={()=>setForcedHeight(forcedHeight===small?large:small)}>change height</button>
 		</div>
 	)

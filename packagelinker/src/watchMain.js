@@ -17,7 +17,7 @@ toWatch.forEach((n)=>{
 	const srcPath = getModuleSrc(n)
 	let scanned = false	
 	const onAnyChange = (event,path) => {
-		scanned && console.log(event, path);
+		scanned && console.log(`[${n}]: ${event}`);
 		switch(event){
 			case 'change': {
 				transpileModuleThenCopyIntoNodeModulesAndLog(n)

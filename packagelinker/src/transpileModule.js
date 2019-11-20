@@ -32,7 +32,7 @@ export const copyTranspiledFolderIntoNodeModules = (n) => {
 		copyCommands.push(copyCommand)
 	})
 
-	return Promise.all(copyCommands.map(cc=>execute(cc))).then(()=>console.log(`[${n}]: Transpiled & copied!`))
+	return Promise.all(copyCommands.map(cc=>execute(cc)))//.then(()=>console.log(`[${n}]: Transpiled & copied!`))
 }
 
 export const forceDependantsToRefresh = (n) => {
@@ -42,7 +42,6 @@ export const forceDependantsToRefresh = (n) => {
 		const fileToAlter = path.resolve(getModuleSrc(k),'./version.js') //
 		const datePart = `${moment(new Date()).format('YYYY-MM-DD [at] HH:mma ss.S[s]')}`
 		const newText = `export default {version: '#${datePart}#'};`
-		console.log(newText)
 		fs.writeFileSync(fileToAlter, newText)
 	})
 }
