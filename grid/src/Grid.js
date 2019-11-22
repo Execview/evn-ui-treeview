@@ -3,21 +3,27 @@ import ReactGridLayout, { WidthProvider } from 'react-grid-layout'
 import GridItem from './GridItem'
 import 'react-grid-layout/css/styles.css'
 import 'react-resizable/css/styles.css'
-const RGL = WidthProvider(ReactGridLayout)
+import { withResizeDetector } from 'react-resize-detector';
+const RGL = withResizeDetector(ReactGridLayout)
 
 const Grid = (props) => {
 	const makeKey = (i) => 'key'+i.toString()+'key'
 
 	const cols = props.cols
-	const defaultItemDimensions = props.defaultItemDimensions || [1,200]
+	const defaultHeight = props.defaultHeight || 200
+	const defaultWidth = props.defaultWidth || 1
 
-	const [layout, setLayout] = useState([])	
+	const [layout, actuallySetLayout] = useState([])
+
+	const setLayout = (tryLayout) => {
+		actuallySetLayout(tryLayout)
+	}
 
 	useEffect(()=>{
 		let newLayout = layout
 		props.children.forEach((child,i)=>{
 			const childGrid = (child.props && child.props.grid) || {}
-			const dataGrid = {i: makeKey(i), x: 0, y:i, w:defaultItemDimensions[0], h:defaultItemDimensions[1], ...childGrid};
+			const dataGrid = {i: makeKey(i), x: 0, y:i, w:defaultWidth, h:defaultHeight, ...childGrid};
 			newLayout.push(dataGrid)
 		})
 		setLayout(newLayout)
@@ -30,9 +36,10 @@ const Grid = (props) => {
 		setLayout([...filteredLayout,{...currentDataGrid, h: height}])
 	}
 	
+	const draggableHandle = props.draggableHandle
 
 	return (
-		<RGL layout={layout} cols={cols} rowHeight={1} margin={[0,0]} onLayoutChange={(newLayout) => setLayout(newLayout)}>
+		<RGL layout={layout} cols={cols} rowHeight={1} margin={[0,0]} onLayoutChange={(newLayout) => setLayout(newLayout)} draggableHandle={`.${draggableHandle}`}>
 			{props.children.map((child,i)=>{
 				const key = makeKey(i)
 				return (

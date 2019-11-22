@@ -7,7 +7,6 @@
 .generic-container {
   	display: flex;
   	height: 100%;
-  	padding: 10px;
 	box-sizing: border-box;
 }
 
@@ -18,7 +17,6 @@
 }
 
 .title{
-	/* flex:0; */
 }
 
 .dd{
@@ -34,4 +32,5 @@
 .rcm{
 	height: 200px;
 	width: 500px;
+	padding:10px;
 }

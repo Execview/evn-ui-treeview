@@ -9,3 +9,11 @@
 .grid{
 	width: 95vw;
 }
+
+.empty-handler {
+  padding:10px;
+}
+
+.draggable-handle{
+
+}

@@ -3,12 +3,12 @@ import ReactDOM from 'react-dom';
 import Row from '../row/Row';
 import Cell from '../cells/Cell/Cell';
 import HeaderCellDisplay from './HeaderCellDisplay';
-import { OCO } from '@execview/reusable'
+import { withResizeDetector } from 'react-resize-detector';
 import './Table.css';
 
 // KNOWN BUG: MILLION RERENDERS
 
-export default class Table extends Component {
+class Table extends Component {
 	constructor(props) {
 		super(props);
 		const defaults = this.getDefaults(props);
@@ -374,3 +374,5 @@ export default class Table extends Component {
 		);
 	}
 }
+
+export default withResizeDetector(Table)

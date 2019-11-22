@@ -50,7 +50,7 @@ const DateCell = (props) => {
 	const displayProps = {
 		...rest,
 		isEditableStyles: props.isEditable,
-		classes: { isEditableStyles: classes['looks-editable'] },
+		classes: { ...props.classes,isEditableStyles: classes['looks-editable'] },
 		data: dateString
 	};
 

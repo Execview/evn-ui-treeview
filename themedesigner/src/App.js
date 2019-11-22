@@ -8,7 +8,11 @@ import colorDescriptions from './colorDescriptions.json'
 import defaultTheme from './themes/default.json'
 
 const App = (props) => {
-	useThemeApplier(defaultTheme)
+	const activeTheme = "default"
+	const themeNames = {
+		default: defaultTheme
+	}
+	useThemeApplier(themeNames[activeTheme] || defaultTheme)
 	const [ref,current] = useFunctionalRef()
 	let items = []
 	const appEl = current
