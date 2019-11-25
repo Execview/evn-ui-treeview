@@ -5,18 +5,23 @@ import useThemeApplier from './useThemeApplier';
 
 import colorDescriptions from './colorDescriptions.json'
 import defaultTheme from './themes/default.json'
+import pinkTheme from './themes/pink.json'
+import blueTheme from './themes/blue.json'
+import printTheme from './themes/print.json'
 
 const App = (props) => {
 	const activeTheme = "default"
-	const themeNames = {
-		default: defaultTheme
+	const themes = {
+		default: defaultTheme,
+		pink: pinkTheme,
+		blue: blueTheme,
+	 	print: printTheme
 	}
+	useThemeApplier(themes[activeTheme] || defaultTheme)
 
 	const ref = useRef()
 	const [current, setCurrent] = useState()
 	useEffect(()=>ref.current && setCurrent(ref.current),[ref.current])
-
-	useThemeApplier(themeNames[activeTheme] || defaultTheme)
 	
 	let items = []
 	const appEl = current
