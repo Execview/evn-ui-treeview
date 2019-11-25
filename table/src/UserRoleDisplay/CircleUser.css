@@ -6,7 +6,7 @@
 .user-menu{
   padding:10px;
   position:absolute;
-  background-color: var(--color2, #383d47);
+  background-color: rgb(var(--color2));
   z-index: 100;
   width: 300px;
   border-radius: 4px;
@@ -30,30 +30,30 @@
   position: absolute;
   right:5px;
   top:23px;
-  color:var(--color5, white);
+  color:rgb(var(--color5));
   font-size: 15px;
   font-weight: bold;
 }
 
 .confirmation-container {
-  background-color: var(--color2, #383d47);
-  color:var(--color5, white);
+  background-color: rgb(var(--color2));
+  color:rgb(var(--color5));
   border-radius: 4px;
 }
 
 .success-message{
-  color: var(--color17, #00CC6F);
+  color: rgb(var(--color17));
   margin-top: 0;
 }
 
 .current-users-message {
-  color: var(--color17, #00CC6F);
+  color: rgb(var(--color17));
   text-align: center;
   margin-bottom: 0;
 }
 
 .no-users-message {
-  color: var(--color19, #eda645);
+  color: rgb(var(--color19));
   text-align: center;
   margin-bottom: 0;
 }
@@ -61,11 +61,11 @@
 .check-container {
   height:70px;
   line-height:70px;
-  background-color:var(--color17, #00CC6F);
+  background-color:rgb(var(--color17));
   text-align:center;
   font-size:50px;
   border-radius: 4px;
-  color: var(--color5, white);
+  color: rgb(var(--color5));
 }
 
 .assigned-title {
@@ -77,7 +77,7 @@
 .check-success {
   margin:0;
   font-size:35px;
-  color: var(--color17, #00CC6F); /*#47c9a2*/
+  color: rgb(var(--color17)); /*#47c9a2*/
 }
 
 .confirmation-content {
@@ -97,8 +97,8 @@
 }
 
 .user-toggle-details{
-  color: var(--color15, #ffc92a);
-  background-color: var(--color2, #383d47);
+  color: rgb(var(--color15));
+  background-color: rgb(var(--color2));
   padding: 10px;
   margin-right: 5px;
 }
@@ -122,7 +122,7 @@
   height: 0;
   border-style: solid;
   border-width: 0 18px 17px 18px;
-  border-color: transparent transparent var(--color2, #383d47) transparent;
+  border-color: transparent transparent rgb(var(--color2)) transparent;
   position: absolute;
   top: -10px;
   left: 142px;
@@ -130,13 +130,13 @@
 
 .user-row{
   /* height:40px; */
-  color:var(--color5, white);
+  color:rgb(var(--color5));
   transition: all 0.5s;
 }
 
 
 .close-icon {
-  color:var(--color18, #ff3d57);
+  color:rgb(var(--color18));
   font-size:20px;
   line-height: 40px;
   cursor: pointer;
@@ -153,8 +153,8 @@
 }
 
 .plus-container {
-  background-color: var(--color2, #383d47);
-  color:var(--color5, white);
+  background-color: rgb(var(--color2));
+  color:rgb(var(--color5));
   height:40px;
   padding-top:5px;
   cursor:pointer;
@@ -167,7 +167,7 @@
 
 .dropdown-wrapper {
   padding:0;
-  background-color: var(--color2, #383d47);
+  background-color: rgb(var(--color2));
 }
 
 .hover-class {
@@ -179,9 +179,9 @@
 }
 
 .add-role-button{
-  color: var(--color5, white);
+  color: rgb(var(--color5));
   border-radius: 4px;
-  background: var(--color19, #eda645);
+  background: rgb(var(--color19));
   text-decoration: none;
   transition: all 0.4s;
   line-height: normal;
@@ -193,14 +193,14 @@
 }
 
 .add-role-button:hover {
-  background: var(--color15, #ffc92a); /*#eda645*/
+  background: rgb(var(--color15)); /*#eda645*/
 }
 
 .add-role-button-grey{
-	background: var(--color25, #c8c8c8);
+	background: rgb(var(--color25));
 }
 .add-role-button-grey:hover{
-	background: var(--color25, #c8c8c8);
+	background: rgb(var(--color25));
 }
 
 .text-focus-in {
@@ -210,7 +210,7 @@
 }
 
 .green-tick{
-  color:var(--color17, #00CC6F);
+  color: rgb(var(--color17));
 }
 
 .transparent-tick{

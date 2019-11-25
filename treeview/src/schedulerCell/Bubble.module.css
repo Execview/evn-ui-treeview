@@ -1,5 +1,5 @@
 .bubble-text {
-    fill: var(--color5, white);
+    fill: rgb(var(--color5));
 	mix-blend-mode: hard-light;
     user-select: none;
     pointer-events: none;

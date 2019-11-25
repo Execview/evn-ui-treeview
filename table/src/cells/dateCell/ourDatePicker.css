@@ -1,11 +1,11 @@
 .react-datepicker{
-	--text: var(--color5, white);
-	--background: var(--color2, #383d47);
-	--darker-background: var(--color3, #2f3441);
-	--day-hover-background: var(--color20, #6ac4d4);
-	--day-hover-text: var(--color28, white);
-	--current-day-background: var(--color16, #74dcee);
-	--current-day-text: var(--color28, white);
+	--text: rgb(var(--color5));
+	--background: rgb(var(--color2));
+	--darker-background: rgb(var(--color3));
+	--day-hover-background: rgb(var(--color20));
+	--day-hover-text: rgb(var(--color28));
+	--current-day-background: rgb(var(--color16));
+	--current-day-text: rgb(var(--color28));
 
 	--arrow-hover: var(--day-hover-background);
 	--current-day-background-hover: var(--day-hover-background);

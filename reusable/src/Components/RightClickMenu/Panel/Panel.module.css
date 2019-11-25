@@ -1,14 +1,14 @@
 .panel {
 	position: absolute;
-	background-color: var(--color2, #383d47);
-	color: var(--color5, white);
+	background-color: rgb(var(--color2));
+	color: rgb(var(--color5));
 	border-radius: 4px;
 	box-sizing: border-box;
 	z-index: 10000;
 }
 
 .panel-padding {
-	border: 1px solid var(--color5, white);
+	border: 1px solid rgb(var(--color5));
 }
 
 .absolute-caret {
@@ -19,8 +19,8 @@
 }
 
 .absolute-caret-border-colors-up {
-	border-color: transparent transparent var(--color5, white) transparent;
+	border-color: transparent transparent rgb(var(--color5)) transparent;
 }
 .absolute-caret-border-colors-down {
-	border-color: var(--color5, white) transparent transparent  transparent;
+	border-color: rgb(var(--color5)) transparent transparent  transparent;
 }

@@ -3,5 +3,5 @@
 }
 
 .remove-filter{
-	color: var(--color18, #ff3d57);
+	color: rgb(var(--color18));
 }

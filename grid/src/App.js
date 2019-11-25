@@ -4,8 +4,10 @@ import Grid from './Grid';
 import classes from './App.module.css';
 import Handler from './Handlers/Handler';
 import EmptyHandler from './Handlers/EmptyHandler'
+import { useThemeApplier, defaultTheme } from '@execview/themedesigner'
 
 const App = (props) => {
+	useThemeApplier(defaultTheme)
 	const draggableHandle = classes['draggable-handle']
 
 	let childItems = []

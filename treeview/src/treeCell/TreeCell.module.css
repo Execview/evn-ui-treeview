@@ -34,16 +34,16 @@
 }
 
 .empty-circle{
-    color: var(--color5, white);
+    color: rgb(var(--color5));
     opacity: 0.5;
 	font-size: 10px;
 }
 
 .green-circle{
-	color: var(--color17, #00CC6F);
+	color: rgb(var(--color17));
 	font-size: 10px;
 }
 
 .selected-background {
-    background-color: var(--color8, #272727);
+    background-color: rgb(var(--color8));
 }

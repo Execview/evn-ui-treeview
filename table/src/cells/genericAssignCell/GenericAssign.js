@@ -44,7 +44,7 @@ const GenericAssign = (props) => {
 
 	return (
 		<div className={classes["generic-container"]}>
-			<div className={classes['dropdown-with-title']}>
+			<div className={`${classes['dropdown-with-title']} ${props.isEditable?'':classes['dropdown-with-title-small']}`}>
 				<div className={classes['title']}>
 					{props.leftTitle}
 				</div>

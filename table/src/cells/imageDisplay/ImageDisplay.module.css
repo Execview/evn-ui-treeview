@@ -19,13 +19,13 @@ cursor: pointer;
 position: absolute;
 right:5px;
 top:23px;
-color:var(--color5, white);
+color: rgb(var(--color5));
 font-size: 15px;
 font-weight: bold;
 }
 
 .cu{
-    border: 2px solid var(--color9, wheat);
+    border: 2px solid rgb(var(--color9));
 }
 
 .empty-editable-container {
@@ -38,7 +38,7 @@ font-weight: bold;
 }
 
 .empty-editable{
-    color: var(--color5, white);
+    color: rgb(var(--color5));
     opacity:0.3;
     margin:0;
     margin-left: 5px;

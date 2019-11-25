@@ -1,7 +1,8 @@
 import useThemeApplier from './useThemeApplier'
-import * as themes from './themes'
+
+import defaultTheme from './themes/default.json'
 
 module.exports = {
 	useThemeApplier,
-	themes
+	defaultTheme
 }

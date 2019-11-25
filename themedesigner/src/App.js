@@ -1,5 +1,4 @@
-import React from 'react';
-import {useFunctionalRef} from '@execview/reusable'
+import React, { useState, useRef, useEffect } from 'react';
 import classes from './App.module.css';
 import ColorBox from './ColorBox';
 import useThemeApplier from './useThemeApplier';
@@ -12,8 +11,13 @@ const App = (props) => {
 	const themeNames = {
 		default: defaultTheme
 	}
+
+	const ref = useRef()
+	const [current, setCurrent] = useState()
+	useEffect(()=>ref.current && setCurrent(ref.current),[ref.current])
+
 	useThemeApplier(themeNames[activeTheme] || defaultTheme)
-	const [ref,current] = useFunctionalRef()
+	
 	let items = []
 	const appEl = current
 
@@ -23,11 +27,11 @@ const App = (props) => {
 		const colorStyle = colorCSSVariable && `rgb(${colorCSSVariable})`
 		const style = {
 			minHeight: '100px',
-			width: '100px',
+			width: '150px',
 			padding: '10px',
-			cursor: 'pointer'
+			position:'relative'
 		}
-		const item = <ColorBox key={i} color={colorStyle} style={style}>{`Colour ${i} - ${colorDescriptions['color'+i]}`}</ColorBox>
+		const item = <ColorBox key={i} style={style} color={colorStyle} name={`Colour ${i}`} description={colorDescriptions['color'+i]}/>
 		items.push(item)
 	}
 

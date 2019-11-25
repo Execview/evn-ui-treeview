@@ -1,10 +1,11 @@
 {
 	"name": "@execview/table",
-	"version": "0.1.128",
+	"version": "0.1.129",
 	"main": "./transpiled/exports.js",
 	"private": false,
 	"dependencies": {
-		"@execview/reusable": "0.1.69",
+		"@execview/reusable": "0.1.71",
+		"@execview/themedesigner": "0.1.3",
 		"@fortawesome/fontawesome-svg-core": "^1.2.25",
 		"@fortawesome/free-solid-svg-icons": "^5.11.2",
 		"@fortawesome/react-fontawesome": "^0.1.7",

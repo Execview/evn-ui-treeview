@@ -10,7 +10,7 @@ const GenericAssignCell = (props) => {
 	return (
 		<div className={classes["generic-cell"]}>
 			{React.createElement(props.display.type, { ...props.display.props, isEditable: props.isEditable, allItems, items: data, style: props.style })}
-			<RightClickMenuWrapper onLeftClick takeParentLocation moveBox={[40,0]} rightClickMenuClassName={classes['rcm']} {...props.rightClickMenuWrapperProps}>
+			<RightClickMenuWrapper onLeftClick takeParentLocation moveBox={[40,0]} rightClickMenuClassName={`${classes['rcm']} ${props.isEditable ? '' : classes['rcm-small']}`} {...props.rightClickMenuWrapperProps}>
 				<GenericAssign
 					allItems={props.items}
 					items={props.data}

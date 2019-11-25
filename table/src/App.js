@@ -11,12 +11,14 @@ import DateCell from './cells/dateCell/DateCell';
 import DropdownCell from './cells/dropdownCell/DropdownCell';
 import GenericAssignCell from './cells/genericAssignCell/GenericAssignCell';
 import ImageDisplay from './cells/imageDisplay/ImageDisplay';
+import { useThemeApplier, defaultTheme } from '@execview/themedesigner'
 import classes from './App.module.css';
 
 const crypto = require('crypto');
 const hash = crypto.createHash('sha256');
 
 const App = (props) => {
+	useThemeApplier(defaultTheme)
 	const [data, setData] = useState({})
 	const [filters, setFilters] = useState({})
 
@@ -70,7 +72,7 @@ const App = (props) => {
 		props.onSave(newId, {}, Object.keys(columnsInfo));
 	}
 	const getContextMenu = (col) => {
-		const filterComponent = columnsInfo[col].filter
+		const filterComponent = columnsInfo[col] && columnsInfo[col].filter
 		if (!filterComponent) { return null; }
 		return (
 			<RightClickMenuWrapper>
@@ -82,7 +84,7 @@ const App = (props) => {
 	}
 
 	return (
-		<div className={`${classes["App"]} ${classes["color-scheme"]}`}>
+		<div className={`${classes["App"]}`}>
 			
 			<div>
 				<Button style={{margin:'10px', padding: '30px', paddingTop:'15px', paddingBottom:'15px'}} onClick={addRow}>Add row</Button>

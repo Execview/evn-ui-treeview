@@ -18,15 +18,15 @@
 }
 
 .grey-text {
-	fill: var(--color25, #c8c8c8);
+	fill: rgb(var(--color25));
 }
 
 .white-text{
-	fill: var(--color5, white);
+	fill: rgb(var(--color5));
 }
 
 .header-text {
-	fill: var(--color5, white);
+	fill: rgb(var(--color5));
 	text-anchor: middle;
 	font-size: 12px;
 }

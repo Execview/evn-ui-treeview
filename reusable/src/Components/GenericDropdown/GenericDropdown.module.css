@@ -1,17 +1,17 @@
 .dropdown {
   padding:10px;
-  background-color: var(--color2, #383d47);
+  background-color: rgb(var(--color2));
   z-index: 1;
   box-sizing: border-box;
 }
 
 .dropdown-input {
   font-size: 16px;
-  color:var(--color5, white);
+  color: rgb(var(--color5));
   padding-left:5px;
   padding-bottom:3px;
   border: none;
-  border-bottom: 2px solid var(--color5, white);
+  border-bottom: 2px solid rgb(var(--color5));
   background-color: inherit;
   width:100%;
   margin:0;
@@ -23,23 +23,23 @@
 .dropdown-input:focus { outline: none; }
 
 .dropdown-input::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-  color: var(--color5, white);
+  color: rgb(var(--color5));
   opacity: 0.6; /* Firefox */
   font-weight: 400;
 }
 
 .dropdown-input:-ms-input-placeholder { /* Internet Explorer 10-11 */
-  color: var(--color5, white);
+  color: rgb(var(--color5));
   opacity: 0.5;
 }
 
 .dropdown-input::-ms-input-placeholder { /* Microsoft Edge */
-  color: var(--color5, white);
+  color: rgb(var(--color5));
   opacity: 0.5;
 }
 
 .dropdown-menu{
-  color: var(--color5, white);
+  color: rgb(var(--color5));
   list-style: none;
   margin-top:0;
   margin-bottom:0;
@@ -55,8 +55,8 @@
 }
 
 .dropdown-item:hover {
-  background-color: var(--color8, #272727);
-  color: var(--color28, white);
+  background-color: rgb(var(--color8));
+  color: rgb(var(--color28));
 }
 
 .dropdown-menu::-webkit-scrollbar {
@@ -65,10 +65,10 @@
 }
 
 .dropdown-menu::-webkit-scrollbar-thumb {
-  background: var(--color11, #00b0a4);
+  background: rgb(var(--color11));
   border-radius: 5px;
 }
 
 .dropdown-menu::-webkit-scrollbar-thumb:hover {
-  background: var(--color12, #00998f);
+  background: rgb(var(--color12));
 }

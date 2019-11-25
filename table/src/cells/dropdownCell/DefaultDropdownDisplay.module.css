@@ -19,5 +19,5 @@
 }
 
 .looks-editable{
-	color: var(--color9, wheat);
+	color: rgb(var(--color9));
 }

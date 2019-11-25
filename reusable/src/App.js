@@ -12,10 +12,12 @@ import recursiveDeepDiffs from './Functions/recursiveDeepDiffs'
 import recursiveDeepDiffsREACT from './Functions/recursiveDeepDiffsREACT'
 import fetchy from './Functions/fetchy'
 import RightClickMenuWrapper from './Components/RightClickMenu/RightClickMenuWrapper';
+import { useThemeApplier, defaultTheme } from '@execview/themedesigner'
 
 import classes from './App.module.css';
 
 const App = (props) => {
+	useThemeApplier(defaultTheme)
 	const RCM = <div style={{width:'500px', height: '200px'}}>Testing very very very very very long</div>
 	const ButtonProps = {onClick:(() => console.log('xd'))}
 	const CircleUserProps = {size: 50, url: 'https://i.imgur.com/OYBnpPT.jpg'}

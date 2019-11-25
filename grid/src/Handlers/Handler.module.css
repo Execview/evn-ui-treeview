@@ -5,18 +5,18 @@
 }
 
 .handler:hover{
-	background-color: rgba(var(--color5,white),0.2);
+	background-color: rgba(var(--color5),0.2);
 }
 
 .handler:hover .cog, .handler:hover .drag-icon{
-	color:var(--color5,white);
+	color: rgb(var(--color5));
 }
 
 
 .handler-bar{
 	cursor: pointer;
 	padding-top: 5px;
-	color: var(--color5,white);
+	color: rgb(var(--color5));
 	display: flex;
 	justify-content: space-between;
 }

@@ -1,7 +1,7 @@
 .get-data {
-  background-color: var(--color2, #383d47);
-  color: var(--color5, white);
-  border: 2px solid var(--color5, white);
+  background-color: rgb(var(--color2));
+  color: rgb(var(--color5));
+  border: 2px solid rgb(var(--color5));
   padding:15px 30px;
   font-size: 14px;
   font-weight: bold;
@@ -14,8 +14,8 @@
 }
 
 .get-data:hover {
-    background-color: var(--color8, #272727);
-    color: var(--color28, white); 
+    background-color: rgb(var(--color8));
+    color: rgb(var(--color28)); 
 }
 
 .button-wrapper {

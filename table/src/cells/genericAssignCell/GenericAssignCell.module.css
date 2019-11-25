@@ -16,13 +16,18 @@
 	width:50%;
 }
 
+.dropdown-with-title-small{
+	width: 100%;
+}
+
 .title{
 }
 
 .dd{
-	height:100%;
+	overflow: hidden;
 	display: flex;
 	flex-direction: column;
+	padding:5px;
 }
 
 .ddm{
@@ -33,4 +38,8 @@
 	height: 200px;
 	width: 500px;
 	padding:10px;
+}
+
+.rcm-small{
+	width: 250px;
 }

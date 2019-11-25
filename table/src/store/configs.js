@@ -154,7 +154,28 @@ const users = {
 	hawyd: {
 		name: 'Billy&Lucky',
 		image: 'https://i.imgur.com/gQo8FSe.jpg'
-	}
+	},
+	awdaww: {
+		name: 'Tom',
+		image: 'https://i.imgur.com/upG3jXQ.jpg'
+	},
+	ncncnc: {
+		name: 'Tom',
+		image: 'https://i.imgur.com/upG3jXQ.jpg'
+	},
+	papapap: {
+		name: 'Tom',
+		image: 'https://i.imgur.com/upG3jXQ.jpg'
+	},
+	wowowo: {
+		name: 'Tom',
+		image: 'https://i.imgur.com/upG3jXQ.jpg'
+	},
+	ldldldl: {
+		name: 'Tom',
+		image: 'https://i.imgur.com/upG3jXQ.jpg'
+	},
+
 };
 
 // GenericAssignDisplay props

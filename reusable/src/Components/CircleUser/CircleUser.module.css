@@ -1,7 +1,7 @@
 .user-circle{
     overflow: hidden;
     border-radius:50%;
-    border: 2px solid var(--color5, white);
+    border: 2px solid rgb(var(--color5));
 }
   
 .user-image {

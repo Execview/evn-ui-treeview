@@ -8,8 +8,11 @@ import { columnsInfo, cellTypes, rules } from './store/config';
 import { PropInspector, Button } from '@execview/reusable'
 import classes from './App.module.css';
 import VisibleColumnSelector from './TableColumnAppenders/VisibleColumnSelector';
+import { useThemeApplier, defaultTheme } from '@execview/themedesigner'
 
 const App = (props) => {
+
+	useThemeApplier(defaultTheme)
 
 	useEffect(()=>{
 		props.onGetLocalData();

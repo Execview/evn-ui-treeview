@@ -5,6 +5,8 @@
 }
 
 .colors {
+	width:1600px;
+	margin:auto;
 	display: flex;
 	flex-wrap: wrap;
 }
