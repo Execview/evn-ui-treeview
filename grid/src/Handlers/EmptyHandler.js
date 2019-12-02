@@ -1,8 +1,9 @@
 import React from 'react'
+import Draggable from '../HandlerTools/Draggable'
 
 const EmptyHandler = (props) => {
 	return (
-		<div className={`${props.draggableHandle} ${props.className}`}>{props.children}</div>
+		<Draggable className={`${props.className}`}>{props.children}</Draggable>
 	)
 }
 

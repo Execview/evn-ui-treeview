@@ -1,13 +1,16 @@
-const injectObjectInObject = (o,a,pos) => {
+const injectObjectInObject = (io,a,pos) => {
+	const okeys = Object.keys(io)
+	const o = io
+	const ObjectsToReplace = Object.keys(a).filter((k)=>okeys.includes(k))
+	ObjectsToReplace.forEach(k=>o[k]=a[k])
+
 	let n;
 	switch(pos){
 		case 'start': n=0; break;
 		case 'end': n=-1; break;
 		default: n = pos || (pos===0 ? 0 : -1)
 	}
-
-
-	const okeys = Object.keys(o)
+	
 	n = n > okeys.length ? okeys.length : n
 	n = n < -1 * okeys.length ? 0 : n
 	n = n < 0 ? okeys.length + 1 + n : n

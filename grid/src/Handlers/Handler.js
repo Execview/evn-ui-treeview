@@ -1,18 +1,27 @@
 import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faCog } from '@fortawesome/free-solid-svg-icons';
-import classes from './Handler.module.css'
+import { faGripLines } from '@fortawesome/free-solid-svg-icons';
+import classes from './Handler.module.css';
+
+import Draggable from '../HandlerTools/Draggable'
+import withGridItemClassName from '../HandlerTools/withGridItemClassName'
+
+const GridItemClassName = classes['grid-item']
+const GridItemChildClassName = classes['child-item']
 
 const Handler = (props) => {
 	return (
 		<div className={classes['handler']}>
-			<div className={`${props.draggableHandle} ${classes['handler-bar']}`}>
-				<FontAwesomeIcon className={classes['drag-icon']} icon={faBars}/>
-				<FontAwesomeIcon className={classes['cog']} icon={faCog}/>
-			</div>
+			<Draggable className={`${classes['handler-bar']}`}>
+				<FontAwesomeIcon className={classes['drag-icon']} icon={faGripLines}/>
+				{props.bar}
+			</Draggable>
 			{props.children}
+			<div className={classes['resizer']}>
+				<div className={classes['resize-icon']} />
+			</div>
 		</div>
 	)
 }
 
-export default Handler
+export default withGridItemClassName(Handler, GridItemClassName, GridItemChildClassName)

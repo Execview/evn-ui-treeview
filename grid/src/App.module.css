@@ -4,6 +4,7 @@
   flex-direction: column;
   align-items: center;
   background-color: rgb(var(--color1));
+  min-height: 100vh;
 }
 
 .grid{
@@ -14,6 +15,5 @@
   padding:10px;
 }
 
-.draggable-handle{
 
-}
+
