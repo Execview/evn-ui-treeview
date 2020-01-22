@@ -6,48 +6,24 @@ import { faWindowClose } from '@fortawesome/free-solid-svg-icons'
 import DateCell from './DateCell'
 
 const DateFilter = (props) => {
-	const activeFilters = props.activeFilter || {}
+	const [meta, setMeta] = [props.meta || {}, props.setMeta || (()=>console.log('no setMeta'))] // {before: date, after: date}
+
 	const text = props.text || {}
-	const beforeFilter = activeFilters.beforeFilter
-	const afterFilter = activeFilters.afterFilter
 
 	const options = {
 		before: {
 			text: text.before || 'Before',
-			date: beforeFilter && beforeFilter.meta,
-			filter: 'beforeFilter'
+			date: meta.before
 		},
 		after: {
 			text: text.after || 'After',
-			date: afterFilter && afterFilter.meta,
-			filter: 'afterFilter'
+			date: meta.after
 		},
 	}
 
-	const setFilter = (f,date) => {
-		let updatedFilters = activeFilters
-		updatedFilters[options[f].filter] = {
-			meta: date,
-			filter: ((allData)=>{
-				return Object.fromEntries(Object.entries(allData).filter(([rowkey,row])=>{
-					const dateColumn = props.filterProperties[0]
-					const dataDate = row[dateColumn]
-					if(!dataDate){return true}
-					if(f==='before') {
-						return dataDate < date
-					} else {
-						return dataDate > date
-					}
-					
-				}))
-			})
-		}
-		props.onValidateSave && props.onValidateSave(updatedFilters);
-	}
-
 	const removeFilter = (f) => {
-		const {[options[f].filter]:_,...updatedFilters} = activeFilters
-		props.onValidateSave && props.onValidateSave(updatedFilters);
+		const {[f]:_,...newMeta} = meta
+		setMeta(newMeta);
 	}
 
 	return (
@@ -58,7 +34,7 @@ const DateFilter = (props) => {
 					return (
 						<div className={classes['filter-option']} key={o}>
 							<div>{op.text}:</div> 
-							<InPlaceCell data={op.date} type={<DateCell dateUnknown='Any'/>} onValidateSave={(d)=>setFilter(o,d)}/>
+							<InPlaceCell data={op.date} type={<DateCell rightClickMenuWrapperProps={{dontPortal: true}} dateUnknown='Any'/>} onValidateSave={(d)=>setMeta({...meta,[o]:d})}/>
 							{op.date ? <FontAwesomeIcon icon={faWindowClose} className={classes['remove-filter']} onClick={()=>removeFilter(o)}/> : null}
 						</div>
 					)
@@ -69,3 +45,20 @@ const DateFilter = (props) => {
 }
 
 export default DateFilter
+
+export const filter = (data, column, meta={}) => {
+	return Object.fromEntries(Object.entries(data).filter(([rowkey,row])=>{
+		const dataDate = row[column]
+		if(!dataDate){return true}
+		let keepRow = true
+		if(meta.before){
+			const date = new Date(meta.before)
+			keepRow = keepRow && dataDate < date
+		}
+		if(meta.after){
+			const date = new Date(meta.after)
+			keepRow = keepRow && dataDate > date
+		}
+		return keepRow	
+	}))
+}

@@ -20,7 +20,19 @@ const hash = crypto.createHash('sha256');
 const App = (props) => {
 	useThemeApplier(defaultTheme)
 	const [data, setData] = useState({})
-	const [filters, setFilters] = useState({})
+	const [config, setConfig] = useState({depth:0,columns:{}})
+	const setFilterMeta = (col,newMeta) => {
+		setConfig({
+			...config,
+			columns: {
+				...config.columns,
+				[col]: {
+					...config.columns[col],
+					filters: newMeta
+				}
+			}
+		})
+	}
 
 	useEffect(() => {
 		setData(props.data);
@@ -39,12 +51,13 @@ const App = (props) => {
 	const allData = t2
 
 	let filteredData = allData
-	Object.values(filters).forEach((colFilter)=>{
-		Object.values(colFilter).forEach(subfilter=>{
-			const filterFunction = subfilter.filter || (()=>{console.log('filter function does not exist')})
-			const old = filteredData
-			filteredData = filterFunction(filteredData)
-		})
+	Object.keys(config.columns).forEach((col)=>{
+		const meta = config.columns[col] && config.columns[col].filters
+		if(columnsInfo[col].filterFunction){
+			// console.log(col)
+			// console.log(meta)
+			filteredData = columnsInfo[col].filterFunction(filteredData,col,meta)
+		} else { /*console.log(`filter function does not exist for: ${col}`)*/ }
 	})
 
 	const randomNumber = Math.floor((Math.random() * cats.length));
@@ -77,7 +90,13 @@ const App = (props) => {
 		return (
 			<RightClickMenuWrapper>
 				<div className={classes['rcm']}>
-				{filterComponent && React.cloneElement(filterComponent, {...filterComponent.props, allData: allData, activeFilter: filters[col], onValidateSave: ((newFilters) => setFilters({ ...filters, [col]: newFilters })), className: classes['context-filter']})}
+
+				{filterComponent && React.cloneElement(filterComponent, {
+					...filterComponent.props,
+					meta: config.columns[col] && config.columns[col].filters,
+					setMeta: ((newMeta)=>setFilterMeta(col,newMeta)),
+					className: classes['context-filter']
+				})}
 				</div>
 			</RightClickMenuWrapper>
 		)

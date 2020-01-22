@@ -6,7 +6,6 @@ import Handler from './Handlers/Handler';
 import EmptyHandler from './Handlers/EmptyHandler'
 import CogBar from './HandlerTools/CogBar'
 
-
 import { useThemeApplier, defaultTheme } from '@execview/themedesigner'
 
 const App = (props) => {

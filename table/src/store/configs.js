@@ -4,11 +4,11 @@ import DropdownCell from '../cells/dropdownCell/DropdownCell';
 import ImageDisplay from '../cells/imageDisplay/ImageDisplay';
 import GenericAssignCell from '../cells/genericAssignCell/GenericAssignCell';
 import ColorCell from '../cells/colorCell/ColorCell';
-import ColorFilter from '../cells/colorCell/ColorFilter';
+import ColorFilter, {filter as ColorFilterFunction} from '../cells/colorCell/ColorFilter';
 import DateCell from '../cells/dateCell/DateCell';
-import DateFilter from '../cells/dateCell/DateFilter'
+import DateFilter, {filter as DateFilterFunction} from '../cells/dateCell/DateFilter'
 import TextCell from '../cells/TextCell/TextCell'
-import TextFilter from '../cells/TextCell/TextFilter'
+import TextFilter, {filter as TextFilterFunction} from '../cells/TextCell/TextFilter'
 
 import UserRoleDisplay from '../UserRoleDisplay/UserRoleDisplay';
 import UserHeaderDisplay from '../headers/UserHeaderDisplay';
@@ -28,11 +28,11 @@ export const columnsInfo1 = {
 };
 
 export const columnsInfo2 = {
-	activityId: { cellType: 'text', headerData: 'Activity ID', width: 5, minWidth: 25, rule: 'textSize', filter:<TextFilter filterProperties={['activityId']}  text={{placeholder: 'Search for ID...'}}/>},
-	startDate: { cellType: 'date', headerData: 'Start Date', width: 10, rule: 'dateExists', filter: <DateFilter filterProperties={['startDate']}/>  },
-	latestProgress: { cellType: 'textarea', headerData: 'Latest Progress', rule: 'textSize', filter: <TextFilter filterProperties={['latestProgress']}/>},
-	dueDate: { cellType: 'date', headerData: 'Due Date', width: 10, filter: <DateFilter filterProperties={['dueDate']}/> },
-	progress: { cellType: 'color', headerData: 'RAG', width: 10, minWidth: 25, filter: <ColorFilter colorStrings={progressValues} filterProperties={['progress']}/>  },
+	activityId: { cellType: 'text', headerData: 'Activity ID', width: 5, minWidth: 25, rule: 'textSize', filter:<TextFilter filterProperties={['activityId']}  text={{placeholder: 'Search for ID...'}}/>, filterFunction: TextFilterFunction},
+	startDate: { cellType: 'date', headerData: 'Start Date', width: 10, rule: 'dateExists', filter: <DateFilter filterProperties={['startDate']}/>, filterFunction: DateFilterFunction  },
+	latestProgress: { cellType: 'textarea', headerData: 'Latest Progress', rule: 'textSize', filter: <TextFilter filterProperties={['latestProgress']}/>, filterFunction: TextFilterFunction},
+	dueDate: { cellType: 'date', headerData: 'Due Date', width: 10, filter: <DateFilter filterProperties={['dueDate']}/>, filterFunction: DateFilterFunction },
+	progress: { cellType: 'color', headerData: 'RAG', width: 10, minWidth: 25, filter: <ColorFilter colorStrings={progressValues} filterProperties={['progress']}/>, filterFunction: ColorFilterFunction  },
 	assignedUsers: { cellType: 'users', headerData: 'Assigned Users', width: 10, headerType: 'userHeader' },
 
 	

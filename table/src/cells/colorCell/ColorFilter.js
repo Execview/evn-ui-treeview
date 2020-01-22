@@ -7,11 +7,11 @@ import { faCheckSquare, faSquare } from '@fortawesome/free-solid-svg-icons';
 const classes = {...ColorCellClasses, ...ColorFilterClasses}
 
 const ColorFilter = (props) => {
-	const activeFilters = props.activeFilter || {} // {removeRed: ()=>removesRedFromData}
+	const [meta, setMeta] = [props.meta || [], props.setMeta || (()=>console.log('no setMeta'))] //[red, green]
 
 	const colors = props.colorStrings || { green: 'green', amber: 'amber', red: 'red', grey: 'grey', blue: 'blue'}
 	const options = Object.fromEntries(Object.entries(colors).map(([c,s])=>{
-		const checked = !Object.keys(activeFilters).includes(c)
+		const checked = !meta.includes(c)
 		const optionComponent = (
 			<div className={classes['color-option']}>
 				<div style={{display:'flex', alignItems: 'center'}}>
@@ -25,24 +25,14 @@ const ColorFilter = (props) => {
 	}))
 
 	const submitToggledFilter = (f) => {
-		const toggledOn = !Object.keys(activeFilters).includes(f)
-		let updatedFilters = activeFilters
+		const toggledOn = !meta.includes(f)
+		let newMeta = null
 		if(toggledOn){
-			updatedFilters[f] = {
-				filter:((allData)=>{
-					return Object.fromEntries(Object.entries(allData).filter(([rowkey,row])=>{
-						const colorColumn = props.filterProperties[0]
-						const color = row[colorColumn]
-						return color!==f && !(f==='grey' && !color)
-					}))
-				})
-			}
+			newMeta = [...meta, f]
 		} else {
-			const {[f]:_,...newFilters} = activeFilters
-			updatedFilters = newFilters
+			newMeta = meta.filter(colour=>colour!==f)
 		}
-		console.log(updatedFilters)
-		props.onValidateSave && props.onValidateSave(updatedFilters);
+		setMeta(newMeta);
 	}
 
 	return (
@@ -60,3 +50,10 @@ const ColorFilter = (props) => {
 }
 
 export default ColorFilter
+
+export const filter = (data, column, meta=[]) => {
+	return Object.fromEntries(Object.entries(data).filter(([rowkey,row])=>{
+		const color = row[column]
+		return !meta.includes(color) && !(color==='grey' && !color)
+	}))
+}

@@ -48,7 +48,7 @@ class Table extends Component {
 			nextInitialWidth: null,
 			column: '',
 			order: 'desc',
-			orderedData: Object.keys(data),
+			orderedData: Object.keys(data || {}),
 			invalidCells: [],
 			data: this.props.data,
 			editableCells: defaults.editableCells,
@@ -66,8 +66,8 @@ class Table extends Component {
 	componentWillReceiveProps(newProps) {
 		const defaults = this.getDefaults(newProps);
 
-		const keys = Object.keys(newProps.data);
-		let newOrderedData = Object.keys(newProps.data);
+		const keys = Object.keys(newProps.data || {});
+		let newOrderedData = Object.keys(newProps.data || {});
 		if (!newProps.dontPreserveOrder) {
 			const alreadyOrderedData = this.state.orderedData.filter(el => keys.includes(el));
 			const dataToAdd = keys.filter(el => !this.state.orderedData.includes(el));

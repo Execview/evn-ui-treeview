@@ -9,18 +9,20 @@ const TreeAppender = (props) => {
 		//an array of arrays of the rows to display, their corresponding depths, and whether they are open/closed/neither.
 		var newDisplayedRows = []
 		const pushChildRows = (childnodes,currentdepth=0) => {
-			for(const currentRow of childnodes){
-			let arrowstatus = tree[currentRow] ? 'open': 'closed';
-			if((props.data[currentRow].ChildAssociatedBubbles || []).length===0){arrowstatus='none'}
-			newDisplayedRows.push({	
-				key:currentRow,
-				depth:currentdepth,
-				nodeStatus: arrowstatus
-			})
-			if(tree[currentRow]){
-				pushChildRows(props.data[currentRow].ChildAssociatedBubbles || [],currentdepth+1)
-			}
-		}}
+			for(const childId of childnodes){
+				const currentRow = props.data[childId]
+				let arrowstatus = tree[childId] ? 'open': 'closed';
+				const currentRowChildren = ((currentRow && currentRow.ChildAssociatedBubbles) || [])
+				if(currentRowChildren.length===0 || !currentRowChildren.some(child=>props.data[child])){arrowstatus='none'}
+				newDisplayedRows.push({
+					key:childId,
+					depth:currentdepth,
+					nodeStatus: arrowstatus
+				})
+				if(tree[childId]){
+					pushChildRows(currentRowChildren,currentdepth+1)
+				}
+			}}
 		pushChildRows(parentNodes)
 		return newDisplayedRows
 	}
@@ -32,16 +34,18 @@ const TreeAppender = (props) => {
 
 	const addTreeData = () => {
 		//inject TreeExpander dataBubble data.
-		const displayedRows = getDisplayedTreeStructure(getParentNodes(props.data))
+		const displayedRows = getDisplayedTreeStructure(props.roots || getParentNodes(props.data))
 		let newTableData = {}
 		for(let i=0; i<displayedRows.length; i++){
 			const rowId = displayedRows[i].key
+			const rowData = props.data[rowId]
+			if(!rowData){continue}
 			const select = props.setSelected ? {isSelected: rowId === props.selectedRow,setSelected: (() => props.setSelected(rowId))} : {}
 			newTableData[rowId] = {
-				...props.data[rowId],
+				...rowData,
 				treeExpander:{
 					...displayedRows[i],
-					text: props.data[rowId].name,
+					text: rowData.name,
 					toggleNode: (()=> setTree({...tree,[rowId]:!tree[rowId]})),
 					...select
 				}

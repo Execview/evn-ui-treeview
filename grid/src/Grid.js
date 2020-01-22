@@ -13,38 +13,64 @@ const RGL = withResizeDetector(ReactGridLayout)
 const draggableHandle = classes['draggable-handle']
 
 const Grid = (props) => {
-	const makeKey = (i) => 'key'+i.toString()+'key'
+	const makeKey = (i) => i.toString()
+	const ourPropertyKeys = ['className','draggable']
 
 	const cols = props.cols
 	const defaultHeight = props.defaultHeight || 200
 	const defaultWidth = props.defaultWidth || 1
 	const margin = props.margin || [0,0]
 
-	const [layout, actuallySetLayout] = useState([])
-	const [ourProperties, setOurProperties] = useState([])
-	const ourPropertyKeys = ['className','draggable']
-
-	const setLayout = (tryLayout) => {
-		actuallySetLayout(tryLayout)
-	}
-
-	useEffect(()=>{
+	const getLayoutAndOurProperties = (layout=[], ourProperties={}) => {
 		let newLayout = layout
-		let newOurProperties = Object.entries(ourProperties)
+		let newOurProperties = ourProperties
+		const maxYSoFar = Math.max(...props.children.map(child=>((child && child.props && child.props.grid && child.props.grid.y) || 0)))
 		props.children.forEach((child,i)=>{
+			if(!child){return}
 			const childGridProps = (child.props && child.props.grid) || {}
 			const RGLParentClassName = child.props.RGLParentClassName
 			const RGLChildClassName = child.props.RGLChildClassName
 			const childGrid = Object.fromEntries(Object.entries(childGridProps).filter(([k,v])=>!ourPropertyKeys.includes(k)))
 			const ourValues = Object.fromEntries(Object.entries(childGridProps).filter(([k,v])=>ourPropertyKeys.includes(k)))
-			const dataGrid = {i: makeKey(i), x: 0, y:i, w:defaultWidth, h:defaultHeight, ...childGrid};
+			const dataGrid = {i: makeKey(i), x: 0, y:maxYSoFar+i, w:defaultWidth, h:defaultHeight, ...childGrid };
 			newLayout.push(dataGrid)
-			newOurProperties.push([dataGrid.i, {className: RGLParentClassName, childClassName: RGLChildClassName,...ourValues}])
+			newOurProperties[dataGrid.i] = {className: RGLParentClassName, childClassName: RGLChildClassName,...ourValues}
 		})
-		setLayout(newLayout)
-		setOurProperties(Object.fromEntries(newOurProperties))
-	},[])
+		return [newLayout, newOurProperties]
+	}
 
+	const isInternalLayout = !props.setLayout
+	const [internalLayout, setInternalLayout] = useState([])
+	const [internalOurProperties, setInternalOurProperties] = useState({})
+	
+	const [layoutFromChildren, ourPropertiesFromChildren] = isInternalLayout ? [null,null] : getLayoutAndOurProperties()
+
+	const externalSetLayout = (newLayout) => {
+		newLayout.sort((a,b)=>{
+			return a.i-b.i
+		})
+		const filteredNewLayout = newLayout.map(blockLayout=>{
+			const filterProperties = ["i","minW","maxW","minH","maxH","moved","static","isDraggable","isResizable"]
+			let newBlockLayout = blockLayout || []
+			filterProperties.forEach(p=>{
+				const {[p]:_, ...rest} = newBlockLayout
+				newBlockLayout = rest
+			})
+			return newBlockLayout
+		})
+		props.setLayout && props.setLayout(filteredNewLayout)
+	}
+	const [layout, setLayout] = isInternalLayout ? [internalLayout, setInternalLayout] : [layoutFromChildren, externalSetLayout]
+
+	const [ourProperties, setOurProperties] = isInternalLayout ? [internalOurProperties, setInternalOurProperties] : [ourPropertiesFromChildren, (()=>console.log('you shouldnt see this'))]
+
+	useEffect(()=>{
+		if(isInternalLayout){
+			const [newLayout, newOurProperties] = getLayoutAndOurProperties(layout, ourProperties)
+			setLayout(newLayout)
+			setOurProperties(newOurProperties)
+		}
+	},[])
 
 	const changeHeight = (key,height) => {
 		const currentDataGrid = layout.find(el=>el.i===key)
