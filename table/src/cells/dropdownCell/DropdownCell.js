@@ -43,14 +43,14 @@ const DropdownCell = (props) => {
 		</div>
 	);
 
-	const {style,... rest} = props;
+	const {rcmStyle,... rest} = props;
 
 	return (
 		<div style={{ height: '100%' }}>
 			<div style={{ height: '100%' }}>
 				{display}
 			</div>
-			<RightClickMenuWrapper onLeftClick inline={inlineMode} takeParentLocation open={open} setOpen={setOpen} rightClickMenuStyle={style} rightClickMenuClassName={classes['rcm']} {...props.rightClickMenuWrapperProps}>
+			<RightClickMenuWrapper onLeftClick inline={inlineMode} takeParentLocation open={open} setOpen={setOpen} rightClickMenuStyle={rcmStyle} rightClickMenuClassName={classes['rcm']} {...props.rightClickMenuWrapperProps}>
 				<GenericDropdown
 					{...rest}
 					onBlur={onBlur}
