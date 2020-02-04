@@ -1,5 +1,4 @@
 import chokidar from 'chokidar'
-import path from 'path'
 import config from '../config.json'
 import transpileModule, { isAModule, getModuleSrc, copyTranspiledFolderIntoNodeModules, forceDependantsToRefresh } from './transpileModule.js'
 

@@ -2,13 +2,14 @@
 	"name": "packagelinker",
 	"version": "1.0.0",
 	"description": "",
-	"main": "./src/watchIndex.js",
+	"main": "./indexes/watchIndex.js",
 	"scripts": {
-		"start": "node ./src/watchIndex",
+		"start": "node ./indexes/watchIndex",
 		"watch": "npm start",
-		"setup": "node ./src/setupIndex",
-		"all": "node ./src/runAllIndex",
-		"clean": "wsl rm -rfd ./node_modules && wsl rm -rfd ./transpiled && wsl rm ./package-lock.json"
+		"setup": "node ./indexes/setupIndex",
+		"all": "node ./indexes/runAllIndex",
+		"clean": "wsl rm -rfd ./node_modules && wsl rm -rfd ./transpiled && wsl rm ./package-lock.json",
+		"update-cascade": "node ./indexes/updateCascadeIndex"
 	},
 	"author": "",
 	"license": "ISC",
@@ -20,6 +21,7 @@
 		"@babel/preset-react": "^7.6.3",
 		"chokidar": "^3.2.2",
 		"esm": "^3.2.25",
-		"moment": "^2.24.0"
+		"moment": "^2.24.0",
+		"readline-sync": "^1.4.10"
 	}
 }

@@ -51,6 +51,10 @@ export const execute = (command,options) => new Promise((resolve,reject)=>{
 	exec(command || defaultCommand,options,(err,stdout,stderr)=>stdout ? resolve(stdout) : reject(err||stderr))
 })
 
+export const executeSequentially = (commands) => {
+	return commands.reduce((lastPromise, command)=>lastPromise.then(()=>execute(command)), Promise.resolve())
+}
+
 
 export const moduleContainsPackageInDependencies = (n,p) => {
 	const packageJsonFile = getModulePackageJson(n);
