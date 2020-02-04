@@ -14,7 +14,11 @@ if(!startingModule){
 }
 
 const startingIndex = Object.keys(config).indexOf(process.argv[2])
-const modulesToCascade = Object.keys(config).slice(startingIndex===-1?0:startingIndex)
+if(startingIndex===-1){
+	console.log('Cant find the specified module...')
+	process.exit()
+}
+const modulesToCascade = Object.keys(config).slice(startingIndex)
 
 modulesToCascade.forEach(n=>{
 	const moduleDependencies = Object.keys(config).filter(ourDependency=>moduleContainsPackageInDependencies(n,ourDependency))
