@@ -233,7 +233,7 @@ const SchedulerAppender = (props) => {
 			}
 		}
 		let {position, ...otherSchedulerOptions} = props.schedulerOptions || {};
-		const newColumn = {scheduler: {cellType: 'scheduler',height: rowHeight, headerType: <SchedulerHeader data={schedulerheaderdata}/>, ...otherSchedulerOptions}};
+		const newColumn = {scheduler: {cellType: <SchedulerCell/>,height: rowHeight, headerType: <SchedulerHeader data={schedulerheaderdata}/>, ...otherSchedulerOptions}};
 		position = position || 'end';
 		
 		return injectObjectInObject(props.columnsInfo, newColumn, position)
@@ -319,7 +319,6 @@ const SchedulerAppender = (props) => {
 				children: newProps.children && newProps.children.props.children,
 				data: addSchedulerData(),
 				columnsInfo: addSchedulerColumn(),
-				cellTypes: {...newProps.cellTypes, scheduler: <SchedulerCell/>},
 				tableRef: tableRef,
 				onRender: ((x)=>{(newProps.onRender && newProps.onRender(x));onTableRender()}),
 				onSave: ((rowId, rowValues, editableValues)=>{( props.onSave && props.onSave(rowId, rowValues, editableValues)); onSaveScheduler(rowId, rowValues, editableValues); })

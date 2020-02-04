@@ -1,8 +1,12 @@
 const injectObjectInObject = (io,a,pos) => {
-	const okeys = Object.keys(io)
-	const o = io
-	const ObjectsToReplace = Object.keys(a).filter((k)=>okeys.includes(k))
-	ObjectsToReplace.forEach(k=>o[k]=a[k])
+	let okeys = Object.keys(io)
+	let o = {...io}
+	const ObjectToReplace = Object.keys(a).find((k)=>okeys.includes(k))
+	if(ObjectToReplace){
+		okeys = okeys.filter(k=>k!==ObjectToReplace)
+		const {[ObjectToReplace]:_, ...rest} = o
+		o = rest
+	}
 
 	let n;
 	switch(pos){

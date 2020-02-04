@@ -19,7 +19,7 @@ const Row = (props) => {
 		keys.map((col, index) => {
 			const editRights = editableCells.includes(col);
 			const red = invalidCells.includes(col);
-			const columnCellType = cellTypes[columnsInfo[col].cellType]
+			const columnCellType = typeof(columnsInfo[col].cellType)==='string' ? cellTypes[columnsInfo[col].cellType] : columnsInfo[col].cellType
 
 			const lastOne = index === keys.length - 1;
 			const style = { width: Math.round(widths[col]), minHeight: heights[col] };

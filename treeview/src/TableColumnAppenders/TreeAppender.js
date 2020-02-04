@@ -57,7 +57,7 @@ const TreeAppender = (props) => {
 	const addTreeColumn = ()=>{
 		let {position, ...otherTreeOptions} = props.treeOptions || {}
 		position = position || 'start';
-		const newColumn = {treeExpander: {cellType: 'tree', height: (props.height || 0), headerData: 'Tree', ...otherTreeOptions}}
+		const newColumn = {treeExpander: {cellType: <TreeCell />, height: (props.height || 0), headerData: 'Tree', ...otherTreeOptions}}
 
 		return injectObjectInObject(props.columnsInfo, newColumn, position);
 	}
@@ -69,7 +69,6 @@ const TreeAppender = (props) => {
 		React.cloneElement(newProps.children,
 		{...newProps,
 		children: newProps.children && newProps.children.props.children,
-		cellTypes: {...newProps.cellTypes, tree: <TreeCell /> },
 		data: tableData,
 		columnsInfo: columnsInfo})
 	);
