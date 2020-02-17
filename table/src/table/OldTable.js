@@ -4,7 +4,7 @@ import Row from '../row/Row';
 import Cell from '../cells/Cell/Cell';
 import HeaderCellDisplay from './HeaderCellDisplay';
 import { withResizeDetector } from 'react-resize-detector';
-import './Table.css';
+import './OldTable.css';
 
 // KNOWN BUG: MILLION RERENDERS
 
@@ -336,7 +336,7 @@ class Table extends Component {
 								return (
 									<th className={'table-header ' + (style.tableHeader || 'table-header-visuals')} key={colkey} style={{ minWidth: this.state.widths[colkey], position: 'relative' }}>
 										{(this.props.getContextMenu && this.props.getContextMenu(colkey) || null)}						
-										<Cell data={data} style={headerStyle} type={type} />
+										<Cell data={data} type={type} />
 										{!lastOne && <div style={{ touchAction: 'none', position: 'absolute', WebkitTransform: 'translate(7px)', transform: 'translateX(7px)', top: 0, right: 0, height: '100%', width: '15px', cursor: 'w-resize', zIndex: 1 }} onPointerDown={e => this.onMouseDown(e, colkey)} onPointerUp={this.stopPr} />}
 									</th>
 								);

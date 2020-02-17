@@ -6,6 +6,8 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import reducer from './store/reducer';
+import version from './version'
+console.log(`Refreshed at: ${version.version}`)
 
 const store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 

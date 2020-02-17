@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import {RightClickMenuWrapper} from '@execview/reusable';
+import {RightClickMenuWrapper, useDimensions} from '@execview/reusable';
 import classes from './ColorCell.module.css';
 
 const ColorCell = (props) => {
+	const [selfRef, getDimensions] = useDimensions()
+	const selfDimensions = getDimensions()
 	const [open, setOpen] = useState(false)
 	const inlineMode = props.inline;
 	const colors = props.colorStrings || { green: 'green', amber: 'amber', red: 'red', grey: 'grey', blue: 'blue'};
@@ -26,13 +28,13 @@ const ColorCell = (props) => {
 		props.onValidateSave(newData);
 	};
 
-	const width = props.style.width >= 137 ? props.style.width : 137;
+	const width = selfDimensions.width >= 137 ? selfDimensions.width : 137;
 
-	const display = props.style.width >= 95 ? bigView : smallView;
+	const display = selfDimensions.width >= 95 ? bigView : smallView;
 
 
 	return (
-		<div style={{ height: '100%' }}>
+		<div ref={selfRef} style={{ height: '100%' }}>
 			<div style={{ height: '100%' }}>
 				{display}
 			</div>

@@ -77,7 +77,7 @@ const App = (props) => {
 		const imageDisplayData = gaais && (items.map(u => gaais[u].image) || []);
 		return <ImageDisplay data={imageDisplayData} style={props.style} />;
 	};
-	const InPlaceCellPropsGenericAssign = { data: ['b', 'c'], type: <GenericAssignCell items={gaais} getOption={id => <div>{gaais[id].name}</div>} getSearchField={id => gaais[id].name} display={<Display />} />, onValidateSave: ((x) => { console.log(x); }) };
+	const InPlaceCellPropsGenericAssign = { data: ['b', 'c'], type: <GenericAssignCell items={gaais} getOption={id => <div>{gaais[id].name}</div>} getSearchField={id => gaais[id].name} display={<Display />} />, onValidateSave: ((x) => { console.log(x); }), style:{width: '70px'} };
 
 	const addRow = () => {
 		console.log('adding new row')

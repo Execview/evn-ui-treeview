@@ -1,31 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import classes from './InPlaceCell.module.css';
 import Cell from '../Cell/Cell';
 
 
 const InPlaceCell = (props) => {
-	const [value, setValue] = useState();
+	const [internalData, setInternalData] = useState(props.data)
+	const [data, setData] = props.onValidateSave ? [props.data, props.onValidateSave] : [internalData, setInternalData]
 
-	useEffect(() => {
-		setValue(props.data);
-	}, [props.data]);
-	
-	const [editMode, setEditMode] = useState(false);
-
-	const inPlaceOnValidateSave = (data) => {
-		setValue(data);
-		setEditMode(false);
-	};
-
-	const newProps = { ...props,
-		data: value,
-		isActive: editMode,
-		onValidateSave: ((data) => { inPlaceOnValidateSave(data); props.onValidateSave && props.onValidateSave(data)})
-	};
+	const { className, style, ...OtherCellProps } = props //OtherCellProps contains isEditable, errorText and other miscellaneous props.
 
 	return (
-		<div onPointerDown={(e) => { if(props.type && props.type.editor) { e.preventDefault(); e.stopPropagation(); setEditMode(true); } }} className={`${classes['default-style']} ${(props.className || '')}`}>
-			<Cell {...newProps} />
+		<div className={`${classes['default-style']} ${(props.className || '')}`} style={props.style}>
+			<Cell data={data} onValidateSave={setData} {...OtherCellProps} />
 		</div>
 	)
 }

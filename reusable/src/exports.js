@@ -15,6 +15,7 @@ import recursiveDeepDiffs from './Functions/recursiveDeepDiffs'
 import recursiveDeepDiffsREACT from './Functions/recursiveDeepDiffsREACT'
 import fetchy from './Functions/fetchy'
 import useFunctionalRef from './Functions/useFunctionalRef'
+import useDimensions from './Functions/useDimensions'
 
 module.exports = {
 	Button,
@@ -32,5 +33,6 @@ module.exports = {
 	recursiveDeepDiffs,
 	recursiveDeepDiffsREACT,
 	fetchy,
-	useFunctionalRef
+	useFunctionalRef,
+	useDimensions
 };

@@ -1,145 +1,129 @@
-import React, {useState, useEffect} from 'react';
-import Row from '../row/Row';
+import React, { useState, useEffect } from 'react';
 import Cell from '../cells/Cell/Cell';
-import Spans from './Spans';
-import './Table.css';
+import Resizer from './Resizer'
+
+import classes from './Table.module.css'
 
 const Table = (props) => {
+	const MAX_FRS = 100 //sum of frs will always be this number after normalising
+	const PIXELY_SCALE = window.innerWidth
+	const DEFAULT_MINIMUM_WIDTH = '100px'
+
 	const data = props.data
 	const columnsInfo = props.columnsInfo
 	const cellTypes = props.cellTypes
-	const onSave = props.onSave
-	const dataSort = props.dataSort || {};
 
-	const [currentSort, setCurrentSort] = useState({}) //{col: 'RAG', asc: 'desc'}
-	const [widths, setWidths] = useState(Object.fromEntries(Object.keys(columnsInfo).map(k=>[k,'auto'])))
-
+	const externalSetWidths = props.setWidths
 	
-	const resizerThing = <div>|</div>
+	//#region const [widths, setWidths] = horribleStateThingWithNormalisation()
+	const normaliseWidths = (widths,maxFrs=MAX_FRS) => { 
+		const normalisationFactor = Object.values(widths).reduce((t,v)=>t+v,0)/maxFrs
+		const normalisedWidths = Object.fromEntries(Object.entries(widths).map(([c,w])=>[c,w/normalisationFactor]))
+		return normalisedWidths
+	}
+	const averageWidth = Object.values(columnsInfo).filter(v=>v.width).reduce((t,v,i)=>{if(i===0){return v.width || 0}return (t*i+v.width)/(i+1)},0) // calculates the average of the frs that exist
+	const getWidthsFromColumnsInfo = (ci) => Object.fromEntries(Object.entries(ci).map(([k, col]) => {
+		return [k, col.width || averageWidth]
+	}))
+	const currentWidths = getWidthsFromColumnsInfo(columnsInfo)
+	const [selfWidths, setSelfWidths] = useState(currentWidths)
+	useEffect(()=>{if(!externalSetWidths && JSON.stringify(currentWidths)!==JSON.stringify(widths)){setWidths(currentWidths)}},[columnsInfo])
+	const [nonNormalWidths, setNonNormalWidths] = !externalSetWidths ? [selfWidths, setSelfWidths] : [currentWidths, externalSetWidths]
+	const [widths, setWidths] = [normaliseWidths(nonNormalWidths), (newWidths)=>setNonNormalWidths(normaliseWidths({...widths, ...newWidths}))]
+	//#endregion
 
-	const onClickHeader = (col) => {
-		setCurrentSort({col: col, asc: !currentSort.asc})
+	//#region resizeColumns logic
+	const [resizerState, setResizerState] = useState()
+	const resizeColumns = (e) => {
+		if(!resizerState){return}
+		const mouseDelta = e.clientX - resizerState.initialPosition
+		const pixelyWidths = normaliseWidths(widths, PIXELY_SCALE)
+		const changes = {
+			[resizerState.leftColumnName]: Math.max(0,resizerState.leftColumnInitialWidth + mouseDelta),
+			[resizerState.rightColumnName]: Math.max(0,resizerState.rightColumnInitialWidth - mouseDelta)
+		} 
+		setWidths(normaliseWidths({...pixelyWidths,...changes},MAX_FRS))
 	}
 	
+	const addResizeListeners = (e, column) => {
+		e.preventDefault();
+		e.stopPropagation();
+		const leftColumnName = Object.keys(widths)[Object.keys(widths).indexOf(column)-1]
+		const pixelyWidths = normaliseWidths(widths, PIXELY_SCALE)
+		setResizerState({
+			initialPosition: e.clientX,
+			leftColumnName: leftColumnName,
+			leftColumnInitialWidth: pixelyWidths[leftColumnName],
+			rightColumnName: column,
+			rightColumnInitialWidth: pixelyWidths[column]
+		});
+		
+	}
+	const removeResizeListeners = (e) => {
+		e.preventDefault();
+		e.stopPropagation();
+		setResizerState(null)
+	}
+	
+	useEffect(()=>{
+		if(resizerState){
+			document.addEventListener('pointermove', resizeColumns);
+			document.addEventListener('pointerup', removeResizeListeners);
+		}
+		return ()=>{
+			document.removeEventListener('pointermove', resizeColumns);
+			document.removeEventListener('pointerup', removeResizeListeners);
+		}
+	},[resizerState])
+	//#endregion
+
+
+	let header = []
+	let cells = []
+
+
+	//header
+	Object.keys(columnsInfo).forEach((col, i) => {
+		const firstOne = i===0
+		const column = columnsInfo[col];
+		const headerType = typeof (column.headerType) === 'string' ? cellTypes[column.headerType] : column.headerType
+		const headerData = column.headerData;
+		header.push(
+			<div key={col+i} style={{ position: 'relative', border: '1px solid red', gridColumnStart: col }}>
+				{ !firstOne && <Resizer column={col} onPointerDownOnColumn={addResizeListeners}/> }
+				<Cell data={headerData} type={headerType} isEditable={false} />
+			</div>
+		);
+	})
+
+	//cells
+	Object.keys(data).forEach((row, i) => {
+		const isEven = i % 2 === 0
+		Object.keys(columnsInfo).forEach((col, j) => {
+			const firstOne = j===0
+			const column = columnsInfo[col]
+			const type = typeof (column.cellType) === 'string' ? cellTypes[column.cellType] : column.cellType
+			const cell = data[row][col] || {};
+			cells.push(
+				<div key={`cell${i}${j}`} style={{position: 'relative', border: '1px solid transparent', backgroundColor: isEven ? '#4f5564' : 'auto' }}>
+					{ !firstOne && <Resizer column={col} onPointerDownOnColumn={addResizeListeners}/>}
+					<Cell data={cell.data} type={type} isEditable={cell.isEditable} />
+				</div>
+			);
+		})
+	})
+
+	const gridTemplateColumnsString = Object.entries(columnsInfo).reduce((t,[c,col]) => `${t} [${c}] minmax(${col.minWidth ? col.minWidth+'px' : DEFAULT_MINIMUM_WIDTH},${widths[c]+'fr'})`, ' ')
+
+	//console.log(gridTemplateColumnsString)
+
 	return (
-		<table>
-			<thead>
-				<tr style={{display:'grid', gridTemplateColumns: Object.keys(columnsInfo).reduce((t,col)=>`${t} [${col}] ${widths[col]}`,'')}}>
-					{Object.keys(columnsInfo).map((col, i) => {
-						const column = columnsInfo[col];
-						let spans = 'both';
-						if (dataSort && dataSort[column.cellType]) {
-							if (currentSort.col) {
-								spans = col === currentSort.col ? (currentSort.asc ? 'arrow-down' : 'arrow-up') : '';
-							}
-						} else {
-							spans = '';
-						}
-						if(spans){console.log(spans)}
-						const headerType = typeof (column.headerType) === 'string' ? cellTypes[column.headerType] : column.headerType
-						const headerData = column.headerData;
-						return (
-							<th onClick={()=>onClickHeader(col)}>
-								<div style={{display: 'flex', alignItems: 'center', border: '1px solid red', gridColumnStart: col}}>
-									<Spans spans={spans} />
-									{/* {resizerThing} */}
-									<Cell data={headerData} type={headerType} isEditable={false} />
-								</div>
-							</th>
-						);
-					})}
-				</tr>
-			</thead>
-			<tbody>
-				{Object.keys(data).map((row,i) => {
-					return (
-						<tr>
-							{Object.keys(columnsInfo).map((col, j) => {
-								const column = columnsInfo[col]
-								const type = typeof (column.cellType) === 'string' ? cellTypes[column.cellType] : column.cellType
-								const cell = data[row][col] || {};
-								return (
-									<td style={{border: '1px solid red'}}>
-										{/* {resizerThing} */}
-										<Cell data={cell.data} type={type} isEditable={cell.isEditable}/>
-									</td>
-								);
-							})}
-						</tr>
-					);
-				})}
-			</tbody>
-		</table>
-	) 	
+		<div style={{ display: 'grid', gridTemplateColumns: gridTemplateColumnsString }}>
+			{header}
+			{cells}
+		</div>
+	)
 }
-// 	return (
-// 		<table className={'table ' + (style.table || '')} ref={props.tableRef}>
-// 			<thead>
-// 				<tr className={'table-row ' + (style.tableRow || 'table-row-visuals')}>
-// 					{Object.keys(state.columnsInfo).map((colkey, index) => {
-// 						const col = state.columnsInfo[colkey];
-// 						const lastOne = index === Object.keys(state.columnsInfo).length - 1;
-
-						// let spans = 'both';
-						// if (props.dataSort && props.dataSort[col.cellType]) {
-						// 	if (state.column) {
-						// 		spans = colkey === state.column ? (state.order === 'desc' ? 'arrow-down' : 'arrow-up') : '';
-						// 	}
-						// } else {
-						// 	spans = '';
-						// }
-
-						// let data = null;
-						// const headerStyle = { width: Math.round(state.widths[colkey]), overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' };
-						// let type = null;
-						// if (col.headerType) {
-						// 	data = col.headerData;
-						// 	type = typeof (col.headerType) === 'string' ? props.cellTypes[col.headerType] : col.headerType;
-						// 	headerStyle.width = state.widths[colkey] - 10;
-						// } else {
-						// 	headerStyle.width = Math.floor(state.widths[colkey]);
-						// 	data = { spans, title: col.headerData, sortData: () => { if (props.dataSort && props.dataSort[col.cellType]) { sortData(colkey, col.cellType); } }, };
-						// 	type = <HeaderCellDisplay />;
-						// }
-
-						// return (
-						// 	<th className={'table-header ' + (style.tableHeader || 'table-header-visuals')} key={colkey} style={{ width: state.widths[colkey] }}>
-						// 		<Cell data={data} style={headerStyle} type={type} />
-						// 		{!lastOne && <div style={{ touchAction: 'none', position: 'absolute', WebkitTransform: 'translate(7px)', transform: 'translateX(7px)', top: 0, right: 0, height: '100%', width: '15px', cursor: 'w-resize' }} onPointerDown={e => onMouseDown(e, colkey)} onPointerUp={stopPr} />}
-						// 	</th>
-						// );
-// 					})}
-// 				</tr>
-// 			</thead>
-// 					<tbody>
-// 						{state.orderedData.map((entry) => {
-// 							let rowStyles = {};
-// 							if (props.selectedRow === entry) {
-// 								rowStyles = { ...rowStyles, backgroundColor: '#3a414f' };
-// 							}	
-// 							return (
-// 								<tr className={'table-row ' + (style.tableRow || 'table-row-visuals')} key={`tr${entry}`} style={rowStyles}>
-// 									<Row
-// 										columnsInfo={props.columnsInfo}
-// 										editableCells={state.editableCells[entry]}
-// 										invalidCells={state.invalidCells.filter(obj => obj.id === entry).map(el => el.col)}
-// 										rowData={state.data[entry]}
-// 										widths={state.widths}
-// 										heights={state.heights}
-// 										cellTypes={props.cellTypes}
-// 										onValidateSave={(col, data) => validateSave(entry, col, data)}
-// 										rules={props.rules}
-// 										onMouseDown={onMouseDown}
-// 										style={style}
-// 									/>
-// 								</tr>
-// 							);
-// 						})}
-// 					</tbody>
-// 				</table>
-// 	)
-// }
-
 
 // const getUniqueColumns = (data) => {
 // 	let uniqueColumns = []

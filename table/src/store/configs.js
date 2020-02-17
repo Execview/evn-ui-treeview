@@ -28,11 +28,11 @@ export const columnsInfo1 = {
 };
 
 export const columnsInfo2 = {
-	activityId: { cellType: 'text', headerData: 'Activity ID', width: 5, minWidth: 25, rule: 'textSize', filter:<TextFilter filterProperties={['activityId']}  text={{placeholder: 'Search for ID...'}}/>, filterFunction: TextFilterFunction},
+	activityId: { cellType: 'text', headerData: 'Activity ID', width: 5, minWidth: 45, rule: 'textSize', filter:<TextFilter filterProperties={['activityId']}  text={{placeholder: 'Search for ID...'}}/>, filterFunction: TextFilterFunction},
 	startDate: { cellType: 'date', headerData: 'Start Date', width: 10, rule: 'dateExists', filter: <DateFilter filterProperties={['startDate']}/>, filterFunction: DateFilterFunction  },
 	latestProgress: { cellType: 'textarea', headerData: 'Latest Progress', rule: 'textSize', filter: <TextFilter filterProperties={['latestProgress']}/>, filterFunction: TextFilterFunction},
 	dueDate: { cellType: 'date', headerData: 'Due Date', width: 10, filter: <DateFilter filterProperties={['dueDate']}/>, filterFunction: DateFilterFunction },
-	progress: { cellType: 'color', headerData: 'RAG', width: 10, minWidth: 25, filter: <ColorFilter colorStrings={progressValues} filterProperties={['progress']}/>, filterFunction: ColorFilterFunction  },
+	progress: { cellType: 'color', headerData: 'RAG', width: 10, minWidth: 45, filter: <ColorFilter colorStrings={progressValues} filterProperties={['progress']}/>, filterFunction: ColorFilterFunction  },
 	assignedUsers: { cellType: 'users', headerData: 'Assigned Users', width: 10, headerType: 'userHeader' },
 
 	

@@ -1,8 +1,9 @@
 import {useRef, useLayoutEffect, useState} from 'react'
 
-const useFunctionalRef = (initialValue) => {
-	const myRef = useRef(initialValue)
-	const [selfRef, setSelfRef] = useState({current: initialValue})
+const useFunctionalRef = (replacementRef) => {
+	const internalRef = useRef()
+	const myRef = replacementRef || internalRef
+	const [selfRef, setSelfRef] = useState({current: null})
 	useLayoutEffect(()=>{
 		if(selfRef.current!==myRef.current){
 			setSelfRef(myRef)

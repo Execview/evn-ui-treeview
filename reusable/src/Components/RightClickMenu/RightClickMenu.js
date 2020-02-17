@@ -1,25 +1,17 @@
-import React, {useState, useLayoutEffect, useRef} from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom'
 import Panel from './Panel/Panel'
 import OCO from '../OCO/OCO'
-import useFunctionalRef from '../../Functions/useFunctionalRef'
 import classes from './RightClickMenu.module.css'
+import useDimensions from '../../Functions/useDimensions'
 
 const RightClickMenu = (props) => {
 	const rightClickDOMNode = props.rightClickDOMNode || document.getElementById('root')
-	const [selfRef, current] = useFunctionalRef()
-	const [selfDimensions, setSelfDimensions] = useState({ width: 0, height: 0 })
-	useLayoutEffect(()=>{
-		if(!current){return}
-		const newSelfRect = current.getBoundingClientRect()
-		const newSelfDimensions = { width: newSelfRect.width, height: newSelfRect.height }
-		if(JSON.stringify(newSelfDimensions)!==JSON.stringify(selfDimensions)){
-			setSelfDimensions(newSelfDimensions)
-		}
-	})
+	const [selfRef, getDimensions] = useDimensions()
+	const selfDimensions = getDimensions()
 
 	const page = {width: Math.min(window.innerWidth,rightClickDOMNode.clientWidth), height: Math.min(window.innerHeight,rightClickDOMNode.clientHeight)}
-	const menu = {width: selfDimensions.width, height: selfDimensions.height}
+	const menu = {width: selfDimensions.width || 0, height: selfDimensions.height || 0}
 
 	const takeParentLocation = props.takeParentLocation	
 

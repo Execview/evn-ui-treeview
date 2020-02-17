@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import RightClickMenu from './RightClickMenu';
 import useFunctionalRef from '../../Functions/useFunctionalRef';
+import useDimensions from '../../Functions/useDimensions';
 
 const RightClickMenuWrapper = (props) => {
+	const getParentFromCurrent = (c) => c && c.parentNode
 	const [wrapperRef, current] = useFunctionalRef();
-	const parentNode = current && current.parentNode;
+	const [wrapperRefCopy, getParentDimensions] = useDimensions({ref: wrapperRef, getNodeFromCurrent: getParentFromCurrent})
+	const parentNode = getParentFromCurrent(current)
 	const [selfOpen, setSelfOpen] = useState(false)
 	const [open, setOpen] = props.setOpen ? [props.open,props.setOpen] : [selfOpen, setSelfOpen]
 	const [position, setPosition] = useState(null);
@@ -13,17 +16,9 @@ const RightClickMenuWrapper = (props) => {
 		if (props.stopPropagation) { e.stopPropagation(); }
 
 		if (props.takeParentLocation) {
-			const PR = parentNode.getBoundingClientRect();
-			const newParentPosition = {
-				x: PR.left + window.pageXOffset,
-				y: PR.top + window.scrollY,
-				screenX: PR.left,
-				screenY: PR.top,
-				width: PR.width,
-				height: PR.height
-			};
-			setPosition(newParentPosition);
 			setOpen(true)
+			setPosition(getParentDimensions());
+			
 		} else {
 			const newMousePosition = {
 				x: e.pageX,
@@ -38,21 +33,21 @@ const RightClickMenuWrapper = (props) => {
 		}
 	};
 
-	const onLeftClick = (e) => { if (props.onLeftClick) { openMenu(e); } };
-	const onContextMenu = (e) => { if (!props.onLeftClick) { e.preventDefault(); openMenu(e); } };
-
 	useEffect(() => {
 		if (!parentNode) { return; }
+		const onLeftClick = (e) => { if (props.onLeftClick) { openMenu(e); } };
+		const onContextMenu = (e) => { if (!props.onLeftClick) { e.preventDefault(); openMenu(e); } };
 		parentNode.addEventListener('click', onLeftClick);
 		parentNode.addEventListener('contextmenu', onContextMenu);
+		
 		return (() => {
 			parentNode.removeEventListener('click',onLeftClick)
 			parentNode.removeEventListener('contextmenu',onContextMenu)
 		})
-	},[parentNode]);
+	});
 
 	return (
-        <div ref={wrapperRef}>
+        <div ref={wrapperRefCopy}>
 			{position && open && (
 				<RightClickMenu
 					rightClickDOMNode={props.rightClickDOMNode}

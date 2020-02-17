@@ -22,7 +22,6 @@ const Row = (props) => {
 			const columnCellType = typeof(columnsInfo[col].cellType)==='string' ? cellTypes[columnsInfo[col].cellType] : columnsInfo[col].cellType
 
 			const lastOne = index === keys.length - 1;
-			const style = { width: Math.round(widths[col]), minHeight: heights[col] };
 			const errorText = rules[columnsInfo[col].rule] ? rules[columnsInfo[col].rule].errorMessage : null;
 			return (
 				<td className={'table-datum ' + (cellStyleClass.tableDatum || 'table-datum-visuals')} key={col}>
@@ -32,10 +31,8 @@ const Row = (props) => {
 						className={'table-label ' + (editRights ? '' : 'no-edit')}
 					>
 						<Cell
-							style={style}
 							data={props.rowData[col]}
 							type={columnCellType}
-
 							isEditable={editRights}
 							onValidateSave={data => props.onValidateSave(col, data)}
 							errorText={red ? errorText : null}
