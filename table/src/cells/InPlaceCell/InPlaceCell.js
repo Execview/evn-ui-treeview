@@ -5,13 +5,13 @@ import Cell from '../Cell/Cell';
 
 const InPlaceCell = (props) => {
 	const [internalData, setInternalData] = useState(props.data)
-	const [data, setData] = props.onValidateSave ? [props.data, props.onValidateSave] : [internalData, setInternalData]
+	const [selfData, setSelfData] = props.onValidateSave ? [props.data, props.onValidateSave] : [internalData, setInternalData]
 
-	const { className, style, ...OtherCellProps } = props //OtherCellProps contains isEditable, errorText and other miscellaneous props.
+	const { className, style, data, ...OtherCellProps } = props //OtherCellProps contains isEditable, errorText and other miscellaneous props.
 
 	return (
 		<div className={`${classes['default-style']} ${(props.className || '')}`} style={props.style}>
-			<Cell data={data} onValidateSave={setData} {...OtherCellProps} />
+			<Cell data={selfData} onValidateSave={setSelfData} {...OtherCellProps} />
 		</div>
 	)
 }

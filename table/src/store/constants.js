@@ -1,5 +1,4 @@
-export const colors = { green: 'On track', amber: 'At Risk', red: 'Blocked', grey: 'Unknown Status', blue: 'Completed'};
-export const priority = { grey: 0, red: 1, amber: 2, green: 3 };
+export const progressValues = { green: 'On track', amber: 'At Risk', red: 'Blocked', grey: 'Unknown Status', blue: 'Completed'};
 export const countries = ['Afghanistan',
   'Albania',
   'Algeria',

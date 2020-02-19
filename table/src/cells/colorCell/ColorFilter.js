@@ -54,6 +54,6 @@ export default ColorFilter
 export const filter = (data, column, meta=[]) => {
 	return Object.fromEntries(Object.entries(data).filter(([rowkey,row])=>{
 		const color = row[column]
-		return !meta.includes(color) && !(color==='grey' && !color)
+		return !meta.includes(color) && !(meta.includes('grey') && !color)
 	}))
 }

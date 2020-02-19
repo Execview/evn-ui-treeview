@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import ImageDisplay from '../cells/imageDisplay/ImageDisplay';
+import ImageDisplay from '../cells/ImageDisplay/ImageDisplay';
 import './CircleUser.css';
 import AssignUsers from './AssignUsers';
+import RightClickMenuWrapper from '@execview/reusable/transpiled/Components/RightClickMenu/RightClickMenuWrapper';
 
 const UserRoleDisplay = (props) => {
 	const [open, setOpen] = useState(false);
@@ -18,7 +19,7 @@ const UserRoleDisplay = (props) => {
 	return (
 		<div className="user-cell" onClick={() => setOpen(true)}>
 			<ImageDisplay data={userImages} style={props.style} />
-			{open && (
+			<RightClickMenuWrapper open={open} setOpen={setOpen} onLeftClick takeParentLocation slideBox={0} moveBox={[150,0]} >
 				<AssignUsers
 					type={props.type || 'activity'}
 					assignedUsers={data}
@@ -28,7 +29,7 @@ const UserRoleDisplay = (props) => {
 					closeMenu={() => setOpen(false)}
 					onValidateSave={props.onValidateSave}
 				/>
-			)}
+			</RightClickMenuWrapper>
 		</div>
 	);
 };

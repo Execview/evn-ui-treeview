@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import errorIcon from '../../Resources/icons-info.svg';
+import errorIcon from './icons-info.svg';
 import classes from './TextCell.module.css';
 
 const TextCell = (props) => {

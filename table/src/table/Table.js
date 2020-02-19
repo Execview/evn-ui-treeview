@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Cell from '../cells/Cell/Cell';
-import Resizer from './Resizer'
-
+import Resizer from './Resizer/Resizer'
+import DefaultHeader from '../headers/DefaultHeader/DefaultHeader';
 import classes from './Table.module.css'
 
 const Table = (props) => {
@@ -81,17 +81,17 @@ const Table = (props) => {
 	let header = []
 	let cells = []
 
-
 	//header
 	Object.keys(columnsInfo).forEach((col, i) => {
 		const firstOne = i===0
 		const column = columnsInfo[col];
-		const headerType = typeof (column.headerType) === 'string' ? cellTypes[column.headerType] : column.headerType
-		const headerData = column.headerData;
+		const headerType = typeof (column.headerType) === 'string' ? <DefaultHeader data={column.headerType}/> : column.headerType
+		console.log(headerType)
 		header.push(
-			<div key={col+i} style={{ position: 'relative', border: '1px solid red', gridColumnStart: col }}>
+			<div key={col+i} className={`${classes['cell']} ${classes['header']}`} style={{ position: 'relative'}}>
+				{props.getContextMenu && props.getContextMenu(col)}
 				{ !firstOne && <Resizer column={col} onPointerDownOnColumn={addResizeListeners}/> }
-				<Cell data={headerData} type={headerType} isEditable={false} />
+				<Cell type={headerType} isEditable={false} />
 			</div>
 		);
 	})
@@ -99,44 +99,34 @@ const Table = (props) => {
 	//cells
 	Object.keys(data).forEach((row, i) => {
 		const isEven = i % 2 === 0
+		const isRowSelected = row === props.selectedRow
 		Object.keys(columnsInfo).forEach((col, j) => {
 			const firstOne = j===0
 			const column = columnsInfo[col]
-			const type = typeof (column.cellType) === 'string' ? cellTypes[column.cellType] : column.cellType
+			const type = column.cellType
 			const cell = data[row][col] || {};
+			const cellClassName = `${classes['cell']} ${isEven?classes['even-cell']:''} ${isRowSelected?classes['selected-row']:''}`
 			cells.push(
-				<div key={`cell${i}${j}`} style={{position: 'relative', border: '1px solid transparent', backgroundColor: isEven ? '#4f5564' : 'auto' }}>
+				<div key={`cell${i}${j}`} className={cellClassName} style={{position: 'relative'}}>
 					{ !firstOne && <Resizer column={col} onPointerDownOnColumn={addResizeListeners}/>}
-					<Cell data={cell.data} type={type} isEditable={cell.isEditable} />
+					<Cell data={cell.data} type={type} isEditable={cell.isEditable} onValidateSave={(data)=>{props.onSave(row,col,data)}} errorText={cell.errorText}/>
 				</div>
 			);
 		})
 	})
 
-	const gridTemplateColumnsString = Object.entries(columnsInfo).reduce((t,[c,col]) => `${t} [${c}] minmax(${col.minWidth ? col.minWidth+'px' : DEFAULT_MINIMUM_WIDTH},${widths[c]+'fr'})`, ' ')
+	const gridTemplateColumnsString = Object.entries(columnsInfo).reduce((t,[c,col]) => `${t} [${c}] minmax(${col.minWidth ? col.minWidth+'px' : DEFAULT_MINIMUM_WIDTH},${widths[c]+'fr'})`, '')
 
-	//console.log(gridTemplateColumnsString)
+	const gridTemplateRowsString = ''//Object.keys(data).reduce((t,k)=>`${t} [${k}] auto`,'')
 
 	return (
-		<div style={{ display: 'grid', gridTemplateColumns: gridTemplateColumnsString }}>
-			{header}
-			{cells}
+		<div className={classes['horizontal-scroll']}>
+			<div style={{ display: 'grid', gridTemplateColumns: gridTemplateColumnsString, gridTemplateRows: gridTemplateRowsString }}>
+				{header}
+				{cells}
+			</div>
 		</div>
 	)
 }
-
-// const getUniqueColumns = (data) => {
-// 	let uniqueColumns = []
-// 	for(const key in data){
-// 		const row = data[key]
-// 		for(const col in row){
-// 			if(!uniqueColumns.includes(col)){
-// 				uniqueColumns.push(col)
-// 			}
-// 		}
-// 	}
-// 	return uniqueColumns;
-// };
-
 
 export default Table
