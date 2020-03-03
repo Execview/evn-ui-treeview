@@ -21,7 +21,7 @@ const allItems = users;
 const Display = (props) => {
 	const items = props.items || [];
 	const imageDisplayData = items.map(u => users[u].image);
-	return <ImageDisplay data={imageDisplayData} style={props.style} isEditable={props.isEditable} placeholder={'Assign a user...'}/>;
+	return <ImageDisplay data={imageDisplayData} style={props.style} permission={props.permission} placeholder={'Assign a user...'}/>;
 };
 const getSearchField = (id) => {
 	return allItems[id].name;
@@ -120,12 +120,12 @@ export const columnsInfo1 = {
 };
 
 export const columnsInfo2 = {
-	activityId: { cellType: cellTypes['text'], headerType: 'Activity ID', width: 5, minWidth: 45, rule: 'textSize', filter:<TextFilter filterProperties={['activityId']}  text={{placeholder: 'Search for ID...'}}/>, filterFunction: TextFilterFunction},
-	startDate: { cellType: cellTypes['date'], headerType: 'Start Date', width: 10, rule: 'dateExists', filter: <DateFilter filterProperties={['startDate']}/>, filterFunction: DateFilterFunction  },
+	activityId: { cellType: cellTypes['text'], headerType: 'Activity ID', minWidth: 45, rule: 'textSize', filter:<TextFilter filterProperties={['activityId']}  text={{placeholder: 'Search for ID...'}}/>, filterFunction: TextFilterFunction},
+	startDate: { cellType: cellTypes['date'], headerType: 'Start Date', rule: 'dateExists', filter: <DateFilter filterProperties={['startDate']}/>, filterFunction: DateFilterFunction  },
 	latestProgress: { cellType: cellTypes['textarea'], headerType: 'Latest Progress', rule: 'textSize', filter: <TextFilter filterProperties={['latestProgress']}/>, filterFunction: TextFilterFunction},
-	dueDate: { cellType: cellTypes['date'], headerType: 'Due Date', width: 10, filter: <DateFilter filterProperties={['dueDate']}/>, filterFunction: DateFilterFunction },
-	progress: { cellType: cellTypes['color'], headerType: 'RAG', width: 10, minWidth: 45, filter: <ColorFilter colorStrings={progressValues} filterProperties={['progress']}/>, filterFunction: ColorFilterFunction  },
-	assignedUsers: { cellType: cellTypes['users'], headerType: 'Assigned Users', width: 10, headerType: <UserHeader/> },
+	dueDate: { cellType: cellTypes['date'], headerType: 'Due Date', filter: <DateFilter filterProperties={['dueDate']}/>, filterFunction: DateFilterFunction },
+	progress: { cellType: cellTypes['color'], headerType: 'RAG',  minWidth: 45, filter: <ColorFilter colorStrings={progressValues} filterProperties={['progress']}/>, filterFunction: ColorFilterFunction  },
+	assignedUsers: { cellType: cellTypes['users'], headerType: 'Assigned Users', headerType: <UserHeader/> },
 };
 
 export const columnsInfo3 = {
@@ -137,56 +137,34 @@ export const columnsInfo3 = {
 	// employeeName: { cellType: cellTypes['dropdown'], headerType: 'Employee Name', width: 400 },
 };
 
-export const permissions1 = {
-	editableRows: [
-		'_w1232','_1235d','_m7ad1','_917gb','_1236d','_k8450','_u184b'
-	]
-};
-
-export const permissions2 = {
-	editableRows: [
-		'_1','_2','_4','_5'
-	],
-	exceptions: [
-		{row: '_2', col: 'start'},
-		{row: '_4', col: 'start'},
-	]
-};
-
-export const permissions3 = {
-	editableRows: [
-		'_1','_2','_3','_4','_5','_6','_7'
-	]
-};
-
 export const newData1 = {
-	_w1232: { company: 'McLaren', contact: 'WL', country: 'United Kingdom', value: 26, progress: 'red', dueDate: new Date('2018-03-17T10:39:57.362Z'), images: ['https://upload.wikimedia.org/wikipedia/commons/c/c1/Mclaren_logo.jpg', 'https://www.supercars.net/blog/wp-content/uploads/2016/03/Screenshot-2016-03-24-12.48.38.png'] },
-	_1235d: { company: 'Koenigsegg', contact: 'JJ', country: 'Sweden', value: 54, progress: 'amber', dueDate: new Date('2017-08-17T10:39:57.362Z'), images: ['https://fsa.zobj.net/crop.php?r=NLYiH-gLk0ZjeMxIBRcaC1knnxFlUJeM5ibM_-HgZVY0zWN3_50DxVgAS7-Zlfbwsd3Aw5han1TZbQEki6F_FzTTopRZsUDyTMsynwkA36kIMiyVnBNkyt2spNAOg5gUVP4TjHNTbzqzjY4A_OZ3mSl-D7s5hgAYfYu1Pb9PGhjAb6AtIwrzR8MtVQQ'] },
-	_m7ad1: { company: 'Porsche', contact: 'ZG', country: 'Germany', value: 78, progress: 'green', images: ['https://render.fineartamerica.com/images/rendered/default/poster/8/10/break/images/artworkimages/medium/1/19-porsche-logo-porsche-logo.jpg'] },
-	_917gb: { company: 'Aston Martin', contact: 'JD', country: 'United Kingdom', value: 132, progress: 'amber', dueDate: new Date('1996-09-13T10:39:57.362Z'), images: ['https://upload.wikimedia.org/wikipedia/en/2/2c/Aston_Martin_Logo_2018.png'] },
-	_1236d: { company: 'Lamborghini', contact: 'BB', country: 'Italy', value: 64, images: ['https://upload.wikimedia.org/wikipedia/en/d/df/Lamborghini_Logo.svg', 'https://www.lamborghini.com/sites/it-en/files/DAM/lamborghini/model/huracan/evo-slider/model/Huracan%20Spyder_scontorno.png'] },
-	_k8450: { company: 'Bugatti', contact: 'DT', country: 'France', progress: 'red', dueDate: new Date('2019-01-17T10:39:57.362Z'), images: ['https://3dexport.com/items/2011/07/05/74832/37701/bugatti_logo_3d_model_c4d_max_obj_fbx_ma_lwo_3ds_3dm_stl_247998.jpg'] },
-	_u184b: { company: 'Mercedes-Benz', contact: 'WL', country: 'Germany', progress: 'green', images: ['https://i.ebayimg.com/images/g/J9sAAOSwol5Y17RS/s-l300.jpg'] }
+	_w1232: { meta: {permission: 4}, company: 'McLaren', contact: 'WL', country: 'United Kingdom', value: 26, progress: 'red', dueDate: new Date('2018-03-17T10:39:57.362Z'), images: ['https://upload.wikimedia.org/wikipedia/commons/c/c1/Mclaren_logo.jpg', 'https://www.supercars.net/blog/wp-content/uploads/2016/03/Screenshot-2016-03-24-12.48.38.png'] },
+	_1235d: { meta: {permission: 4}, company: 'Koenigsegg', contact: 'JJ', country: 'Sweden', value: 54, progress: 'amber', dueDate: new Date('2017-08-17T10:39:57.362Z'), images: ['https://fsa.zobj.net/crop.php?r=NLYiH-gLk0ZjeMxIBRcaC1knnxFlUJeM5ibM_-HgZVY0zWN3_50DxVgAS7-Zlfbwsd3Aw5han1TZbQEki6F_FzTTopRZsUDyTMsynwkA36kIMiyVnBNkyt2spNAOg5gUVP4TjHNTbzqzjY4A_OZ3mSl-D7s5hgAYfYu1Pb9PGhjAb6AtIwrzR8MtVQQ'] },
+	_m7ad1: { meta: {permission: 4}, company: 'Porsche', contact: 'ZG', country: 'Germany', value: 78, progress: 'green', images: ['https://render.fineartamerica.com/images/rendered/default/poster/8/10/break/images/artworkimages/medium/1/19-porsche-logo-porsche-logo.jpg'] },
+	_917gb: { meta: {permission: 4}, company: 'Aston Martin', contact: 'JD', country: 'United Kingdom', value: 132, progress: 'amber', dueDate: new Date('1996-09-13T10:39:57.362Z'), images: ['https://upload.wikimedia.org/wikipedia/en/2/2c/Aston_Martin_Logo_2018.png'] },
+	_1236d: { meta: {permission: 4}, company: 'Lamborghini', contact: 'BB', country: 'Italy', value: 64, images: ['https://upload.wikimedia.org/wikipedia/en/d/df/Lamborghini_Logo.svg', 'https://www.lamborghini.com/sites/it-en/files/DAM/lamborghini/model/huracan/evo-slider/model/Huracan%20Spyder_scontorno.png'] },
+	_k8450: { meta: {permission: 1}, company: 'Bugatti', contact: 'DT', country: 'France', progress: 'red', dueDate: new Date('2019-01-17T10:39:57.362Z'), images: ['https://3dexport.com/items/2011/07/05/74832/37701/bugatti_logo_3d_model_c4d_max_obj_fbx_ma_lwo_3ds_3dm_stl_247998.jpg'] },
+	_u184b: { meta: {permission: 1}, company: 'Mercedes-Benz', contact: 'WL', country: 'Germany', progress: 'green', images: ['https://i.ebayimg.com/images/g/J9sAAOSwol5Y17RS/s-l300.jpg'] }
 };
 
 export const newData2 = {
-	_1: { activityId: '', activityTitle: 'Fix PDF', progress: 'green', dueDate: new Date('2018-03-17T10:39:57.362Z'), employeeName: '', assignedUsers: [{ user: 'abd4', role: 'Project Manager', department: 'Kitten Petter' }, { user: 'gte3', role: 'Project Manager' }, { user: 'plo4', role: 'Pleb' }] },
-	_2: { activityId: '1251251', activityTitle: 'Mobile Shipment', startDate: new Date('2017-08-17T10:39:57.362Z'), latestProgress: 'The current task is in progress and about to be evaluated', progress: 'amber', dueDate: new Date('2017-08-17T10:39:57.362Z'), employeeName: 'Mark', assignedUsers: [{ user: 'abd4', role: 'Legendary Consumer' }] },
-	_3: { activityId: '11241', activityTitle: 'Things to Do', startDate: new Date('2017-08-17T10:39:57.362Z'), latestProgress: 'In progress', progress: 'red', employeeName: 'Paul', assignedUsers: [{ user: 'rew7', role: 'Wizard' }, { user: 'gte3', role: 'Project Manager' }] },
-	_4: { activityId: '765976', activityTitle: 'Replace Tire', startDate: new Date('2017-08-17T10:39:57.362Z'), latestProgress: 'Done', dueDate: new Date('1996-09-13T10:39:57.362Z'), employeeName: 'Agam', assignedUsers: [{ user: 'jio9', role: 'Project Manager' }] },
-	_5: { activityId: '783434', activityTitle: 'ANUYIC', startDate: new Date('2017-08-17T10:39:57.362Z'), latestProgress: '', employeeName: 'James', progress: 'blue', assignedUsers: [{ user: 'abd4', role: 'Peasant' }, { user: 'gte3', role: 'Project Manager' }, { user: 'plo4', role: 'Peasant' }, { user: 'rew7', role: 'Project Manager' }, { user: 'jio9', role: 'Slacker' }] },
-	_6: { activityTitle: 'OAUWDA', startDate: new Date('2017-08-17T10:39:57.362Z'), latestProgress: '', dueDate: new Date('2019-01-17T10:39:57.362Z'), employeeName: 'Andras', assignedUsers: [], progress: 'red' },
-	_7: { activityId: '612422', activityTitle: 'AWDIA', startDate: new Date('2017-08-17T10:39:57.362Z'), latestProgress: '', employeeName: 'Salman', progress: 'amber' }
+	_1: { meta: {permission: 4}, activityId: '', activityTitle: 'Fix PDF', progress: 'green', dueDate: new Date('2018-03-17T10:39:57.362Z'), employeeName: '', assignedUsers: [{ user: 'abd4', role: 'Project Manager', department: 'Kitten Petter' }, { user: 'gte3', role: 'Project Manager' }, { user: 'plo4', role: 'Pleb' }] },
+	_2: { meta: {permission: 4}, activityId: '1251251', activityTitle: 'Mobile Shipment', startDate: new Date('2017-08-17T10:39:57.362Z'), latestProgress: 'The current task is in progress and about to be evaluated', progress: 'amber', dueDate: new Date('2017-08-17T10:39:57.362Z'), employeeName: 'Mark', assignedUsers: [{ user: 'abd4', role: 'Legendary Consumer' }] },
+	_3: { meta: {permission: 1}, activityId: '11241', activityTitle: 'Things to Do', startDate: new Date('2017-08-17T10:39:57.362Z'), latestProgress: 'In progress', progress: 'red', employeeName: 'Paul', assignedUsers: [{ user: 'rew7', role: 'Wizard' }, { user: 'gte3', role: 'Project Manager' }] },
+	_4: { meta: {permission: 1}, activityId: '765976', activityTitle: 'Replace Tire', startDate: new Date('2017-08-17T10:39:57.362Z'), latestProgress: 'Done', dueDate: new Date('1996-09-13T10:39:57.362Z'), employeeName: 'Agam', assignedUsers: [{ user: 'jio9', role: 'Project Manager' }] },
+	_5: { meta: {permission: 1}, activityId: '783434', activityTitle: 'ANUYIC', startDate: new Date('2017-08-17T10:39:57.362Z'), latestProgress: '', employeeName: 'James', progress: 'blue', assignedUsers: [{ user: 'abd4', role: 'Peasant' }, { user: 'gte3', role: 'Project Manager' }, { user: 'plo4', role: 'Peasant' }, { user: 'rew7', role: 'Project Manager' }, { user: 'jio9', role: 'Slacker' }] },
+	_6: { meta: {permission: 4}, activityTitle: 'OAUWDA', startDate: new Date('2017-08-17T10:39:57.362Z'), latestProgress: '', dueDate: new Date('2019-01-17T10:39:57.362Z'), employeeName: 'Andras', assignedUsers: [], progress: 'red' },
+	_7: { meta: {permission: 4}, activityId: '612422', activityTitle: 'AWDIA', startDate: new Date('2017-08-17T10:39:57.362Z'), latestProgress: '', employeeName: 'Salman', progress: 'amber' }
 };
 
 export const newData3 = {
-	_1: { activityId: '12425', activityTitle: 'Fix PDF', startDate: new Date('2017-08-17T10:39:57.362Z'), latestProgress: 'Fix Chromium', progress: 'green', dueDate: new Date('2018-03-17T10:39:57.362Z'), employeeName: '', assignedGeneric: ['abd4', 'gte3', 'plo4'] },
-	_2: { activityId: '1251251', activityTitle: 'Mobile Shipment', startDate: new Date('2017-08-17T10:39:57.362Z'), latestProgress: 'The current task is in progress and about to be evaluated', progress: 'amber', dueDate: new Date('2017-08-17T10:39:57.362Z'), employeeName: 'Mark' },
-	_3: { activityId: '11241', activityTitle: 'Things to Do', startDate: new Date('2017-08-17T10:39:57.362Z'), latestProgress: 'In progress', progress: 'red', employeeName: 'Paul' },
-	_4: { activityId: '765976', activityTitle: 'Replace Tire', startDate: new Date('2017-08-17T10:39:57.362Z'), latestProgress: 'Done', dueDate: new Date('1996-09-13T10:39:57.362Z'), employeeName: 'Agam', assignedGeneric: ['abd4'] },
-	_5: { activityId: '783434', activityTitle: 'ANUYIC', startDate: new Date('2017-08-17T10:39:57.362Z'), latestProgress: '', employeeName: 'James', progress: 'green' },
-	_6: { activityId: '12657', activityTitle: 'OAUWDA', startDate: new Date('2017-08-17T10:39:57.362Z'), latestProgress: '', dueDate: new Date('2019-01-17T10:39:57.362Z'), employeeName: 'Andras', assignedGeneric: [], progress: 'red' },
-	_7: { activityId: '612422', activityTitle: 'AWDIA', startDate: new Date('2017-08-17T10:39:57.362Z'), latestProgress: '', employeeName: 'Salman', progress: 'amber' }
+	_1: { meta: {permission: 4}, activityId: '12425', activityTitle: 'Fix PDF', startDate: new Date('2017-08-17T10:39:57.362Z'), latestProgress: 'Fix Chromium', progress: 'green', dueDate: new Date('2018-03-17T10:39:57.362Z'), employeeName: '', assignedGeneric: ['abd4', 'gte3', 'plo4'] },
+	_2: { meta: {permission: 4}, activityId: '1251251', activityTitle: 'Mobile Shipment', startDate: new Date('2017-08-17T10:39:57.362Z'), latestProgress: 'The current task is in progress and about to be evaluated', progress: 'amber', dueDate: new Date('2017-08-17T10:39:57.362Z'), employeeName: 'Mark' },
+	_3: { meta: {permission: 4}, activityId: '11241', activityTitle: 'Things to Do', startDate: new Date('2017-08-17T10:39:57.362Z'), latestProgress: 'In progress', progress: 'red', employeeName: 'Paul' },
+	_4: { meta: {permission: 1}, activityId: '765976', activityTitle: 'Replace Tire', startDate: new Date('2017-08-17T10:39:57.362Z'), latestProgress: 'Done', dueDate: new Date('1996-09-13T10:39:57.362Z'), employeeName: 'Agam', assignedGeneric: ['abd4'] },
+	_5: { meta: {permission: 4}, activityId: '783434', activityTitle: 'ANUYIC', startDate: new Date('2017-08-17T10:39:57.362Z'), latestProgress: '', employeeName: 'James', progress: 'green' },
+	_6: { meta: {permission: 1}, activityId: '12657', activityTitle: 'OAUWDA', startDate: new Date('2017-08-17T10:39:57.362Z'), latestProgress: '', dueDate: new Date('2019-01-17T10:39:57.362Z'), employeeName: 'Andras', assignedGeneric: [], progress: 'red' },
+	_7: { meta: {permission: 1}, activityId: '612422', activityTitle: 'AWDIA', startDate: new Date('2017-08-17T10:39:57.362Z'), latestProgress: '', employeeName: 'Salman', progress: 'amber' }
 };
 
 const crypto = require('crypto');
@@ -194,12 +172,9 @@ const hash = crypto.createHash('sha256');
 
 const columnsInfo0 = columnsInfo1;
 const newData0 = {};
-const permissions0 = {
-	editableRows:[]
-};
+
 for (let i = 0; i < 120; i++) {
 	const newId = '_' + hash.update(Date.now() + Math.random().toString()).digest('hex').substring(0, 5);
-	newData0[newId] = { company: 'McLaren', contact: 'WL', country: 'United Kingdom', value: 26, progress: 'green', dueDate: new Date('2018-03-17T10:39:57.362Z') };
-	permissions0.editableRows.push(newId)
+	newData0[newId] = { meta: {permission: 4}, company: 'McLaren', contact: 'WL', country: 'United Kingdom', value: 26, progress: 'green', dueDate: new Date('2018-03-17T10:39:57.362Z') }
 }
-export { newData0, permissions0, columnsInfo0 };
+export { newData0, columnsInfo0 };

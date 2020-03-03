@@ -1,57 +1,47 @@
 /* eslint-disable guard-for-in */
 import React, {useState} from 'react';
-//import Table from '../table/OldTable';
 import Table from '../table/Table';
 import './TableWrapper.css';
 
 const TableWrapper = (props) => {
 
-	const [selfColumnsInfo, setSelfColumnsInfo] = useState(props.columnsInfo)
-	const [columnsInfo, setColumnsInfo] = props.setColumnsInfo ? [props.columnsInfo, props.setColumnsInfo] : [selfColumnsInfo, setSelfColumnsInfo]
+	const [internalColumnChanges, setInternalColumnChanges] = useState({})
 
-	const permissions = props.permissions || {};
+	const appendInternalColumnChanges = (ci, changes) => Object.fromEntries(Object.entries(ci).map(([k,col])=>[k,{...col,...changes[k]}]))
+	const alterInternalColumns = (newCi) => setInternalColumnChanges(Object.fromEntries(Object.entries(newCi).map(([k,col])=>{
+		const selfManagedProperties = ['width']
+		const alterations = Object.fromEntries(Object.entries(col).filter(([k,v])=>selfManagedProperties.includes(k)))
+		return [k,alterations]
+	})))
 
+
+	const [columnsInfo, setColumnsInfo] = props.setColumnsInfo ? [props.columnsInfo, props.setColumnsInfo] : [appendInternalColumnChanges(props.columnsInfo, internalColumnChanges),alterInternalColumns]
+
+	//rows have a meta property containing permission: n, and errors: {col: 'error text'}
 	const tableData = {};
 	for (const row in props.data) {
-		const rowIsEditable = (permissions.editableRows && permissions.editableRows.includes(row)) || (!props.permissions && props.onSave) // editableRows contains the row or no permissions are given + there is an onSave (i.e every row is probably editable)
 		for (const col in columnsInfo) {
 			if (!tableData[row]) { tableData[row] = {}; }
-			const errorTextCell = props.errors && props.errors.find(cell=>cell.row===row && cell.col ===col)
 			const cell = {
-				isEditable: rowIsEditable && !(permissions.exceptions && permissions.exceptions.find(cell=>cell.row===row && cell.col ===col)),
+				permission: (props.data[row].meta && props.data[row].meta.permission) || 1,
 				data: props.data[row][col],
-				errorText: errorTextCell && errorTextCell.errorText
+				errorText: props.data[row].meta && props.data[row].meta.errors && props.data[row].meta.errors[col] 
 			};
 			tableData[row][col] = cell;
 		}
 	}
-
-/*
-	permissions = {
-		editableRows: [
-			'_1','_2','_4','_5'
-		],
-		exceptions: [
-			{row: '_2', col: 'start'},
-			{row: '_4', col: 'start'},
-		]
-	}
-	
-	errors = [
-		{row: a, col: 'start', errorText: 'no'},
-		{row: d, col: 'test', errorText: 'why'}
-	]
-*/
 
 	return (
 		<div style={{ width: '100%', userSelect: 'none' }}>
 			<Table
 				data={tableData}
 				columnsInfo={columnsInfo}
+				setColumnsInfo={setColumnsInfo}
 				cellTypes={props.cellTypes}
 				onSave={props.onSave}
 				selectedRow={props.selectedRow}
 				getContextMenu={props.getContextMenu}
+				tableRef={props.tableRef}
 			/>
 		</div>
 	);

@@ -1,30 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import { useDimensions } from '@execview/reusable'
 import SchedulerOverlay from './SchedulerOverlay'
 import SchedulerMenu from './SchedulerMenu'
 import classes from './SchedulerHeader.module.css';
-import { Button, OCO, RightClickMenuWrapper } from '@execview/reusable'
+import { Button, RightClickMenuWrapper } from '@execview/reusable'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment'
 
 const SchedulerHeader = (props) => {
-	const snaps = props.data.snaps || []
-	const style = props.style || {}
+	const data = props.data || {}
+	const snaps = data.snaps || []
+	const [selfRef, getSelfDimensions] = useDimensions()
 
-	const [tableRefCurrent, setTableRefCurrent] = useState(null)
-	useEffect(()=>{
-		if(props.data.tableRef){
-			setTableRefCurrent(props.data.tableRef.current)
-		}
-	},[props.data.tableRef])
-	
-	const tableHeight = tableRefCurrent ? tableRefCurrent.getBoundingClientRect().height : 0
+	const tableHeight = (data.getTableDimensions && data.getTableDimensions().height) || 0
 
 	useEffect(()=>{
-		props.data.getWidth && props.data.getWidth(style.width)
+		data.setWidth && data.setWidth(getSelfDimensions().width)
 	})
 
-	const formatString = props.data.timeFormatString || 'DD/MM/YY'
+	const formatString = data.timeFormatString || 'DD/MM/YY'
 	
 	const timeIntervals = snaps.map((snap,index)=>{
 		const diff = index !== snaps.length-1 ? Math.abs((snaps[index+1][1]-snap[1])/2) : 0;
@@ -43,7 +38,7 @@ const SchedulerHeader = (props) => {
 	})
 
 	return (
-		<div className={`${classes["header-cell"]} ${classes["no-select"]} ${classes["scheduler-header"]}`} style={{touchAction: 'pan-y' }} >
+		<div ref={selfRef} className={`${classes["header-cell"]} ${classes["no-select"]} ${classes["scheduler-header"]}`} style={{touchAction: 'pan-y' }} >
 			<svg height='100%' width='100%' onPointerDown={props.data.mouseOnScheduler}>
 				<text className={classes['header-text']}>
 				{timeIntervals}

@@ -27,8 +27,11 @@ export const copyTranspiledFolderIntoNodeModules = (n) => {
 	const modulesThatRequireN = Object.keys(config).filter(k=>moduleContainsPackageInDependencies(k,n))
 	modulesThatRequireN.forEach(k=>{
 		//copy transpiled n into k
-		const copy = process.platform === "win32"?'robocopy /E':'cp'
+		const isWindows = process.platform === "win32"
+		//if(isWindows){copyCommands.push(`rmdir \/F \/S \/Q "${path.resolve(getModulePath(k),`./node_modules/${n}/transpiled`)}"`)}
+		const copy = isWindows ? 'robocopy /E' : 'cp'
 		const copyCommand = `${copy} "${getTranspiledModulePath(n)}" "${path.resolve(getModulePath(k),`./node_modules/${n}/transpiled`)}"`
+		
 		copyCommands.push(copyCommand)
 	})
 

@@ -82,11 +82,6 @@ export const UNLINK_PARENT_BUBBLE = (state,action,reducer) => {
 			_data: {...newState._data,
 							[parentBubbleKey]:{...newState._data[parentBubbleKey],
 											ChildBubbles:{...rest}}}}
-		
-		//sort out side colours
-		newState = reducer(newState,{type: actionTypes.SET_ORIGINAL_COLOUR,key:action.key,side:'left'})
-		newState = reducer(newState,{type: actionTypes.SET_ORIGINAL_COLOUR,key:action.key,side:'right'})
-		newState = reducer(newState,{type: actionTypes.SET_ORIGINAL_COLOUR,key:action.key,side:'middle'})
 	}
 	return newState
 }

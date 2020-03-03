@@ -1,5 +1,5 @@
-export const getYPositionFromRowId = (id,rowHeights) => {
-		return (rowHeights[id] || {}).y || 0
+export const getYPositionFromRowId = (id,rowHeights,offset) => {
+		return (rowHeights[id] || {}).y - offset || 0
 }
 
 class SVGHolder {
@@ -43,7 +43,10 @@ export const getNearestSnapXToDate = (date,snaps)=>{
 	const val = date.valueOf()
     const daterangems = snaps.map(dateX=>dateX[0].valueOf())
 	const nearestTwoVals = getNearestValuesInArray(daterangems,val).slice(0,2)
-	const nearestTwoXs = nearestTwoVals.map(nt=>snaps[daterangems.indexOf(nt)][1])
+	const nearestTwoXs = nearestTwoVals.map(nt=>{
+		const nearestsSnap = snaps[daterangems.indexOf(nt)]
+		return (nearestsSnap && nearestsSnap[1]) || 0
+	})
 	const percentBetween = (val-nearestTwoVals[1])/(nearestTwoVals[0]-nearestTwoVals[1])
 	
 	const valX = nearestTwoXs[1] + (nearestTwoXs[0]-nearestTwoXs[1])*percentBetween

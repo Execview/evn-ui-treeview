@@ -1,7 +1,4 @@
-import { getNearestSnapXToDate } from './schedulerFunctions';
-
 var moment = require('moment')
- 
 
 export const getDrawnLinksFromData = (data,getBubbleYById,getBubbleXFromDate) => {
 	let drawLinks = []
@@ -41,7 +38,34 @@ export const getDrawnLinksFromData = (data,getBubbleYById,getBubbleXFromDate) =>
 	return drawLinks
 }
 
+export const getBubbleColours = (id, data, overrides={}) => {
+	const self = data[id]
+	const original = self.colour
+	let right = original
+	let left = original
+
+	if(self.ParentBubble && data[self.ParentBubble]){
+		const parent = data[self.ParentBubble]
+		const linkedSide = parent.ChildBubbles[id].childside
+		if(linkedSide==='left'){
+			left = parent.colour
+		} else {
+			right = parent.colour
+		}
+	}
+
+	const override = overrides[id]
+
+	return {
+		right:right,
+		middle:original,
+		left:left,
+		...override
+	}
+}
+
 export const getSnaps = (start, schedulerResolution, schedulerWidth, timeWidth, extrasnaps) =>{
+	if(!schedulerWidth){return []}
 	const resolutionMap = {hour:'h', day:'d', week:'w', month:'M'}
 	const timeIncrement = resolutionMap[schedulerResolution]
 	// console.log(timeIncrement)
@@ -50,7 +74,7 @@ export const getSnaps = (start, schedulerResolution, schedulerWidth, timeWidth, 
 	const getDateRange = (start, number)=>{
 		var daterange = []
 		for(let i=0; i<number; i++){
-			let currentdate = moment(start).add(i, schedulerResolution).toDate()
+			let currentdate = moment(start).add(i, timeIncrement).toDate()
 			// if([0,6].includes(moment(currentdate).day())){number++;continue;}
 
 			//EXPERIMENTAL -- deals with months that start with saturday/sunday/monday. pls remove
@@ -73,7 +97,6 @@ export const getSnaps = (start, schedulerResolution, schedulerWidth, timeWidth, 
 	for(let i=0;i<daterange.length;i++){
 		newXsnaps.push([daterange[i],(i-extrasnaps)*timeWidth])
 	}
-
 	return newXsnaps
 }
 

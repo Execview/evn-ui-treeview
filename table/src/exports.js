@@ -2,11 +2,11 @@ import Table from './tableWrapper/TableWrapper';
 import cats from './store/ElCatso';
 
 import UserRoleDisplay from './UserRoleDisplay/UserRoleDisplay';
-import UserHeaderDisplay from './headers/UserHeaderDisplay';
+import UserHeader from './headers/UserHeader/UserHeader';
 import Cell from './cells/Cell/Cell';
 import ColorCell from './cells/ColorCell/ColorCell';
 import ColorFilter, {filter as ColorFilterFunction} from './cells/ColorCell/ColorFilter';
-import DateCell from './cells/dateCell/DateCell';
+import DateCell from './cells/DateCell/DateCell';
 import DateFilter, {filter as DateFilterFunction}  from './cells/DateCell/DateFilter'
 import DropdownCell from './cells/DropdownCell/DropdownCell';
 import GenericAssignCell from './cells/GenericAssignCell/GenericAssignCell';
@@ -20,7 +20,7 @@ module.exports = {
 	Table,
 	cats,
 	UserRoleDisplay,
-	UserHeaderDisplay,
+	UserHeader,
 	Cell,
 	ColorCell,
 	ColorFilter,

@@ -12,6 +12,7 @@ import { faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
 
 const DateCell = (props) => {
 	const [open, setOpen] = useState(false);
+	const isEditable = props.permission > 1;
 
 	const unknownString = props.dateUnknown || 'Date Unknown'
 
@@ -37,19 +38,13 @@ const DateCell = (props) => {
 
 	
 	const {onValidateSave,...rest} = props;
-	// const display = (
-	// 	<div style={{ display: 'flex', justifyContent: 'space-between', height: '100%' }}>
-	// 		<TextCell {...rest} isEditableStyles={props.isEditable} classes={{isEditableStyles: classes['looks-editable']}} data={dateString} />
-	// 		{props.showCalendar && <FontAwesomeIcon icon={faCalendarAlt}/>} 
-	// 	</div>
-	// );
 
 	const editorFormat = 'DD/MM/YYYY';
 	const editorContent = moment(selectedDate).format(editorFormat);
 
 	const displayProps = {
 		...rest,
-		isEditableStyles: props.isEditable,
+		isEditableStyles: isEditable,
 		classes: { ...props.classes,isEditableStyles: classes['looks-editable'] },
 		data: dateString
 	};
@@ -57,16 +52,13 @@ const DateCell = (props) => {
 	const editProps = {
 		errorText: props.errorText,
 		classes: props.editorClasses,
-		isEditable: props.isEditable,
+		isEditable: isEditable,
 		style: props.style,
 		placeholder: editorFormat,
 		data: editorContent,
 		onValidateSave: (d) => { if (d === editorContent) { return; } submit(moment(d, editorFormat).toDate())}
 	};
 
-	// const editor = (
-	// 	<TextCell autoFocus={!isMobile} errorText={props.errorText} classes={props.editorClasses} isEditable={props.isEditable} style={props.style} placeholder={editorFormat} data={editorContent} onValidateSave={(d) => { if (d === editorContent) { return; } submit(moment(d, editorFormat).toDate()); }} />
-	// );
 	// remove background from modal datepicker + center.
 	const textCellProps = !open ? displayProps : editProps;
 	const style = { width: '100%', height: '100%' };
@@ -74,7 +66,7 @@ const DateCell = (props) => {
 		<div className={classes['date-cell-default']} style={style}>
 			<TextCell {...textCellProps} />
 			{/* <input {...textCellProps} /> */}
-			{props.isEditable && (
+			{isEditable && (
 				<RightClickMenuWrapper
 					{...props.rightClickMenuWrapperProps}
 					open={open}

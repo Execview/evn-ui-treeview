@@ -6,7 +6,7 @@ const ImageDisplay = (props) => {
 	const [selfRef, getDimensions] = useDimensions()
 	const selfDimensions = getDimensions()
 	const data = props.data || [];
-	const isEditable = props.isEditable;
+	const isEditable = props.permission > 1;
 	const emptyText = props.placeholder || '';
 	let circlesLimit = data.length;
 	let addAmount = null;
@@ -16,7 +16,7 @@ const ImageDisplay = (props) => {
 	}
 	const size = 40;
 
-	if (data.length === 0 && props.isEditable) { return <div className={classes['empty-editable-container']} style={{ minHeight: size }} ><p className={classes['empty-editable']}>{emptyText}</p></div>; }
+	if (data.length === 0 && isEditable) { return <div className={classes['empty-editable-container']} style={{ minHeight: size }} ><p className={classes['empty-editable']}>{emptyText}</p></div>; }
 	return (
 		<div ref={selfRef} className={classes['user-cell']} style={{ minHeight: size }}>
 			<div className={classes['users-container']}>

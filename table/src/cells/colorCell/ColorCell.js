@@ -9,7 +9,7 @@ const ColorCell = (props) => {
 	const inlineMode = props.inline;
 	const colors = props.colorStrings || { green: 'green', amber: 'amber', red: 'red', grey: 'grey', blue: 'blue'};
 	const text = props.data || 'grey';
-	const isEditable = props.isEditable;
+	const isEditable = props.permission > 1;
 	const colorClasses = isEditable ? classes['solid-background-' + text] : classes['non-editable-' + text];
 	const smallView = (
 		<div className={classes['color-circle-container']}>

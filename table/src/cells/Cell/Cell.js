@@ -5,11 +5,11 @@ const Cell = (props) => {
 	const errorText = props.errorText || props.errorText === '' ? props.errorText : null;
 	const type = props.type || <TextCell />;
 	const onValidateSave = props.onValidateSave || ((v) => { console.log('cell returned ' + v); });
-	const isEditable = typeof (props.isEditable) === 'boolean' ? props.isEditable : true;
-	
+	const permission = props.permission || 1
 	return (
-		React.createElement(type.type, { data: props.data, onValidateSave, isEditable, errorText, ...type.props })
+		React.createElement(type.type, { data: props.data, onValidateSave, permission, errorText, ...type.props })
 	);
 };
 
-export default Cell;
+export default Cell
+

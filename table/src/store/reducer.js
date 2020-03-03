@@ -1,10 +1,9 @@
 // import React from 'react';
 import * as actionTypes from './actionTypes';
-import { data, permissions } from './configSwitch';
+import { data } from './configSwitch';
 
 const initialState = {
-	data: data,
-	permissions: permissions
+	data: data
 };
 
 const reducer = (state = initialState, action) => {
@@ -26,11 +25,12 @@ const reducer = (state = initialState, action) => {
 				...state,
 				data: {
 					...state.data,
-					[action.id]: action.data
-				},
-				permissions: {
-					...permissions,
-					editableRows: [...((state.permissions && state.permissions.editableRows) || []), action.id]
+					[action.id]: {
+						...action.data,
+						meta: {
+							permission:4
+						}
+					}
 				}
 			}
 		}

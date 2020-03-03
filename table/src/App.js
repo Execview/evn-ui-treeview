@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Button, RightClickMenuWrapper } from '@execview/reusable';
 import TableWrapper from './tableWrapper/TableWrapper';
 import * as actionTypes from './store/actionTypes';
-import { cellTypes, columnsInfo } from './store/configSwitch';
+import { cellTypes, columnsInfo as columnsInfoConfig } from './store/configSwitch';
 import cats from './store/ElCatso';
 import InPlaceCell from './cells/InPlaceCell/InPlaceCell';
 import ColorCell from './cells/ColorCell/ColorCell';
@@ -20,6 +20,8 @@ const hash = crypto.createHash('sha256');
 const App = (props) => {
 	useThemeApplier(defaultTheme)
 	const data = props.data
+	const columnsInfo = columnsInfoConfig
+	//const [columnsInfo, setColumnsInfo] = useState(columnsInfoConfig)
 	const [config, setConfig] = useState({depth:0,columns:{}})
 	const setFilterMeta = (col,newMeta) => {
 		setConfig({
@@ -79,12 +81,10 @@ const App = (props) => {
 
 	return (
 		<div className={`${classes["App"]}`}>
-			
 			<div>
 				<Button style={{margin:'10px', padding: '30px', paddingTop:'15px', paddingBottom:'15px'}} onClick={addRow}>Add row</Button>
 				<TableWrapper
 					columnsInfo={columnsInfo}
-					permissions={props.permissions}
 					data={filteredData}
 					cellTypes={cellTypes}
 					onSave={props.onSave}
@@ -109,8 +109,7 @@ const App = (props) => {
 
 const mapStateToProps = (state) => {
 	return {
-		data: state.data,
-		permissions: state.permissions,
+		data: state.data
 	};
 };
 

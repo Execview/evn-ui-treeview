@@ -6,11 +6,10 @@ const GenericAssign = (props) => {
 	const data = props.items || [];
 	const allItems = props.allItems || {};
 	const allKeys = !Array.isArray(allItems) ? Object.keys(allItems) : allItems
+	const isEditable = props.permission > 1
 
 	const [leftSearchString, setLeftSearchString] = useState('');
 	const [rightSearchString, setRightSearchString] = useState('');
-
-	const isEditable = props.isEditable;
 
 	const unassignGeneric = (itemId) => {
 		props.onValidateSave && props.onValidateSave(data.filter(el => el !== itemId));
@@ -44,7 +43,7 @@ const GenericAssign = (props) => {
 
 	return (
 		<div className={classes["generic-container"]}>
-			<div className={`${classes['dropdown-with-title']} ${props.isEditable?'':classes['dropdown-with-title-small']}`}>
+			<div className={`${classes['dropdown-with-title']} ${isEditable?'':classes['dropdown-with-title-small']}`}>
 				<div className={classes['title']}>
 					{props.leftTitle}
 				</div>

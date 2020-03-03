@@ -7,7 +7,7 @@ const InPlaceCell = (props) => {
 	const [internalData, setInternalData] = useState(props.data)
 	const [selfData, setSelfData] = props.onValidateSave ? [props.data, props.onValidateSave] : [internalData, setInternalData]
 
-	const { className, style, data, ...OtherCellProps } = props //OtherCellProps contains isEditable, errorText and other miscellaneous props.
+	const { className, style, data, ...OtherCellProps } = props //OtherCellProps contains permission, errorText and other miscellaneous props.
 
 	return (
 		<div className={`${classes['default-style']} ${(props.className || '')}`} style={props.style}>

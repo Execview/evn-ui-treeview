@@ -5,6 +5,7 @@ import './index.css';
 import * as serviceWorker from './serviceWorker';
 import App from './App';
 
+
 import {createStore, applyMiddleware, compose} from 'redux';
 import {Provider} from 'react-redux';
 import thunk from 'redux-thunk';
@@ -12,6 +13,9 @@ import reducer from './store/reducer';
 
 import { createEpicMiddleware } from 'redux-observable';
 import rootEpic from './store/epic'
+
+import version from './version'
+console.log(`Refreshed at: ${version.version}`)
 
 const epicMiddleware = createEpicMiddleware()
 

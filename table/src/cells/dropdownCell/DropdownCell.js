@@ -4,6 +4,7 @@ import DefaultDropdownDisplay from './DefaultDropdownDisplay';
 import classes from './DropdownCell.module.css';
 
 const DropdownCell = (props) => {
+	const isEditable = props.permission > 1;
 	const [open, setOpen] = useState(false)
 	const input = props.options || {};
 	const optionsIsArray = Array.isArray(input);
@@ -35,11 +36,11 @@ const DropdownCell = (props) => {
 
 	const options = Object.fromEntries(Object.entries(inputOptions).filter(([o,op]) => displayedRows.includes(o)))
 
-	const displayCell = props.display || <DefaultDropdownDisplay {...props} data={options[data]} looksEditable={props.isEditable} showCaret={!inlineMode} />;
+	const displayCell = props.display || <DefaultDropdownDisplay {...props} data={options[data]} looksEditable={isEditable} showCaret={!inlineMode} />;
 
 	const display = (
 		<div style={{ height: '100%' }}>
-			{React.createElement(displayCell.type, {  data, ...displayCell.props, isEditableStyles: props.isEditable, style: props.style })}
+			{React.createElement(displayCell.type, {  data, ...displayCell.props, isEditableStyles: isEditable, style: props.style })}
 		</div>
 	);
 

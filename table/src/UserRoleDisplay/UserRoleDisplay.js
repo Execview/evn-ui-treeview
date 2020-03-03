@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import ImageDisplay from '../cells/ImageDisplay/ImageDisplay';
 import './CircleUser.css';
 import AssignUsers from './AssignUsers';
-import RightClickMenuWrapper from '@execview/reusable/transpiled/Components/RightClickMenu/RightClickMenuWrapper';
+import { RightClickMenuWrapper } from '@execview/reusable';
 
 const UserRoleDisplay = (props) => {
 	const [open, setOpen] = useState(false);
-
+	console.log('rerender')
 	const getUserProfile = (user) => {
 		return props.userProfiles[user];
 	};

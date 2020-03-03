@@ -5,8 +5,8 @@ import classes from './TextCell.module.css';
 const TextCell = (props) => {
 	const [showText, setShowText] = useState(false);
 	const [text, setText] = useState('');
-	const isEditableStyles = props.isEditable || props.isEditableStyles;
-	const canEdit = props.isEditable;
+	const isEditable = props.permission > 1;
+	const isEditableStyles = isEditable || props.isEditableStyles;
 	useEffect(() => setText(props.data || ''), [props.data]);
 	const [textareaOpen, setTextareaOpen] = useState((props.autoFocus && props.wrap) || false);
 	const style = props.style || {};
@@ -73,7 +73,7 @@ const TextCell = (props) => {
 
 	const inputProps = {
 		className: (classes['input'] + ' ' + textClasses + errorTextClasses + isEditableStylesClasses + (!text && isEditableStyles ? (classes['empty-editable'] + ' ' + (optionalClasses.placeholder || '')) : '')),
-		disabled: !canEdit,
+		disabled: !isEditable,
 		autoFocus: props.autoFocus || false,
 		type: props.password ? 'password' : 'text'
 	};
@@ -94,7 +94,7 @@ const TextCell = (props) => {
 		<div
 			className={containerClasses + errorContainerClasses}
 			style={style}
-			onClick={(e) => { if (props.wrap && canEdit) { setTextareaOpen(true); } if (props.onClick) { props.onClick(e); } }}
+			onClick={(e) => { if (props.wrap && isEditable) { setTextareaOpen(true); } if (props.onClick) { props.onClick(e); } }}
 		>
 			{React.createElement(inputType.type, { ...inputType.props, ...bothProps, ...(props.wrap ? textareaProps : inputProps) })}
 			{errorIconEl}

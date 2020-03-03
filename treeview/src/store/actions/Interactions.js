@@ -46,7 +46,10 @@ export const ADD_ROW = (state,action,reducer) => {
 				open:true,
 				name: tempTitle,
 				progress: 'amber',
-				shape: shape
+				shape: shape,
+				meta: {
+					permission: 4
+				}
 		};
 	}
     let newState =  {
@@ -54,16 +57,11 @@ export const ADD_ROW = (state,action,reducer) => {
         _data: {
             ...state._data,
             [newId] : newRow
-        },
-        editableCells: {
-            ...state.editableCells,
-            [newId]: action.editableCells
         }
     };
 	if(parent){
 		newState = reducer(newState, {type:actionTypes.PERFORM_ASSOCIATION, childkey:newId,parentkey:parent})
-		if(!state._data[parent].open){newState = reducer(newState, {type:actionTypes.TOGGLE_NODE, nodeKey:parent})}
-		}
+	}
     return newState
 }
 
@@ -91,27 +89,24 @@ export const DELETE_BUBBLE = (state,action,reducer) => {
     return newState;
 }
 
-export const TOGGLE_NODE = (state,action,reducer) => {
-    const updatedState = { ...state,
-        _data: {...state._data,
-            [action.nodeKey]:{...state._data[action.nodeKey],
-                open: !state._data[action.nodeKey].open
-            }
-        }
-    };
-    return updatedState;
-}
-
 export const MOVE_BUBBLES = (state,action,reducer) => {
 	let newState = {
 		...state,
         _data: action._data,
         itemChanges: action.itemChanges
     }
-	if(action.editableValues){
-		newState.editableCells[action.originalAction.key] = action.editableValues 
-    }
+
 	return newState
+}
+
+export const SAVE_ROW = (state,action,reducer) => {
+	return {
+		...state,
+		[action.row]: {
+			...state[action.row],
+			[action.col]: action.data
+		}
+	}
 }
 
 export const TRY_BUBBLE_TRANSFORM = (state,action,reducer) => {
