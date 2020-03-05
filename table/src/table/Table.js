@@ -128,7 +128,7 @@ const Table = (props) => {
 
 	return (
 		<div className={classes['horizontal-scroll']}>
-			<div style={{ display: 'grid', gridTemplateColumns: gridTemplateColumnsString, gridTemplateRows: gridTemplateRowsString }} ref={props.tableRef}>
+			<div style={{ display: 'grid', gridTemplateColumns: gridTemplateColumnsString, gridTemplateRows: gridTemplateRowsString, gridRowGap: 1 }} ref={props.tableRef}>
 				{header}
 				{cells}
 			</div>

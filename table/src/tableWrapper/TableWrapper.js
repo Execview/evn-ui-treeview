@@ -22,8 +22,9 @@ const TableWrapper = (props) => {
 	for (const row in props.data) {
 		for (const col in columnsInfo) {
 			if (!tableData[row]) { tableData[row] = {}; }
+			const permission = (props.data[row].meta && (props.data[row].meta.exceptions && props.data[row].meta.exceptions[col] || props.data[row].meta.permission)) || 1
 			const cell = {
-				permission: (props.data[row].meta && props.data[row].meta.permission) || 1,
+				permission: permission,
 				data: props.data[row][col],
 				errorText: props.data[row].meta && props.data[row].meta.errors && props.data[row].meta.errors[col] 
 			};
@@ -37,7 +38,6 @@ const TableWrapper = (props) => {
 				data={tableData}
 				columnsInfo={columnsInfo}
 				setColumnsInfo={setColumnsInfo}
-				cellTypes={props.cellTypes}
 				onSave={props.onSave}
 				selectedRow={props.selectedRow}
 				getContextMenu={props.getContextMenu}
