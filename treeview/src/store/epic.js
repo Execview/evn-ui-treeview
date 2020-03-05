@@ -40,8 +40,11 @@ export const tryBubbleTransformEpicMap = (action, state)=>{
 			itemChanges,
 		}
 
-		return Observable.of(moveBubblesAction)
-
+		if (action.sendChanges) {
+            return Observable.of(moveBubblesAction,{type: actionTypes.SEND_CHANGES, itemChanges})
+        } else {
+            return Observable.of(moveBubblesAction)
+        }
 	}
 	return Observable.of(voidAction);
 }
