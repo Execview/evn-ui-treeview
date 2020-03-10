@@ -1,11 +1,11 @@
 {
 	"name": "@execview/grid",
-	"version": "0.1.11",
+	"version": "0.1.12",
 	"main": "./transpiled/exports.js",
 	"private": false,
 	"dependencies": {
-		"@execview/reusable": "^0.1.77",
-		"@execview/themedesigner": "^0.1.4",
+		"@execview/reusable": "^0.1.78",
+		"@execview/themedesigner": "^0.1.5",
 		"@fortawesome/fontawesome-svg-core": "^1.2.25",
 		"@fortawesome/free-solid-svg-icons": "^5.11.2",
 		"@fortawesome/react-fontawesome": "^0.1.7",

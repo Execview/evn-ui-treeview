@@ -1,8 +1,8 @@
-import {useEffect} from 'react'
+import {useLayoutEffect} from 'react'
 import * as colorString from 'color-string'
 
 const useThemeApplier = (theme, element=document.getElementById('root')) => {
-	useEffect(()=>{
+	useLayoutEffect(()=>{
 		if(!theme){return}
 		Object.entries(theme).forEach(([v,c])=>{
 			const cssVariableColor =  colorString.get.rgb((c || 'transparent').toString().trim()) || [0,0,0,0]
@@ -12,7 +12,6 @@ const useThemeApplier = (theme, element=document.getElementById('root')) => {
 			} else {
 				console.log(`Color ${v} will not be changed. Value is: ${c}`)
 			}
-			
 		})
 	},[theme])
 	return null
