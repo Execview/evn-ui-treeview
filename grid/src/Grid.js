@@ -14,7 +14,8 @@ const draggableHandle = classes['draggable-handle']
 
 const Grid = (props) => {
 	const makeKey = (i) => i.toString()
-	const ourPropertyKeys = ['className','draggable']
+	const ourPropertyKeys = ['className','draggable','id']
+	const filterProperties = ["i","minW","maxW","minH","maxH","moved","static","isDraggable","isResizable"]
 
 	const cols = props.cols
 	const defaultHeight = props.defaultHeight || 200
@@ -27,9 +28,10 @@ const Grid = (props) => {
 		const maxYSoFar = Math.max(...props.children.map(child=>((child && child.props && child.props.grid && child.props.grid.y) || 0)))
 		props.children.forEach((child,i)=>{
 			if(!child){return}
-			const childGridProps = (child.props && child.props.grid) || {}
-			const RGLParentClassName = child.props.RGLParentClassName
-			const RGLChildClassName = child.props.RGLChildClassName
+			const childProps = child.props || {}
+			const childGridProps = childProps.grid || {}
+			const RGLParentClassName = childProps.RGLParentClassName
+			const RGLChildClassName = childProps.RGLChildClassName
 			const childGrid = Object.fromEntries(Object.entries(childGridProps).filter(([k,v])=>!ourPropertyKeys.includes(k)))
 			const ourValues = Object.fromEntries(Object.entries(childGridProps).filter(([k,v])=>ourPropertyKeys.includes(k)))
 			const dataGrid = {i: makeKey(i), x: 0, y:maxYSoFar+i, w:defaultWidth, h:defaultHeight, ...childGrid };
@@ -45,19 +47,21 @@ const Grid = (props) => {
 	
 	const [layoutFromChildren, ourPropertiesFromChildren] = isInternalLayout ? [null,null] : getLayoutAndOurProperties()
 
+	const removeTheirProperties = (blockLayout,exceptions=[]) => {
+			const propertiesToFilter = filterProperties.filter(p=>!exceptions.includes(p))
+			let newBlockLayout = blockLayout || {}
+			propertiesToFilter.forEach(p=>{
+				const {[p]:_, ...rest} = newBlockLayout
+				newBlockLayout = rest
+		})
+		return newBlockLayout
+	}
+
 	const externalSetLayout = (newLayout) => {
 		newLayout.sort((a,b)=>{
 			return a.i-b.i
 		})
-		const filteredNewLayout = newLayout.map(blockLayout=>{
-			const filterProperties = ["i","minW","maxW","minH","maxH","moved","static","isDraggable","isResizable"]
-			let newBlockLayout = blockLayout || []
-			filterProperties.forEach(p=>{
-				const {[p]:_, ...rest} = newBlockLayout
-				newBlockLayout = rest
-			})
-			return newBlockLayout
-		})
+		const filteredNewLayout = newLayout.map(blockLayout=>removeTheirProperties(blockLayout))
 		props.setLayout && props.setLayout(filteredNewLayout)
 	}
 	const [layout, setLayout] = isInternalLayout ? [internalLayout, setInternalLayout] : [layoutFromChildren, externalSetLayout]
@@ -78,9 +82,16 @@ const Grid = (props) => {
 		setLayout([...filteredLayout,{...currentDataGrid, h: height+margin[1]}])
 	}
 
+	const onDrop = (l,o,n) => {
+		let newPos = removeTheirProperties(n,['i'])
+		const el_id = ourProperties[newPos.i] && ourProperties[newPos.i].id
+		if(el_id){ newPos = {...newPos, id: el_id} }
+		props.onDrop && props.onDrop(removeTheirProperties(newPos))
+	}
+
 	return (
 		<DraggableContext.Provider value={draggableHandle}>
-		<RGL layout={layout} cols={cols} rowHeight={1} margin={[0,0]} onLayoutChange={(newLayout) => setLayout(newLayout)} draggableHandle={`.${draggableHandle}`}>
+		<RGL onDragStop={onDrop} layout={layout} cols={cols} rowHeight={1} margin={[0,0]} onLayoutChange={(newLayout) => setLayout(newLayout)} draggableHandle={`.${draggableHandle}`}>
 			{props.children.map((child,i)=>{
 				const key = makeKey(i)
 				const parentClassName = (ourProperties[key] && ourProperties[key].className) || ''
