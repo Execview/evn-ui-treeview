@@ -1,6 +1,6 @@
 {
 	"name": "@execview/grid",
-	"version": "0.1.12",
+	"version": "0.1.13",
 	"main": "./transpiled/exports.js",
 	"private": false,
 	"dependencies": {
