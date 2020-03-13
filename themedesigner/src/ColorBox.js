@@ -1,5 +1,4 @@
 import React, {useState, useEffect, useRef} from 'react'
-import * as colorString from 'color-string'
 import { ChromePicker } from 'react-color'
 
 const ColorBox = (props) => {

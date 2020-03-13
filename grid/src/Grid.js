@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import ReactGridLayout, { WidthProvider } from 'react-grid-layout'
 import GridItem from './GridItem'
 import 'react-grid-layout/css/styles.css'
@@ -10,9 +10,9 @@ import classes from './Grid.module.css'
 
 const RGL = withResizeDetector(ReactGridLayout)
 
-const draggableHandle = classes['draggable-handle']
-
 const Grid = (props) => {
+	const draggableHandle = props.draggableClassName || classes['draggable-handle']
+
 	const makeKey = (i) => i.toString()
 	const ourPropertyKeys = ['className','draggable','id']
 	const filterProperties = ["i","minW","maxW","minH","maxH","moved","static","isDraggable","isResizable"]
@@ -61,7 +61,9 @@ const Grid = (props) => {
 		newLayout.sort((a,b)=>{
 			return a.i-b.i
 		})
-		const filteredNewLayout = newLayout.map(blockLayout=>removeTheirProperties(blockLayout))
+		const filteredNewLayout = newLayout.map(blockLayout=>{
+			return {...removeTheirProperties(blockLayout),...ourProperties[blockLayout.i]} //add ourProperties back in
+		})
 		props.setLayout && props.setLayout(filteredNewLayout)
 	}
 	const [layout, setLayout] = isInternalLayout ? [internalLayout, setInternalLayout] : [layoutFromChildren, externalSetLayout]
