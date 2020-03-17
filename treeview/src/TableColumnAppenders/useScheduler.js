@@ -60,6 +60,9 @@ const useScheduler = (data, columnsInfo, options={}, active=true) => {
 		return moment(d).startOf(r).toDate()
 	}
 
+	const [schedulerStart, actuallySetSchedulerStart] = useState(initialStartDate)
+	const [schedulerResolution, actuallySetSchedulerResolution] = useState(initialSchedulerResolution)
+
 	const setSchedulerStart = (date) => {
 		const d = getShiftedStart(date,schedulerResolution)
 		
@@ -69,14 +72,7 @@ const useScheduler = (data, columnsInfo, options={}, active=true) => {
 	const setSchedulerResolution = (res) => {
 		actuallySetSchedulerResolution(res)
 		actuallySetSchedulerStart(getShiftedStart(schedulerStart,res))
-	}
-
-	
-	const [schedulerStart, actuallySetSchedulerStart] = useState(initialStartDate)
-
-	const [schedulerResolution, actuallySetSchedulerResolution] = useState(initialSchedulerResolution)
-
-	
+	}	
 
 	const extrasnaps = 0 //Math.ceil(schedulerWidth/timeWidth)
 

@@ -66,7 +66,7 @@ export const getBubbleColours = (id, data, overrides={}) => {
 
 export const getSnaps = (start, schedulerResolution, schedulerWidth, timeWidth, extrasnaps) =>{
 	if(!schedulerWidth){return []}
-	const resolutionMap = {hour:'h', day:'d', week:'w', month:'M'}
+	const resolutionMap = {hour:'h', day:'d', week:'w', month:'M', quarter: 'Q'}
 	const timeIncrement = resolutionMap[schedulerResolution]
 	// console.log(timeIncrement)
 	// console.log(start)

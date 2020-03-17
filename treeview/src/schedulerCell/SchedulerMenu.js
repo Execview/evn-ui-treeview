@@ -9,7 +9,7 @@ const SchedulerMenu = (props) => {
 
 	return (
 		<div className={classes["scheduler-menu"]}>
-			<InPlaceCell data={new Date(start)} type={<DateCell isEditable showCalendar rightClickMenuWrapperProps={{dontPortal: true}}/>} onValidateSave={(d) => {console.log(d); setStart(d)}}/>
+			<InPlaceCell permission={4} data={new Date(start)} type={<DateCell isEditable showCalendar rightClickMenuWrapperProps={{dontPortal: true}}/>} onValidateSave={(d) => {console.log(d); setStart(d)}}/>
 			<p/>
 			<div>
 				<ul className={classes['items-list']}>
