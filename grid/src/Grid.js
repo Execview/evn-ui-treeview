@@ -85,10 +85,17 @@ const Grid = (props) => {
 	}
 
 	const onDrop = (l,o,n) => {
-		let newPos = removeTheirProperties(n,['i'])
-		const el_id = ourProperties[newPos.i] && ourProperties[newPos.i].id
-		if(el_id){ newPos = {...newPos, id: el_id} }
-		props.onDrop && props.onDrop(removeTheirProperties(newPos))
+		const n_i = n.i
+		const o_i = o.i
+		const n_id = ourProperties[n_i] && ourProperties[n_i].id
+		const o_id = ourProperties[o_i] && ourProperties[o_i].id
+
+		const newPos = removeTheirProperties(n)
+		if(n_id) {newPos.id = n_id}
+		const oldPos = removeTheirProperties(o)
+		if(o_id) {oldPos.id = o_id}
+
+		props.onDrop && props.onDrop(newPos, oldPos)
 	}
 
 	return (
