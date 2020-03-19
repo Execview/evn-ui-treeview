@@ -20,19 +20,32 @@ This can be used to quickly clean and reinstall all the node_modules. I.e:
 
 > npm run all npm run clean && npm run all npm install
 
-**2.** To create or remove the npm links please run:
+**2.** To setup the components + site for automatically refreshing on dependency changes:
 
-> npm run link-modules
+> npm run setup
 
-> npm run unlink-modules
+This deletes the line in react-scripts which prevent this from happening. 
 
 **3.** To begin watching all the modles for changes run:
 
 > npm run watch
+
+or
+
+> npm start
+
+**4.** To publish a package, and install it in the components which depend on it:
+
+> npm run update-cascade [package name here]
+
+This will publish the 'parent' packages and install those in their parents. An update cascade, if you will... 😁.
   
 
 
 
 ### Things to note ###
 
-This will force all modules to use one copy of react. This was to fix issues with hooks. The version used is the version of the last module in the config. 
+- You need to import the version file that gets written everytime a dependency changes.
+- Sometimes you need to refresh the page after activating the packagelinker.
+- Make sure you specify a package when using the update-cascade command. Choose the lowest level package in the graph that you have changed.
+- The package linker will publish the parent packages **as is** so ensure the changes in the working tree are intended.
