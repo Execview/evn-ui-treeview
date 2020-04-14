@@ -6,6 +6,7 @@ Make a config file called "config.json" and fill it with:
 	"@execview/reusable": "../reusable",
 	"@execview/table": "../table",
 	"@execview/treeview": "../treeview",
+	"@execview/grid": "../grid",
 	"evn-ui-web": "[Insert relative path to the site here]"
 }
 ```

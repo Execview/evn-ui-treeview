@@ -1,31 +1,21 @@
+import nodeFetch from 'node-fetch'
+
 const removeOurOptions = (options) => {
-	const {body,debug,payload,token,holder,method,timeout,...otherOptions} = options
+	const {body,debug,token,method,timeout, headers,...otherOptions} = options
 	return otherOptions
 }
 
-const fetchy = (link,options={})=>{
+export const fetchy = (url,options={},notJSON=false) => {
+	if(!url){console.log('WHERE IS THE LINK?!'); return}
+
+	let body = options.body
 	const debug = options.debug || false
-	const payload = options.body
 	const token = options.token
-	const holder = options.holder || ''
 	const timeout = options.timeout || 3000
 	const otherOptions = removeOurOptions(options)
-	
 
-	if(!link){console.log('WHERE IS THE LINK?!'); return}
 
-	let body = undefined;
-	if(payload!==undefined){
-		if(holder){
-			body = {
-				payload: payload || {},
-				meta: {holder: holder}
-			}
-		} else {
-			body = payload || {}
-		}
-	}
-	const hasBody = (body!==undefined)
+	const hasBody = body!==undefined
 	let method = options.method || (hasBody ? 'POST': 'GET')
 
 	let headers = {}
@@ -36,21 +26,26 @@ const fetchy = (link,options={})=>{
 	let fetchOptions = {
 		signal: controller.signal,
 		method:method,
-		headers: headers,
+		headers: {...headers, ...options.headers},
 		...otherOptions
 	}
 	if(hasBody){
-		const isTextFormat = ['json','text'].some(w=>(fetchOptions.headers["Content-Type"] || '').includes(w)) 
-		fetchOptions.body = isTextFormat ? JSON.stringify(body) : body
+		const contentType = fetchOptions.headers["Content-Type"] || ''
+		let fetchBody = body
+		if(typeof(body)!=="string" && ['json','text'].some(t=>contentType.includes(t))){fetchBody = JSON.stringify(fetchBody)}
+		fetchOptions.body = fetchBody
 	}
 	
 	if(token){fetchOptions.headers["Authorization"] = "Bearer "+token}
 
-	const debugInfo = {url: link,fetchOptions: {...fetchOptions, body:body}}
-	debug && console.log(debugInfo)
+	debug && console.log({url: url, fetchOptions: {...fetchOptions, body:body}})
+
+	const fetchFunction = fetch || nodeFetch
+
+	const fetchPromise = fetchFunction(url, fetchOptions)
 	return Promise.race([
-		fetch(link, fetchOptions),
-		new Promise((resolve, reject) => setTimeout(() => {reject('too slow! -> '+link); controller.abort()}, timeout))
+		notJSON ? fetchPromise : fetchPromise.then(res=>res.json()),
+		new Promise((resolve, reject) => setTimeout(() => {reject('too slow! -> '+url); controller.abort()}, timeout))
 	])
 }
 
