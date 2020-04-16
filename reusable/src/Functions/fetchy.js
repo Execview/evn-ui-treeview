@@ -1,11 +1,23 @@
 import nodeFetch from 'node-fetch'
+import AC from 'abort-controller';
 
 const removeOurOptions = (options) => {
 	const {body,debug,token,method,timeout, headers,...otherOptions} = options
 	return otherOptions
 }
 
+const globalStringOrAlt = (globalString, alt) =>{
+	let result = alt
+	try {
+		result = eval(globalString)
+	} catch (e) {
+
+	}
+	return result
+}
+
 export const fetchy = (url,options={},notJSON=false) => {
+	const [fetchFunction, AbortControllerClass] = [globalStringOrAlt('fetch', nodeFetch),globalStringOrAlt('AbortController', AC)]
 	if(!url){console.log('WHERE IS THE LINK?!'); return}
 
 	let body = options.body
@@ -21,8 +33,7 @@ export const fetchy = (url,options={},notJSON=false) => {
 	let headers = {}
 	if(method!=='GET'){headers["Content-Type"] = "application/json"}
 	
-
-	let controller = new AbortController();
+	let controller = new AbortControllerClass();
 	let fetchOptions = {
 		signal: controller.signal,
 		method:method,
@@ -39,8 +50,6 @@ export const fetchy = (url,options={},notJSON=false) => {
 	if(token){fetchOptions.headers["Authorization"] = "Bearer "+token}
 
 	debug && console.log({url: url, fetchOptions: {...fetchOptions, body:body}})
-
-	const fetchFunction = fetch || nodeFetch
 
 	const fetchPromise = fetchFunction(url, fetchOptions)
 	return Promise.race([

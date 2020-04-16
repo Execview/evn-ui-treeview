@@ -1,10 +1,11 @@
 {
 	"name": "@execview/reusable",
-	"version": "0.1.79",
+	"version": "0.1.81",
 	"main": "./transpiled/exports.js",
 	"private": false,
 	"dependencies": {
 		"@execview/themedesigner": "^0.1.5",
+		"abort-controller": "^3.0.0",
 		"moment": "^2.24.0",
 		"node-fetch": "^2.6.0",
 		"react": "16.11.0",

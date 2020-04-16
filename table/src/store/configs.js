@@ -15,35 +15,6 @@ import UserHeader from '../headers/UserHeader/UserHeader';
 import { countries, progressValues } from './constants';
 import classes from '../App.module.css';
 
-
-//#region  GenericAssignDisplay props
-const allItems = users;
-const Display = (props) => {
-	const items = props.items || [];
-	const imageDisplayData = items.map(u => users[u].image);
-	return <ImageDisplay data={imageDisplayData} style={props.style} permission={props.permission} placeholder={'Assign a user...'}/>;
-};
-const getSearchField = (id) => {
-	return allItems[id].name;
-};
-
-const getOption = (id) => {
-	return (
-		<div className="user-row">
-			<TripleFill
-				style={{ height: '40px', cursor: 'pointer' }}
-				left={<CircleUser url={allItems[id].image} />}
-				center={<p className={classes["tripleFill-user-name"]}>{allItems[id].name}</p>}
-			/>
-		</div>
-	);
-};
-
-const leftTitle = <p className={classes["dropdown-title"]}>Assigned Users</p>;
-const rightTitle = <p className={classes["dropdown-title"]}>Available Users</p>;
-
-//#endregion
-
 const users = {
 	abd4: {
 		name: 'Jeremy',
@@ -96,6 +67,36 @@ const users = {
 	},
 
 };
+
+//#region  GenericAssignDisplay props
+const allItems = users;
+const Display = (props) => {
+	const items = props.items || [];
+	const imageDisplayData = items.map(u => users[u].image);
+	return <ImageDisplay data={imageDisplayData} style={props.style} permission={props.permission} placeholder={'Assign a user...'}/>;
+};
+const getSearchField = (id) => {
+	return allItems[id].name;
+};
+
+const getOption = (id) => {
+	return (
+		<div className="user-row">
+			<TripleFill
+				style={{ height: '40px', cursor: 'pointer' }}
+				left={<CircleUser url={allItems[id].image} />}
+				center={<p className={classes["tripleFill-user-name"]}>{allItems[id].name}</p>}
+			/>
+		</div>
+	);
+};
+
+const leftTitle = <p className={classes["dropdown-title"]}>Assigned Users</p>;
+const rightTitle = <p className={classes["dropdown-title"]}>Available Users</p>;
+
+//#endregion
+
+
 
 export const cellTypes = {
 	text: <TextCell />,
