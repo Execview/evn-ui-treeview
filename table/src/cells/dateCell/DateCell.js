@@ -1,14 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import DatePicker from 'react-datepicker';
+import React, { useState } from 'react';
+
 import moment from 'moment';
-import { isMobile } from 'react-device-detect';
 import { RightClickMenuWrapper } from '@execview/reusable';
 import 'react-datepicker/dist/react-datepicker.css';
-import './ourDatePicker.css'
+
 import classes from './DateCell.module.css';
 import TextCell from '../TextCell/TextCell';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
+import OurDatePicker from './OurDatePicker/OurDatePicker'
 
 const DateCell = (props) => {
 	const [open, setOpen] = useState(false);
@@ -33,6 +31,8 @@ const DateCell = (props) => {
 
 	const datePickerProps = {
 		selected: selectedDate,
+		showMonthDropdown: true,
+      	showYearDropdown: true,
 		onSelect: ((changedDate) => {submit(changedDate)})
 	};	
 
@@ -77,7 +77,7 @@ const DateCell = (props) => {
 					modalClassName={classes['datepicker-modal']}
 					rightClickMenuClassName={classes['rcm']}
 				>
-					<DatePicker inline {...datePickerProps} {...extraDatePickerProps} />
+					<OurDatePicker inline {...datePickerProps} {...extraDatePickerProps} />
 				</RightClickMenuWrapper>
 			)}
 			
