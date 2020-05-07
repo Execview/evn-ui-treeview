@@ -5,6 +5,7 @@
 	"main": "./indexes/watchIndex.js",
 	"scripts": {
 		"start": "node ./indexes/watchIndex",
+		"test": "nodemon ./indexes/testIndex",
 		"watch": "npm start",
 		"setup": "node ./indexes/setupIndex",
 		"all": "node ./indexes/runAllIndex",

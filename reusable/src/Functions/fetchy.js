@@ -51,9 +51,11 @@ export const fetchy = (url,options={},notJSON=false) => {
 
 	debug && console.log({url: url, fetchOptions: {...fetchOptions, body:body}})
 
-	const fetchPromise = fetchFunction(url, fetchOptions)
+	let fetchPromise = fetchFunction(url, fetchOptions).then(res=>{return res})
+	if(!notJSON){fetchPromise = fetchPromise.then(res=>res.json())}
+	if(debug){fetchPromise = fetchPromise.then((res)=>{console.log(res); return res})}
 	return Promise.race([
-		notJSON ? fetchPromise : fetchPromise.then(res=>res.json()),
+		fetchPromise,
 		new Promise((resolve, reject) => setTimeout(() => {reject('too slow! -> '+url); controller.abort()}, timeout))
 	])
 }
