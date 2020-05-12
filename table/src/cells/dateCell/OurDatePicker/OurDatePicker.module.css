@@ -1,0 +1,35 @@
+.custom-header{
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	color: white;
+}
+
+.date{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 16px;
+	font-weight: bold;
+
+}
+
+.date-picker-rcm{
+	width: 100px;
+	height: 190px;
+}
+
+.year-dropdown{
+	background-color:red;
+}
+
+.month-arrow {
+	padding:5px;
+	cursor: pointer;
+	font-size:20px;
+	user-select: none;
+}
+
+.month-arrow:hover {
+	color:rgb(var(--color20));
+}

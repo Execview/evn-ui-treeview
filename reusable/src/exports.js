@@ -16,6 +16,7 @@ import recursiveDeepDiffsREACT from './Functions/recursiveDeepDiffsREACT'
 import fetchy from './Functions/fetchy'
 import useFunctionalRef from './Functions/useFunctionalRef'
 import useDimensions from './Functions/useDimensions'
+import { getOurCookie, setOurCookie } from './Functions/ourCookies'
 
 module.exports = {
 	Button,
@@ -34,5 +35,7 @@ module.exports = {
 	recursiveDeepDiffsREACT,
 	fetchy,
 	useFunctionalRef,
-	useDimensions
+	useDimensions,
+	getOurCookie,
+	setOurCookie
 };

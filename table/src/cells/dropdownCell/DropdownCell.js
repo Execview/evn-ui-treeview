@@ -44,14 +44,17 @@ const DropdownCell = (props) => {
 		</div>
 	);
 
-	const {rcmStyle,... rest} = props;
+	const {rcmStyle, genericDropdownClasses, ... rest} = props;
+
+	const {rcmClassName,...otherRCMWProps} = (props.rightClickMenuWrapperProps || {})
+
 
 	return (
 		<div style={{ height: '100%' }}>
 			<div style={{ height: '100%' }}>
 				{display}
 			</div>
-			<RightClickMenuWrapper onLeftClick inline={inlineMode} takeParentLocation open={open} setOpen={setOpen} rightClickMenuStyle={rcmStyle} rightClickMenuClassName={classes['rcm']} {...props.rightClickMenuWrapperProps}>
+			<RightClickMenuWrapper onLeftClick inline={inlineMode} takeParentLocation open={open} setOpen={setOpen} rightClickMenuStyle={rcmStyle} rightClickMenuClassName={`${classes['rcm']} ${rcmClassName||''}`} {...otherRCMWProps}>
 				<GenericDropdown
 					{...rest}
 					onBlur={onBlur}
@@ -61,7 +64,7 @@ const DropdownCell = (props) => {
 					searchString={searchString}
 					options={options}
 					autoFocus={true}
-					genericDropdownClasses={{dropdown: classes['dropdown'], dropdownMenu: classes['dropdown-menu']}}
+					genericDropdownClasses={{dropdown: classes['dropdown'], dropdownMenu: classes['dropdown-menu'],...genericDropdownClasses}}
 				/>
 			</RightClickMenuWrapper>
 		</div>

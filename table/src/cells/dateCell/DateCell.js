@@ -31,8 +31,6 @@ const DateCell = (props) => {
 
 	const datePickerProps = {
 		selected: selectedDate,
-		showMonthDropdown: true,
-      	showYearDropdown: true,
 		onSelect: ((changedDate) => {submit(changedDate)})
 	};	
 
