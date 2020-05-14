@@ -14,22 +14,22 @@
 
 }
 
-.date-picker-rcm{
+.month-picker-rcm{
+	width: 150px;
+	height: 190px;
+}
+.year-picker-rcm{
 	width: 100px;
 	height: 190px;
 }
 
-.year-dropdown{
-	background-color:red;
-}
-
-.month-arrow {
+.arrow {
 	padding:5px;
 	cursor: pointer;
 	font-size:20px;
 	user-select: none;
 }
 
-.month-arrow:hover {
+.arrow:hover {
 	color:rgb(var(--color20));
 }

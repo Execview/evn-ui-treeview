@@ -21,7 +21,8 @@ export const fetchy = (url,options={},notJSON=false) => {
 	if(!url){console.log('WHERE IS THE LINK?!'); return}
 
 	let body = options.body
-	const debug = options.debug || false
+	const previewMode = options.preview!==undefined //for when you dont want to perform the fetch, but want to debug. (the value of options.preview is resolved)
+	const debug = options.debug || previewMode
 	const token = options.token
 	const timeout = options.timeout || 3000
 	const otherOptions = removeOurOptions(options)
@@ -51,7 +52,7 @@ export const fetchy = (url,options={},notJSON=false) => {
 
 	debug && console.log({url: url, fetchOptions: {...fetchOptions, body:body}})
 
-	let fetchPromise = fetchFunction(url, fetchOptions).then(res=>{return res})
+	let fetchPromise = previewMode ? Promise.resolve(options.preview) : fetchFunction(url, fetchOptions).then(res=>{return res})
 	if(!notJSON){fetchPromise = fetchPromise.then(res=>res.json())}
 	if(debug){fetchPromise = fetchPromise.then((res)=>{console.log(res); return res})}
 	return Promise.race([
