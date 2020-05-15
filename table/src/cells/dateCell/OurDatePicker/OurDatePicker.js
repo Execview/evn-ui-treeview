@@ -27,20 +27,8 @@ const OurDatePicker = (props) => {
 			yearOptions[option] = option
 		}
 
-		const monthOptions = [
-			"January",
-			"February",
-			"March",
-			"April",
-			"May",
-			"June",
-			"July",
-			"August",
-			"September",
-			"October",
-			"November",
-			"December",
-		]
+		const monthOptions = moment.monthsShort()
+		
 		const selectedMonth = monthOptions[moment(date).month()]
 
 		console.log(selectedMonth)
