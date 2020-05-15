@@ -2,7 +2,7 @@ import nodeFetch from 'node-fetch'
 import AC from 'abort-controller';
 
 const removeOurOptions = (options) => {
-	const {body,debug,token,method,timeout, headers,...otherOptions} = options
+	const {body,debug,token,method,timeout, headers, preview,...otherOptions} = options
 	return otherOptions
 }
 
@@ -23,6 +23,7 @@ export const fetchy = (url,options={},notJSON=false) => {
 	let body = options.body
 	const previewMode = options.preview!==undefined //for when you dont want to perform the fetch, but want to debug. (the value of options.preview is resolved)
 	const debug = options.debug || previewMode
+	const ntj = notJSON || options.notJSON || previewMode
 	const token = options.token
 	const timeout = options.timeout || 3000
 	const otherOptions = removeOurOptions(options)
@@ -53,7 +54,7 @@ export const fetchy = (url,options={},notJSON=false) => {
 	debug && console.log({url: url, fetchOptions: {...fetchOptions, body:body}})
 
 	let fetchPromise = previewMode ? Promise.resolve(options.preview) : fetchFunction(url, fetchOptions).then(res=>{return res})
-	if(!notJSON){fetchPromise = fetchPromise.then(res=>res.json())}
+	if(!ntj){fetchPromise = fetchPromise.then(res=>res.json())}
 	if(debug){fetchPromise = fetchPromise.then((res)=>{console.log(res); return res})}
 	return Promise.race([
 		fetchPromise,
