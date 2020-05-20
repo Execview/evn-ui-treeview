@@ -67,7 +67,8 @@ export const executeSequentially = (commands) => commands.reduce((lastPromise, c
 		return execute(c.command, {cwd: c.path})
 	})
 	.catch(err=>console.log(err))
-,Promise.resolve()))
+	)
+,Promise.resolve())
 
 
 export const moduleContainsPackageInINDIRECTDependencies = (n,p) => {
