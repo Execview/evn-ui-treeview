@@ -60,9 +60,15 @@ export const execute = (command,options) => new Promise((resolve,reject)=>{
 	exec(command || defaultCommand,options,(err,stdout,stderr)=>stdout ? resolve(stdout) : reject(err||stderr))
 })
 
-export const executeSequentially = (commands) => {
-	return commands.reduce((lastPromise, c)=>lastPromise.then(()=>{console.log(c.command); return execute(c.command, {cwd: c.path}).catch(err=>console.log(err))}), Promise.resolve())
-}
+export const executeSequentially = (commands) => commands.reduce((lastPromise, c)=>(
+	lastPromise
+	.then(()=>{
+		console.log(`[${c.for}]: ${c.command}`)
+		return execute(c.command, {cwd: c.path})
+	})
+	.catch(err=>console.log(err))
+,Promise.resolve()))
+
 
 export const moduleContainsPackageInINDIRECTDependencies = (n,p) => {
 	const packageLockFile = getModulePackageLock(n);

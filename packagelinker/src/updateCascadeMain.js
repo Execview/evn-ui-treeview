@@ -24,11 +24,11 @@ modulesToCascade.forEach(n=>{
 	const moduleDependencies = Object.keys(config).filter(ourDependency=>moduleContainsPackageInDependencies(n,ourDependency))
 
 	if(moduleDependencies.length > 0){
-		commandsToExecute.push({path: getModulePath(n), command: `npm install --save-exact ${moduleDependencies.map(d=>d+`@latest`).join(' ')}`})
+		commandsToExecute.push({for: n, path: getModulePath(n), command: `npm install --save-exact ${moduleDependencies.map(d=>d+`@latest`).join(' ')}`})
 	}
 
 	if(isAModule(n)){
-		commandsToExecute.push({path: getModulePath(n), command: `npm publish`})
+		commandsToExecute.push({for: n, path: getModulePath(n), command: `npm publish`})
 	}
 })
 
