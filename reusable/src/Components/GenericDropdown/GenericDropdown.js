@@ -5,7 +5,7 @@ import classes from './GenericDropdown.module.css';
 
 const GenericDropDown = (props) => {
 	const randomContainerId = useMemo(()=>Math.random().toString(),[])
-	const autoscroll = props.autoscroll
+	const autoscroll = props.autoscroll || {}
 
 	useEffect(()=>{
 		const isId = typeof(autoscroll) === 'string'
