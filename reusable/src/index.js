@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import version from './version'
+console.log(`Refreshed at: ${version.version}`)
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

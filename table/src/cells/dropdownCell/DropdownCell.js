@@ -5,7 +5,8 @@ import classes from './DropdownCell.module.css';
 
 const DropdownCell = (props) => {
 	const isEditable = props.permission > 1;
-	const [open, setOpen] = useState(false)
+	const [internalOpen, setInternalOpen] = useState(false)
+	const [open, setOpen] = props.setOpen ? [props.open, props.setOpen] : [internalOpen, setInternalOpen]
 	const input = props.options || {};
 	const optionsIsArray = Array.isArray(input);
 	const inputOptions = !optionsIsArray ? input : Object.fromEntries(input.map(o => [o, o]));
@@ -44,9 +45,13 @@ const DropdownCell = (props) => {
 		</div>
 	);
 
-	const {rcmStyle, genericDropdownClasses, ... rest} = props;
+	const {rcmStyle, genericDropdownClasses, autoscroll, ... rest} = props;
 
 	const {rcmClassName,...otherRCMWProps} = (props.rightClickMenuWrapperProps || {})
+
+	const defaultAutoScroll = {
+		id: data
+	}
 
 
 	return (
@@ -57,6 +62,7 @@ const DropdownCell = (props) => {
 			<RightClickMenuWrapper onLeftClick inline={inlineMode} takeParentLocation open={open} setOpen={setOpen} rightClickMenuStyle={rcmStyle} rightClickMenuClassName={`${classes['rcm']} ${rcmClassName||''}`} {...otherRCMWProps}>
 				<GenericDropdown
 					{...rest}
+					autoscroll={{...defaultAutoScroll,...autoscroll}}
 					onBlur={onBlur}
 					submit={(key) => { props.onValidateSave(key); if(!props.dontCloseOnClick){setOpen(false)} }}
 					canSearch={props.canSearch}

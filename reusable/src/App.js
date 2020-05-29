@@ -47,7 +47,8 @@ const App = (props) => {
 		options: GenericDropdownPropsOptions,
 		canSearch: true,
 		searchString: genericDropdownPropsSearchString,
-		onSearchChange: (v=>setGenericDropdownPropsSearchString(v))
+		onSearchChange: (v=>setGenericDropdownPropsSearchString(v)),
+		autoscroll: {id:'g',smooth: 'easeInOutQuart'}
 	}
 
 	return (

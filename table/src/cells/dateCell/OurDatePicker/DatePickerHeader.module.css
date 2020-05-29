@@ -14,6 +14,10 @@
 
 }
 
+.selected{
+	background-color: red;
+}
+
 .month-picker-rcm{
 	width: 150px;
 	height: 190px;

@@ -7,7 +7,8 @@ Make a config file called "config.json" and fill it with:
 	"@execview/table": "../table",
 	"@execview/treeview": "../treeview",
 	"@execview/grid": "../grid",
-	"evn-ui-web": "[Insert relative path to the site here]"
+	"evn-ui-web": "[Insert relative path to the site here]",
+	etc...
 }
 ```
 
