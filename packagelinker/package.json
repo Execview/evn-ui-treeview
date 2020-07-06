@@ -10,7 +10,8 @@
 		"setup": "node ./indexes/setupIndex",
 		"all": "node ./indexes/runAllIndex",
 		"clean": "wsl rm -rfd ./node_modules && wsl rm -rfd ./transpiled && wsl rm ./package-lock.json",
-		"update-cascade": "node ./indexes/updateCascadeIndex"
+		"update-cascade": "node ./indexes/updateCascadeIndex",
+		"update-cascade-test": "nodemon ./indexes/updateCascadeIndex @execview/table"
 	},
 	"author": "",
 	"license": "ISC",

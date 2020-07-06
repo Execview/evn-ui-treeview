@@ -8,8 +8,17 @@ export const getFullPath = p => path.resolve(process.cwd(),p)
 
 export const getModulePath = (n) => getFullPath(config[n])
 export const getModuleSrc = (n) => path.resolve(getModulePath(n),'./src')
-export const getModulePackageJson = (n) => fs.readFileSync(path.resolve(getModulePath(n),'./package.json'))
-export const getModulePackageLock = (n) => fs.readFileSync(path.resolve(getModulePath(n),'./package-lock.json'))
+export const extractJSON = (fb) => {
+	const f = fb.toString()
+	if(!fb || !f || f[0]!=='{'){
+		return {}
+	} else {
+		return JSON.parse(f)
+	}
+}
+export const getModulePackageJson = (n) => extractJSON(fs.readFileSync(path.resolve(getModulePath(n),'./package.json')))
+export const getModulePackageLock = (n) => extractJSON(fs.readFileSync(path.resolve(getModulePath(n),'./package-lock.json')))
+export const writeToModulePackageJson = (n,data) => fs.writeFileSync(path.resolve(getModulePath(n),'./package.json'),JSON.stringify(data,null,4)) 
 
 export const getTranspiledModulePath = (n) => path.resolve(getFullPath('.'),'./transpiled/'+n)
 
@@ -60,21 +69,16 @@ export const execute = (command,options) => new Promise((resolve,reject)=>{
 	exec(command || defaultCommand,options,(err,stdout,stderr)=>stdout ? resolve(stdout) : reject(err||stderr))
 })
 
-export const executeSequentially = (commands) => commands.reduce((lastPromise, c)=>(
+export const doSequentially = (promiseFunctions) => promiseFunctions.reduce((lastPromise, pf)=>(
 	lastPromise
-	.then(()=>{
-		console.log(`[${c.for}]: ${c.command}`)
-		return execute(c.command, {cwd: c.path})
-	})
-	.catch(err=>console.log(err))
+	.then(()=>pf())
+	.catch(err=>console.error(err))
 	)
 ,Promise.resolve())
 
 
 export const moduleContainsPackageInINDIRECTDependencies = (n,p) => {
-	const packageLockFile = getModulePackageLock(n);
-	if(!packageLockFile || !packageLockFile[0]==='{'){return}
-	const packageLock = JSON.parse(packageLockFile)
+	const packageLock = getModulePackageLock(n);
 	let flatRequirementList = []
 	const appendRequirements = (tree) => {
 		if(!typeof(tree)==='object'){return}
@@ -88,9 +92,7 @@ export const moduleContainsPackageInINDIRECTDependencies = (n,p) => {
 }
 
 export const moduleContainsPackageInDependencies = (n,p) => {
-	const packageJsonFile = getModulePackageJson(n);
-	if(!packageJsonFile || !packageJsonFile[0]==='{'){return}
-	const packageJson = JSON.parse(packageJsonFile)
+	const packageJson = getModulePackageJson(n)
 	const depProperties = Object.keys(packageJson).filter(k=>k.includes('dep')) //peerDeps, devDeps, deps, etc...	
 	return depProperties.some(dep=>{
 		return Object.keys(packageJson[dep]).includes(p)
