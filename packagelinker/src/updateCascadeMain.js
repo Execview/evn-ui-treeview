@@ -20,19 +20,20 @@ const packagesToCacade = Object.keys(config).slice(startingIndex)
 
 
 const cachedVersions = {}
-const publishModule = (m) => {console.log(`[${m}]: Publishing...`); cachedVersions[m] = null ; return execute(`npm publish`,{cwd: getModulePath(m)})}
+const publishModule = (m) => {console.log(`[${m}]: Publishing...`); cachedVersions[m] = null; return execute(`npm publish`,{cwd: getModulePath(m)})}
 const getModuleVersion = (m) => cachedVersions[m] ? Promise.resolve(cachedVersions[m]) : execute(`npm show ${m} version`).then(res=>{const v = res.trim(); cachedVersions[m]=v; return v})
 
 const updatePackageVersion = (p,m,v,options) => {
 	const {type} = options || {}
 	const letter = type !== 'exact' ? '^' : ''
-	console.log(`[${p}]: Updating ${m} to ${letter}${v}`)
+	const newVersion = `${letter}${v}`
 	const pj = getModulePackageJson(p)
 	let newPj = pj
 	const depProperties = Object.keys(pj).filter(k=>k.includes('dep'))
 	depProperties.forEach(dp=>{
-		if(pj[dp][m]){
-			newPj[dp][m]=`${letter}${v}`
+		if(pj[dp][m] && pj[dp][m]!==newVersion){
+			console.log(`[${p}]: Updating ${m} to ${newVersion}`)
+			newPj[dp][m]=`${newVersion}`
 		} 
 	})
 	return writeToModulePackageJson(p,newPj)
