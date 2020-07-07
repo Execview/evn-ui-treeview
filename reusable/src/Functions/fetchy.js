@@ -2,7 +2,7 @@ import nodeFetch from 'node-fetch'
 import AC from 'abort-controller';
 
 const removeOurOptions = (options) => {
-	const {body,debug,token,method,timeout, headers, preview,...otherOptions} = options
+	const {body,debug,token,method,timeout, headers, preview, notJSON, ...otherOptions} = options
 	return otherOptions
 }
 
@@ -53,7 +53,7 @@ export const fetchy = (url,options={},notJSON=false) => {
 
 	debug && console.log({url: url, fetchOptions: {...fetchOptions, body:body}})
 
-	let fetchPromise = previewMode ? Promise.resolve(options.preview) : fetchFunction(url, fetchOptions).then(res=>{return res})
+	let fetchPromise = previewMode ? Promise.resolve(options.preview) : fetchFunction(url, fetchOptions)
 	if(!ntj){fetchPromise = fetchPromise.then(res=>res.json())}
 	if(debug){fetchPromise = fetchPromise.then((res)=>{console.log(res); return res})}
 	return Promise.race([

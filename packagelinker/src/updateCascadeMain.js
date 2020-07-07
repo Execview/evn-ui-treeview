@@ -20,7 +20,7 @@ const packagesToCacade = Object.keys(config).slice(startingIndex)
 
 
 const cachedVersions = {}
-const publishModule = (m) => {console.log(`[${m}]: Publishing...`); cachedVersions[m] = null ; return execute(`npm publish`,{cwd: getModulePath(p)})}
+const publishModule = (m) => {console.log(`[${m}]: Publishing...`); cachedVersions[m] = null ; return execute(`npm publish`,{cwd: getModulePath(m)})}
 const getModuleVersion = (m) => cachedVersions[m] ? Promise.resolve(cachedVersions[m]) : execute(`npm show ${m} version`).then(res=>{const v = res.trim(); cachedVersions[m]=v; return v})
 
 const updatePackageVersion = (p,m,v,options) => {
