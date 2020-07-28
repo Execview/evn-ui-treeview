@@ -17,7 +17,10 @@ export const extractJSON = (fb) => {
 	}
 }
 export const getModulePackageJson = (n) => extractJSON(fs.readFileSync(path.resolve(getModulePath(n),'./package.json')))
-export const getModulePackageLock = (n) => extractJSON(fs.readFileSync(path.resolve(getModulePath(n),'./package-lock.json')))
+export const getModulePackageLock = (n) => {
+	const plPath = path.resolve(getModulePath(n),'./package-lock.json')
+	return fs.existsSync(plPath) ? extractJSON(fs.readFileSync(plPath)) : getModulePackageJson(n)
+}
 export const writeToModulePackageJson = (n,data) => fs.writeFileSync(path.resolve(getModulePath(n),'./package.json'),JSON.stringify(data,null,"\t")) 
 
 export const getTranspiledModulePath = (n) => path.resolve(getFullPath('.'),'./transpiled/'+n)
