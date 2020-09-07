@@ -24,6 +24,7 @@ export const fetchy = (url,options={},notJSON=false) => {
 	const previewMode = options.preview!==undefined //for when you dont want to perform the fetch, but want to debug. (the value of options.preview is resolved)
 	const debug = options.debug || previewMode
 	const ntj = notJSON || options.notJSON || previewMode
+	const leaveError = options.leaveError || previewMode
 	const token = options.token
 	const timeout = options.timeout || 3000
 	const otherOptions = removeOurOptions(options)
@@ -54,7 +55,11 @@ export const fetchy = (url,options={},notJSON=false) => {
 	debug && console.log({url: url, fetchOptions: {...fetchOptions, body:body}})
 
 	let fetchPromise = previewMode ? Promise.resolve(options.preview) : fetchFunction(url, fetchOptions)
-	if(!ntj){fetchPromise = fetchPromise.then(res=>res.json())}
+	if(!previewMode){
+		fetchPromise = fetchPromise.then(res=>res.ok ? res : (leaveError ? Promise.reject(res) : res.text().then(err=>Promise.reject(err))))
+		if(!ntj){fetchPromise = fetchPromise.then(res=>res.json())}
+	}
+	
 	if(debug){fetchPromise = fetchPromise.then((res)=>{console.log(res); return res})}
 	return Promise.race([
 		fetchPromise,
