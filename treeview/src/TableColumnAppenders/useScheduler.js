@@ -46,9 +46,14 @@ const useScheduler = (data, columnsInfo, options={}, active=true) => {
 
 	useEffect(()=>{
 		if(!initialised && data && Object.keys(data).length!==0){
-			setInitialised(true)
-			const newStartDate =  new Date(Math.min(...Object.keys(data).map(key=>data[key].startdate)))
-			setSchedulerStart(newStartDate)
+			const allStartDates = Object.keys(data).map(key=>data[key].startdate).filter(sd=>!isNaN(sd))
+			if(allStartDates.length > 0) {
+				const newStartDate =  new Date(Math.min(...allStartDates))
+				console.log('#############################################################')
+				console.log(newStartDate)
+				setInitialised(true)
+				setSchedulerStart(newStartDate)
+			}
 		}
 	},[data])
 

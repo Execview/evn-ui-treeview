@@ -39,7 +39,7 @@ export const getNearestValuesInArray = (snaps,value)=>{
 	})
 }
 
-export const getNearestSnapXToDate = (date,snaps)=>{
+export const getNearestSnapXToDate = (date=(new Date()),snaps=[])=>{
 	const val = date.valueOf()
     const daterangems = snaps.map(dateX=>dateX[0].valueOf())
 	const nearestTwoVals = getNearestValuesInArray(daterangems,val).slice(0,2)
