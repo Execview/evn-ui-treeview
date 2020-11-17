@@ -2,7 +2,7 @@ import nodeFetch from 'node-fetch'
 import AC from 'abort-controller';
 
 const removeOurOptions = (options) => {
-	const {body,debug,token,method,timeout, headers, preview, notJSON, ...otherOptions} = options
+	const {body,debug,token,method,timeout,headers,preview,notJSON,leaveError,req_id, ...otherOptions} = options
 	return otherOptions
 }
 
@@ -16,16 +16,17 @@ const globalStringOrAlt = (globalString, alt) =>{
 	return result
 }
 
-export const fetchy = (url,options={},notJSON=false) => {
+export const fetchy = (url,options={}) => {
 	const [fetchFunction, AbortControllerClass] = [globalStringOrAlt('fetch', nodeFetch),globalStringOrAlt('AbortController', AC)]
 	if(!url){console.log('WHERE IS THE LINK?!'); return}
 
 	let body = options.body
 	const previewMode = options.preview!==undefined //for when you dont want to perform the fetch, but want to debug. (the value of options.preview is resolved)
 	const debug = options.debug || previewMode
-	const ntj = notJSON || options.notJSON || previewMode
+	const ntj = options.notJSON || previewMode
 	const leaveError = options.leaveError || previewMode
 	const token = options.token
+	const req_id = options.req_id
 	const timeout = options.timeout || 3000
 	const otherOptions = removeOurOptions(options)
 
@@ -35,6 +36,7 @@ export const fetchy = (url,options={},notJSON=false) => {
 
 	let headers = {}
 	if(method!=='GET'){headers["Content-Type"] = "application/json"}
+	if(req_id){headers['x-request-id'] = req_id}
 	
 	let controller = new AbortControllerClass();
 	let fetchOptions = {
