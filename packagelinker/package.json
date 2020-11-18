@@ -5,6 +5,7 @@
 	"main": "./indexes/watchIndex.js",
 	"scripts": {
 		"start": "node ./indexes/watchIndex",
+		"dev": "nodemon ./indexes/watchIndex",
 		"test": "nodemon ./indexes/testIndex",
 		"watch": "npm start",
 		"setup": "node ./indexes/setupIndex",
@@ -24,6 +25,7 @@
 		"chokidar": "^3.2.2",
 		"esm": "^3.2.25",
 		"moment": "2.24.0",
-		"readline-sync": "^1.4.10"
+		"readline-sync": "^1.4.10",
+		"rxjs": "^6.6.3"
 	}
 }
