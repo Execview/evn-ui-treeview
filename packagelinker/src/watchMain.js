@@ -66,8 +66,9 @@ const controlledSubscribeSet = (s, callback, options={}) => { //only sends next 
 	}
 
 	s.subscribe(e=>{
-		buffer = buffer.filter(el=>el!==e) //place e at the end,
-		buffer.push(e)
+		// buffer = buffer.filter(el=>el!==e) //place e at the end,
+		// buffer.push(e)
+		!buffer.includes(e) && buffer.push(e) //no point moving it to the end if it was going to get processed next anyway...
 		if(!thinking){
 			consumeNext()
 		}

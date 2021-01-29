@@ -1,6 +1,6 @@
 {
 	"name": "@execview/reusable",
-	"version": "0.1.94",
+	"version": "0.1.95",
 	"main": "./transpiled/exports.js",
 	"private": false,
 	"dependencies": {

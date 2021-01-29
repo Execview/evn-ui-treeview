@@ -1,11 +1,11 @@
 {
 	"name": "@execview/treeview",
-	"version": "0.1.134",
+	"version": "0.1.135",
 	"main": "./transpiled/exports.js",
 	"private": false,
 	"dependencies": {
-		"@execview/reusable": "0.1.94",
-		"@execview/table": "0.1.163",
+		"@execview/reusable": "0.1.95",
+		"@execview/table": "0.1.164",
 		"@execview/themedesigner": "0.1.6",
 		"@fortawesome/fontawesome-svg-core": "^1.2.25",
 		"@fortawesome/free-regular-svg-icons": "^5.11.2",

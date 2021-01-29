@@ -2,7 +2,7 @@ import nodeFetch from 'node-fetch'
 import AC from 'abort-controller';
 
 const removeOurOptions = (options) => {
-	const {body,debug,token,method,timeout,headers,preview,notJSON,leaveError,req_id, ...otherOptions} = options
+	const {body,debug,token,basic,method,timeout,headers,preview,notJSON,leaveError,req_id, ...otherOptions} = options
 	return otherOptions
 }
 
@@ -16,8 +16,10 @@ const globalStringOrAlt = (globalString, alt) =>{
 	return result
 }
 
+const nodeBTOA = (str) => (new Buffer.from(str,'ascii')).toString('base64')
+
 export const fetchy = (url,options={}) => {
-	const [fetchFunction, AbortControllerClass] = [globalStringOrAlt('fetch', nodeFetch),globalStringOrAlt('AbortController', AC)]
+	const [fetchFunction, AbortControllerClass, toBase64] = [globalStringOrAlt('fetch', nodeFetch),globalStringOrAlt('AbortController', AC), globalStringOrAlt('btoa', nodeBTOA)]
 	if(!url){console.log('WHERE IS THE LINK?!'); return}
 
 	let body = options.body
@@ -26,6 +28,7 @@ export const fetchy = (url,options={}) => {
 	const ntj = options.notJSON || previewMode
 	const leaveError = options.leaveError || previewMode
 	const token = options.token
+	const basic = options.basic
 	const req_id = options.req_id
 	const timeout = options.timeout || 3000
 	const otherOptions = removeOurOptions(options)
@@ -52,7 +55,13 @@ export const fetchy = (url,options={}) => {
 		fetchOptions.body = fetchBody
 	}
 	
-	if(token){fetchOptions.headers["Authorization"] = "Bearer "+token}
+	if(token){fetchOptions.headers["Authorization"] = `Bearer ${token}`}
+	if(basic){
+		const alreadyString = typeof(basic)==='string'
+		if(!alreadyString && (!basic.user || !basic.password)){return Promise.reject('provide user and password for basic auth!')}
+		const basicString = alreadyString ? basic : toBase64(`${basic.user}:${basic.password}`)
+		fetchOptions.headers["Authorization"] = `Basic ${basicString}`
+	}
 
 	debug && console.log({url: url, fetchOptions: {...fetchOptions, body:body}})
 

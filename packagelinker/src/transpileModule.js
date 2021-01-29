@@ -75,7 +75,7 @@ export const execute = (command,options) => new Promise((resolve,reject)=>{
 export const doSequentially = (promiseFunctions) => promiseFunctions.reduce((lastPromise, pf)=>(
 	lastPromise
 	.then(()=>pf())
-	.catch(err=>console.error(err))
+	.catch(err=>{console.error(err); return Promise.reject(err)})
 	)
 ,Promise.resolve())
 
