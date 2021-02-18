@@ -7,10 +7,12 @@ export const getOurCookie = (originalCookie,getProperty) => {
 	return cookie;
 }
 
-export const setOurCookie = (setFunction, o) => {
+export const setOurCookie = (setFunction, o, properties={}) => {
 	if(Object.keys(o||{}).length===0){return}
 	Object.entries(o).forEach(([c,v])=>{
-		const newCookie = v ? `${c}=${v}; expires=${new Date('2970-01-01').toUTCString()}; path=/` : `${c}=; expires=${new Date('1970-01-01').toUTCString()}; path=/`
+		let expiration = '2970-01-01'
+		if(properties[c] && properties[c].expires){expiration = properties[c].expires}
+		const newCookie = v ? `${c}=${v}; expires=${new Date(expiration).toUTCString()}; path=/` : `${c}=; expires=${new Date('1970-01-01').toUTCString()}; path=/`
 		console.log(newCookie)
 		setFunction(newCookie)
 	})
