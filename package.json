@@ -1,12 +1,15 @@
 {
 	"name": "@execview/treeview",
-	"version": "0.1.136",
+	"version": "0.1.138",
 	"main": "./transpiled/exports.js",
-	"private": false,
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Execview/evn-ui-treeview.git"
+	},
 	"dependencies": {
-		"@execview/reusable": "0.1.96",
-		"@execview/table": "0.1.165",
-		"@execview/themedesigner": "0.1.6",
+		"@execview/reusable": "0.1.99",
+		"@execview/table": "0.1.167",
+		"@execview/themedesigner": "0.1.15",
 		"@fortawesome/fontawesome-svg-core": "^1.2.25",
 		"@fortawesome/free-regular-svg-icons": "^5.11.2",
 		"@fortawesome/free-solid-svg-icons": "^5.11.2",
@@ -29,7 +32,7 @@
 		"build": "react-scripts build",
 		"test": "react-scripts test",
 		"eject": "react-scripts eject",
-		"prepublishOnly": "npm version patch && npm install --no-save @babel/cli @babel/core @babel/preset-env @babel/plugin-proposal-class-properties @babel/preset-react && babel src -d transpiled --copy-files --plugins=@babel/plugin-proposal-class-properties --presets=@babel/preset-env,@babel/preset-react",
+		"prepublishOnly": "npm --no-git-tag-version version patch && npm install --no-save @babel/cli @babel/core @babel/preset-env @babel/plugin-proposal-class-properties @babel/preset-react && babel src -d transpiled --copy-files --plugins=@babel/plugin-proposal-class-properties --presets=@babel/preset-env,@babel/preset-react",
 		"postpublish": "rmdir /S /Q transpiled",
 		"clean": "wsl rm -rfd ./node_modules && wsl rm -rfd ./transpiled && wsl rm ./package-lock.json"
 	},
