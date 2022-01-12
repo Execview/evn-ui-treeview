@@ -1,15 +1,14 @@
 import * as actionTypes from './actionTypes';
+import { v4 as uuid } from 'uuid';
 
 const moment = require('moment')
-const crypto = require('crypto');
-const hash = crypto.createHash('sha256');
 
 export const ADD_ROW = (state,action,reducer) => {
 	let newRow = action.row
 	let newId = action.id
 	const parent = action.parent || ''
 	if(!newRow){
-		newId = '_' + hash.update(Date.now() + Math.random().toString()).digest('hex').substring(0, 5);
+		newId = '_' + uuid();
 		const shape = action.shape || 'bubble'
 		let tempTitle = 'Untitled Activity';
 		switch (shape) {

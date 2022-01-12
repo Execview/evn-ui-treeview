@@ -1,55 +1,47 @@
 {
 	"name": "@execview/treeview",
-	"version": "0.1.138",
+	"version": "0.1.139",
 	"main": "./transpiled/exports.js",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/Execview/evn-ui-treeview.git"
 	},
 	"dependencies": {
-		"@execview/reusable": "0.1.99",
-		"@execview/table": "0.1.167",
-		"@execview/themedesigner": "0.1.15",
-		"@fortawesome/fontawesome-svg-core": "^1.2.25",
-		"@fortawesome/free-regular-svg-icons": "^5.11.2",
-		"@fortawesome/free-solid-svg-icons": "^5.11.2",
-		"@fortawesome/react-fontawesome": "^0.1.7",
-		"jwt-decode": "^2.2.0",
-		"moment": "2.24.0",
-		"moment-business-time": "^0.7.1",
-		"react": "16.11.0",
-		"react-datepicker": "^2.9.6",
-		"react-dom": "16.11.0",
-		"react-redux": "^7.1.1",
-		"react-scripts": "3.2.0",
-		"redux": "^4.0.4",
-		"redux-observable": "^1.2.0",
-		"redux-thunk": "^2.3.0",
-		"rxjs-compat": "^6.5.3"
+		"@execview/reusable": "0.1.108",
+		"@execview/table": "0.1.169",
+		"@execview/themedesigner": "0.1.18",
+		"@fortawesome/fontawesome-svg-core": "^1.2.36",
+		"@fortawesome/free-regular-svg-icons": "^5.15.4",
+		"@fortawesome/free-solid-svg-icons": "^5.15.4",
+		"@fortawesome/react-fontawesome": "^0.1.16",
+		"jwt-decode": "^3.1.2",
+		"moment": "2.29.1",
+		"moment-business-time": "^1.1.1",
+		"react": "17.0.2",
+		"react-datepicker": "^4.6.0",
+		"react-dom": "17.0.2",
+		"react-redux": "^7.2.6",
+		"react-scripts": "5.0.0",
+		"redux": "^4.1.2",
+		"redux-observable": "^2.0.0",
+		"redux-thunk": "^2.4.1",
+		"rxjs-compat": "^6.6.7",
+		"uuid": "^8.3.2"
 	},
 	"scripts": {
 		"start": "react-scripts start",
 		"build": "react-scripts build",
 		"test": "react-scripts test",
-		"eject": "react-scripts eject",
-		"prepublishOnly": "npm --no-git-tag-version version patch && npm install --no-save @babel/cli @babel/core @babel/preset-env @babel/plugin-proposal-class-properties @babel/preset-react && babel src -d transpiled --copy-files --plugins=@babel/plugin-proposal-class-properties --presets=@babel/preset-env,@babel/preset-react",
-		"postpublish": "rmdir /S /Q transpiled",
-		"clean": "wsl rm -rfd ./node_modules && wsl rm -rfd ./transpiled && wsl rm ./package-lock.json"
+		"prepublishOnly": "npm --no-git-tag-version version patch && npm run installTranspiler && npm run transpile",
+		"postpublish": "npx --yes rimraf transpiled",
+		"installTranspiler": "npm install --no-save @babel/cli @babel/preset-react",
+		"transpile": "npx babel src -d transpiled --copy-files --presets=@babel/preset-react",
+		"clean": "npx --yes rimraf node_modules transpiled package-lock.json"
 	},
 	"files": [
 		"/public",
 		"/transpiled"
 	],
-	"keywords": [],
-	"author": "james.styman@execview.com",
-	"license": "ISC",
-	"readme": "README.md",
-	"publishConfig": {
-		"registry": "https://registry.npmjs.org"
-	},
-	"eslintConfig": {
-		"extends": "react-app"
-	},
 	"browserslist": [
 		">0.2%",
 		"not dead",

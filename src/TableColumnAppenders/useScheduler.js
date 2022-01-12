@@ -1,19 +1,18 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import SchedulerCell from '../schedulerCell/SchedulerCell'
 import SchedulerHeader from '../schedulerCell/SchedulerHeader';
-import { injectObjectInObject } from '@execview/reusable';
+import { injectObjectInObject, useDimensions } from '@execview/reusable';
 
 import { getDrawnLinksFromData, getSnaps, getTimeFormatString, getMajorStartOf, getBubbleColours } from './SchedulerBehavior'
 import { getColourFromMap } from './BubbleBehavior'
 import {getNearestSnapXToDate, getInternalMousePosition, getNearestSnapDateToX, getExactNearestSnapDateToX, getYPositionFromRowId} from './schedulerFunctions'
 import { UNSATColours, Lightcolours, Darkcolours, testColours } from './colourOptions'
-import useDimensions from '@execview/reusable/transpiled/Functions/useDimensions';
 
 
-var Rx = require('rxjs/Rx')
+import { fromEvent, merge } from 'rxjs';
 var moment = require('moment')
 
-const mousepositionstream = Rx.Observable.fromEvent(document,'pointermove').merge(Rx.Observable.fromEvent(document,'pointerdown'))
+const mousepositionstream = merge(fromEvent(document,'pointermove'),fromEvent(document,'pointerdown'))
 
 const useScheduler = (data, columnsInfo, options={}, active=true) => {
 	const [initialised, setInitialised] = useState(false)
@@ -49,8 +48,6 @@ const useScheduler = (data, columnsInfo, options={}, active=true) => {
 			const allStartDates = Object.keys(data).map(key=>data[key].startdate).filter(sd=>!isNaN(sd))
 			if(allStartDates.length > 0) {
 				const newStartDate =  new Date(Math.min(...allStartDates))
-				console.log('#############################################################')
-				console.log(newStartDate)
 				setInitialised(true)
 				setSchedulerStart(newStartDate)
 			}

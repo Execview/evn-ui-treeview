@@ -1,19 +1,19 @@
 import * as actionTypes from './actions/actionTypes'
-import { combineEpics } from 'redux-observable';
-import {ofType} from 'redux-observable'
-import {filter, map, tap} from 'rxjs/operators'
+import { combineEpics, ofType } from 'redux-observable';
+import {filter, map, tap, mergeMap} from 'rxjs/operators'
 import { recursiveDeepCopy } from '@execview/reusable';
 import tryReturnValidTransformState from './stateValidator';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 const voidAction = {type: 'dont care'}
 
-export const tryBubbleTransformEpic = (action$,state$) => { return (
-    action$.ofType(actionTypes.TRY_BUBBLE_TRANSFORM).mergeMap(action=>{
+export const tryBubbleTransformEpic = (action$,state$) => action$.pipe(
+    ofType(actionTypes.TRY_BUBBLE_TRANSFORM),
+	mergeMap(action=>{
 		const state = {...state$.value};
 		return tryBubbleTransformEpicMap(action,state)
 	})
-)}
+)
 export const tryBubbleTransformEpicMap = (action, state)=>{
 	//apply transformation to a copy of bubble states. If valid, replace the main state.
 	const bubbleCopies = {}
@@ -41,12 +41,12 @@ export const tryBubbleTransformEpicMap = (action, state)=>{
 		}
 
 		if (action.sendChanges) {
-            return Observable.of(moveBubblesAction,{type: actionTypes.SEND_CHANGES, itemChanges})
+            return of(moveBubblesAction,{type: actionTypes.SEND_CHANGES, itemChanges})
         } else {
-            return Observable.of(moveBubblesAction)
+            return of(moveBubblesAction)
         }
 	}
-	return Observable.of(voidAction);
+	return of(voidAction);
 }
 
 export const tryPerformLinkEpic = (action$,state$) => action$.pipe(

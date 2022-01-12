@@ -5,7 +5,7 @@ import reducer from './store/reducer'
 import * as actionTypes from './store/actions/actionTypes'
 import { tryBubbleTransformEpicMap, tryPerformLinkEpicMap, tryPerformAssociationEpicMap } from './store/epic'
 
-module.exports = {
+export {
 	useScheduler,
 	useTree,
 	getRootsFromData,
@@ -15,4 +15,6 @@ module.exports = {
 	tryBubbleTransformEpicMap,
 	tryPerformLinkEpicMap,
 	tryPerformAssociationEpicMap
-};
+}
+
+export default null
