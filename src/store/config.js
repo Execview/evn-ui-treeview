@@ -2,7 +2,7 @@ import React from 'react';
 
 import { TextCell, ColorCell, DateCell } from '@execview/table'
 
-import Data from './configData.json'
+import Data from './configData.json' assert { type: "json" }
 
 export const data = Data
 
