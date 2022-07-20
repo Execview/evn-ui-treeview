@@ -274,8 +274,8 @@ const useScheduler = (data, columnsInfo, options={}, active=true) => {
 				[columnName]:{
 					//Bubble Data
 					bkey: rowId,
-					startpoint: [getNearestSnapXToDate(tableData[rowId].startdate,snaps),0],
-					endpoint: [getNearestSnapXToDate(tableData[rowId].enddate,snaps),bubbleHeight],
+					startpoint: tableData[rowId].startdate ? [getNearestSnapXToDate(tableData[rowId].startdate,snaps),0] : [0,0],
+					endpoint: tableData[rowId].enddate ? [getNearestSnapXToDate(tableData[rowId].enddate,snaps),bubbleHeight] : [0,0],
 					colour: getColourFromMap(bubbleColours.middle,colours),
 					leftcolour: getColourFromMap(bubbleColours.left,colours),
 					rightcolour: getColourFromMap(bubbleColours.right,colours),
@@ -292,7 +292,7 @@ const useScheduler = (data, columnsInfo, options={}, active=true) => {
 					rightmouseout:((k,e)=>bubblemouseout(k,e,'right')),					
 					middlemouseout:((k,e)=>bubblemiddlemouseout(k,e,'middle')),
 					onContextMenu:((k,e)=>bubbleOnContextMenu(k,e)),
-					text:tableData[rowId].name,
+					text: tableData[rowId].startdate && tableData[rowId].enddate && tableData[rowId].name || '',
 					shadow: shadow,
 					mouseOnScheduler: clickedOnScheduler,
 					shape: tableData[rowId].shape,

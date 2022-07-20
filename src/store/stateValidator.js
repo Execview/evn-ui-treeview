@@ -132,7 +132,15 @@ const tryReturnValidTransformState = (bubbles,key,changes) =>{
 
 
 	//Dont allow negative length bubbles
-	if(!Object.keys(bubbles).every(bubblekey => {var bubble = bubbles[bubblekey]; return bubble.startdate<bubble.enddate})){console.log('negative width!');return false}
+	if(!Object.keys(bubbles).every(bubblekey => {
+		var bubble = bubbles[bubblekey]
+		const validStartAndEnd = bubble.startdate<bubble.enddate || !bubble.startdate || !bubble.enddate
+		if(!validStartAndEnd){console.log(`${bubblekey} has some invalid data`)}
+		return validStartAndEnd
+	})){
+		console.log('negative width!')
+		return false
+	}
 	
 	//Dont allow bubbles to collide
 	//if(!Object.keys(bubbles).every(bubblekey => {var bubble = bubbles[bubblekey];return checkForNoBubbleCollisions(bubble,bubbles)})){/*console.log('collision!')*/;return false}
