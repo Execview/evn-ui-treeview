@@ -4,6 +4,7 @@ import useVisibleColumns from './TableColumnAppenders/useVisibleColumns'
 import reducer from './store/reducer'
 import * as actionTypes from './store/actions/actionTypes'
 import { tryBubbleTransformEpicMap, tryPerformLinkEpicMap, tryPerformAssociationEpicMap } from './store/epic'
+import stateValidator from './store/stateValidator'
 
 export {
 	useScheduler,
@@ -14,7 +15,8 @@ export {
 	actionTypes,
 	tryBubbleTransformEpicMap,
 	tryPerformLinkEpicMap,
-	tryPerformAssociationEpicMap
+	tryPerformAssociationEpicMap,
+	stateValidator
 }
 
 export default null

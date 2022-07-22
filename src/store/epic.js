@@ -54,7 +54,7 @@ export const tryPerformLinkEpic = (action$,state$) => action$.pipe(
 	map(action=>{const state = {...state$.value}; return tryPerformLinkEpicMap(action,state)})
 )
 export const tryPerformLinkEpicMap = (action,state)=>{
-	if ((action.parentside === 'left' || action.parentside === 'right') && action.childkey!==action.parentkey) {
+	if ((action.parentside === 'left' || action.parentside === 'right') && action.childkey!==action.parentkey && state._data[action.childkey] && state._data[action.parentkey]) {
 		// if child doesnt have parent AND parent hasnt already linked child
 		if((!state._data[action.childkey].ParentBubble)&&(!(state._data[action.parentkey].ChildBubbles || {})[action.childkey])){
 			return {...action, type: actionTypes.PERFORM_LINK} 
