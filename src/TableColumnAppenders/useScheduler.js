@@ -36,7 +36,8 @@ const useScheduler = (data, columnsInfo, options={}, active=true) => {
 
 	const HIGHLIGHT_COLOUR = 'Grey'
 
-	const [rowHeights, setRowHeights] = useState([])
+	const [rowHeights, setRowHeights] = useReducer((rhs,{id,heightAndY})=>({...rhs,[id]:heightAndY}),[])
+	useReducer()
 	const [schedulerWidth, setSchedulerWidth] = useState(0)
 
 	const [bubbleContextMenuKey, setBubbleContextMenuKey] = useState(null)
@@ -248,7 +249,11 @@ const useScheduler = (data, columnsInfo, options={}, active=true) => {
 		const schedulerheaderdata = {
 			snaps: snaps,
 			getTableDimensions: getTableDimensions,
-			links: getDrawnLinksFromData(data,((id)=>getYPositionFromRowId(id,rowHeights,getTableDimensions().y)+(((rowHeights[id] || {}).height || 0)/2)),((bubbleDate)=>getNearestSnapXToDate(bubbleDate,snaps))),
+			links: getDrawnLinksFromData(
+				data,
+				id=>getYPositionFromRowId(id,rowHeights,getTableDimensions().y)+(((rowHeights[id] || {}).height || 0)/2),
+				bubbleDate=>getNearestSnapXToDate(bubbleDate,snaps)
+			),
 			setWidth: ((w)=>{if(w!==schedulerWidth){setSchedulerWidth(w)}}),
 			mouseOnScheduler: clickedOnScheduler,
 			timeFormatString: getTimeFormatString(schedulerResolution),
@@ -305,7 +310,11 @@ const useScheduler = (data, columnsInfo, options={}, active=true) => {
 							deleteBubble: <div onClick={()=>{deleteBubble(bubbleContextMenuKey)}}>Delete Bubble</div> 
 						}
 					},
-					setHeightAndY: ((newHeightAndY)=>{rowHeights[rowId]=newHeightAndY; setRowHeights({...rowHeights})})
+					setHeightAndY: ((newHeightAndY)=>{
+						// rowHeights[rowId]=newHeightAndY; setRowHeights({...rowHeights})
+						// console.log(`setting ${rowId}: y: ${rowHeights[rowId]?.y} ->  ${newHeightAndY?.y} & h:${rowHeights[rowId]?.height} ->  ${newHeightAndY?.height}`)
+						setRowHeights({id: rowId, heightAndY: newHeightAndY})
+					})
 				}
 			}
 		}

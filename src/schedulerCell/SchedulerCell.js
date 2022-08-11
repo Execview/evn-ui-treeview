@@ -1,4 +1,4 @@
-import React, {useLayoutEffect, useState} from 'react';
+import React, {useEffect, useLayoutEffect, useState} from 'react';
 import Bubble from './Bubble';
 import classes from './SchedulerCell.module.css';
 import {RightClickMenuWrapper, useDimensions} from '@execview/reusable'
@@ -6,17 +6,22 @@ import SchedulerRightClickMenu from './SchedulerRightClickMenu';
 
 const SchedulerCell = (props) => {
 	const [selfRef, getSelfDimensions] = useDimensions()
-	const [rowHeightAndY, setRowHeightAndY] = useState(0);
+	const [rowHeightAndY, setRowHeightAndY] = useState({});
+	const [internalId, setInternalId] = useState() //sometimes the same cell can be used for a different bubble (i.e the props/data change but the reference doesnt)
 	const data = props.data || {}
 	const style = props.style || {}
 	const touchAction = data.shadow ? 'none' : 'pan-y'
+
 	useLayoutEffect(()=>{
+		const requiresRecalculation = data?.bkey!==internalId
+		if(requiresRecalculation){setInternalId(data?.bkey)}		
 		const d = getSelfDimensions()
 		const newHeightAndY = {
 			height: d.height,
 			y: d.y
 		}
-		if(JSON.stringify(newHeightAndY) !== JSON.stringify(rowHeightAndY)) {
+
+		if(requiresRecalculation || (newHeightAndY.y && newHeightAndY.height && (JSON.stringify(newHeightAndY) !== JSON.stringify(rowHeightAndY)))) {
 			setRowHeightAndY(newHeightAndY)
 			data.setHeightAndY && data.setHeightAndY(newHeightAndY)
 		}
