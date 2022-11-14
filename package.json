@@ -1,14 +1,14 @@
 {
 	"name": "@execview/treeview",
-	"version": "0.1.158",
+	"version": "0.1.160",
 	"main": "./transpiled/exports.js",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/Execview/evn-ui-treeview.git"
 	},
 	"dependencies": {
-		"@execview/reusable": "0.1.119",
-		"@execview/table": "0.1.180",
+		"@execview/reusable": "0.1.120",
+		"@execview/table": "0.1.182",
 		"@execview/themedesigner": "0.1.28",
 		"@fortawesome/fontawesome-svg-core": "^6.1.2",
 		"@fortawesome/free-regular-svg-icons": "^6.1.2",
