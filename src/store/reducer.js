@@ -1,7 +1,7 @@
-import * as actionTypes from './actions/actionTypes';
-import * as BubbleLinks from './actions/BubbleLinks';
-import * as DataManagement from './actions/DataManagement';
-import * as Interactions from './actions/Interactions';
+import * as actionTypes from './actions/actionTypes.js';
+import * as BubbleLinks from './actions/BubbleLinks.js';
+import * as DataManagement from './actions/DataManagement.js';
+import * as Interactions from './actions/Interactions.js';
 
 let initialState = {
 	_data: {}

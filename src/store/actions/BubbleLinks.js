@@ -1,4 +1,4 @@
-import * as actionTypes from './actionTypes';
+import * as actionTypes from './actionTypes.js';
 
 export const PERFORM_LINK = (state,action,reducer) => {
 	var newState = {...state}

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDimensions } from '@execview/reusable'
-import SchedulerOverlay from './SchedulerOverlay'
-import SchedulerMenu from './SchedulerMenu'
+import SchedulerOverlay from './SchedulerOverlay.js'
+import SchedulerMenu from './SchedulerMenu.js'
 import classes from './SchedulerHeader.module.css';
 import { Button, RightClickMenuWrapper } from '@execview/reusable'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

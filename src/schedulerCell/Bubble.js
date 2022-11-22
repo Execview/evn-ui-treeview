@@ -1,5 +1,5 @@
 import React from 'react';
-import getBubblePath from './getBubblePath'
+import getBubblePath from './getBubblePath.js'
 import classes from './Bubble.module.css'
 
 const Bubble = React.memo((props) => {

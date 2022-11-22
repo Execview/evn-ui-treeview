@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import TreeCell from '../treeCell/TreeCell';
+import TreeCell from '../treeCell/TreeCell.js';
 import { injectObjectInObject } from '@execview/reusable';
 
 const useTree = (data={},columnsInfo={},options={},active=true) => {

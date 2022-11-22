@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
-import SchedulerRightClickMenu from './SchedulerRightClickMenu'
-import { getNearestSnapXToDate } from '../TableColumnAppenders/schedulerFunctions'
-import { getMajorStartOf, getMajorLegend } from '../TableColumnAppenders/SchedulerBehavior'
+import SchedulerRightClickMenu from './SchedulerRightClickMenu.js'
+import { getNearestSnapXToDate } from '../TableColumnAppenders/schedulerFunctions.js'
+import { getMajorStartOf, getMajorLegend } from '../TableColumnAppenders/SchedulerBehavior.js'
 import classes from './SchedulerOverlay.module.css';
 import moment from 'moment'
 

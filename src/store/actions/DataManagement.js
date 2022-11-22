@@ -1,4 +1,4 @@
-import { data as configData} from '../config'
+import { data as configData} from '../config.js'
 
 export const LOAD_FROM_CONFIG = (state,action,reducer) => {
 	const translateConfigData = (data) => {

@@ -1,4 +1,4 @@
-import * as actionTypes from './actionTypes';
+import * as actionTypes from './actionTypes.js';
 import { v4 as uuid } from 'uuid';
 
 const moment = require('moment')

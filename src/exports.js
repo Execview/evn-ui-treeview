@@ -1,10 +1,10 @@
-import useScheduler from './TableColumnAppenders/useScheduler';
-import useTree, { getRootsFromData } from './TableColumnAppenders/useTree';
-import useVisibleColumns from './TableColumnAppenders/useVisibleColumns'
-import reducer from './store/reducer'
-import * as actionTypes from './store/actions/actionTypes'
-import { tryBubbleTransformEpicMap, tryPerformLinkEpicMap, tryPerformAssociationEpicMap } from './store/epic'
-import stateValidator from './store/stateValidator'
+import useScheduler from './TableColumnAppenders/useScheduler.js';
+import useTree, { getRootsFromData } from './TableColumnAppenders/useTree.js';
+import useVisibleColumns from './TableColumnAppenders/useVisibleColumns.js'
+import reducer from './store/reducer.js'
+import * as actionTypes from './store/actions/actionTypes.js'
+import { tryBubbleTransformEpicMap, tryPerformLinkEpicMap, tryPerformAssociationEpicMap } from './store/epic.js'
+import stateValidator from './store/stateValidator.js'
 
 export {
 	useScheduler,

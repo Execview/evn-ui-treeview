@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useReducer } from 'react';
-import SchedulerCell from '../schedulerCell/SchedulerCell'
-import SchedulerHeader from '../schedulerCell/SchedulerHeader';
+import SchedulerCell from '../schedulerCell/SchedulerCell.js'
+import SchedulerHeader from '../schedulerCell/SchedulerHeader.js';
 import { injectObjectInObject, useDimensions } from '@execview/reusable';
 
-import { getDrawnLinksFromData, getSnaps, getTimeFormatString, getMajorStartOf, getBubbleColours } from './SchedulerBehavior'
-import { getColourFromMap } from './BubbleBehavior'
-import {getNearestSnapXToDate, getInternalMousePosition, getNearestSnapDateToX, getExactNearestSnapDateToX, getYPositionFromRowId} from './schedulerFunctions'
-import { UNSATColours, Lightcolours, Darkcolours, testColours } from './colourOptions'
+import { getDrawnLinksFromData, getSnaps, getTimeFormatString, getMajorStartOf, getBubbleColours } from './SchedulerBehavior.js'
+import { getColourFromMap } from './BubbleBehavior.js'
+import {getNearestSnapXToDate, getInternalMousePosition, getNearestSnapDateToX, getExactNearestSnapDateToX, getYPositionFromRowId} from './schedulerFunctions.js'
+import { UNSATColours, Lightcolours, Darkcolours, testColours } from './colourOptions.js'
 
 
 import { fromEvent, merge } from 'rxjs';

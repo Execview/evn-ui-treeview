@@ -1,8 +1,8 @@
 import React, {useEffect, useLayoutEffect, useState} from 'react';
-import Bubble from './Bubble';
+import Bubble from './Bubble.js';
 import classes from './SchedulerCell.module.css';
 import {RightClickMenuWrapper, useDimensions} from '@execview/reusable'
-import SchedulerRightClickMenu from './SchedulerRightClickMenu';
+import SchedulerRightClickMenu from './SchedulerRightClickMenu.js';
 
 const SchedulerCell = (props) => {
 	const [selfRef, getSelfDimensions] = useDimensions()

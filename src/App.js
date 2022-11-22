@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import {connect} from 'react-redux';
-import useScheduler from './TableColumnAppenders/useScheduler'
-import * as actionTypes from './store/actions/actionTypes'
-import useTree from './TableColumnAppenders/useTree';
+import useScheduler from './TableColumnAppenders/useScheduler.js'
+import * as actionTypes from './store/actions/actionTypes.js'
+import useTree from './TableColumnAppenders/useTree.js';
 import { Table, cats } from '@execview/table';
-import { columnsInfo as columnsInfoConfig, cellTypes } from './store/config';
+import { columnsInfo as columnsInfoConfig, cellTypes } from './store/config.js';
 import { Button } from '@execview/reusable'
 import classes from './App.module.css';
-import useVisibleColumns from './TableColumnAppenders/useVisibleColumns';
+import useVisibleColumns from './TableColumnAppenders/useVisibleColumns.js';
 import { useThemeApplier, defaultTheme } from '@execview/themedesigner'
 
 const App = (props) => {

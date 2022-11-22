@@ -1,8 +1,8 @@
-import * as actionTypes from './actions/actionTypes'
+import * as actionTypes from './actions/actionTypes.js'
 import { combineEpics, ofType } from 'redux-observable';
 import {filter, map, tap, mergeMap} from 'rxjs/operators'
 import { recursiveDeepCopy } from '@execview/reusable';
-import tryReturnValidTransformState from './stateValidator';
+import tryReturnValidTransformState from './stateValidator.js';
 import { Observable, of } from 'rxjs';
 
 const voidAction = {type: 'dont care'}
