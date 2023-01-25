@@ -1,1 +1,1 @@
-export default {version: '#2022-11-22T12:07:23.567Z#'};
+export default {version: '#2022-12-06T12:16:55.717Z#'};

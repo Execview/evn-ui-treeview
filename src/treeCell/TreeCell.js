@@ -25,7 +25,7 @@ const TreeCell = (props) => {
 	let rowSelection;
 	if (data.setSelectedRow) {
 		let icon= data.isSelected ? <FontAwesomeIcon icon={faCircle} className={classes['green-circle']} /> : <FontAwesomeIcon icon={emptyCircle} className={classes['empty-circle']} />;
-		rowSelection = <div className={classes['row-selection']} onClick={data.setSelectedRow}>{icon}</div>;
+		rowSelection = <div className={classes['row-selection']} >{icon}</div>;
 	}
 	
 	let selectedBackgroundClass = data.isSelected ? classes['selected-background'] : ''
@@ -33,7 +33,7 @@ const TreeCell = (props) => {
 	
 
 	return (
-		<div className={`${classes["cell-container"]} ${pointerClass} ${selectedBackgroundClass}`} style={{minHeight: style.minHeight}}>
+		<div className={`${classes["cell-container"]} ${pointerClass} ${selectedBackgroundClass}`} style={{minHeight: style.minHeight}} onClick={data.setSelectedRow}>
 			{rowSelection}
 			<div className={classes["cell-text"]} onClick={data.toggleNode} style={style}>
 				<div style={{marginLeft: 20 * data.depth, marginRight: 5}}>{arrow}</div>
