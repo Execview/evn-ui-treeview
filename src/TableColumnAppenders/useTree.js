@@ -8,6 +8,7 @@ const useTree = (data={},columnsInfo={},options={},active=true) => {
 	const roots = options.roots
 	const setSelectedRow = options.setSelectedRow
 	const selectedRow = options.selectedRow
+	const hideText = options.hideText 
 	const treeOptions = options.treeOptions
 	const columnName = options.columnName || 'treeExpander'
 	
@@ -46,7 +47,7 @@ const useTree = (data={},columnsInfo={},options={},active=true) => {
 				...rowData,
 				[columnName]:{
 					...displayedRows[i],
-					text: rowData.name,
+					text: hideText ? '' : rowData.name,
 					toggleNode: (()=> setTree({...tree,[rowId]:!tree[rowId]})),
 					...select
 				}
@@ -58,7 +59,7 @@ const useTree = (data={},columnsInfo={},options={},active=true) => {
 	const addTreeColumn = ()=>{
 		let {position, ...otherTreeOptions} = treeOptions || {}
 		position = position || 'start';
-		const newColumn = {[columnName]: {...columnsInfo[columnName], cellType: <TreeCell />, headerType: 'Tree', ...otherTreeOptions}}
+		const newColumn = {[columnName]: {...columnsInfo[columnName], cellType: <TreeCell />, headerType: 'Tree', minWidth: hideText ? '15' : undefined, ...otherTreeOptions}}
 
 		return injectObjectInObject(columnsInfo, newColumn, position);
 	}

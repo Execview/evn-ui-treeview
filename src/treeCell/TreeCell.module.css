@@ -4,6 +4,7 @@
     height: 100%;
     align-items: center;
 	width: 100%;
+	cursor: pointer;
 }
 
 .row-selection{
@@ -49,8 +50,4 @@
 
 .selected-background {
     background-color: rgb(var(--color8));
-}
-
-.pointer {
-    cursor: pointer;
 }

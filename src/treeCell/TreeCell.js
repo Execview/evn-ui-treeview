@@ -6,34 +6,25 @@ import classes from './TreeCell.module.css';
 
 const TreeCell = (props) => {
 	const data = props.data || {}
-	const downIcon = faAngleDown;
-	const rightIcon = faAngleRight;
-	let arrow = <FontAwesomeIcon icon={downIcon} style={{fontSize:'12px', opacity:'0'}}/>;
-
 	const style = props.style || {}
 
-	// var closestElement = element.closest(selectors); 
-	let pointerClass = ''
-	if (data.nodeStatus === 'open') {
-		arrow = <FontAwesomeIcon icon={downIcon} style={{fontSize:'13px'}}/>;
-		pointerClass = classes['pointer'];
-	} else if (data.nodeStatus === 'closed') {
-		arrow = <FontAwesomeIcon icon={rightIcon} style={{fontSize:'13px'}}/>;
-		pointerClass = classes['pointer'];
+	let arrow = null
+	switch(data?.nodeStatus){
+		case 'open': { arrow = <FontAwesomeIcon icon={faAngleDown} style={{fontSize:'13px'}}/>; break }
+		case 'closed': { arrow = <FontAwesomeIcon icon={faAngleRight} style={{fontSize:'13px'}}/>; break }
+		default: {arrow = <FontAwesomeIcon icon={faAngleDown} style={{fontSize:'12px', opacity:'0'}}/>}
 	}
 
 	let rowSelection;
 	if (data.setSelectedRow) {
-		let icon= data.isSelected ? <FontAwesomeIcon icon={faCircle} className={classes['green-circle']} /> : <FontAwesomeIcon icon={emptyCircle} className={classes['empty-circle']} />;
+		const icon= data.isSelected ? <FontAwesomeIcon icon={faCircle} className={classes['green-circle']} /> : <FontAwesomeIcon icon={emptyCircle} className={classes['empty-circle']} />;
 		rowSelection = <div className={classes['row-selection']} >{icon}</div>;
 	}
 	
-	let selectedBackgroundClass = data.isSelected ? classes['selected-background'] : ''
-
-	
+	const selectedBackgroundClass = data.isSelected ? classes['selected-background'] : ''
 
 	return (
-		<div className={`${classes["cell-container"]} ${pointerClass} ${selectedBackgroundClass}`} style={{minHeight: style.minHeight}} onClick={data.setSelectedRow}>
+		<div className={`${classes["cell-container"]} ${selectedBackgroundClass}`} style={{minHeight: style.minHeight}} onClick={data.setSelectedRow}>
 			{rowSelection}
 			<div className={classes["cell-text"]} onClick={data.toggleNode} style={style}>
 				<div style={{marginLeft: 20 * data.depth, marginRight: 5}}>{arrow}</div>
