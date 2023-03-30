@@ -15,7 +15,6 @@ const App = (props) => {
 
 	const data = props.data || {}
 	const [columnsInfo, setColumnsInfo] = useState(columnsInfoConfig)
-	const [changes, setChanges] = useState()
 
 	useEffect(()=>{
 		props.onGetLocalData();
@@ -45,10 +44,11 @@ const App = (props) => {
 		props.clearChanges()
 	}
 	
-	let [a,b] = useTree(data,columnsInfo,{
+	let [a,b, Wrapper] = useTree(data,columnsInfo,{
 		setSelectedRow:(itemId) =>selectedRow === itemId ? setSelectedRow(null): setSelectedRow(itemId),
 		selectedRow: selectedRow,
-		treeOptions: treeOptions
+		treeOptions: treeOptions,
+		tryPerformAssociation: props.tryPerformAssociation
 	})
 
 	const [c,d,tableRef] = useScheduler(a,b,{
@@ -64,26 +64,28 @@ const App = (props) => {
 	const [newData, newColumnsInfo] = [c,e]
 
 	return (
-		<div className={`${classes["App"]} ${classes['color-scheme']}`}>
-			<div className={classes["button-container"]}>
-				<Button onClick={()=>props.onAddRow(selectedRow)}>Add Row</Button>
-				<Button onClick={()=>setShowEnddate(!showEnddate)}>Toggle Enddate</Button>
+		<Wrapper>
+			<div className={`${classes["App"]} ${classes['color-scheme']}`}>
+				<div className={classes["button-container"]}>
+					<Button onClick={()=>props.onAddRow(selectedRow)}>Add Row</Button>
+					<Button onClick={()=>setShowEnddate(!showEnddate)}>Toggle Enddate</Button>
+				</div>
+				{<Table
+					itemChanges={props.itemChanges}
+					data={newData}
+					columnsInfo={newColumnsInfo}
+					setColumnsInfo={setColumnsInfo}
+					cellTypes={cellTypes}
+					dontPreserveOrder={true}
+					tableRef={tableRef}
+					selectedRow={selectedRow}
+					onSave={onSave}
+				/>}
+				<div style={{ margin: 'auto', marginTop: '30px', maxWidth: '400px' }}>
+					<img draggable='false' style={{ marginTop: '30px', maxWidth: '100%' }} src={cats[randomNumber]} alt="xd" />
+				</div>
 			</div>
-			{<Table
-				itemChanges={props.itemChanges}
-				data={newData}
-				columnsInfo={newColumnsInfo}
-				setColumnsInfo={setColumnsInfo}
-				cellTypes={cellTypes}
-				dontPreserveOrder={true}
-				tableRef={tableRef}
-				selectedRow={selectedRow}
-				onSave={onSave}
-			/>}
-			<div style={{ margin: 'auto', marginTop: '30px', maxWidth: '400px' }}>
-				<img draggable='false' style={{ marginTop: '30px', maxWidth: '100%' }} src={cats[randomNumber]} alt="xd" />
-			</div>
-		</div>
+		</Wrapper>
 	);
 }
 

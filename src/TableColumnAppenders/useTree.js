@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
-import TreeCell from '../treeCell/TreeCell.js';
 import { injectObjectInObject } from '@execview/reusable';
+import DraggableTreeCell from '../treeCell/DraggableTreeCell.js';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend'
+
+const wrapper = (props) => <DndProvider backend={HTML5Backend}>{props.children}</DndProvider>
 
 const useTree = (data={},columnsInfo={},options={},active=true) => {
 	const [tree,setTree] = useState({});
@@ -11,6 +15,7 @@ const useTree = (data={},columnsInfo={},options={},active=true) => {
 	const hideText = options.hideText 
 	const treeOptions = options.treeOptions
 	const columnName = options.columnName || 'treeExpander'
+	const tryPerformAssociation = options.tryPerformAssociation
 	
 	const getDisplayedTreeStructure = (parentNodes)=>{
 		//an array of arrays of the rows to display, their corresponding depths, and whether they are open/closed/neither.
@@ -49,7 +54,8 @@ const useTree = (data={},columnsInfo={},options={},active=true) => {
 					...displayedRows[i],
 					text: hideText ? '' : rowData.name,
 					toggleNode: (()=> setTree({...tree,[rowId]:!tree[rowId]})),
-					...select
+					...select,
+					onDrop: dragId => tryPerformAssociation && tryPerformAssociation(rowId, dragId) 
 				}
 			}
 		}
@@ -59,12 +65,12 @@ const useTree = (data={},columnsInfo={},options={},active=true) => {
 	const addTreeColumn = ()=>{
 		let {position, ...otherTreeOptions} = treeOptions || {}
 		position = position || 'start';
-		const newColumn = {[columnName]: {...columnsInfo[columnName], cellType: <TreeCell />, headerType: 'Tree', minWidth: hideText ? '15' : undefined, ...otherTreeOptions}}
+		const newColumn = {[columnName]: {...columnsInfo[columnName], cellType: <DraggableTreeCell />, headerType: 'Tree', minWidth: hideText ? '15' : undefined, ...otherTreeOptions}}
 
 		return injectObjectInObject(columnsInfo, newColumn, position);
 	}
 
-	return [addTreeData(), addTreeColumn()]
+	return [addTreeData(), addTreeColumn(), wrapper]
 }
 
 export default useTree;

@@ -51,3 +51,24 @@
 .selected-background {
     background-color: rgb(var(--color8));
 }
+
+.dnd-container{
+    box-sizing: border-box;
+}
+
+.dnd-container:hover {
+    border: 2px solid rgb(var(--color5));
+}
+
+.dnd {
+    height: 100%;
+    width: 100%;
+}
+
+.drag {
+    background-color: rgb(var(--color19));
+}
+
+.over {
+    background-color: rgb(var(--color13));
+}
