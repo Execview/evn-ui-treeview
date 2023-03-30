@@ -1,6 +1,6 @@
 {
 	"name": "@execview/treeview",
-	"version": "0.1.170",
+	"version": "0.1.180",
 	"main": "./transpiled/exports.js",
 	"repository": {
 		"type": "git",
@@ -8,7 +8,7 @@
 	},
 	"dependencies": {
 		"@execview/reusable": "0.1.125",
-		"@execview/table": "0.1.189",
+		"@execview/table": "0.1.198",
 		"@execview/themedesigner": "0.1.32",
 		"@fortawesome/fontawesome-svg-core": "^6.2.1",
 		"@fortawesome/free-regular-svg-icons": "^6.2.1",
