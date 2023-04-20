@@ -1,6 +1,6 @@
 {
 	"name": "@execview/treeview",
-	"version": "0.1.180",
+	"version": "0.1.181",
 	"main": "./transpiled/exports.js",
 	"repository": {
 		"type": "git",

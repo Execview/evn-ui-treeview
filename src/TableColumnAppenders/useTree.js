@@ -70,7 +70,7 @@ const useTree = (data={},columnsInfo={},options={},active=true) => {
 		return injectObjectInObject(columnsInfo, newColumn, position);
 	}
 
-	return [addTreeData(), addTreeColumn(), wrapper]
+	return [addTreeData(), addTreeColumn(), wrapper || (p=>p.children)]
 }
 
 export default useTree;
