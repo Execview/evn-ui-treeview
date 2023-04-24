@@ -7,8 +7,9 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 const wrapper = (props) => <DndProvider backend={HTML5Backend}>{props.children}</DndProvider>
 
 const useTree = (data={},columnsInfo={},options={},active=true) => {
+	const W = wrapper || (p=>p.children)
 	const [tree,setTree] = useState({});
-	if(!active){return [data, columnsInfo]}
+	if(!active){return [data, columnsInfo, W]}
 	const roots = options.roots
 	const setSelectedRow = options.setSelectedRow
 	const selectedRow = options.selectedRow
@@ -70,7 +71,7 @@ const useTree = (data={},columnsInfo={},options={},active=true) => {
 		return injectObjectInObject(columnsInfo, newColumn, position);
 	}
 
-	return [addTreeData(), addTreeColumn(), wrapper || (p=>p.children)]
+	return [addTreeData(), addTreeColumn(), W]
 }
 
 export default useTree;
